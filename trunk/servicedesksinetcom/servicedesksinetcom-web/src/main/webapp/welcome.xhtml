@@ -1,29 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-    <h:body>
-        <h1>
-            <h:outputText value="#{msg['welcome']}"></h:outputText>
-            <h:outputText value="#{language.country}"></h:outputText>
-            <h:outputText value="#{language.language}"></h:outputText>
-        </h1>
-        <h:form>
-            <div align="center" style="width: 900px; height: 100%">
-                <h:panelGrid columns="2">
-                    Language:
-                    <h:selectOneMenu value="#{language.localeCode}" onchange="submit();" valueChangeListener="#{language.countryLocaleCodeChanged}">
-                        <f:selectItems value="#{language.countriesInMap}"></f:selectItems>
-                    </h:selectOneMenu>
-                </h:panelGrid>
-            </div>
-        </h:form>
-    </h:body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom Home</ui:define>
+    <ui:define name="menu"><p:menu model="#{menuBean.menuPrincipal}"></p:menu></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+           <h:head />
+           <h:body>
+               <h:form>
+                   <h:outputText>Nothing yet!</h:outputText>
+               </h:form>
+           </h:body>
+       </f:view>
+    </ui:define>
+    <ui:define name="footer">
+        Nothing Here...
+    </ui:define>
+</ui:composition>
