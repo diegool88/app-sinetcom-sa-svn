@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom Login</ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+           <h:head />
+           <h:body>
+               <h:form>
+                   <p:panelGrid columns="2">
+                       <p:column><h:outputLabel>Usuario</h:outputLabel></p:column>
+                       <p:column><p:inputText value="#{login.nombreUsuario}" ></p:inputText></p:column>
+                       <p:column><h:outputLabel>Contrasena</h:outputLabel></p:column>
+                       <p:column><p:inputText value="#{login.password}" ></p:inputText></p:column>
+                       <p:column></p:column>
+                       <p:column><p:commandButton value="login" action="#{login.login}"></p:commandButton></p:column>
+                   </p:panelGrid>
+               </h:form>
+           </h:body>
+       </f:view>
+    </ui:define>
+    <ui:define name="footer">
+        Nothing Here...
+    </ui:define>
+</ui:composition>

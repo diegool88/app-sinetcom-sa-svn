@@ -11,25 +11,27 @@
         <title>SD Sinetcom - <ui:insert name="title">Sin Titulo</ui:insert></title>
     </h:head>
     <h:body>
-        <div id="page">
-            <div id="header">
-                <ui:insert name="header" >
-                    <ui:include src="/template/common/commonheader.xhtml" />
-                </ui:insert>
-                <ui:insert name="menu">
-                    <ui:include src="/menu/menu.xhtml" />
-                </ui:insert>
-            </div>
-            <div id="contents">
-                <div class="background">
-                    <ui:insert name="content" >
+        <h:form>
+            <div id="page">
+                <div id="header">
+                    <ui:insert name="header" >
+                        <ui:include src="/template/common/commonheader.xhtml" />
+                    </ui:insert>
+                    <ui:insert name="menu">
+<!--                        <ui:include src="/menu/menu.xhtml" />-->
+                    </ui:insert>
+                </div>
+                <div id="contents">
+                    <div class="background">
+                        <ui:insert name="content" >
+                        </ui:insert>
+                    </div>
+                </div>
+                <div id="footer">
+                    <ui:insert name="footer" >
                     </ui:insert>
                 </div>
             </div>
-            <div id="footer">
-                <ui:insert name="footer" >
-                </ui:insert>
-            </div>
-        </div>
+        </h:form>
     </h:body>
 </html>

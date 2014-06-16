@@ -23,6 +23,6 @@
         <param-value>casablanca</param-value>
     </context-param>
     <welcome-file-list>
-        <welcome-file>fujitsuHome.xhtml</welcome-file>
+        <welcome-file>login.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
