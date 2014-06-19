@@ -3,19 +3,23 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      >
+      
+      xmlns:h="http://java.sun.com/jsf/html">
     <body>
 	    <ui:composition>
                 <table align="center" style="height: 200px;" cellspacing="20">
                     <tr>
                         <td>
-                            <a href="#" class="logoleft" ><img width="124" height="40" src="images/emclogo.png" alt="EMC" /></a>
+                            <h:graphicImage library="images" class="logoleft" name="emclogo.png" width="124" height="40" alt="EMC"></h:graphicImage>
+                            <!--<a href="#" class="logoleft" ><img width="124" height="40" src="images/emclogo.png" alt="EMC" /></a>-->
                         </td>
                         <td>
-                            <a href="#" class="logocenter" ><img width="396" height="60" src="images/sinetcomlogo.png" alt="Sinetcom S.A." /></a>
+                            <h:graphicImage library="images" class="logocenter" name="sinetcomlogo.png" width="396" height="60" alt="Sinetcom S.A."></h:graphicImage>
+                            <!--<a href="#" class="logocenter" ><img width="396" height="60" src="images/sinetcomlogo.png" alt="Sinetcom S.A." /></a>-->
                         </td>
                         <td>
-                            <a href="#" class="logoright" ><img width="82" height="40" src="images/fujitsured.png" alt="Fujitsu" /></a>
+                            <h:graphicImage library="images" class="logoright" name="fujitsured.png" width="82" height="40" alt="Fujitsu"></h:graphicImage>
+                            <!--<a href="#" class="logoright" ><img width="82" height="40" src="images/fujitsured.png" alt="Fujitsu" /></a>-->
                         </td>
                     </tr>
                 </table>
