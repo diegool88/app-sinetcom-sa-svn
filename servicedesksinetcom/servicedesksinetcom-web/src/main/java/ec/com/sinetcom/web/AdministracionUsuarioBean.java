@@ -36,10 +36,11 @@ public class AdministracionUsuarioBean implements Serializable{
     
     @PostConstruct
     public void doInit(){
-        usuarioActual = new Usuario();
+        //usuarioActual = new Usuario();
     }
     
     public String login(){
+        this.usuarioActual = new Usuario();
         this.usuarioActual = this.servicioUsuario.validarUsuario(this.nombreUsuario, this.password);
         if(this.usuarioActual == null){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuario desconocido, intente nuevamente!"));
@@ -51,7 +52,7 @@ public class AdministracionUsuarioBean implements Serializable{
     
     public String logout(){
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "index?faces-redirect=true";
+        return "login?faces-redirect=true";
     }
     
     public boolean estaUsuarioAutenticado() {
