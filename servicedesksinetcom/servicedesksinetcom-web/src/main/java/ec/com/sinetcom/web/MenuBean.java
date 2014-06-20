@@ -14,6 +14,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.component.menuitem.MenuItem;
+import org.primefaces.component.submenu.Submenu;
 import org.primefaces.model.DefaultMenuModel;
 import org.primefaces.model.MenuModel;
 
@@ -59,13 +60,44 @@ public class MenuBean implements Serializable{
     @PostConstruct
     public void doInit(){
         menuPrincipal = new DefaultMenuModel();
+        
 //        rol = getLogin().getUsuarioActual().getNombreUsuario();
         rol = login.getUsuarioActual().getNombreUsuario();
         if(rol.equals("admin")){
             //menuPrincipal = new DefaultMenuModel();
-            MenuItem productos = new MenuItem();
-            productos.setValue("Productos");
-            menuPrincipal.addMenuItem(productos);
+            //Primer Submenu Productos
+            Submenu productos = new Submenu();
+            productos.setLabel("Productos");
+            MenuItem crearProducto = new MenuItem();
+            crearProducto.setValue("Crear Producto");
+            MenuItem modificarProducto = new MenuItem();
+            modificarProducto.setValue("Modificar Producto");
+            MenuItem gestionarModelosYRevisiones = new MenuItem();
+            gestionarModelosYRevisiones.setValue("Gestionar Modelos y Revisiones");
+            productos.getChildren().add(crearProducto);
+            productos.getChildren().add(modificarProducto);
+            productos.getChildren().add(gestionarModelosYRevisiones);
+            menuPrincipal.addSubmenu(productos);
+            
+            //Segundo Submenu Perfiles de Usuarios
+            Submenu perfilesDeUsuario = new Submenu();
+            perfilesDeUsuario.setLabel("Perfiles de Usuario");
+            MenuItem crearUsuario = new MenuItem();
+            crearUsuario.setValue("Crear Usuario");
+            MenuItem modificarUsuario = new MenuItem();
+            modificarUsuario.setValue("Modificar Usuario");
+            MenuItem eliminarUsuario = new MenuItem();
+            eliminarUsuario.setValue("Eliminar Usuario");
+            perfilesDeUsuario.getChildren().add(crearUsuario);
+            perfilesDeUsuario.getChildren().add(modificarUsuario);
+            perfilesDeUsuario.getChildren().add(eliminarUsuario);
+            menuPrincipal.addSubmenu(perfilesDeUsuario);
+            //Tercero Submenu Fabricantes
+            Submenu fabricantes = new Submenu();
+            fabricantes.setLabel("Fabricantes");
+            menuPrincipal.addSubmenu(fabricantes);
+            
+            
         }else{
             //menuPrincipal = new DefaultMenuModel();
             MenuItem inventarios = new MenuItem();

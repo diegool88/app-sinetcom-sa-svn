@@ -230,7 +230,7 @@ img {
 
 /*------------------------------ CONTENTS ------------------------------*/
 #contents {
-    background: url(../images/bg-content.gif) repeat;
+    background: url("#{resource['images/bg-content.gif']}") repeat;
     padding: 40px 0 20px;
 }
 #contents div.body {
