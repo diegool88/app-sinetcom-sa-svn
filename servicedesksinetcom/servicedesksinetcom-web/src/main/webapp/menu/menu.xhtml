@@ -7,6 +7,38 @@
                 xmlns:p="http://primefaces.org/ui">
     <h:form>
         <p:megaMenu>
+            <p:submenu label="Productos" rendered="#{login.usuarioActual.rol eq 'admin'}">
+                <p:column>
+                    <p:submenu label="Productos">
+                        <p:menuitem value="Crear Producto"></p:menuitem>
+                        <p:menuitem value="Modificar Producto"></p:menuitem>
+<!--                        <p:menuitem value="Gestionar Modelos/Revisiones"></p:menuitem>-->
+                    </p:submenu>
+                    <p:submenu label="Gestionar Modelos/Revisiones">
+                        <p:menuitem value="Crear Modelo de Producto"></p:menuitem>
+                        <p:menuitem value="Crear Version de Softare"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            
+            <p:submenu label="Perfiles de Usuario">
+                <p:column>
+                    <p:submenu label="Gestion de Usuarios" rendered="#{login.usuarioActual.rol eq 'admin'}">
+                        <p:menuitem value="Crear Usuario"></p:menuitem>
+                        <p:menuitem value="Modificar Usuario"></p:menuitem>
+                        <p:menuitem value="Eliminar Usuario"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Gestion de Roles" rendered="#{login.usuarioActual.rol eq 'admin'}">
+                        <p:menuitem value="Crear Rol"></p:menuitem>
+                        <p:menuitem value="Modificar Rol"></p:menuitem>
+                        <p:menuitem value="Eliminar Rol"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Mi Perfil de Usuario">
+                        <p:menuitem value="Editar mi perfil"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>   
+<!--            
             <p:menuitem value="Home" url="index.xhtml"></p:menuitem>
             <p:submenu label="Casos" icon="ui-icon-person">
                 <p:column>
@@ -16,7 +48,7 @@
                         <p:menuitem value="Nuevo Caso" url="nuevoCaso.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
-            </p:submenu>
+            </p:submenu>-->
         </p:megaMenu>
     </h:form>
 </ui:composition>
