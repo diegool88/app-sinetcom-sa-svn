@@ -39,10 +39,12 @@ public class servicioUsuario implements servicioUsuarioLocal {
         if(nombreUsuario.equals("admin") && password.equals("admin")){
             this.usuario.setNombreUsuario("admin");
             this.usuario.setPassword("admin");
+            this.usuario.setRol("admin");
             return this.usuario;
         }else if(nombreUsuario.equals("inventory") && password.equals("inventory")){
             this.usuario.setNombreUsuario("inventory");
             this.usuario.setPassword("inventory");
+            this.usuario.setRol("register");
             return this.usuario;
         }else{
             return null;
