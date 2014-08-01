@@ -24,7 +24,6 @@
                         <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenido #{login.nombreUsuario}! <p:commandLink value="Logout" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink value="Login" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
                     </div>
                     <ui:insert name="menu">
-<!--                        <ui:include src="/menu/menu.xhtml" />-->
                     </ui:insert>
                 </div>
                 <div id="contents">

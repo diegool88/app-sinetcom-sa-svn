@@ -13,6 +13,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.component.column.Column;
 import org.primefaces.component.menuitem.MenuItem;
 import org.primefaces.component.submenu.Submenu;
 import org.primefaces.model.DefaultMenuModel;
@@ -23,10 +24,10 @@ import org.primefaces.model.MenuModel;
  * @author diegoflores
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class MenuBean implements Serializable{
     
-    private MenuModel menuPrincipal;
+    private DefaultMenuModel menuPrincipal;
     private String rol;
     
     @ManagedProperty("#{login}")
@@ -40,11 +41,11 @@ public class MenuBean implements Serializable{
 //        
 //    }
 
-    public MenuModel getMenuPrincipal() {
+    public DefaultMenuModel getMenuPrincipal() {
         return menuPrincipal;
     }
 
-    public void setMenuPrincipal(MenuModel menuPrincipal) {
+    public void setMenuPrincipal(DefaultMenuModel menuPrincipal) {
         this.menuPrincipal = menuPrincipal;
     }
 
@@ -64,33 +65,66 @@ public class MenuBean implements Serializable{
 //        rol = getLogin().getUsuarioActual().getNombreUsuario();
         rol = login.getUsuarioActual().getNombreUsuario();
         if(rol.equals("admin")){
-            //menuPrincipal = new DefaultMenuModel();
-            //Primer Submenu Productos
+            
+            //Primer Submenu
+            Submenu submenuProductos = new Submenu();
+            submenuProductos.setLabel("Productos");
+            
+            //Label
             Submenu productos = new Submenu();
             productos.setLabel("Productos");
+            
             MenuItem crearProducto = new MenuItem();
             crearProducto.setValue("Crear Producto");
+            crearProducto.setUrl("#");
+            
             MenuItem modificarProducto = new MenuItem();
             modificarProducto.setValue("Modificar Producto");
+            modificarProducto.setUrl("#");
+            
             MenuItem gestionarModelosYRevisiones = new MenuItem();
             gestionarModelosYRevisiones.setValue("Gestionar Modelos y Revisiones");
+            gestionarModelosYRevisiones.setUrl("#");
+            
             productos.getChildren().add(crearProducto);
             productos.getChildren().add(modificarProducto);
             productos.getChildren().add(gestionarModelosYRevisiones);
+            
+            Column column = new Column();
+            column.getChildren().add(productos);
+            
+            submenuProductos.getChildren().add(column);
             menuPrincipal.addSubmenu(productos);
             
-            //Segundo Submenu Perfiles de Usuarios
+            //Segundo Submenu
+            Submenu submenuPerfilUsuario = new Submenu();
+            submenuPerfilUsuario.setLabel("Perfiles de Usuario");
+            
+            //Label
             Submenu perfilesDeUsuario = new Submenu();
             perfilesDeUsuario.setLabel("Perfiles de Usuario");
+            
             MenuItem crearUsuario = new MenuItem();
             crearUsuario.setValue("Crear Usuario");
+            crearUsuario.setUrl("#");
+            
             MenuItem modificarUsuario = new MenuItem();
             modificarUsuario.setValue("Modificar Usuario");
+            modificarUsuario.setUrl("#");
+            
             MenuItem eliminarUsuario = new MenuItem();
             eliminarUsuario.setValue("Eliminar Usuario");
+            eliminarUsuario.setUrl("#");
+            
             perfilesDeUsuario.getChildren().add(crearUsuario);
             perfilesDeUsuario.getChildren().add(modificarUsuario);
             perfilesDeUsuario.getChildren().add(eliminarUsuario);
+            
+            Column column1 = new Column();
+            column1.getChildren().add(perfilesDeUsuario);
+            
+            perfilesDeUsuario.getChildren().add(column1);
+            
             menuPrincipal.addSubmenu(perfilesDeUsuario);
             //Tercero Submenu Fabricantes
             Submenu fabricantes = new Submenu();
