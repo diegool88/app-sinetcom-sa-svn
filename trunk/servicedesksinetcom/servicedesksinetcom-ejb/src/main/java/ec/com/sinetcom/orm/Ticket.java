@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,6 +38,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ticket.findAll", query = "SELECT t FROM Ticket t")})
 public class Ticket implements Serializable {
+    @Lob
+    @Column(name = "hojaDeServicio")
+    private byte[] hojaDeServicio;
+    @JoinColumn(name = "Usuario_id_responsable", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Usuario usuarioidresponsable;
+    @JoinColumn(name = "Usuario_id_propietario", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Usuario usuarioidpropietario;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -237,6 +247,30 @@ public class Ticket implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Ticket[ ticketNumber=" + ticketNumber + " ]";
+    }
+
+    public byte[] getHojaDeServicio() {
+        return hojaDeServicio;
+    }
+
+    public void setHojaDeServicio(byte[] hojaDeServicio) {
+        this.hojaDeServicio = hojaDeServicio;
+    }
+
+    public Usuario getUsuarioidresponsable() {
+        return usuarioidresponsable;
+    }
+
+    public void setUsuarioidresponsable(Usuario usuarioidresponsable) {
+        this.usuarioidresponsable = usuarioidresponsable;
+    }
+
+    public Usuario getUsuarioidpropietario() {
+        return usuarioidpropietario;
+    }
+
+    public void setUsuarioidpropietario(Usuario usuarioidpropietario) {
+        this.usuarioidpropietario = usuarioidpropietario;
     }
     
 }
