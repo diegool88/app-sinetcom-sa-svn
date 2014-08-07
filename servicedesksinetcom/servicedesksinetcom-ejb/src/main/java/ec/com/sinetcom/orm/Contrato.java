@@ -37,6 +37,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Contrato.findAll", query = "SELECT c FROM Contrato c")})
 public class Contrato implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Column(name = "contratoDigital")
+    private byte[] contratoDigital;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -68,11 +73,6 @@ public class Contrato implements Serializable {
     @Column(name = "fechaInicioGarantiaTecnica")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInicioGarantiaTecnica;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Column(name = "contratoDigital")
-    private byte[] contratoDigital;
     @Basic(optional = false)
     @NotNull
     @Column(name = "servicioSoporteMantenimiento")
@@ -218,14 +218,6 @@ public class Contrato implements Serializable {
 
     public void setFechaInicioGarantiaTecnica(Date fechaInicioGarantiaTecnica) {
         this.fechaInicioGarantiaTecnica = fechaInicioGarantiaTecnica;
-    }
-
-    public byte[] getContratoDigital() {
-        return contratoDigital;
-    }
-
-    public void setContratoDigital(byte[] contratoDigital) {
-        this.contratoDigital = contratoDigital;
     }
 
     public int getServicioSoporteMantenimiento() {
@@ -449,6 +441,14 @@ public class Contrato implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Contrato[ numero=" + numero + " ]";
+    }
+
+    public byte[] getContratoDigital() {
+        return contratoDigital;
+    }
+
+    public void setContratoDigital(byte[] contratoDigital) {
+        this.contratoDigital = contratoDigital;
     }
     
 }

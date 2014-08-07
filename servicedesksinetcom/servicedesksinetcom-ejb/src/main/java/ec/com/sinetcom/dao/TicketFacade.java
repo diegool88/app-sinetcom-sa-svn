@@ -4,11 +4,14 @@
  */
 package ec.com.sinetcom.dao;
 
+import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.EstadoTicket;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.ServicioTicket;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -103,11 +106,88 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * Función que permite recuperar todos los tickets por estado
      */
     public List<Ticket> obtenerTodosLosTicketsPorEstado(String estado){
-        String sql = "SELECT t FROM Ticket t JOIN t.estadoTicketcodigo e WHERE e.nombre LIKE :estado";
+        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :estado";
         Query qry = this.em.createNamedQuery(sql);  
         qry.setParameter("estado", estado);
         return qry.getResultList();
     }
     
+    /**
+     * Función que permite recuperar todos los tickets por prioridad
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorPrioridad(String prioridad){
+        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :prioridad";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter("prioridad", prioridad);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets por servicio
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorServicio(String servicio){
+        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :servicio";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter("servicio", servicio);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets que han sido atendidos en el último mes
+     */
+    public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoMes(){
+        
+        int mes = Calendar.getInstance().get(Calendar.MONTH)+1;
+        int anio = Calendar.getInstance().get(Calendar.YEAR);
+        
+        String sql = "SELECT t FROM Ticket t WHERE MONTH(t.fechaDeCreacion) = ?1 AND YEAR(t.fechaDeCreacion) = ?2";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, mes);
+        qry.setParameter(2, anio);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets que han sido atendidos en el último año
+     */
+    public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoAnio(){
+        
+        int anio = Calendar.getInstance().get(Calendar.YEAR);
+        
+        String sql = "SELECT t FROM Ticket t WHERE AND YEAR(t.fechaDeCreacion) = ?1";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, anio);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets que han sido atendidos en el último mes por cliente
+     */
+    public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoMesPorCliente(ClienteEmpresa clienteEmpresa){
+        
+        int mes = Calendar.getInstance().get(Calendar.MONTH)+1;
+        int anio = Calendar.getInstance().get(Calendar.YEAR);
+        
+        String sql = "SELECT t FROM Ticket t WHERE MONTH(t.clienteEmpresaruc) = ?1 AND YEAR(t.fechaDeCreacion) = ?2 AND t.clienteEmpresaruc = ?3";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, mes);
+        qry.setParameter(2, anio);
+        qry.setParameter(3, clienteEmpresa);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets que han sido atendidos en el último año por cliente
+     */
+    public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoAnioPorCliente(ClienteEmpresa clienteEmpresa){
+
+        int anio = Calendar.getInstance().get(Calendar.YEAR);
+        
+        String sql = "SELECT t FROM Ticket t WHERE YEAR(t.fechaDeCreacion) = ?1 AND t.clienteEmpresaruc = ?2";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, anio);
+        qry.setParameter(2, clienteEmpresa);
+        return qry.getResultList();
+    }
     
 }

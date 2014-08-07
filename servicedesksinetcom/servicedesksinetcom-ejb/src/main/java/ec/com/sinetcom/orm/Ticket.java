@@ -41,6 +41,18 @@ public class Ticket implements Serializable {
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
+    @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")
+    @ManyToOne(optional = false)
+    private ItemProducto itemProductonumeroSerial;
+    @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc")
+    @ManyToOne(optional = false)
+    private ClienteEmpresa clienteEmpresaruc;
+    @Column(name = "fechaDeCierre")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaDeCierre;
+    @JoinColumn(name = "Usuario_id_creador", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Usuario usuarioidcreador;
     @JoinColumn(name = "Usuario_id_responsable", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Usuario usuarioidresponsable;
@@ -249,14 +261,6 @@ public class Ticket implements Serializable {
         return "ec.com.sinetcom.orm.Ticket[ ticketNumber=" + ticketNumber + " ]";
     }
 
-    public byte[] getHojaDeServicio() {
-        return hojaDeServicio;
-    }
-
-    public void setHojaDeServicio(byte[] hojaDeServicio) {
-        this.hojaDeServicio = hojaDeServicio;
-    }
-
     public Usuario getUsuarioidresponsable() {
         return usuarioidresponsable;
     }
@@ -271,6 +275,46 @@ public class Ticket implements Serializable {
 
     public void setUsuarioidpropietario(Usuario usuarioidpropietario) {
         this.usuarioidpropietario = usuarioidpropietario;
+    }
+
+    public Date getFechaDeCierre() {
+        return fechaDeCierre;
+    }
+
+    public void setFechaDeCierre(Date fechaDeCierre) {
+        this.fechaDeCierre = fechaDeCierre;
+    }
+
+    public Usuario getUsuarioidcreador() {
+        return usuarioidcreador;
+    }
+
+    public void setUsuarioidcreador(Usuario usuarioidcreador) {
+        this.usuarioidcreador = usuarioidcreador;
+    }
+
+    public byte[] getHojaDeServicio() {
+        return hojaDeServicio;
+    }
+
+    public void setHojaDeServicio(byte[] hojaDeServicio) {
+        this.hojaDeServicio = hojaDeServicio;
+    }
+
+    public ItemProducto getItemProductonumeroSerial() {
+        return itemProductonumeroSerial;
+    }
+
+    public void setItemProductonumeroSerial(ItemProducto itemProductonumeroSerial) {
+        this.itemProductonumeroSerial = itemProductonumeroSerial;
+    }
+
+    public ClienteEmpresa getClienteEmpresaruc() {
+        return clienteEmpresaruc;
+    }
+
+    public void setClienteEmpresaruc(ClienteEmpresa clienteEmpresaruc) {
+        this.clienteEmpresaruc = clienteEmpresaruc;
     }
     
 }
