@@ -33,6 +33,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "activo")
+    private boolean activo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioidresponsable")
     private List<Ticket> ticketList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioidpropietario")
@@ -338,6 +342,14 @@ public class Usuario implements Serializable {
 
     public void setTicketList1(List<Ticket> ticketList1) {
         this.ticketList1 = ticketList1;
+    }
+
+    public boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
     
 }

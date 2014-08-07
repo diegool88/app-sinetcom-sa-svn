@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "ClienteEmpresa.findAll", query = "SELECT c FROM ClienteEmpresa c")})
 public class ClienteEmpresa implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc")
+    private List<Ticket> ticketList;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -204,6 +206,15 @@ public class ClienteEmpresa implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.ClienteEmpresa[ ruc=" + ruc + " ]";
+    }
+
+    @XmlTransient
+    public List<Ticket> getTicketList() {
+        return ticketList;
+    }
+
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
     
 }

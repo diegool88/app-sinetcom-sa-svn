@@ -5,9 +5,12 @@
 package ec.com.sinetcom.dao;
 
 import ec.com.sinetcom.orm.HistorialDeTicket;
+import ec.com.sinetcom.orm.Ticket;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,5 +29,18 @@ public class HistorialDeTicketFacade extends AbstractFacade<HistorialDeTicket> {
     public HistorialDeTicketFacade() {
         super(HistorialDeTicket.class);
     }
+    
+    /**
+     * Función que permite obtener la fecha en que se realizó el contacto con el cliente
+     */
+    public Date obtenerFechaDePrimerContactoDeTicket(Ticket ticket){
+        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 AND h.EventoTicket_codigo.nombre LIKE :contacto";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, ticket);
+        qry.setParameter("contacto", "primer contacto");
+        return ((HistorialDeTicket)qry.getResultList().get(0)).getFechaDelEvento();
+        
+    }
+    
     
 }
