@@ -13,6 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -32,6 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Competencias.findAll", query = "SELECT c FROM Competencias c")})
 public class Competencias implements Serializable {
+    @JoinTable(name = "UsuarioCompetencias", joinColumns = {
+        @JoinColumn(name = "Competencias_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "Usuario_id", referencedColumnName = "id")})
+    @ManyToMany
+    private List<Usuario> usuarioList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -128,6 +136,15 @@ public class Competencias implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Competencias[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
     
 }

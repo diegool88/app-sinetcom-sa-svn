@@ -4,10 +4,13 @@
  */
 package ec.com.sinetcom.dao;
 
+import ec.com.sinetcom.orm.Competencias;
 import ec.com.sinetcom.orm.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,6 +28,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
 
     public UsuarioFacade() {
         super(Usuario.class);
+    }
+    
+    public List<Usuario> obtenerUsuariosPorCompetencias(Competencias competencias){
+        String sql = "SELECT u FROM Usuario u WHERE :competencias IN u.competenciasList";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter("competencias", competencias);
+        return qry.getResultList();
     }
     
 }

@@ -38,6 +38,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ticket.findAll", query = "SELECT t FROM Ticket t")})
 public class Ticket implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fechaDeProximaActualizacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaDeProximaActualizacion;
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
@@ -293,14 +298,6 @@ public class Ticket implements Serializable {
         this.usuarioidcreador = usuarioidcreador;
     }
 
-    public byte[] getHojaDeServicio() {
-        return hojaDeServicio;
-    }
-
-    public void setHojaDeServicio(byte[] hojaDeServicio) {
-        this.hojaDeServicio = hojaDeServicio;
-    }
-
     public ItemProducto getItemProductonumeroSerial() {
         return itemProductonumeroSerial;
     }
@@ -315,6 +312,22 @@ public class Ticket implements Serializable {
 
     public void setClienteEmpresaruc(ClienteEmpresa clienteEmpresaruc) {
         this.clienteEmpresaruc = clienteEmpresaruc;
+    }
+
+    public Date getFechaDeProximaActualizacion() {
+        return fechaDeProximaActualizacion;
+    }
+
+    public void setFechaDeProximaActualizacion(Date fechaDeProximaActualizacion) {
+        this.fechaDeProximaActualizacion = fechaDeProximaActualizacion;
+    }
+
+    public byte[] getHojaDeServicio() {
+        return hojaDeServicio;
+    }
+
+    public void setHojaDeServicio(byte[] hojaDeServicio) {
+        this.hojaDeServicio = hojaDeServicio;
     }
     
 }

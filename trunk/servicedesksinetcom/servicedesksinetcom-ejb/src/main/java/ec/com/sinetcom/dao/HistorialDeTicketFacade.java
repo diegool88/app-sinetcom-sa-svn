@@ -32,15 +32,28 @@ public class HistorialDeTicketFacade extends AbstractFacade<HistorialDeTicket> {
     
     /**
      * Función que permite obtener la fecha en que se realizó el contacto con el cliente
+     * @param ticket
+     * @return 
      */
     public Date obtenerFechaDePrimerContactoDeTicket(Ticket ticket){
-        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 AND h.EventoTicket_codigo.nombre LIKE :contacto";
+        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 AND h.EventoTicket_codigo.codigo = ?2";
         Query qry = this.em.createNamedQuery(sql);  
         qry.setParameter(1, ticket);
-        qry.setParameter("contacto", "primer contacto");
+        qry.setParameter(2, 6);
         return ((HistorialDeTicket)qry.getResultList().get(0)).getFechaDelEvento();
         
     }
     
+    /**
+     * Funcion que permite obtener el numero de la ultima entrada historica de un ticket
+     * @param ticket
+     * @return 
+     */
+    public int obtenerOrdenDeHistorialDeTicket(Ticket ticket){
+        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 ORDER BY h.fechaDelEvento DESC";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, ticket);
+        return qry.getResultList().isEmpty() ? 0 : ((HistorialDeTicket)qry.getResultList().get(0)).getOrden();
+    }
     
 }
