@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Articulo.findAll", query = "SELECT a FROM Articulo a")})
 public class Articulo implements Serializable {
+    @Lob
+    @Column(name = "contenidoAdjunto")
+    private byte[] contenidoAdjunto;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,9 +62,9 @@ public class Articulo implements Serializable {
     @Size(max = 45)
     @Column(name = "referencia")
     private String referencia;
-    @Size(max = 120)
-    @Column(name = "rutaDeContenidoAdjunto")
-    private String rutaDeContenidoAdjunto;
+    //@Size(max = 120)
+    //@Column(name = "rutaDeContenidoAdjunto")
+    //private String rutaDeContenidoAdjunto;
     @Column(name = "fechaDeCreacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaDeCreacion;
@@ -140,13 +144,13 @@ public class Articulo implements Serializable {
         this.referencia = referencia;
     }
 
-    public String getRutaDeContenidoAdjunto() {
-        return rutaDeContenidoAdjunto;
-    }
-
-    public void setRutaDeContenidoAdjunto(String rutaDeContenidoAdjunto) {
-        this.rutaDeContenidoAdjunto = rutaDeContenidoAdjunto;
-    }
+//    public String getRutaDeContenidoAdjunto() {
+//        return rutaDeContenidoAdjunto;
+//    }
+//
+//    public void setRutaDeContenidoAdjunto(String rutaDeContenidoAdjunto) {
+//        this.rutaDeContenidoAdjunto = rutaDeContenidoAdjunto;
+//    }
 
     public Date getFechaDeCreacion() {
         return fechaDeCreacion;
@@ -219,6 +223,14 @@ public class Articulo implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Articulo[ id=" + id + " ]";
+    }
+
+    public byte[] getContenidoAdjunto() {
+        return contenidoAdjunto;
+    }
+
+    public void setContenidoAdjunto(byte[] contenidoAdjunto) {
+        this.contenidoAdjunto = contenidoAdjunto;
     }
     
 }

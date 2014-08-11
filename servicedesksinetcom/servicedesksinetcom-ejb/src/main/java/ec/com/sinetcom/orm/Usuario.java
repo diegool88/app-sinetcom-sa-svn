@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,6 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
+    @ManyToMany(mappedBy = "usuarioList")
+    private List<Competencias> competenciasList;
     @Basic(optional = false)
     @NotNull
     @Column(name = "activo")
@@ -350,6 +353,15 @@ public class Usuario implements Serializable {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    @XmlTransient
+    public List<Competencias> getCompetenciasList() {
+        return competenciasList;
+    }
+
+    public void setCompetenciasList(List<Competencias> competenciasList) {
+        this.competenciasList = competenciasList;
     }
     
 }

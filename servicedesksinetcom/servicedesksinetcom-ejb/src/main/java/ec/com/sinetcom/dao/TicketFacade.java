@@ -38,6 +38,9 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar los tickets por estado de un determinado usuario propietario
+     * @param usuario
+     * @param estadoTicket
+     * @return 
      */
     public List<Ticket> obtenerTicketsPorEstadoDePropietario(Usuario usuario, EstadoTicket estadoTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.estadoTicketcodigo = ?2";
@@ -49,6 +52,9 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar los tickets por estado de un determinado usuario propietario (Ingresa String de estado)
+     * @param usuario
+     * @param estadoTicket
+     * @return 
      */
     public List<Ticket> obtenerTicketsPorEstadoDePropietario(Usuario usuario, String estadoTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.estadoTicketcodigo.nombre LIKE :estado";
@@ -60,6 +66,9 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar los tickets por servicios de un determinado usuario propietario
+     * @param usuario
+     * @param servicioTicket
+     * @return 
      */
     public List<Ticket> obtenerTicketsPorServicioDePropietario(Usuario usuario, ServicioTicket servicioTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.servicioTicketcodigo = ?2";
@@ -71,6 +80,9 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar los tickets por servicios de un determinado usuario propietario (Ingresa string de servicio)
+     * @param usuario
+     * @param servicioTicket
+     * @return 
      */
     public List<Ticket> obtenerTicketsPorServicioDePropietario(Usuario usuario, String servicioTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.servicioTicketcodigo.nombre LIKE :servicio";
@@ -82,6 +94,9 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar los tickets por prioridad de un determinado usuario propietario
+     * @param usuario
+     * @param prioridadTicket
+     * @return 
      */
     public List<Ticket> obtenerTicketsPorPrioridadDePropietario(Usuario usuario, PrioridadTicket prioridadTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.prioridadTicketcodigo = ?2";
@@ -93,6 +108,9 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar los tickets por prioridad de un determinado usuario propietario
+     * @param usuario
+     * @param prioridadTicket
+     * @return 
      */
     public List<Ticket> obtenerTicketsPorPrioridadDePropietario(Usuario usuario, String prioridadTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.prioridadTicketcodigo.nombre LIKE :prioridad";
@@ -104,6 +122,8 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets por estado
+     * @param estado
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsPorEstado(String estado){
         String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :estado";
@@ -114,6 +134,8 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets por prioridad
+     * @param prioridad
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsPorPrioridad(String prioridad){
         String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :prioridad";
@@ -124,6 +146,8 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets por servicio
+     * @param servicio
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsPorServicio(String servicio){
         String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :servicio";
@@ -134,13 +158,14 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets que han sido atendidos en el último mes
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoMes(){
         
         int mes = Calendar.getInstance().get(Calendar.MONTH)+1;
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
-        String sql = "SELECT t FROM Ticket t WHERE MONTH(t.fechaDeCreacion) = ?1 AND YEAR(t.fechaDeCreacion) = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE FUNC('MONTH',t.fechaDeCreacion) = ?1 AND FUNC('YEAR',t.fechaDeCreacion) = ?2";
         Query qry = this.em.createNamedQuery(sql);  
         qry.setParameter(1, mes);
         qry.setParameter(2, anio);
@@ -149,12 +174,13 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets que han sido atendidos en el último año
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoAnio(){
         
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
-        String sql = "SELECT t FROM Ticket t WHERE AND YEAR(t.fechaDeCreacion) = ?1";
+        String sql = "SELECT t FROM Ticket t WHERE AND FUNC('YEAR',t.fechaDeCreacion) = ?1";
         Query qry = this.em.createNamedQuery(sql);  
         qry.setParameter(1, anio);
         return qry.getResultList();
@@ -162,13 +188,15 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets que han sido atendidos en el último mes por cliente
+     * @param clienteEmpresa
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoMesPorCliente(ClienteEmpresa clienteEmpresa){
         
         int mes = Calendar.getInstance().get(Calendar.MONTH)+1;
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
-        String sql = "SELECT t FROM Ticket t WHERE MONTH(t.clienteEmpresaruc) = ?1 AND YEAR(t.fechaDeCreacion) = ?2 AND t.clienteEmpresaruc = ?3";
+        String sql = "SELECT t FROM Ticket t WHERE FUNC('MONTH',t.clienteEmpresaruc) = ?1 AND FUNC('YEAR',t.fechaDeCreacion) = ?2 AND t.clienteEmpresaruc = ?3";
         Query qry = this.em.createNamedQuery(sql);  
         qry.setParameter(1, mes);
         qry.setParameter(2, anio);
@@ -178,12 +206,14 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     
     /**
      * Función que permite recuperar todos los tickets que han sido atendidos en el último año por cliente
+     * @param clienteEmpresa
+     * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsAtendidosElUltimoAnioPorCliente(ClienteEmpresa clienteEmpresa){
 
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
-        String sql = "SELECT t FROM Ticket t WHERE YEAR(t.fechaDeCreacion) = ?1 AND t.clienteEmpresaruc = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE FUNC('YEAR',t.fechaDeCreacion) = ?1 AND t.clienteEmpresaruc = ?2";
         Query qry = this.em.createNamedQuery(sql);  
         qry.setParameter(1, anio);
         qry.setParameter(2, clienteEmpresa);
