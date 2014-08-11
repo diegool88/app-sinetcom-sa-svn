@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<job-scheduling-data
+    xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData 
+	http://www.quartz-scheduler.org/xml/job_scheduling_data_2_0.xsd"
+    version="2.0">
+    <pre-processing-commands>
+        <delete-jobs-in-group>*</delete-jobs-in-group>  <!-- clear all jobs in scheduler -->
+        <delete-triggers-in-group>*</delete-triggers-in-group> <!-- clear all triggers in scheduler -->
+    </pre-processing-commands>
+    
+    <processing-directives>
+        <!-- if there are any jobs/trigger in scheduler of same name (as in this file), overwrite them -->
+        <overwrite-existing-data>true</overwrite-existing-data>
+        <!-- if there are any jobs/trigger in scheduler of same name (as in this file), and over-write is false, ignore them rather then generating an error -->
+        <ignore-duplicates>false</ignore-duplicates> 
+    </processing-directives>
+    
+    <schedule>
+        <job>
+            <name>EnviarNotificacionJob</name>
+            <job-class>ec.com.sinetcom.quartz.EnviarNotificacionJob</job-class>
+            <durability>true</durability>
+            <recover>false</recover>
+        </job>
+<!--        <job>
+            <name>AJob</name>
+            <group>AGroup</group>
+            <description>Print a welcome message</description>
+            <job-class>com.mkyong.scheduler.SchedulerJob</job-class>
+                        
+        </job>
+ 
+        <trigger>
+            <cron>
+                <name>dummyTriggerName</name>
+                <job-name>AJob</job-name>
+                <job-group>AGroup</job-group>
+                 It will run every 5 seconds 
+                <cron-expression>0/5 * * * * ?</cron-expression>
+            </cron>
+        </trigger>-->
+    </schedule>
+</job-scheduling-data>
