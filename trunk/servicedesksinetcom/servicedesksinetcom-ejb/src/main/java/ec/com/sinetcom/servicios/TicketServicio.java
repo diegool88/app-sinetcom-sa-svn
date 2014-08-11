@@ -6,6 +6,7 @@ package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.configuracion.UtilidadDeCorreoElectronico;
 import ec.com.sinetcom.dao.ArticuloFacade;
+import ec.com.sinetcom.dao.ContactoFacade;
 import ec.com.sinetcom.dao.EventoTicketFacade;
 import ec.com.sinetcom.dao.HistorialDeTicketFacade;
 import ec.com.sinetcom.dao.TicketFacade;
@@ -13,11 +14,13 @@ import ec.com.sinetcom.dao.UsuarioFacade;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.Cola;
 import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.orm.EstadoTicket;
 import ec.com.sinetcom.orm.HistorialDeTicket;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;
+import ec.com.sinetcom.quartz.EnviarNotificacionJob;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +30,13 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import org.quartz.JobDetail;
+import static org.quartz.SimpleScheduleBuilder.*;
+import static org.quartz.JobBuilder.*;
+import static org.quartz.TriggerBuilder.*;
+import static org.quartz.SimpleTrigger.*;
+import org.quartz.JobDataMap;
+import org.quartz.Trigger;
 
 /**
  *
@@ -53,6 +63,10 @@ public class TicketServicio {
     @EJB
     private UsuarioFacade usuarioFacade;
     
+    @EJB
+    private ContactoFacade contactoFacade;
+    
+    
     /**
      * Servicio que permite crear un nuevo ticket
      * @param ticket
@@ -61,7 +75,38 @@ public class TicketServicio {
     public boolean crearNuevoTicket(Ticket ticket){
         
         try{
+            
+            //Se determina el tiempo de vida del ticket según el SLA
+            int tiempoDeVida = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeSolucion();
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.HOUR, tiempoDeVida);
+            ticket.setTiempoDeVida(c.getTime());
+            //Se indica la fecha actual como fecha de creacion
+            ticket.setFechaDeCreacion(new Date());
+            //Se determina el tiempo de actualizacion segun el SLA
+            int tiempoDeActualizacion = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeActualizacionDeEscalacion();
+            c = Calendar.getInstance();
+            c.add(Calendar.HOUR, tiempoDeActualizacion);
+            ticket.setFechaDeProximaActualizacion(c.getTime());
+            //Creamos el ticket
             this.ticketFacade.create(ticket);
+            
+            //Se crea una tarea de notificacion para cuando se termine el tiempo de actualizacion
+            JobDataMap dataMap = new JobDataMap();
+            dataMap.put("ticket", ticket);
+            JobDetail tarea = newJob(EnviarNotificacionJob.class)
+                    .withIdentity("actualizar" + ticket.getTicketNumber(), "tickets")
+                    .usingJobData(dataMap)
+                    .build();
+            Calendar c_notif = c.getInstance();
+            c_notif.add(Calendar.MINUTE, -15);
+            Trigger tareaTrigger = newTrigger()
+                    .withIdentity("t_actualizar" + ticket.getTicketNumber(), "tickets")
+                    .startAt(c_notif.getTime())
+                    .endAt(c.getTime())
+                    .build();
+            
+            
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
             historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(0));
             historialDeTicket.setFechaDelEvento(new Date());
@@ -70,13 +115,10 @@ public class TicketServicio {
             historialDeTicket.setTicketticketNumber(ticket);
             this.historialDeTicketFacade.create(historialDeTicket);
             UtilidadDeCorreoElectronico utilidadDeCorreoElectronico = new UtilidadDeCorreoElectronico();
-            Competencias competencias = ticket.getColaid().getCompetenciasid();
-            List<Usuario> usuarios = this.usuarioFacade.obtenerUsuariosPorCompetencias(competencias);
-            String[] correosCC = null;
-            for(int i = 0 ; i < usuarios.size() ; i++){
-                correosCC[i] = usuarios.get(i).getCorreoElectronico();
-            }
-            utilidadDeCorreoElectronico.enviarCorreoSimple(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec" , "Nueva incidencia - Caso# " + ticket.getTicketNumber(), "", correosCC);
+            
+            //Se envia el correo electrónico notificando a todos los interesados 
+            utilidadDeCorreoElectronico.enviarCorreoSimple(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec" , "Nueva incidencia - Caso# " + ticket.getTicketNumber(), "", contactosDeTicket(ticket));
+            
         }catch(Exception e){
             e.printStackTrace();
             return false;
@@ -256,6 +298,53 @@ public class TicketServicio {
         }
             
         
+    }
+    
+    /**
+     * Función que permite subir la hoja de servicio como un archivo adjunto
+     * @param archivo
+     * @return 
+     */
+    public boolean subirHojaDeServicioDeTicket(byte[] archivo, Ticket ticket){
+        try{
+            ticket.setHojaDeServicio(archivo);
+            this.ticketFacade.edit(ticket);
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Función que permite obtener todos los contactos involucrados en el ticket
+     * @param ticket
+     * @return 
+     */
+    private String[] contactosDeTicket(Ticket ticket){
+        
+        //Se envía un correo a todos los que tienen la competencia respectiva al caso
+        Competencias competencias = ticket.getColaid().getCompetenciasid();
+        List<Usuario> usuarios = this.usuarioFacade.obtenerUsuariosPorCompetencias(competencias);
+        String[] correosCC = null;
+        for(int i = 0 ; i < usuarios.size() ; i++){
+            correosCC[i] = usuarios.get(i).getCorreoElectronico();
+        }
+
+        //Se añade a las persona que esten involucradas en el caso
+        List<Contacto> contactos = this.contactoFacade.obtenerContactosDeCliente(ticket.getClienteEmpresaruc());
+        int j = 0;
+        for(int i = correosCC.length - 1; i < correosCC.length + contactos.size() ; i++){
+            correosCC[i] = contactos.get(j++).getCorreoElectronico();
+        }
+        
+
+        //Se agrega a la presidencia en copia
+        correosCC[correosCC.length] = "jorge.yanez@sinetcom.com.ec";
+        //Agregando al Helpdesk en copia
+        correosCC[correosCC.length] = "soporte@sinetcom.com.ec";
+        
+        return correosCC;
     }
     
 }

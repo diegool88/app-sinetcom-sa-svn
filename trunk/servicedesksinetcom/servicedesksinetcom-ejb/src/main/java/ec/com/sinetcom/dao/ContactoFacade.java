@@ -4,10 +4,13 @@
  */
 package ec.com.sinetcom.dao;
 
+import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.Contacto;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,6 +28,13 @@ public class ContactoFacade extends AbstractFacade<Contacto> {
 
     public ContactoFacade() {
         super(Contacto.class);
+    }
+    
+    public List<Contacto> obtenerContactosDeCliente(ClienteEmpresa clienteEmpresa){
+        String sql = "SELECT c FROM Contacto c WHERE c.clienteEmpresaruc = ?1";
+        Query qry = this.em.createNamedQuery(sql);  
+        qry.setParameter(1, clienteEmpresa);
+        return qry.getResultList();
     }
     
 }
