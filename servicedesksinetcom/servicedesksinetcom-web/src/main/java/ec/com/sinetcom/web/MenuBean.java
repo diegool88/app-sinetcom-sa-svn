@@ -17,7 +17,9 @@ import org.primefaces.component.column.Column;
 import org.primefaces.component.menuitem.MenuItem;
 import org.primefaces.component.submenu.Submenu;
 import org.primefaces.model.DefaultMenuModel;
+import org.primefaces.model.DefaultUploadedFile;
 import org.primefaces.model.MenuModel;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
