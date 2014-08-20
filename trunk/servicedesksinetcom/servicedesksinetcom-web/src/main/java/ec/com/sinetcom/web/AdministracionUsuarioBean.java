@@ -4,9 +4,10 @@
  */
 package ec.com.sinetcom.web;
 
-import ec.com.sinetcom.entidades.Usuario;
-import ec.com.sinetcom.servicios.servicioUsuario;
-import ec.com.sinetcom.servicios.servicioUsuarioLocal;
+
+import ec.com.sinetcom.orm.Usuario;
+import ec.com.sinetcom.servicios.AutenticacionServicio;
+
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -24,7 +25,8 @@ import javax.faces.context.FacesContext;
 public class AdministracionUsuarioBean implements Serializable{
     
     @EJB
-    private servicioUsuarioLocal servicioUsuario;
+    private AutenticacionServicio autenticacionServicio;
+    //private servicioUsuarioLocal servicioUsuario;
     
     private String nombreUsuario;
     private String password;
@@ -41,12 +43,13 @@ public class AdministracionUsuarioBean implements Serializable{
     
     public String login(){
         this.usuarioActual = new Usuario();
-        this.usuarioActual = this.servicioUsuario.validarUsuario(this.nombreUsuario, this.password);
+        this.usuarioActual = this.autenticacionServicio.validarUsuario(nombreUsuario, password);
+        
         if(this.usuarioActual == null){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuario desconocido, intente nuevamente!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error de Autenticacion","Usuario/Contraseña inválidos!"));
             return (this.nombreUsuario = this.password = null);
         } else {
-            return "welcome";
+            return "welcome?faces-redirect=true";
         }
     }
     

@@ -4,31 +4,53 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:form>
+        <p:growl id="growl" showDetail="true" sticky="true"/>
         <p:megaMenu>
-            <p:submenu label="Productos" rendered="#{login.usuarioActual.rol eq 'admin'}">
+            <p:submenu label="Productos" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                 <p:column>
                     <p:submenu label="Productos">
                         <p:menuitem value="Crear Producto"></p:menuitem>
                         <p:menuitem value="Modificar Producto"></p:menuitem>
-<!--                        <p:menuitem value="Gestionar Modelos/Revisiones"></p:menuitem>-->
                     </p:submenu>
                     <p:submenu label="Gestionar Modelos/Revisiones">
                         <p:menuitem value="Crear Modelo de Producto"></p:menuitem>
-                        <p:menuitem value="Crear Version de Softare"></p:menuitem>
+                        <p:menuitem value="Crear Versión de Software"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
             
+            <p:submenu label="Tickets de Soporte" rendered="#{login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}">
+                <p:column>
+                    <p:submenu label="Todos los Tickets" rendered="#{(login.usuarioActual.grupoid.permisos.administra eq true) or login.usuarioActual.grupoid.permisos.consultaTodosLosTickets eq true}">
+                        <p:menuitem value="Tickets por estados" ajax="false" action="tickets?faces-redirect=true"><f:param name="tipo" value="estados"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por colas" ajax="false" action="tickets?faces-redirect=true"><f:param name="tipo" value="colas"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por prioridad" ajax="false" action="tickets?faces-redirect=true"><f:param name="tipo" value="prioridad"></f:param></p:menuitem>
+                    </p:submenu>
+                </p:column>
+                <p:column>
+                    <p:submenu label="Mis tickets">
+                        <p:menuitem value="Tickets por estados" ajax="false" action="misTicketsPorEstado?faces-redirect=true"><f:param name="tipo" value="estados"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por colas" ajax="false" action="mistickets?faces-redirect=true"><f:param name="tipo" value="colas"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por prioridad" ajax="false" action="mistickets?faces-redirect=true"><f:param name="tipo" value="prioridad"></f:param></p:menuitem>
+                        <p:menuitem value="Crear Ticket de Soporte" ajax="false" action="crearTicket?faces-redirect=true"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            
+            <p:submenu label="Contratos">
+            </p:submenu>
+            
             <p:submenu label="Perfiles de Usuario">
                 <p:column>
-                    <p:submenu label="Gestion de Usuarios" rendered="#{login.usuarioActual.rol eq 'admin'}">
+                    <p:submenu label="Gestion de Usuarios" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                         <p:menuitem value="Crear Usuario"></p:menuitem>
                         <p:menuitem value="Modificar Usuario"></p:menuitem>
                         <p:menuitem value="Eliminar Usuario"></p:menuitem>
                     </p:submenu>
-                    <p:submenu label="Gestion de Roles" rendered="#{login.usuarioActual.rol eq 'admin'}">
+                    <p:submenu label="Gestion de Roles" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                         <p:menuitem value="Crear Rol"></p:menuitem>
                         <p:menuitem value="Modificar Rol"></p:menuitem>
                         <p:menuitem value="Eliminar Rol"></p:menuitem>
@@ -37,7 +59,7 @@
                         <p:menuitem value="Editar mi perfil"></p:menuitem>
                     </p:submenu>
                 </p:column>
-            </p:submenu>   
+            </p:submenu>
 <!--            
             <p:menuitem value="Home" url="index.xhtml"></p:menuitem>
             <p:submenu label="Casos" icon="ui-icon-person">

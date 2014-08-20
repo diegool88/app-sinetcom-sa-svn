@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      
+
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
@@ -14,14 +14,16 @@
         <title>SD Sinetcom - <ui:insert name="title">Sin Titulo</ui:insert></title>
     </h:head>
     <h:body>
-        <h:form>
+            <div id="mensaje">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+            </div>
             <div id="page">
                 <div id="header">
                     <ui:insert name="header" >
                         <ui:include src="/template/common/commonheader.xhtml" />
                     </ui:insert>
-                    <div style="position: absolute; top: 5px; right: 0px;">
-                        <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenido #{login.nombreUsuario}! <p:commandLink value="Logout" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink value="Login" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
+                    <div style="position: absolute; top: 5px; right: 0px; color: #ffffff">
+                        <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenido #{login.usuarioActual.nombre}! - <p:commandLink style="color: #ffffff;" value="(Salir)" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink style="color: #ffffff;" value="Ingresar" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
                     </div>
                     <ui:insert name="menu">
                     </ui:insert>
@@ -31,16 +33,16 @@
                         <ui:insert name="content" >
                         </ui:insert>
                     </h:panelGroup>
-<!--                    <div class="background">
-                        <ui:insert name="content" >
-                        </ui:insert>
-                    </div>-->
+                    <!--                    <div class="background">
+                                            <ui:insert name="content" >
+                                            </ui:insert>
+                                        </div>-->
                 </div>
                 <div id="footer">
                     <ui:insert name="footer" >
+                        Sinetcom S.A. 2014 - Todos los derechos Reservados.
                     </ui:insert>
                 </div>
             </div>
-        </h:form>
     </h:body>
 </html>

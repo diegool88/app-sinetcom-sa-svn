@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom - Tickets</ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+               <h:form>
+                   <f:facet name="header">
+                       Mis Tickets Por Estado
+                   </f:facet>
+                   <p:tabView>
+                       <p:ajax event="tabChange" listener="#{misTicketsPorEstado.cambioDeTab}"></p:ajax>
+                       <p:tab title="Abiertos">
+                           
+                       </p:tab>    
+                       <p:tab title="Cerrados">
+                           
+                       </p:tab>
+                       <p:tab title="Pendientes">
+                           
+                       </p:tab>
+                   </p:tabView>
+               </h:form>
+       </f:view>
+    </ui:define>
+<!--    <ui:define name="footer">
+        Nothing Here...
+    </ui:define>-->
+</ui:composition>

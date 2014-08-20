@@ -7,22 +7,26 @@
     <ui:define name="title">Sinetcom Login</ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
-           <h:head />
-           <h:body>
-               <h:form>
-                   <p:panelGrid columns="2">
-                       <p:column><h:outputLabel>Usuario</h:outputLabel></p:column>
-                       <p:column><p:inputText value="#{login.nombreUsuario}" ></p:inputText></p:column>
-                       <p:column><h:outputLabel>Contrasena</h:outputLabel></p:column>
-                       <p:column><p:inputText value="#{login.password}" ></p:inputText></p:column>
-                       <p:column></p:column>
-                       <p:column><p:commandButton value="login" action="#{login.login}"></p:commandButton></p:column>
-                   </p:panelGrid>
-               </h:form>
-           </h:body>
-       </f:view>
+            <h:head />
+            <h:body>
+                <h:form>
+                    <div class="center" >
+                        <p:panel id="basic" styleClass="centerPanel" header="Inicio de Sesión" style="margin-bottom:20px; width: 390px;">
+                            <p:panelGrid columns="2">
+                                <p:column><h:outputLabel>Usuario</h:outputLabel></p:column>
+                                <p:column><p:inputText value="#{login.nombreUsuario}" ></p:inputText></p:column>
+                                <p:column><h:outputLabel>Contraseña</h:outputLabel></p:column>
+                                <p:column><p:password value="#{login.password}" ></p:password></p:column>
+                                <p:column></p:column>
+                                <p:column><p:commandButton value="Ingresar" ajax="false" action="#{login.login}"></p:commandButton></p:column>
+                            </p:panelGrid>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </h:body>
+        </f:view>
     </ui:define>
     <ui:define name="footer">
-        Nothing Here...
+        Sinetcom S.A. (2014) - Todos los derechos reservados.
     </ui:define>
 </ui:composition>

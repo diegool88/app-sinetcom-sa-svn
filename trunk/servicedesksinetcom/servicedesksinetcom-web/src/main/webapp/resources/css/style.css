@@ -603,4 +603,14 @@ img {
     text-align: center;
 }
 
+.center{
+    margin: auto;
+    width: 70%;
+}
+
+.centerPanel{
+    margin: auto;
+    width: auto;
+}
+
 /*------------------------------ For IE6 ------------------------------*/
