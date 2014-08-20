@@ -37,6 +37,9 @@ public class Articulo implements Serializable {
     @Lob
     @Column(name = "contenidoAdjunto")
     private byte[] contenidoAdjunto;
+    @Size(max = 10)
+    @Column(name = "extensionArchivo")
+    private String extensionArchivo;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -223,6 +226,14 @@ public class Articulo implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Articulo[ id=" + id + " ]";
+    }
+
+    public String getExtensionArchivo() {
+        return extensionArchivo;
+    }
+
+    public void setExtensionArchivo(String extensionArchivo) {
+        this.extensionArchivo = extensionArchivo;
     }
 
     public byte[] getContenidoAdjunto() {

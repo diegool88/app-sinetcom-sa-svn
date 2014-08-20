@@ -6,6 +6,7 @@ package ec.com.sinetcom.dao;
 
 import ec.com.sinetcom.orm.Competencias;
 import ec.com.sinetcom.orm.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,11 +31,42 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
+    /**
+     * Permite obtener las competencias de un usuario (No funciona)
+     * @param competencias
+     * @return 
+     */
     public List<Usuario> obtenerUsuariosPorCompetencias(Competencias competencias){
-        String sql = "SELECT u FROM Usuario u WHERE :competencias IN u.competenciasList";
-        Query qry = this.em.createNamedQuery(sql);  
-        qry.setParameter("competencias", competencias);
-        return qry.getResultList();
+        String sql = "SELECT u FROM Usuario u INNER JOIN u.competenciasList c WHERE c.id = ?1";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter(1, competencias.getId());
+        return qry.getResultList().isEmpty() ? null : qry.getResultList();
+    }
+    
+    /**
+     * Permite verificar la existencia de un usuario registrado
+     * @param cuenta
+     * @param password
+     * @return 
+     */
+    public Usuario verificarExistenciaDeUsuario(String cuenta, String password){
+        String sql = "SELECT u FROM Usuario u WHERE u.correoElectronico = ?1 AND u.password = ?2";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, cuenta);
+        qry.setParameter(2, password);
+        return qry.getResultList().isEmpty() ? null : (Usuario)qry.getSingleResult();
+    }
+    
+    /**
+     * Permite obtener un usuario por correo electrónico
+     * @param correoElectrocnico
+     * @return 
+     */
+    public Usuario obtenerUsuarioPorCorreoElectronico(String correoElectrocnico){
+        String sql = "SELECT u FROM Usuario u WHERE u.correoElectronico = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, correoElectrocnico);
+        return qry.getResultList().isEmpty() ? null : (Usuario)qry.getSingleResult();
     }
     
 }

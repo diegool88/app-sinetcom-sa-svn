@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "VisitasMantenimiento.findAll", query = "SELECT v FROM VisitasMantenimiento v")})
 public class VisitasMantenimiento implements Serializable {
+    @Lob
+    @Column(name = "hojaDeServicio")
+    private byte[] hojaDeServicio;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,9 +53,6 @@ public class VisitasMantenimiento implements Serializable {
     @Column(name = "hora")
     @Temporal(TemporalType.TIME)
     private Date hora;
-    @Lob
-    @Column(name = "hojaDeServicio")
-    private byte[] hojaDeServicio;
     @Size(max = 254)
     @Column(name = "descripcion")
     private String descripcion;
@@ -101,14 +101,6 @@ public class VisitasMantenimiento implements Serializable {
 
     public void setHora(Date hora) {
         this.hora = hora;
-    }
-
-    public byte[] getHojaDeServicio() {
-        return hojaDeServicio;
-    }
-
-    public void setHojaDeServicio(byte[] hojaDeServicio) {
-        this.hojaDeServicio = hojaDeServicio;
     }
 
     public String getDescripcion() {
@@ -166,6 +158,14 @@ public class VisitasMantenimiento implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.VisitasMantenimiento[ id=" + id + " ]";
+    }
+
+    public byte[] getHojaDeServicio() {
+        return hojaDeServicio;
+    }
+
+    public void setHojaDeServicio(byte[] hojaDeServicio) {
+        this.hojaDeServicio = hojaDeServicio;
     }
     
 }

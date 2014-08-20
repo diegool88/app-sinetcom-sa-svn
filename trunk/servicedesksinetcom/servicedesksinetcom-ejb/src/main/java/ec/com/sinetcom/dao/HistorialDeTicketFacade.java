@@ -37,10 +37,10 @@ public class HistorialDeTicketFacade extends AbstractFacade<HistorialDeTicket> {
      */
     public Date obtenerFechaDePrimerContactoDeTicket(Ticket ticket){
         String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 AND h.EventoTicket_codigo.codigo = ?2";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, ticket);
         qry.setParameter(2, 6);
-        return ((HistorialDeTicket)qry.getResultList().get(0)).getFechaDelEvento();
+        return qry.getResultList().isEmpty() ? null : ((HistorialDeTicket)qry.getResultList().get(0)).getFechaDelEvento();
         
     }
     
@@ -50,8 +50,8 @@ public class HistorialDeTicketFacade extends AbstractFacade<HistorialDeTicket> {
      * @return 
      */
     public int obtenerOrdenDeHistorialDeTicket(Ticket ticket){
-        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 ORDER BY h.fechaDelEvento DESC";
-        Query qry = this.em.createNamedQuery(sql);  
+        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.ticketticketNumber = ?1 ORDER BY h.fechaDelEvento DESC";
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, ticket);
         return qry.getResultList().isEmpty() ? 0 : ((HistorialDeTicket)qry.getResultList().get(0)).getOrden();
     }
