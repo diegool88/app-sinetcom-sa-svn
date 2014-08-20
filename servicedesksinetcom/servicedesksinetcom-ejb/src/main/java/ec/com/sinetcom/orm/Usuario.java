@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "Usuario", catalog = "dbsinetcom", schema = "")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
+//@XmlRootElement
+//@NamedQueries({
+//    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
     @ManyToMany(mappedBy = "usuarioList")
     private List<Competencias> competenciasList;

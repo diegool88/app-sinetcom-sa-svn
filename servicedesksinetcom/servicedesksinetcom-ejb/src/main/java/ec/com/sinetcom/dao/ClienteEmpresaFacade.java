@@ -8,6 +8,7 @@ import ec.com.sinetcom.orm.ClienteEmpresa;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,4 +28,10 @@ public class ClienteEmpresaFacade extends AbstractFacade<ClienteEmpresa> {
         super(ClienteEmpresa.class);
     }
     
+    public ClienteEmpresa obtenerClienteEmpresaPorRuc(String ruc){
+        String sql = "SELECT c FROM ClienteEmpresa c WHERE c.ruc = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, ruc);
+        return qry.getResultList().isEmpty() ? null : (ClienteEmpresa)qry.getResultList().get(0);
+    }
 }

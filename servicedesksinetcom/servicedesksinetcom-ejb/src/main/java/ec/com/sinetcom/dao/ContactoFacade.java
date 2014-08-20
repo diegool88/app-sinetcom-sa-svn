@@ -32,7 +32,7 @@ public class ContactoFacade extends AbstractFacade<Contacto> {
     
     public List<Contacto> obtenerContactosDeCliente(ClienteEmpresa clienteEmpresa){
         String sql = "SELECT c FROM Contacto c WHERE c.clienteEmpresaruc = ?1";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, clienteEmpresa);
         return qry.getResultList();
     }

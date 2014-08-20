@@ -5,6 +5,7 @@
 package ec.com.sinetcom.dao;
 
 import ec.com.sinetcom.orm.ClienteEmpresa;
+import ec.com.sinetcom.orm.Cola;
 import ec.com.sinetcom.orm.EstadoTicket;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.ServicioTicket;
@@ -44,7 +45,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTicketsPorEstadoDePropietario(Usuario usuario, EstadoTicket estadoTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.estadoTicketcodigo = ?2";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter(2, estadoTicket);
         return qry.getResultList();
@@ -58,7 +59,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTicketsPorEstadoDePropietario(Usuario usuario, String estadoTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.estadoTicketcodigo.nombre LIKE :estado";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("estado", estadoTicket);
         return qry.getResultList();
@@ -72,7 +73,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTicketsPorServicioDePropietario(Usuario usuario, ServicioTicket servicioTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.servicioTicketcodigo = ?2";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter(2, servicioTicket);
         return qry.getResultList();
@@ -86,7 +87,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTicketsPorServicioDePropietario(Usuario usuario, String servicioTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.servicioTicketcodigo.nombre LIKE :servicio";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("servicio", servicioTicket);
         return qry.getResultList();
@@ -100,23 +101,51 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTicketsPorPrioridadDePropietario(Usuario usuario, PrioridadTicket prioridadTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.prioridadTicketcodigo = ?2";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter(2, prioridadTicket);
         return qry.getResultList();
     }
     
     /**
-     * Función que permite recuperar los tickets por prioridad de un determinado usuario propietario
+     * Función que permite recuperar los tickets por prioridad de un determinado usuario propietario (String)
      * @param usuario
      * @param prioridadTicket
      * @return 
      */
     public List<Ticket> obtenerTicketsPorPrioridadDePropietario(Usuario usuario, String prioridadTicket){
         String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.prioridadTicketcodigo.nombre LIKE :prioridad";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("prioridad", prioridadTicket);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar los tickets por cola de un determinado usuario propietario (String)
+     * @param usuario
+     * @param colaTicket
+     * @return 
+     */
+    public List<Ticket> obtenerTicketsPorColaDePropietario(Usuario usuario, String colaTicket){
+        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.colaid.nombre LIKE :colaTicket";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, usuario);
+        qry.setParameter("colaTicket", colaTicket);
+        return qry.getResultList();
+    }
+    
+    /**
+     * * Función que permite recuperar los tickets por cola de un determinado usuario propietario 
+     * @param usuario
+     * @param cola
+     * @return 
+     */
+    public List<Ticket> obtenerTicketsPorColaDePropietario(Usuario usuario, Cola cola){
+        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.colaid = ?2";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, usuario);
+        qry.setParameter("prioridad", cola);
         return qry.getResultList();
     }
     
@@ -127,7 +156,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTodosLosTicketsPorEstado(String estado){
         String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :estado";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter("estado", estado);
         return qry.getResultList();
     }
@@ -139,7 +168,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTodosLosTicketsPorPrioridad(String prioridad){
         String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :prioridad";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter("prioridad", prioridad);
         return qry.getResultList();
     }
@@ -151,7 +180,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      */
     public List<Ticket> obtenerTodosLosTicketsPorServicio(String servicio){
         String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :servicio";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter("servicio", servicio);
         return qry.getResultList();
     }
@@ -166,7 +195,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
         String sql = "SELECT t FROM Ticket t WHERE FUNC('MONTH',t.fechaDeCreacion) = ?1 AND FUNC('YEAR',t.fechaDeCreacion) = ?2";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, mes);
         qry.setParameter(2, anio);
         return qry.getResultList();
@@ -181,7 +210,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
         String sql = "SELECT t FROM Ticket t WHERE AND FUNC('YEAR',t.fechaDeCreacion) = ?1";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, anio);
         return qry.getResultList();
     }
@@ -197,7 +226,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
         String sql = "SELECT t FROM Ticket t WHERE FUNC('MONTH',t.clienteEmpresaruc) = ?1 AND FUNC('YEAR',t.fechaDeCreacion) = ?2 AND t.clienteEmpresaruc = ?3";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, mes);
         qry.setParameter(2, anio);
         qry.setParameter(3, clienteEmpresa);
@@ -214,7 +243,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         int anio = Calendar.getInstance().get(Calendar.YEAR);
         
         String sql = "SELECT t FROM Ticket t WHERE FUNC('YEAR',t.fechaDeCreacion) = ?1 AND t.clienteEmpresaruc = ?2";
-        Query qry = this.em.createNamedQuery(sql);  
+        Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, anio);
         qry.setParameter(2, clienteEmpresa);
         return qry.getResultList();

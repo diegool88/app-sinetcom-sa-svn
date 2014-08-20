@@ -38,14 +38,19 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ticket.findAll", query = "SELECT t FROM Ticket t")})
 public class Ticket implements Serializable {
+    @Lob
+    @Column(name = "hojaDeServicio")
+    private byte[] hojaDeServicio;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "titulo")
+    private String titulo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaDeProximaActualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaDeProximaActualizacion;
-    @Lob
-    @Column(name = "hojaDeServicio")
-    private byte[] hojaDeServicio;
     @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")
     @ManyToOne(optional = false)
     private ItemProducto itemProductonumeroSerial;
@@ -70,10 +75,6 @@ public class Ticket implements Serializable {
     @Basic(optional = false)
     @Column(name = "ticketNumber")
     private Integer ticketNumber;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "titulo")
-    private int titulo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "tiempoDeVida")
@@ -120,7 +121,7 @@ public class Ticket implements Serializable {
         this.ticketNumber = ticketNumber;
     }
 
-    public Ticket(Integer ticketNumber, int titulo, Date tiempoDeVida, Date fechaDeCreacion) {
+    public Ticket(Integer ticketNumber, String titulo, Date tiempoDeVida, Date fechaDeCreacion) {
         this.ticketNumber = ticketNumber;
         this.titulo = titulo;
         this.tiempoDeVida = tiempoDeVida;
@@ -133,14 +134,6 @@ public class Ticket implements Serializable {
 
     public void setTicketNumber(Integer ticketNumber) {
         this.ticketNumber = ticketNumber;
-    }
-
-    public int getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(int titulo) {
-        this.titulo = titulo;
     }
 
     public Date getTiempoDeVida() {
@@ -320,6 +313,14 @@ public class Ticket implements Serializable {
 
     public void setFechaDeProximaActualizacion(Date fechaDeProximaActualizacion) {
         this.fechaDeProximaActualizacion = fechaDeProximaActualizacion;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public byte[] getHojaDeServicio() {

@@ -6,9 +6,13 @@ package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.dao.UsuarioFacade;
 import ec.com.sinetcom.orm.Usuario;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 
 /**
  *
@@ -23,8 +27,15 @@ public class UsuarioServicio {
     @EJB
     private UsuarioFacade usuarioFacade;
     
+    private Usuario usuario;
+    
+    
+    
     /**
      * Servicio para bloquear/desbloquear Usuario Registrado
+     * @param usuario
+     * @param bloquear
+     * @return 
      */
     public boolean cambiarActividadDeUsuario(Usuario usuario, boolean bloquear){
         
@@ -41,4 +52,6 @@ public class UsuarioServicio {
         }
         return true;
     }
+    
+    
 }

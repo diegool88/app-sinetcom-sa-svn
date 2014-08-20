@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "GarantiaEconomica.findAll", query = "SELECT g FROM GarantiaEconomica g")})
 public class GarantiaEconomica implements Serializable {
+    @Lob
+    @Column(name = "adendum")
+    private byte[] adendum;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,9 +65,6 @@ public class GarantiaEconomica implements Serializable {
     @Column(name = "fechaFin")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaFin;
-    @Lob
-    @Column(name = "adendum")
-    private byte[] adendum;
     @Size(max = 45)
     @Column(name = "idNotificador")
     private String idNotificador;
@@ -139,14 +139,6 @@ public class GarantiaEconomica implements Serializable {
         this.fechaFin = fechaFin;
     }
 
-    public byte[] getAdendum() {
-        return adendum;
-    }
-
-    public void setAdendum(byte[] adendum) {
-        this.adendum = adendum;
-    }
-
     public String getIdNotificador() {
         return idNotificador;
     }
@@ -194,6 +186,14 @@ public class GarantiaEconomica implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.GarantiaEconomica[ id=" + id + " ]";
+    }
+
+    public byte[] getAdendum() {
+        return adendum;
+    }
+
+    public void setAdendum(byte[] adendum) {
+        this.adendum = adendum;
     }
     
 }

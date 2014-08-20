@@ -123,5 +123,6 @@ public class ComponenteElectronicoAtomico implements Serializable {
     public String toString() {
         return "ec.com.sinetcom.orm.ComponenteElectronicoAtomico[ id=" + id + " ]";
     }
+
     
 }
