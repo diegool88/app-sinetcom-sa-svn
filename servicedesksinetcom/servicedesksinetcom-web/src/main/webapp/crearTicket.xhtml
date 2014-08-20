@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom - Crear Ticket</ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:form enctype="multipart/form-data">
+                <p:growl id="growl" life="2000"></p:growl>
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage library="images" name="ajax_loader.gif" />
+                </p:dialog>
+                <p:panel id="crear" styleClass="centerPanel" header="Crear nuevo ticket de Soporte" rendered="#{not crearTicketBean.ticketCreado}">
+                    <p:panelGrid columns="2">
+                        <p:column>
+                            <p:outputLabel for="cliente">Seleccione el Cliente: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="cliente" converter="#{clienteEmpresaConverter}" value="#{crearTicketBean.ticket.clienteEmpresaruc}" required="true">
+                                <f:selectItem itemLabel="-- Seleccione una opción --" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearTicketBean.clienteEmpresas}" var="cli" itemLabel="#{cli.nombreComercial}" itemValue="#{cli.ruc}" ></f:selectItems>
+                                <p:ajax listener="#{crearTicketBean.actualizarProductosCliente()}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update="producto"></p:ajax>
+                            </p:selectOneMenu> 
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="producto">Seleccione el Producto: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="producto" converter="#{itemProductoConverter}" value="#{crearTicketBean.ticket.itemProductonumeroSerial}" required="true">
+                                <f:selectItem itemLabel="-- Seleccione una opción --" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearTicketBean.itemProductos}" var="pro" itemLabel="#{pro.modeloProductoid.lineaDeProductoid.nombre} #{pro.modeloProductoid.modelo} - #{pro.numeroSerial}" itemValue="#{pro.numeroSerial}"></f:selectItems>
+                            </p:selectOneMenu> 
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="servicio">Seleccione el Servicio: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="servicio" converter="#{servicioConverter}" value="#{crearTicketBean.ticket.servicioTicketcodigo}" required="true">
+                                <f:selectItem itemLabel="-- Seleccione una opción --" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearTicketBean.servicioTickets}" var="serv" itemLabel="#{serv.nombre}" itemValue="#{serv.codigo.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="cola">Seleccione la cola: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="cola" converter="#{colaConverter}" value="#{crearTicketBean.ticket.colaid}" required="true">
+                                <f:selectItem itemLabel="-- Seleccione una opción --" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearTicketBean.colas}" var="cola" itemLabel="#{cola.nombre}" itemValue="#{cola.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="prioridad">Seleccione la Prioridad: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="prioridad" converter="#{prioridadConverter}" value="#{crearTicketBean.ticket.prioridadTicketcodigo}" required="true">
+                                <f:selectItem itemLabel="-- Seleccione una opción --" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearTicketBean.prioridadTickets}" var="pri" itemLabel="#{pri.nombre}" itemValue="#{pri.codigo.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="titulo">Título: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="titulo" value="#{crearTicketBean.ticket.titulo}" required="true"></p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="articulo">Descripción: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="articulo" value="#{crearTicketBean.articulo.cuerpo}" rows="10" cols="50" counter="display" maxlength="5000" autoResize="false" counterTemplate="{0} caracteres restantes" required="true"></p:inputTextarea> <br />
+                            <h:outputText id="display" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="archivo">Adjunto: </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:row>
+                                <p:column>
+                                    <p:commandButton value="Crear Ticket" id="botonCrear" icon="ui-icon-disk" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"  actionListener="#{crearTicketBean.crearTicket}" update="growl @form"></p:commandButton>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Cancelar" id="botonCancelar" icon="ui-icon-close" immediate="true" action="welcome?faces-redirect=true"></p:commandButton> 
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                    </p:panelGrid>
+                </p:panel>
+                <p:outputPanel id="resumen" styleClass="centerPanel" rendered="#{crearTicketBean.ticketCreado}">
+                    <p><strong>Ticket#: </strong>#{crearTicketBean.ticket.ticketNumber}</p>
+                    <p><strong>Creador: </strong>#{crearTicketBean.ticket.usuarioidcreador.nombre} #{crearTicketBean.ticket.usuarioidcreador.apellido}</p>
+                    <p><strong>Fecha de Creación: </strong>#{crearTicketBean.ticket.fechaDeCreacion}</p>
+                    <p><strong>Equipo: </strong>#{crearTicketBean.ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{crearTicketBean.ticket.itemProductonumeroSerial.modeloProductoid.modelo} - #{crearTicketBean.ticket.itemProductonumeroSerial.numeroSerial}</p>
+                    <p><strong>Prioridad: </strong>#{crearTicketBean.ticket.prioridadTicketcodigo.nombre}</p>
+                    <p><strong>Servicio: </strong>#{crearTicketBean.ticket.servicioTicketcodigo.nombre}</p>
+                    <p><strong>Cola: </strong>#{crearTicketBean.ticket.colaid.nombre}</p>
+                    <p:commandButton value="Continuar" id="botonContinuar" icon="ui-icon-update" immediate="true" action="welcome?faces-redirect=true"></p:commandButton>
+                </p:outputPanel>
+            </h:form>
+        </f:view>
+    </ui:define>
+    <ui:define name="footer">
+        Nothing Here...
+    </ui:define>
+</ui:composition>

@@ -52,6 +52,10 @@ public class FiltroDeAutorizacion implements Filter {
                 res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
                 res.setDateHeader("Expires", 0); // Proxies.
             }
+            //Forzar a usar el Charset UTF-8
+            response.setCharacterEncoding("UTF-8");
+            request.setCharacterEncoding("UTF-8");
+            
             // User is logged in, so just continue request.
             chain.doFilter(request, response);
         } else {
