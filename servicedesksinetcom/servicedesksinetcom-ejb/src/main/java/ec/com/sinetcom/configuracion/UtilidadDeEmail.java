@@ -55,7 +55,9 @@ public class UtilidadDeEmail {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
             //Guardar Archivo Adjunto
-            guardarArchivoAdjunto(nombreArchivo, adjunto);            
+            if(adjunto != null){
+                guardarArchivoAdjunto(nombreArchivo, adjunto);
+            }
             // Part two is attachment
             messageBodyPart = new MimeBodyPart();
             String filename = "/temp/" + nombreArchivo;
@@ -66,7 +68,7 @@ public class UtilidadDeEmail {
 
             // Send the complete message parts
             message.setContent(multipart);
-
+            
             // Send message
             Transport.send(message);
             //Transport.send(message);

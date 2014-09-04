@@ -44,7 +44,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorEstadoDePropietario(Usuario usuario, EstadoTicket estadoTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.estadoTicketcodigo = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.estadoTicketcodigo = ?2";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter(2, estadoTicket);
@@ -58,7 +58,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorEstadoDePropietario(Usuario usuario, String estadoTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.estadoTicketcodigo.nombre LIKE :estado";
+        String sql = "SELECT t FROM Ticket t JOIN t.estadoTicketcodigo e WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND e.nombre LIKE :estado";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("estado", estadoTicket);
@@ -72,7 +72,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorServicioDePropietario(Usuario usuario, ServicioTicket servicioTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.servicioTicketcodigo = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.servicioTicketcodigo = ?2";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter(2, servicioTicket);
@@ -86,7 +86,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorServicioDePropietario(Usuario usuario, String servicioTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.servicioTicketcodigo.nombre LIKE :servicio";
+        String sql = "SELECT t FROM Ticket t JOIN t.servicioTicketcodigo s WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND s.nombre LIKE :servicio";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("servicio", servicioTicket);
@@ -100,7 +100,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorPrioridadDePropietario(Usuario usuario, PrioridadTicket prioridadTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.prioridadTicketcodigo = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.prioridadTicketcodigo = ?2";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter(2, prioridadTicket);
@@ -114,7 +114,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorPrioridadDePropietario(Usuario usuario, String prioridadTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.prioridadTicketcodigo.nombre LIKE :prioridad";
+        String sql = "SELECT t FROM Ticket t JOIN t.prioridadTicketcodigo p WHERE t.usuarioidpropietario = ?1 AND p.nombre LIKE :prioridad";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("prioridad", prioridadTicket);
@@ -128,7 +128,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorColaDePropietario(Usuario usuario, String colaTicket){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.colaid.nombre LIKE :colaTicket";
+        String sql = "SELECT t FROM Ticket t JOIN t.colaid c WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND c.nombre LIKE :colaTicket";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
         qry.setParameter("colaTicket", colaTicket);
@@ -142,10 +142,10 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTicketsPorColaDePropietario(Usuario usuario, Cola cola){
-        String sql = "SELECT t FROM Ticket t WHERE t.usuarioidpropietario = ?1 AND t.colaid = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.colaid = ?2";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, usuario);
-        qry.setParameter("prioridad", cola);
+        qry.setParameter(2, cola);
         return qry.getResultList();
     }
     
@@ -155,7 +155,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsPorEstado(String estado){
-        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :estado";
+        String sql = "SELECT t FROM Ticket t JOIN t.estadoTicketcodigo e WHERE e.nombre LIKE :estado";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter("estado", estado);
         return qry.getResultList();
@@ -167,7 +167,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsPorPrioridad(String prioridad){
-        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :prioridad";
+        String sql = "SELECT t FROM Ticket t JOIN t.prioridadTicketcodigo p WHERE p.nombre LIKE :prioridad";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter("prioridad", prioridad);
         return qry.getResultList();
@@ -179,7 +179,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @return 
      */
     public List<Ticket> obtenerTodosLosTicketsPorServicio(String servicio){
-        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo.nombre LIKE :servicio";
+        String sql = "SELECT t FROM Ticket t JOIN t.servicioTicketcodigo s WHERE s.nombre LIKE :servicio";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter("servicio", servicio);
         return qry.getResultList();

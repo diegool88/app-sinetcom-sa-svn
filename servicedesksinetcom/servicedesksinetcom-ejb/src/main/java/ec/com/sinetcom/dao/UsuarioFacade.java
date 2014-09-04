@@ -5,9 +5,11 @@
 package ec.com.sinetcom.dao;
 
 import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +29,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return em;
     }
 
+    @EJB
+    private GrupoFacade grupoFacade;
+    
     public UsuarioFacade() {
         super(Usuario.class);
     }
@@ -67,6 +72,18 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, correoElectrocnico);
         return qry.getResultList().isEmpty() ? null : (Usuario)qry.getSingleResult();
+    }
+    
+    /**
+     * Obtener todos los ingenieros de soporte
+     * @return 
+     */
+    public List<Usuario> obtenerTodosLosIngenieros(){
+        String sql = "SELECT u FROM Usuario u JOIN u.grupoid g WHERE g.id = :grupo1 OR g.id = :grupo2";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter("grupo1", 2);
+        qry.setParameter("grupo2", 3);
+        return qry.getResultList();
     }
     
 }
