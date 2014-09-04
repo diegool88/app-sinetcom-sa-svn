@@ -9,6 +9,7 @@ import ec.com.sinetcom.dao.ColaFacade;
 import ec.com.sinetcom.dao.ItemProductoFacade;
 import ec.com.sinetcom.dao.PrioridadTicketFacade;
 import ec.com.sinetcom.dao.ServicioTicketFacade;
+import ec.com.sinetcom.dao.TicketFacade;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.Cola;
@@ -16,10 +17,17 @@ import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.ServicioTicket;
 import ec.com.sinetcom.orm.Ticket;
+import ec.com.sinetcom.quartz.EJBTimerTest;
+import ec.com.sinetcom.quartz.EnviarNotificacionJob;
+import ec.com.sinetcom.quartz.JobPrueba;
 import ec.com.sinetcom.servicios.TicketServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -31,48 +39,48 @@ import javax.faces.event.ActionEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultUploadedFile;
 import org.primefaces.model.UploadedFile;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
+import static org.quartz.JobBuilder.*;
+import org.quartz.JobDataMap;
+import static org.quartz.TriggerBuilder.*;
+import static org.quartz.SimpleScheduleBuilder.*;
+import org.quartz.Trigger;
 
 /**
  *
  * @author diegoflores
  */
-
 @ManagedBean
 @ViewScoped
-public class CrearTicketBean implements Serializable{
-    
+public class CrearTicketBean implements Serializable {
+
     @EJB
     private TicketServicio ticketServicio;
-    
-    @ManagedProperty(value="#{login}")
+    @ManagedProperty(value = "#{login}")
     private AdministracionUsuarioBean administracionUsuarioBean;
-
+    @EJB
+    private EJBTimerTest timerTest;
+    
     public void setAdministracionUsuarioBean(AdministracionUsuarioBean administracionUsuarioBean) {
         this.administracionUsuarioBean = administracionUsuarioBean;
     }
-    
     //Las variables tipo lista
     private List<Cola> colas;
-    
     private List<PrioridadTicket> prioridadTickets;
-    
     private List<ServicioTicket> servicioTickets;
-    
     private List<ClienteEmpresa> clienteEmpresas;
-    
     private List<ItemProducto> itemProductos;
-    
     //El nuevo ticket de soporte
     private Ticket ticket;
-    
     private Articulo articulo;
-    
     private UploadedFile archivoAdjunto;
-    
     private boolean ticketCreado;
     
     @PostConstruct
-    public void doInit(){
+    public void doInit() {
         this.colas = this.ticketServicio.obtenerTodasLasColas();
         this.prioridadTickets = this.ticketServicio.obtenerTodasLasPrioridades();
         this.servicioTickets = this.ticketServicio.obtenerTodosLosServiciosDeTicket();
@@ -80,42 +88,95 @@ public class CrearTicketBean implements Serializable{
         this.ticket = new Ticket();
         this.articulo = new Articulo();
         this.ticketCreado = false;
-        //this.archivoAdjunto = new DefaultUploadedFile();
+
+//        try {
+//            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+//
+//            JobDetail test = newJob(JobPrueba.class)
+//                    .withIdentity("job1", "group1")
+//                    .build();
+//
+//            Trigger trigger = newTrigger()
+//                    .withIdentity("trigger1", "group1")
+//                    .startNow()
+//                    .withSchedule(simpleSchedule()
+//                    .withIntervalInSeconds(5)
+//                    .repeatForever())
+//                    .build();
+//
+//            scheduler.scheduleJob(test, trigger);
+//
+//            //this.archivoAdjunto = new DefaultUploadedFile();
+//        } catch (SchedulerException ex) {
+//            Logger.getLogger(CrearTicketBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
-    
+
     /**
      * Actualiza el combo de productos de un cliente
      */
-    public void actualizarProductosCliente(){
+    public void actualizarProductosCliente() {
         this.itemProductos = this.ticketServicio.obtenerTodosLosProductosDeUnCliente(this.ticket.getClienteEmpresaruc());
     }
-    
+
     /**
      * Sube el archivo adjunto
-     * @param event 
+     *
+     * @param event
      */
-    public void adjuntarArchivo(FileUploadEvent event){
+    public void adjuntarArchivo(FileUploadEvent event) {
         this.archivoAdjunto = event.getFile();
     }
-    
+
     /**
      * Evento de creación del ticket de soporte
-     * @param event 
+     *
+     * @param event
      */
-    public void crearTicket(ActionEvent event){
+    public void crearTicket(ActionEvent event) {
         //Agregar el archivo adjunto
-        if(archivoAdjunto != null){
+        if (archivoAdjunto != null) {
             this.articulo.setContenidoAdjunto(this.archivoAdjunto.getContents());
             String[] tipo = this.archivoAdjunto.getContentType().split("/");
             this.articulo.setExtensionArchivo(tipo[1]);
         }
         this.ticketServicio.crearNuevoTicket(this.ticket, this.administracionUsuarioBean.getUsuarioActual());
         this.articulo.setAsunto(this.ticket.getTitulo());
-        this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticket, this.articulo, this.administracionUsuarioBean.getUsuarioActual());
+        this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticket, this.articulo, this.administracionUsuarioBean.getUsuarioActual(), true);
         Mensajes.mostrarMensajeInformativo("Ticket #" + this.ticket.getTicketNumber() + " creado con éxito!");
         this.ticketCreado = true;
+        this.timerTest.run();
+        
+        //Se envia un Job para hacer recordatorios de atención del ticket
+//        try {
+//            
+//            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+//            JobDataMap dataMap = new JobDataMap();
+//            dataMap.put("ticket", this.ticket.getTicketNumber());
+//
+//            JobDetail tarea = newJob(EnviarNotificacionJob.class)
+//                    .withIdentity("actualizar_" + this.ticket.getTicketNumber(), "tickets")
+//                    .usingJobData(dataMap)
+//                    .build();
+//            Calendar c_notif = Calendar.getInstance();
+//            c_notif.setTime(ticket.getFechaDeProximaActualizacion());
+//            c_notif.add(Calendar.MINUTE, -15);
+//            Trigger tareaTrigger = newTrigger()
+//                    .withIdentity("t_actualizar_" + this.ticket.getTicketNumber(), "tickets")
+//                    .startNow()
+//                    .withSchedule(simpleSchedule()
+//                        .withIntervalInSeconds(10)
+//                        .repeatForever())
+//                    .endAt(this.ticket.getFechaDeCierre())
+//                    .build();
+//            scheduler.scheduleJob(tarea,tareaTrigger);
+//            
+//        } catch (SchedulerException ex) {
+//            Logger.getLogger(CrearTicketBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
     }
-    
+
     public List<Cola> getColas() {
         return colas;
     }
@@ -187,5 +248,4 @@ public class CrearTicketBean implements Serializable{
     public void setTicketCreado(boolean ticketCreado) {
         this.ticketCreado = ticketCreado;
     }
-    
 }
