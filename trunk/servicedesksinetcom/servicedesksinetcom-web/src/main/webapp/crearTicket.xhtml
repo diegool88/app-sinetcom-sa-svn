@@ -94,14 +94,17 @@
                     </p:panelGrid>
                 </p:panel>
                 <p:outputPanel id="resumen" styleClass="centerPanel" rendered="#{crearTicketBean.ticketCreado}">
-                    <p><strong>Ticket#: </strong>#{crearTicketBean.ticket.ticketNumber}</p>
-                    <p><strong>Creador: </strong>#{crearTicketBean.ticket.usuarioidcreador.nombre} #{crearTicketBean.ticket.usuarioidcreador.apellido}</p>
-                    <p><strong>Fecha de Creación: </strong>#{crearTicketBean.ticket.fechaDeCreacion}</p>
-                    <p><strong>Equipo: </strong>#{crearTicketBean.ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{crearTicketBean.ticket.itemProductonumeroSerial.modeloProductoid.modelo} - #{crearTicketBean.ticket.itemProductonumeroSerial.numeroSerial}</p>
-                    <p><strong>Prioridad: </strong>#{crearTicketBean.ticket.prioridadTicketcodigo.nombre}</p>
-                    <p><strong>Servicio: </strong>#{crearTicketBean.ticket.servicioTicketcodigo.nombre}</p>
-                    <p><strong>Cola: </strong>#{crearTicketBean.ticket.colaid.nombre}</p>
-                    <p:commandButton value="Continuar" id="botonContinuar" icon="ui-icon-update" immediate="true" action="welcome?faces-redirect=true"></p:commandButton>
+                    <div style="color: black; font-size: larger;">
+                        <h1>Resumen de Ticket</h1>
+                        <p><strong>Ticket#: </strong>#{crearTicketBean.ticket.ticketNumber}</p>
+                        <p><strong>Creador: </strong>#{crearTicketBean.ticket.usuarioidcreador.nombre} #{crearTicketBean.ticket.usuarioidcreador.apellido}</p>
+                        <p><strong>Fecha de Creación: </strong>#{crearTicketBean.ticket.fechaDeCreacion}</p>
+                        <p><strong>Equipo: </strong>#{crearTicketBean.ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{crearTicketBean.ticket.itemProductonumeroSerial.modeloProductoid.modelo} - #{crearTicketBean.ticket.itemProductonumeroSerial.numeroSerial}</p>
+                        <p><strong>Prioridad: </strong>#{crearTicketBean.ticket.prioridadTicketcodigo.nombre}</p>
+                        <p><strong>Servicio: </strong>#{crearTicketBean.ticket.servicioTicketcodigo.nombre}</p>
+                        <p><strong>Cola: </strong>#{crearTicketBean.ticket.colaid.nombre}</p>
+                        <p:commandButton value="Continuar" id="botonContinuar" immediate="true" action="welcome?faces-redirect=true"></p:commandButton>
+                    </div>
                 </p:outputPanel>
             </h:form>
         </f:view>
