@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.Articulo;
+import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Ticket;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author diegoflores
  */
 @Stateless
-public class ArticuloFacade extends AbstractFacade<Articulo> {
+public class ActividadEnSitioFacade extends AbstractFacade<ActividadEnSitio> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -26,31 +26,20 @@ public class ArticuloFacade extends AbstractFacade<Articulo> {
         return em;
     }
 
-    public ArticuloFacade() {
-        super(Articulo.class);
+    public ActividadEnSitioFacade() {
+        super(ActividadEnSitio.class);
     }
     
     /**
-     * Obtemos todos los articulos de un ticket
+     * Función que obtiene todas las actividades en sitio de un ticket
      * @param ticket
      * @return 
      */
-    public List<Articulo> obtenerTodosLosArticulosDeUnTicket(Ticket ticket){
-        String sql = "SELECT a FROM Articulo a WHERE a.ticketticketNumber = ?1";
+    public List<ActividadEnSitio> obtenerTodasLasActividadesDeUnTicket(Ticket ticket){
+        String sql = "SELECT a FROM ActividadEnSitio a WHERE a.ticketticketNumber = ?1";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, ticket);
         return qry.getResultList().isEmpty() ? null : qry.getResultList();
     }
     
-    /**
-     * Obtener orden de Articulo
-     * @param ticket
-     * @return 
-     */
-    public int obtenerOrdenDeArticuloTicket(Ticket ticket){
-        String sql = "SELECT COUNT(a.id) FROM Articulo a WHERE a.ticketticketNumber = ?1";
-        Query qry = this.em.createQuery(sql);
-        qry.setParameter(1, ticket);
-        return ((Number)qry.getSingleResult()).intValue() + 1;
-    }
 }

@@ -41,6 +41,10 @@ public class Ticket implements Serializable {
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
+    private List<VisitasMantenimiento> visitasMantenimientoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
+    private List<ActividadEnSitio> actividadEnSitioList;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -329,6 +333,24 @@ public class Ticket implements Serializable {
 
     public void setHojaDeServicio(byte[] hojaDeServicio) {
         this.hojaDeServicio = hojaDeServicio;
+    }
+
+    @XmlTransient
+    public List<VisitasMantenimiento> getVisitasMantenimientoList() {
+        return visitasMantenimientoList;
+    }
+
+    public void setVisitasMantenimientoList(List<VisitasMantenimiento> visitasMantenimientoList) {
+        this.visitasMantenimientoList = visitasMantenimientoList;
+    }
+
+    @XmlTransient
+    public List<ActividadEnSitio> getActividadEnSitioList() {
+        return actividadEnSitioList;
+    }
+
+    public void setActividadEnSitioList(List<ActividadEnSitio> actividadEnSitioList) {
+        this.actividadEnSitioList = actividadEnSitioList;
     }
     
 }

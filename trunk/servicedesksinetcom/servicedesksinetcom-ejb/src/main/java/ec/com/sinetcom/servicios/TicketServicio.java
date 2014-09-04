@@ -7,31 +7,34 @@ package ec.com.sinetcom.servicios;
 import com.mchange.v1.util.ArrayUtils;
 import ec.com.sinetcom.configuracion.UtilidadDeCorreoElectronico;
 import ec.com.sinetcom.configuracion.UtilidadDeEmail;
+import ec.com.sinetcom.dao.ActividadEnSitioFacade;
 import ec.com.sinetcom.dao.ArticuloFacade;
 import ec.com.sinetcom.dao.ClienteEmpresaFacade;
 import ec.com.sinetcom.dao.ColaFacade;
 import ec.com.sinetcom.dao.ContactoFacade;
 import ec.com.sinetcom.dao.EstadoTicketFacade;
 import ec.com.sinetcom.dao.EventoTicketFacade;
+import ec.com.sinetcom.dao.GrupoFacade;
 import ec.com.sinetcom.dao.HistorialDeTicketFacade;
 import ec.com.sinetcom.dao.ItemProductoFacade;
 import ec.com.sinetcom.dao.PrioridadTicketFacade;
 import ec.com.sinetcom.dao.ServicioTicketFacade;
 import ec.com.sinetcom.dao.TicketFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
+import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.Cola;
 import ec.com.sinetcom.orm.Competencias;
 import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.orm.EstadoTicket;
+import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.HistorialDeTicket;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.ServicioTicket;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;
-import ec.com.sinetcom.quartz.EnviarNotificacionJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -84,6 +87,10 @@ public class TicketServicio {
     private ItemProductoFacade itemProductoFacade;
     @EJB
     private EstadoTicketFacade estadoTicketFacade;
+    @EJB
+    private GrupoFacade grupoFacade;
+    @EJB
+    private ActividadEnSitioFacade actividadEnSitioFacade;
 
     /**
      * Obtiene todas las colas
@@ -110,6 +117,15 @@ public class TicketServicio {
      */
     public List<ClienteEmpresa> obtenerTodosLosClientes() {
         return this.clienteEmpresaFacade.findAll();
+    }
+
+    /**
+     * Obtiene todos los estados posibles de un ticket
+     *
+     * @return
+     */
+    public List<EstadoTicket> obtenerTodosLosEstados() {
+        return this.estadoTicketFacade.findAll();
     }
 
     /**
@@ -163,6 +179,16 @@ public class TicketServicio {
     }
 
     /**
+     * Obtener el usuario por el id (Converter)
+     *
+     * @param id
+     * @return
+     */
+    public Usuario obtenerUsuario(int id) {
+        return this.usuarioFacade.find(id);
+    }
+
+    /**
      * Obtiene todos los servicios
      *
      * @return
@@ -171,8 +197,87 @@ public class TicketServicio {
         return this.servicioTicketFacade.findAll();
     }
 
+    /**
+     * Obtiene todos los productos de un cliente
+     *
+     * @param clienteIDSeleccionado
+     * @return
+     */
     public List<ItemProducto> obtenerTodosLosProductosDeUnCliente(ClienteEmpresa clienteIDSeleccionado) {
         return clienteIDSeleccionado != null ? this.itemProductoFacade.obtenerTodosLosProductosDeCliente(clienteIDSeleccionado.getContratoList()) : null;
+    }
+
+    /**
+     * Obtiene todos los tickets de un usuario por estado
+     *
+     * @param usuario
+     * @param estado
+     * @return
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorUnEstado(Usuario usuario, int estado) {
+        EstadoTicket estadoTicket = this.estadoTicketFacade.find(estado);
+        if (estadoTicket != null) {
+            return this.ticketFacade.obtenerTicketsPorEstadoDePropietario(usuario, estadoTicket);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene todos los tickets de un usuario por cola
+     *
+     * @param usuario
+     * @param cola
+     * @return
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorUnaCola(Usuario usuario, int cola) {
+        Cola colaTicket = this.colaFacade.find(cola);
+        if (colaTicket != null) {
+            return this.ticketFacade.obtenerTicketsPorColaDePropietario(usuario, colaTicket);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene todos los ingenieros de soporte
+     *
+     * @return
+     */
+    public List<Usuario> obtenerTodosLosIngenieros() {
+        return this.usuarioFacade.obtenerTodosLosIngenieros();
+    }
+
+    /**
+     * Obtiene todos los articulos de un ticket
+     *
+     * @param ticket
+     * @return
+     */
+    public List<Articulo> obtenerTodosLosArticulosDeTicket(Ticket ticket) {
+        return this.articuloFacade.obtenerTodosLosArticulosDeUnTicket(ticket);
+    }
+
+    /**
+     * Obtiene todos las actividades en sitio de un ticket
+     *
+     * @param ticket
+     * @return
+     */
+    public List<ActividadEnSitio> obtenerTodasLasActividadesEnSitioDeUnTicket(Ticket ticket) {
+        return this.actividadEnSitioFacade.obtenerTodasLasActividadesDeUnTicket(ticket);
+    }
+
+    /**
+     * Eliminar un actividad en sitio
+     *
+     * @param id
+     */
+    public void eliminarActividadDeTicket(int id) {
+        ActividadEnSitio actividadEnSitio = this.actividadEnSitioFacade.find(id);
+        if (actividadEnSitio != null) {
+            this.actividadEnSitioFacade.remove(actividadEnSitio);
+        }
     }
 
     /**
@@ -212,21 +317,21 @@ public class TicketServicio {
             this.ticketFacade.create(ticket);
 
             //Se crea una tarea de notificacion para cuando se termine el tiempo de actualizacion
-            JobDataMap dataMap = new JobDataMap();
-            dataMap.put("ticket", ticket);
-            JobDetail tarea = newJob(EnviarNotificacionJob.class)
-                    .withIdentity("actualizar" + ticket.getTicketNumber(), "tickets")
-                    .usingJobData(dataMap)
-                    .build();
-            Calendar c_notif = c.getInstance();
-            c_notif.add(Calendar.MINUTE, -15);
-            Trigger tareaTrigger = newTrigger()
-                    .withIdentity("t_actualizar" + ticket.getTicketNumber(), "tickets")
-                    .startAt(c_notif.getTime())
-                    .endAt(c.getTime())
-                    .build();
+//            JobDataMap dataMap = new JobDataMap();
+//            dataMap.put("ticket", ticket);
+//            JobDetail tarea = newJob(EnviarNotificacionJob.class)
+//                    .withIdentity("actualizar" + ticket.getTicketNumber(), "tickets")
+//                    .usingJobData(dataMap)
+//                    .build();
+//            Calendar c_notif = c.getInstance();
+//            c_notif.add(Calendar.MINUTE, -15);
+//            Trigger tareaTrigger = newTrigger()
+//                    .withIdentity("t_actualizar" + ticket.getTicketNumber(), "tickets")
+//                    .startAt(c_notif.getTime())
+//                    .endAt(c.getTime())
+//                    .build();
 
-
+            //Se añade un historico del evento
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
             historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(1));
             historialDeTicket.setFechaDelEvento(new Date());
@@ -234,7 +339,7 @@ public class TicketServicio {
             historialDeTicket.setUsuarioid(ticket.getUsuarioidcreador());
             historialDeTicket.setTicketticketNumber(ticket);
             this.historialDeTicketFacade.create(historialDeTicket);
-            
+
             //Se envia el correo electrónico notificando a todos los interesados 
             //utilidadDeCorreoElectronico.enviarCorreoConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Nueva incidencia - Caso# " + ticket.getTicketNumber(), crearCuerpoDeCorreoNuevoTicket(ticket, , true), null, adjunto, null);
             //utilidadDeCorreoElectronico.enviarCorreoSimple(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Nueva incidencia - Caso# " + ticket.getTicketNumber(), "", contactosDeTicket(ticket));
@@ -281,21 +386,37 @@ public class TicketServicio {
      * @param usuarioAsignante
      * @return
      */
-    public boolean asignarTicketAPropietario(Ticket ticket, Usuario usuarioPropietario, Usuario usuarioAsignante) {
+    public boolean asignarTicketAPropietario(Ticket ticket, Usuario usuarioAsignante) {
         try {
-            ticket.setUsuarioidpropietario(usuarioPropietario);
             this.ticketFacade.edit(ticket);
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
-            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(4));
+            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(5));
             historialDeTicket.setOrden(this.historialDeTicketFacade.obtenerOrdenDeHistorialDeTicket(ticket));
             historialDeTicket.setTicketticketNumber(ticket);
             historialDeTicket.setFechaDelEvento(new Date());
             historialDeTicket.setUsuarioid(usuarioAsignante);
+            this.historialDeTicketFacade.create(historialDeTicket);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * Servicio que permite agregar una nueva actividad en sitio a un ticket
+     *
+     * @param actividadEnSitio
+     * @return
+     */
+    public boolean agregarActividadEnSitio(ActividadEnSitio actividadEnSitio) {
+        try {
+            this.actividadEnSitioFacade.create(actividadEnSitio);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -312,11 +433,12 @@ public class TicketServicio {
             ticket.setEstadoTicketcodigo(estadoTicket);
             this.ticketFacade.edit(ticket);
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
-            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(2));
+            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(3));
             historialDeTicket.setOrden(this.historialDeTicketFacade.obtenerOrdenDeHistorialDeTicket(ticket));
             historialDeTicket.setTicketticketNumber(ticket);
             historialDeTicket.setFechaDelEvento(new Date());
             historialDeTicket.setUsuarioid(usuario);
+            this.historialDeTicketFacade.create(historialDeTicket);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -338,11 +460,12 @@ public class TicketServicio {
             ticket.setColaid(cola);
             this.ticketFacade.edit(ticket);
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
-            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(3));
+            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(4));
             historialDeTicket.setOrden(this.historialDeTicketFacade.obtenerOrdenDeHistorialDeTicket(ticket));
             historialDeTicket.setTicketticketNumber(ticket);
             historialDeTicket.setFechaDelEvento(new Date());
             historialDeTicket.setUsuarioid(usuario);
+            this.historialDeTicketFacade.create(historialDeTicket);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -359,7 +482,7 @@ public class TicketServicio {
      * @param usuario
      * @return
      */
-    public boolean ingresarNuevoArticuloAlTicket(Ticket ticket, Articulo articulo, Usuario usuario) {
+    public boolean ingresarNuevoArticuloAlTicket(Ticket ticket, Articulo articulo, Usuario usuario, boolean esArticuloInicial) {
         try {
             articulo.setDe(usuario);
             articulo.setPara(ticket.getUsuarioidcreador());
@@ -374,20 +497,26 @@ public class TicketServicio {
             articulo.setCopia(cc.toString());
             articulo.setTicketticketNumber(ticket);
             articulo.setFechaDeCreacion(new Date());
+            articulo.setOrden(this.articuloFacade.obtenerOrdenDeArticuloTicket(ticket));
             articuloFacade.create(articulo);
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
-            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(1));
+            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(2));
             historialDeTicket.setOrden(this.historialDeTicketFacade.obtenerOrdenDeHistorialDeTicket(ticket));
             historialDeTicket.setTicketticketNumber(ticket);
             historialDeTicket.setFechaDelEvento(new Date());
             historialDeTicket.setUsuarioid(usuario);
-            
+
             //Se envía un correo por ticket nuevo
             UtilidadDeEmail utilidadDeCorreoElectronico = new UtilidadDeEmail();
-            //Se envia el correo electrónico notificando a todos los interesados 
-            utilidadDeCorreoElectronico.enviarMensajeConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Nueva incidencia - Caso# " + ticket.getTicketNumber(), crearCuerpoDeCorreoNuevoTicket(ticket, articulo, false), contactosDeTicket(ticket) , articulo.getContenidoAdjunto() != null ? articulo.getContenidoAdjunto() : null, articulo.getContenidoAdjunto() != null ? ticket.getTicketNumber() + "_" + articulo.getId() + "." + articulo.getExtensionArchivo() : null);
-            //Se envia un correo a todos los tecnicos de Sinetcom
-            utilidadDeCorreoElectronico.enviarMensajeConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Nueva incidencia - Caso# " + ticket.getTicketNumber(), crearCuerpoDeCorreoNuevoTicket(ticket, articulo, true), contactosDeTicket(ticket) , articulo.getContenidoAdjunto() != null ? articulo.getContenidoAdjunto() : null, articulo.getContenidoAdjunto() != null ? ticket.getTicketNumber() + "_" + articulo.getId() + "." + articulo.getExtensionArchivo() : null);
+            if (esArticuloInicial) {
+                //Se envia el correo electrónico notificando a todos los interesados 
+                utilidadDeCorreoElectronico.enviarMensajeConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Nueva incidencia - Caso# " + ticket.getTicketNumber(), crearCuerpoDeCorreoNuevoTicket(ticket, articulo, false), contactosDeTicket(ticket), articulo.getContenidoAdjunto() != null ? articulo.getContenidoAdjunto() : null, articulo.getContenidoAdjunto() != null ? ticket.getTicketNumber() + "_" + articulo.getId() + "." + articulo.getExtensionArchivo() : null);
+                //Se envia un correo a todos los tecnicos de Sinetcom
+                utilidadDeCorreoElectronico.enviarMensajeConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Nueva incidencia - Caso# " + ticket.getTicketNumber(), crearCuerpoDeCorreoNuevoTicket(ticket, articulo, true), contactosDeTicket(ticket), articulo.getContenidoAdjunto() != null ? articulo.getContenidoAdjunto() : null, articulo.getContenidoAdjunto() != null ? ticket.getTicketNumber() + "_" + articulo.getId() + "." + articulo.getExtensionArchivo() : null);
+            }else{
+                //Se envia un correo electrónico del nuevo articulo
+                utilidadDeCorreoElectronico.enviarMensajeConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Actualización - Caso# " + ticket.getTicketNumber(), crearCuerpoDeCorreoNuevoArticuloEnTicket(articulo), contactosDeTicket(ticket), articulo.getContenidoAdjunto() != null ? articulo.getContenidoAdjunto() : null, articulo.getContenidoAdjunto() != null ? ticket.getTicketNumber() + "_" + articulo.getId() + "." + articulo.getExtensionArchivo() : null);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -396,6 +525,26 @@ public class TicketServicio {
         return true;
     }
 
+    public boolean cerrarTicket(Ticket ticket, Usuario usuario, boolean conExito){
+        try{
+            EstadoTicket estadoDeCierre = conExito == true ? this.estadoTicketFacade.find(3) : this.estadoTicketFacade.find(4);
+            ticket.setEstadoTicketcodigo(estadoDeCierre);
+            this.ticketFacade.edit(ticket);
+            //Se añade un historico del evento
+            HistorialDeTicket historialDeTicket = new HistorialDeTicket();
+            historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(6));
+            historialDeTicket.setFechaDelEvento(new Date());
+            historialDeTicket.setOrden(this.historialDeTicketFacade.obtenerOrdenDeHistorialDeTicket(ticket) + 1);
+            historialDeTicket.setUsuarioid(usuario);
+            historialDeTicket.setTicketticketNumber(ticket);
+            this.historialDeTicketFacade.create(historialDeTicket);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * Servicio que permite verificar que se hayan cumplido los SLAs (En texto y
      * en boolean)
@@ -477,10 +626,10 @@ public class TicketServicio {
         //Se envía un correo a todos los que tienen la competencia respectiva al caso
         Competencias competencias = ticket.getColaid().getCompetenciasid();
         List<Usuario> usuarios = this.usuarioFacade.obtenerUsuariosPorCompetencias(competencias);
-        
+
         //String[] correosCC1 = new String[usuarios == null ? 0 : usuarios.size()];
         if (usuarios != null) {
-            for(Usuario usuarioContacto: usuarios){
+            for (Usuario usuarioContacto : usuarios) {
                 ccTodos.add(usuarioContacto.getCorreoElectronico());
             }
         }
@@ -488,27 +637,33 @@ public class TicketServicio {
         //Se añade a las persona que esten involucradas en el caso
         List<Contacto> contactos = this.contactoFacade.obtenerContactosDeCliente(ticket.getClienteEmpresaruc());
         if (contactos != null) {
-            for(Contacto contactoEmpresa: contactos){
+            for (Contacto contactoEmpresa : contactos) {
                 ccTodos.add(contactoEmpresa.getCorreoElectronico());
             }
         }
 
         //Se agrega a la presidencia en copia
-        ccTodos.add("jorge.yanez@sinetcom.com.ec");
+        //ccTodos.add("jorge.yanez@sinetcom.com.ec");
         //Agregando al Helpdesk en copia
         ccTodos.add("soporte@sinetcom.com.ec");
+        //Agrenado al Gerente de soporte
+        ccTodos.add("antonio.bassignana@sinetcom.com.ec");
+        //Agregando a la persona que creo el ticket
+        ccTodos.add(ticket.getUsuarioidcreador().getCorreoElectronico());
 
         return ccTodos;
     }
-    
+
     /**
-     * Esta función permite crear el cuerpo del correo electrónico de un nuevo ticket
+     * Esta función permite crear el cuerpo del correo electrónico de un nuevo
+     * ticket
+     *
      * @param ticket
      * @param articulo
-     * @return 
+     * @return
      */
-    private String crearCuerpoDeCorreoNuevoTicket(Ticket ticket, Articulo articulo, boolean empresaDeSoporte){
-        
+    private String crearCuerpoDeCorreoNuevoTicket(Ticket ticket, Articulo articulo, boolean empresaDeSoporte) {
+
         StringBuilder cuerpo = new StringBuilder();
         //Se indica los datos principales del ticket
         cuerpo.append("Le informamos que un nuevo ticket de soporte se ha creado:").append("\n");
@@ -521,11 +676,10 @@ public class TicketServicio {
         cuerpo.append("Estado: ").append(ticket.getEstadoTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Equipo: ").append(ticket.getItemProductonumeroSerial().getModeloProductoid().getLineaDeProductoid().getNombre()).append(ticket.getItemProductonumeroSerial().getModeloProductoid().getModelo()).append(" - S/N ").append(ticket.getItemProductonumeroSerial().getNumeroSerial()).append("\n");
         //Se agrega la informacion a la empresa de soporte
-        if(empresaDeSoporte){
+        if (empresaDeSoporte) {
             cuerpo.append("SLA: ").append(ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad()).append("\n");
             Calendar c = Calendar.getInstance();
-            switch(ticket.getPrioridadTicketcodigo().getValor())
-            {
+            switch (ticket.getPrioridadTicketcodigo().getValor()) {
                 case 1:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadAlta());
                     cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
@@ -549,16 +703,18 @@ public class TicketServicio {
         cuerpo.append("---------------------------------------------------").append("\n");
         cuerpo.append("Asunto: ").append(ticket.getTitulo()).append("\n");
         cuerpo.append("Descripción del problema: ").append(articulo.getCuerpo()).append("\n");
-        
+
         return cuerpo.toString();
     }
-    
+
     /**
-     * Función que permite crear el cuerpo del correo electronico de un nuevo articulo
+     * Función que permite crear el cuerpo del correo electronico de un nuevo
+     * articulo
+     *
      * @param articulo
-     * @return 
+     * @return
      */
-    public String crearCuerpoDeCorreoNuevoArticuloEnTicket(Articulo articulo){
+    private String crearCuerpoDeCorreoNuevoArticuloEnTicket(Articulo articulo) {
         StringBuilder cuerpo = new StringBuilder();
         //Agregamos el nuevo articulo al ticket
         cuerpo.append("Se ha agregado un nuevo artículo al ticket# ").append(articulo.getTicketticketNumber().getTicketNumber()).append("\n");
@@ -566,5 +722,4 @@ public class TicketServicio {
         cuerpo.append(articulo.getCuerpo()).append("\n");
         return cuerpo.toString();
     }
-    
 }

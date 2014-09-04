@@ -37,6 +37,9 @@ public class VisitasMantenimiento implements Serializable {
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
+    @JoinColumn(name = "Ticket_ticketNumber", referencedColumnName = "ticketNumber")
+    @ManyToOne(optional = false)
+    private Ticket ticketticketNumber;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,9 +62,6 @@ public class VisitasMantenimiento implements Serializable {
     @Size(max = 45)
     @Column(name = "idNotificador")
     private String idNotificador;
-    @Size(max = 45)
-    @Column(name = "idTicketMantenimiento")
-    private String idTicketMantenimiento;
     @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")
     @ManyToOne(optional = false)
     private Contrato contratonumero;
@@ -119,14 +119,6 @@ public class VisitasMantenimiento implements Serializable {
         this.idNotificador = idNotificador;
     }
 
-    public String getIdTicketMantenimiento() {
-        return idTicketMantenimiento;
-    }
-
-    public void setIdTicketMantenimiento(String idTicketMantenimiento) {
-        this.idTicketMantenimiento = idTicketMantenimiento;
-    }
-
     public Contrato getContratonumero() {
         return contratonumero;
     }
@@ -166,6 +158,14 @@ public class VisitasMantenimiento implements Serializable {
 
     public void setHojaDeServicio(byte[] hojaDeServicio) {
         this.hojaDeServicio = hojaDeServicio;
+    }
+
+    public Ticket getTicketticketNumber() {
+        return ticketticketNumber;
+    }
+
+    public void setTicketticketNumber(Ticket ticketticketNumber) {
+        this.ticketticketNumber = ticketticketNumber;
     }
     
 }
