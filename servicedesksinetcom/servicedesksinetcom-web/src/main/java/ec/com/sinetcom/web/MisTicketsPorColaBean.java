@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.ServletOutputStream;
@@ -41,26 +42,26 @@ import org.primefaces.model.UploadedFile;
  *
  * @author diegoflores
  */
-@ManagedBean(name="misTicketsPorCola")
+@ManagedBean(name = "misTicketsPorCola")
 @ViewScoped
-public class MisTicketsPorColaBean extends BotonesTickets implements Serializable{
-    
+public class MisTicketsPorColaBean extends BotonesTickets implements Serializable {
+
     @EJB
     private TicketServicio ticketServicio;
-    
+
     @ManagedProperty(value = "#{login}")
     private AdministracionUsuarioBean administracionUsuarioBean;
 
     public void setAdministracionUsuarioBean(AdministracionUsuarioBean administracionUsuarioBean) {
         this.administracionUsuarioBean = administracionUsuarioBean;
     }
-    
+
     //Se escogen todos los estados de un ticket
     private List<Cola> colasTickets;
     //Se escogen todos los ingeniero disponibles con las competencias de la cola
     private List<Usuario> ingenieros;
     //Se define el arreglo de ticket
-    private List<Ticket> tickets; 
+    private List<Ticket> tickets;
     //Se define el ticket seleccionado
     private Ticket ticketSeleccionado;
     //Articulos del ticket seleccionado
@@ -81,9 +82,11 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     private Boolean resueltoConExito;
     //Archivo para descargar
     private StreamedContent archivoPorDescargar;
-    
+    //Link de descarga
+    private UICommand link;
+
     @PostConstruct
-    public void doInit(){
+    public void doInit() {
         //this.tickets = new ArrayList<Ticket>();
         //this.estadoTickets = this.ticketServicio.obtenerTodosLosEstados();
         this.colasTickets = this.ticketServicio.obtenerTodasLasColas();
@@ -94,13 +97,13 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.actividadesEnSitio = new ArrayList<ActividadEnSitio>();
         this.nuevaActividadEnSitio = new ActividadEnSitio();
         this.fechaActual = new Date();
-        if(this.ticketSeleccionado == null){ 
+        if (this.ticketSeleccionado == null) {
             this.sinSeleccion();
         }
         this.resueltoConExito = true;
     }
-    
-    public void cambioDeTab(TabChangeEvent event){
+
+    public void cambioDeTab(TabChangeEvent event) {
         Tab activo = event.getTab();
         int seleccion = Integer.parseInt(activo.getAttributes().get("id").toString().split("-")[1]);
         this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), seleccion);
@@ -110,34 +113,35 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.sinSeleccion();
         Mensajes.mostrarMensajeInformativo(activo.getAttributes().get("title").toString());
     }
-    
-    public void asignarIngeniero(ActionEvent event){
-        if(this.ticketSeleccionado != null){
+
+    public void asignarIngeniero(ActionEvent event) {
+        if (this.ticketSeleccionado != null) {
             this.ticketServicio.asignarTicketAPropietario(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
+            Mensajes.mostrarMensajeInformativo("Ticket #" + this.ticketSeleccionado.getTicketNumber() + " asignado a Ing. " + this.ticketSeleccionado.getUsuarioidpropietario().getNombreCompleto());
         }
     }
-    
-    public void eliminarActividad(ActionEvent event){
-        this.ticketServicio.eliminarActividadDeTicket((Integer)event.getComponent().getAttributes().get("idActividad"));
+
+    public void eliminarActividad(ActionEvent event) {
+        this.ticketServicio.eliminarActividadDeTicket((Integer) event.getComponent().getAttributes().get("idActividad"));
         this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket(this.ticketSeleccionado);
     }
-    
-    public void descargarArchivoAdjunto(ActionEvent event){
+
+    public void descargarArchivoAdjunto(ActionEvent event) {
         //ByteArrayInputStream stream = new ByteArrayInputStream(((Articulo)event.getComponent().getAttributes().get("idActividad")).getContenidoAdjunto());
-        Articulo articuloSel = (Articulo)event.getComponent().getAttributes().get("articuloId");
-        this.archivoPorDescargar = new DefaultStreamedContent(new ByteArrayInputStream(articuloSel.getContenidoAdjunto()), 
-                articuloSel.getExtensionArchivo().equals("jpg") || 
-                articuloSel.getExtensionArchivo().equals("jpeg") ||
-                articuloSel.getExtensionArchivo().equals("gif") ||
-                articuloSel.getExtensionArchivo().equals("png") ? "image/" + articuloSel.getExtensionArchivo() : "application/pdf", "archivo." + articuloSel.getExtensionArchivo());
+        Articulo articuloSel = (Articulo) event.getComponent().getAttributes().get("articuloId");
+        this.archivoPorDescargar = new DefaultStreamedContent(new ByteArrayInputStream(articuloSel.getContenidoAdjunto()),
+                articuloSel.getExtensionArchivo().equals("jpg")
+                || articuloSel.getExtensionArchivo().equals("jpeg")
+                || articuloSel.getExtensionArchivo().equals("gif")
+                || articuloSel.getExtensionArchivo().equals("png") ? "image/" + articuloSel.getExtensionArchivo() : "application/pdf", "archivo." + articuloSel.getExtensionArchivo());
         //descargarArchivoPorByteArray("archivo", articuloSel.getExtensionArchivo(), articuloSel.getContenidoAdjunto());
     }
-    
-    public void descargarArchivoPorByteArray(String nombreArchivo, String tipoArchivo, byte[] datos){
+
+    public void descargarArchivoPorByteArray(String nombreArchivo, String tipoArchivo, byte[] datos) {
         FacesContext faces = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) faces.getExternalContext().getResponse();
         response.setContentLength(datos.length);
-        response.addHeader("Content-Type", tipoArchivo.equals("jpg") || tipoArchivo.equals("png") || tipoArchivo.equals("jpeg") || tipoArchivo.equals("gif") ? "image/" + tipoArchivo : "application/" + tipoArchivo );
+        response.addHeader("Content-Type", tipoArchivo.equals("jpg") || tipoArchivo.equals("png") || tipoArchivo.equals("jpeg") || tipoArchivo.equals("gif") ? "image/" + tipoArchivo : "application/" + tipoArchivo);
         response.addHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
         ServletOutputStream out = null;
         try {
@@ -160,13 +164,13 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         // close output stream response writer
         faces.responseComplete();
     }
-    
-    public void adjuntarArchivo(FileUploadEvent event){
+
+    public void adjuntarArchivo(FileUploadEvent event) {
         this.archivoAdjunto = event.getFile();
     }
-    
-    public void crearNuevoArticulo(ActionEvent event){
-        if(this.archivoAdjunto != null){
+
+    public void crearNuevoArticulo(ActionEvent event) {
+        if (this.archivoAdjunto != null) {
             this.articuloNuevo.setContenidoAdjunto(this.archivoAdjunto.getContents());
             String[] tipo = this.archivoAdjunto.getContentType().split("/");
             this.articuloNuevo.setExtensionArchivo(tipo[1]);
@@ -174,43 +178,47 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticketSeleccionado, this.articuloNuevo, this.administracionUsuarioBean.getUsuarioActual(), false);
         this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket(this.ticketSeleccionado);
     }
-    
-    public void agregarActividadEnSitio(ActionEvent event){
-        if(this.ticketSeleccionado != null){
+
+    public void agregarActividadEnSitio(ActionEvent event) {
+        if (this.ticketSeleccionado != null) {
             this.nuevaActividadEnSitio.setTicketticketNumber(this.ticketSeleccionado);
             this.ticketServicio.agregarActividadEnSitio(this.nuevaActividadEnSitio);
             this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket(this.ticketSeleccionado);
         }
     }
-    
-    public void enserarActividadEnSitio(ActionEvent event){
+
+    public void enserarActividadEnSitio(ActionEvent event) {
         this.nuevaActividadEnSitio = new ActividadEnSitio();
     }
-    
-    public void registroSeleccionado(SelectEvent event){
+
+    public void registroSeleccionado(SelectEvent event) {
         this.sinSeleccion();
-        this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket((Ticket)event.getObject());
-        this.actividadesEnSitio = this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket((Ticket)event.getObject());
-        int codigoEstado = ((Ticket)event.getObject()).getEstadoTicketcodigo().getCodigo();
-        if(codigoEstado != 3 && codigoEstado != 4) {
+        this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket((Ticket) event.getObject());
+        this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket((Ticket) event.getObject());
+        int codigoEstado = ((Ticket) event.getObject()).getEstadoTicketcodigo().getCodigo();
+        if (codigoEstado != 3 && codigoEstado != 4) {
             this.seleccionadoUno();
-        }        
+        }
     }
-    
-    public void registroDeseleccionado(UnselectEvent event){
+
+    public void registroDeseleccionado(UnselectEvent event) {
         this.articulos = null;
         this.actividadesEnSitio = null;
         this.sinSeleccion();
     }
 
-    public void cerrarCaso(ActionEvent event){
-        this.ticketSeleccionado.setFechaDeModificacion(new Date());
-        this.ticketSeleccionado.setFechaDeCierre(new Date());
-        this.ticketServicio.cerrarTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual(), this.resueltoConExito);
-        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getColaid().getId());
+    public void cerrarCaso(ActionEvent event) {
+        boolean tieneActividades = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket(this.ticketSeleccionado) != null ? true : false;
+        if (!tieneActividades) {
+            Mensajes.mostrarMensajeDeError("Usted no puede cerrar este ticket, debe tener registrada al menos una actividad!");
+        } else {
+            this.ticketSeleccionado.setFechaDeModificacion(new Date());
+            this.ticketSeleccionado.setFechaDeCierre(new Date());
+            this.ticketServicio.cerrarTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual(), this.resueltoConExito);
+            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getColaid().getId());
+        }
     }
-    
-    
+
     public List<Ticket> getTickets() {
         return tickets;
     }
@@ -314,7 +322,13 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     public void setArchivoPorDescargar(StreamedContent archivoPorDescargar) {
         this.archivoPorDescargar = archivoPorDescargar;
     }
-    
-    
-    
+
+    public UICommand getLink() {
+        return link;
+    }
+
+    public void setLink(UICommand link) {
+        this.link = link;
+    }
+
 }

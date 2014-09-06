@@ -14,17 +14,17 @@ import javax.faces.context.FacesContext;
 public class Mensajes {
     
     public static void mostrarMensajeInformativo(String mensaje){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, mensaje,  null);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Info: ", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
     public static void mostrarMensajeDeError(String mensaje){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje,  null);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: ", mensaje); 
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
     public static void mostrarMensajeDeAdvertencia(String mensaje){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, mensaje,  null);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia: ",  mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }
