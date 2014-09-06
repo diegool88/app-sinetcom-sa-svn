@@ -259,6 +259,15 @@ public class TicketServicio {
     }
 
     /**
+     * Obtiene un articulo por id
+     * @param id
+     * @return 
+     */
+    public Articulo obtenerUnArticuloPorId(int id){
+        return this.articuloFacade.find(id);
+    }
+    
+    /**
      * Obtiene todos las actividades en sitio de un ticket
      *
      * @param ticket
