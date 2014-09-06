@@ -124,6 +124,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     public void eliminarActividad(ActionEvent event) {
         this.ticketServicio.eliminarActividadDeTicket((Integer) event.getComponent().getAttributes().get("idActividad"));
         this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket(this.ticketSeleccionado);
+        Mensajes.mostrarMensajeInformativo("Actividad Eliminada!");
     }
 
     public void descargarArchivoAdjunto(ActionEvent event) {
@@ -208,7 +209,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     }
 
     public void cerrarCaso(ActionEvent event) {
-        boolean tieneActividades = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket(this.ticketSeleccionado) != null ? true : false;
+        boolean tieneActividades = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket(this.ticketSeleccionado) != null;
         if (!tieneActividades) {
             Mensajes.mostrarMensajeDeError("Usted no puede cerrar este ticket, debe tener registrada al menos una actividad!");
         } else {
@@ -216,6 +217,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
             this.ticketSeleccionado.setFechaDeCierre(new Date());
             this.ticketServicio.cerrarTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual(), this.resueltoConExito);
             this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getColaid().getId());
+            Mensajes.mostrarMensajeInformativo("El Ticket# " + this.ticketSeleccionado.getTicketNumber() + " ha sido cerrado con éxito!");
         }
     }
 
