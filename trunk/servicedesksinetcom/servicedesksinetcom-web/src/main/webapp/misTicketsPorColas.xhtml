@@ -56,14 +56,14 @@
                     <p:panel id="asignarT">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione un ingeniero:"></h:outputText>
-                            <p:selectOneMenu value="#{misTicketsPorCola.ticketSeleccionado.usuarioidpropietario}" converter="#{usuarioConverter}">
+                            <p:selectOneMenu value="#{misTicketsPorCola.ticketSeleccionado.usuarioidpropietario}" required="true" requiredMessage="Seleccione un ingeniero!" converter="#{usuarioConverter}">
                                 <p:ajax event="change" update="@this"></p:ajax>
                                 <f:selectItem itemLabel="--Seleccione una opción--" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{misTicketsPorCola.ingenieros}" var="ing" itemLabel="#{ing.nombre} #{ing.apellido}" itemValue="#{ing.id.toString()}"></f:selectItems>
                             </p:selectOneMenu> 
                         </p:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Asignar Ticket" actionListener="#{misTicketsPorEstado.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" process="@this" update="@form"></p:commandButton>
+                            <p:commandButton value="Asignar Ticket" process=":form:asignarT" update="@form" actionListener="#{misTicketsPorCola.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
                         </f:facet>
                     </p:panel>
                 </p:dialog>
@@ -123,7 +123,7 @@
                         </p:panelGrid>
                         <br/>
                         <hr/>
-                        <p:commandButton value="Cerrar Caso" process=":form:cerrarT" update="@form" actionListener="#{misTicketsPorCola.cerrarCaso}"></p:commandButton>
+                        <p:commandButton value="Cerrar Caso" process="@this" update="@form" actionListener="#{misTicketsPorCola.cerrarCaso}"></p:commandButton>
                         <hr/>
                     </p:panel>
                 </p:dialog>
@@ -140,10 +140,12 @@
                                 <h:outputLabel>Mensaje: </h:outputLabel>
                                 <p:inputTextarea cols="40" rows="10" value="#{articulo.cuerpo}" readonly="true"></p:inputTextarea> 
                                 <h:outputLabel>Adjunto: </h:outputLabel>
-                                <p:commandLink value="#{articulo.contenidoAdjunto != null ? 'Descargar' : 'No Disponible'}" ajax="false" immediate="true" disabled="#{articulo.contenidoAdjunto != null ? 'false' : 'true' }" actionListener="#{misTicketsPorCola.descargarArchivoAdjunto}">
-                                    <f:attribute name="articuloId" value="#{articulo}"></f:attribute>
-                                    <p:fileDownload value="#{misTicketsPorCola.archivoPorDescargar}"></p:fileDownload>
-                                </p:commandLink>
+<!--                                <h:commandLink action="descarga" target="_blank" immediate="true" value="#{not empty articulo.contenidoAdjunto ? 'Descargar' : 'No Disponible'}">
+                                    <f:param name="id" value="#{articulo.id}"></f:param>
+                                </h:commandLink>-->
+                                <h:outputLink value="#" disabled="#{articulo.contenidoAdjunto != null ? 'false' : 'true'}" onclick="window.open('descarga.xhtml?articuloId=#{articulo.id}', 'Descarga', 'dependent=yes, menubar=no, toolbar=no, height=200, width=200'); return false;" target="_blank">#{articulo.contenidoAdjunto != null ? 'Descargar' : 'No disponible'}
+<!--                                    <f:param name="articuloId" value="#{articulo.id}"></f:param>-->
+                                </h:outputLink>
                             </h:panelGrid>
                         </p:panel>
                     </c:forEach>
@@ -164,6 +166,12 @@
                         </f:facet>
                     </p:panel>
                 </p:panel>
+                <script type="text/javascript">
+                    function descargarArchivo(){
+                        var link = document.getElementById("#{misTicketsPorCola.link.clientId}");
+                        link.click();
+                    }
+                </script>
             </h:form>
         </f:view>
     </ui:define>
