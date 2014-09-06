@@ -109,7 +109,7 @@ public class Usuario implements Serializable {
     private List<Articulo> articuloList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "de")
     private List<Articulo> articuloList1;
-
+    
     public Usuario() {
     }
 
@@ -363,5 +363,10 @@ public class Usuario implements Serializable {
     public void setCompetenciasList(List<Competencias> competenciasList) {
         this.competenciasList = competenciasList;
     }
+
+    public String getNombreCompleto() {
+        return this.nombre + " " + this.apellido;
+    }
+    
     
 }
