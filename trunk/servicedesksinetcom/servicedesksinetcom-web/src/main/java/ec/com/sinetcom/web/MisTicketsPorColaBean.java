@@ -8,6 +8,7 @@ import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.Cola;
 import ec.com.sinetcom.orm.EstadoTicket;
+import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;
 import ec.com.sinetcom.servicios.TicketServicio;
@@ -23,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
@@ -56,7 +58,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.administracionUsuarioBean = administracionUsuarioBean;
     }
 
-    //Se escogen todos los estados de un ticket
+    //Se escogen todos las colas de un ticket
     private List<Cola> colasTickets;
     //Se escogen todos los ingeniero disponibles con las competencias de la cola
     private List<Usuario> ingenieros;
@@ -69,7 +71,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     //Articulo Nuevo
     private Articulo articuloNuevo;
     //Cola seleccionada
-    private String colaSeleccionada;
+    private String tabSeleccionado;
     //Actividades realizadas
     private List<ActividadEnSitio> actividadesEnSitio;
     //Actividad en sitio
@@ -78,6 +80,8 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     private Date fechaActual;
     //Archivo adjunto de nuevo articulo
     private UploadedFile archivoAdjunto;
+    //Archivo adjunto de hoja de servicio
+    private UploadedFile archivoAdjuntoHojaS;
     //Indicador de resolcion de ticket
     private Boolean resueltoConExito;
     //Archivo para descargar
@@ -87,8 +91,6 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
 
     @PostConstruct
     public void doInit() {
-        //this.tickets = new ArrayList<Ticket>();
-        //this.estadoTickets = this.ticketServicio.obtenerTodosLosEstados();
         this.colasTickets = this.ticketServicio.obtenerTodasLasColas();
         this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), 1);
         this.ingenieros = this.ticketServicio.obtenerTodosLosIngenieros();
@@ -109,7 +111,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), seleccion);
         this.articulos = null;
         this.ticketSeleccionado = null;
-        this.colaSeleccionada = activo.getAttributes().get("title").toString();
+        this.tabSeleccionado = activo.getAttributes().get("title").toString();
         this.sinSeleccion();
         Mensajes.mostrarMensajeInformativo(activo.getAttributes().get("title").toString());
     }
@@ -135,7 +137,6 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
                 || articuloSel.getExtensionArchivo().equals("jpeg")
                 || articuloSel.getExtensionArchivo().equals("gif")
                 || articuloSel.getExtensionArchivo().equals("png") ? "image/" + articuloSel.getExtensionArchivo() : "application/pdf", "archivo." + articuloSel.getExtensionArchivo());
-        //descargarArchivoPorByteArray("archivo", articuloSel.getExtensionArchivo(), articuloSel.getContenidoAdjunto());
     }
 
     public void descargarArchivoPorByteArray(String nombreArchivo, String tipoArchivo, byte[] datos) {
@@ -170,6 +171,19 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.archivoAdjunto = event.getFile();
     }
 
+    public void adjuntarArchivoHojaS(FileUploadEvent event){
+        this.archivoAdjuntoHojaS = event.getFile();
+    }
+    
+    public void guardarArchivoAdjuntoHojaS(ActionEvent event){
+        if(this.archivoAdjuntoHojaS != null){
+            this.ticketSeleccionado.setHojaDeServicio(this.archivoAdjuntoHojaS.getContents());
+            this.ticketServicio.actualizarInformacionTicket(this.ticketSeleccionado);
+            Mensajes.mostrarMensajeInformativo("Se ha subido la hoja de Servicio de forma satisfactoria");
+            this.actualizarBotones();
+        }
+    }
+    
     public void crearNuevoArticulo(ActionEvent event) {
         if (this.archivoAdjunto != null) {
             this.articuloNuevo.setContenidoAdjunto(this.archivoAdjunto.getContents());
@@ -179,7 +193,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticketSeleccionado, this.articuloNuevo, this.administracionUsuarioBean.getUsuarioActual(), false);
         this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket(this.ticketSeleccionado);
     }
-
+    
     public void agregarActividadEnSitio(ActionEvent event) {
         if (this.ticketSeleccionado != null) {
             this.nuevaActividadEnSitio.setTicketticketNumber(this.ticketSeleccionado);
@@ -193,13 +207,14 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     }
 
     public void registroSeleccionado(SelectEvent event) {
-        this.sinSeleccion();
-        this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket((Ticket) event.getObject());
-        this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket((Ticket) event.getObject());
-        int codigoEstado = ((Ticket) event.getObject()).getEstadoTicketcodigo().getCodigo();
-        if (codigoEstado != 3 && codigoEstado != 4) {
-            this.seleccionadoUno();
+        this.ticketSeleccionado = (Ticket)event.getObject();
+        this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket((Ticket)event.getObject());
+        this.actividadesEnSitio = this.ticketServicio.obtenerTodasLasActividadesEnSitioDeUnTicket((Ticket)event.getObject());
+        if(this.ticketSeleccionado.getHojaDeServicio() != null){
+            ByteArrayInputStream stream = new ByteArrayInputStream(this.ticketSeleccionado.getHojaDeServicio());
+            this.archivoPorDescargar = new DefaultStreamedContent(stream, "application/pdf", "hojaDeServicio.pdf");
         }
+        this.actualizarBotones();
     }
 
     public void registroDeseleccionado(UnselectEvent event) {
@@ -218,9 +233,47 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
             this.ticketServicio.cerrarTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual(), this.resueltoConExito);
             this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getColaid().getId());
             Mensajes.mostrarMensajeInformativo("El Ticket# " + this.ticketSeleccionado.getTicketNumber() + " ha sido cerrado con éxito!");
+            this.actualizarBotones();
         }
     }
 
+    public void ponerEnPendiente(ActionEvent event){
+        this.ticketServicio.ponerEnPendiente(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
+        Mensajes.mostrarMensajeInformativo("El ticket# " + this.ticketSeleccionado.getTicketNumber() + " se ha cambiado a estado pendiente!");
+        this.actualizarBotones();
+    }
+    
+    public void reAbrirCaso(ActionEvent event){
+        this.ticketServicio.reabrirCaso(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
+        Mensajes.mostrarMensajeInformativo("El ticket# " + this.ticketSeleccionado.getTicketNumber() + " ha sido re-abierto!");
+        this.actualizarBotones();
+    }
+    
+    public void ingresarPrimerContacto(ActionEvent event){
+        this.ticketServicio.ingresarPrimerContactoDeTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
+        Mensajes.mostrarMensajeInformativo("Primer contacto ingresado satisfactoriamente!");
+        this.actualizarBotones();
+    }
+    
+    public void actualizarBotones(){
+        this.sinSeleccion();
+        int codigoEstado = this.ticketSeleccionado.getEstadoTicketcodigo().getCodigo();
+        boolean tienePrimerContacto = this.ticketSeleccionado.getFechaDePrimerContacto() != null;
+        if (codigoEstado != 3 && codigoEstado != 4) {
+            this.seleccionadoUno();
+        }
+        if(codigoEstado == 5){
+            this.mostrarReAbrirCaso();
+        }
+        if(!tienePrimerContacto){
+            this.mostrarPrimerContacto();
+        }
+        if(this.ticketSeleccionado.getHojaDeServicio() != null){
+            this.desactivarHojaDeServicio();
+            this.mostrarDescargarHojaDeServicio();
+        }
+    }
+    
     public List<Ticket> getTickets() {
         return tickets;
     }
@@ -269,12 +322,12 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.colasTickets = colasTickets;
     }
 
-    public String getColaSeleccionada() {
-        return colaSeleccionada;
+    public String getTabSeleccionado() {
+        return tabSeleccionado;
     }
 
-    public void setColaSeleccionada(String colaSeleccionada) {
-        this.colaSeleccionada = colaSeleccionada;
+    public void setTabSeleccionado(String tabSeleccionado) {
+        this.tabSeleccionado = tabSeleccionado;
     }
 
     public List<ActividadEnSitio> getActividadesEnSitio() {
@@ -333,4 +386,12 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
         this.link = link;
     }
 
+    public UploadedFile getArchivoAdjuntoHojaS() {
+        return archivoAdjuntoHojaS;
+    }
+
+    public void setArchivoAdjuntoHojaS(UploadedFile archivoAdjuntoHojaS) {
+        this.archivoAdjuntoHojaS = archivoAdjuntoHojaS;
+    } 
+    
 }

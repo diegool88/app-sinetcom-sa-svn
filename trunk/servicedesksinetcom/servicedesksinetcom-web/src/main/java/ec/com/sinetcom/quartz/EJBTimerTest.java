@@ -13,8 +13,8 @@ import javax.ejb.Singleton;
  */
 @Singleton
 public class EJBTimerTest {
-    @Schedule(hour="*", minute="*", second="0/5", persistent=false)
-    public void run(){
-        System.out.println("Ticket#");
-    }
+//    @Schedule(hour="*", minute="*", second="0/5", persistent=false)
+//    public void run(){
+//        System.out.println("Ticket#");
+//    }
 }

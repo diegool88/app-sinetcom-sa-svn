@@ -8,6 +8,7 @@ import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.Cola;
 import ec.com.sinetcom.orm.EstadoTicket;
+import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;
 import ec.com.sinetcom.servicios.TicketServicio;
@@ -42,9 +43,9 @@ import org.primefaces.model.UploadedFile;
  *
  * @author diegoflores
  */
-@ManagedBean(name="misTicketsPorEstado")
+@ManagedBean(name="misTicketsPorPrioridad")
 @ViewScoped
-public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializable{
+public class MisTicketsPorPrioridadBean extends BotonesTickets implements Serializable{
     
     @EJB
     private TicketServicio ticketServicio;
@@ -56,8 +57,8 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
         this.administracionUsuarioBean = administracionUsuarioBean;
     }
 
-    //Se escogen todos los estados de un ticket
-    private List<EstadoTicket> estadosTickets;
+    //Se escogen todos las prioridades de un ticket
+    private List<PrioridadTicket> prioridadesTickets;
     //Se escogen todos los ingeniero disponibles
     private List<Usuario> ingenieros;
     //Se define el arreglo de ticket
@@ -89,8 +90,8 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
 
     @PostConstruct
     public void doInit() {
-        this.estadosTickets = this.ticketServicio.obtenerTodosLosEstados();
-        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(administracionUsuarioBean.getUsuarioActual(), 1);
+        this.prioridadesTickets = this.ticketServicio.obtenerTodasLasPrioridades();
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaPrioridad(administracionUsuarioBean.getUsuarioActual(), 1);
         this.ingenieros = this.ticketServicio.obtenerTodosLosIngenieros();
         this.articuloNuevo = new Articulo();
         this.articuloNuevo.setDe(this.administracionUsuarioBean.getUsuarioActual());
@@ -106,7 +107,7 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
     public void cambioDeTab(TabChangeEvent event) {
         Tab activo = event.getTab();
         int seleccion = Integer.parseInt(activo.getAttributes().get("id").toString().split("-")[1]);
-        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(administracionUsuarioBean.getUsuarioActual(), seleccion);
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaPrioridad(administracionUsuarioBean.getUsuarioActual(), seleccion);
         this.articulos = null;
         this.ticketSeleccionado = null;
         this.tabSeleccionado = activo.getAttributes().get("title").toString();
@@ -229,7 +230,7 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
             this.ticketSeleccionado.setFechaDeModificacion(new Date());
             this.ticketSeleccionado.setFechaDeCierre(new Date());
             this.ticketServicio.cerrarTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual(), this.resueltoConExito);
-            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getEstadoTicketcodigo().getCodigo());
+            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaPrioridad(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getPrioridadTicketcodigo().getCodigo());
             Mensajes.mostrarMensajeInformativo("El Ticket# " + this.ticketSeleccionado.getTicketNumber() + " ha sido cerrado con éxito!");
             this.actualizarBotones();
         }
@@ -312,12 +313,12 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
         this.articuloNuevo = articuloNuevo;
     }
 
-    public List<EstadoTicket> getEstadosTickets() {
-        return estadosTickets;
+    public List<PrioridadTicket> getPrioridadesTickets() {
+        return prioridadesTickets;
     }
 
-    public void setEstadosTickets(List<EstadoTicket> estadosTickets) {
-        this.estadosTickets = estadosTickets;
+    public void setPrioridadesTickets(List<PrioridadTicket> prioridadesTickets) {
+        this.prioridadesTickets = prioridadesTickets;
     }
 
     public String getTabSeleccionado() {

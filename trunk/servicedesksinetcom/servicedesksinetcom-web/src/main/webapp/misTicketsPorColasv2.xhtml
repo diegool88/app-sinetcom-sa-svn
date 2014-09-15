@@ -5,6 +5,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="template/plantilla.xhtml"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:metadata>
+        <f:viewParam name="tipo" value="#{misTicketsPorCola.ticketPor}"></f:viewParam>
+    </f:metadata>
     <ui:define name="title">Sinetcom - Tickets</ui:define>
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
@@ -16,20 +19,29 @@
                 <f:facet name="header">
                     Mis Tickets Por Colas
                 </f:facet>                
-                <p:tabView id="tabview">
-                    <p:ajax event="tabChange" listener="#{misTicketsPorCola.cambioDeTab}" update=":form1:articulos, :form:tabla"></p:ajax>
-                    <c:forEach items="#{misTicketsPorCola.colasTickets}" var="cola">
+                <p:tabView id="tabview" dynamic="true">
+                    <p:ajax event="tabChange" immediate="true" listener="#{misTicketsPorCola.cambioDeTab}" update="@form"></p:ajax>
+                    <c:forEach items="#{misTicketsPorCola.colasTickets}" var="cola" rendered="#{misTicketsPorCola.mostrarTabsColas}">
                         <p:tab title="#{cola.nombre}" id="tab-#{cola.id}">
+                            <f:param name="tipo" value="#{misTicketsPorCola.ticketPor}"></f:param>
                         </p:tab>
                     </c:forEach>
+<!--                    <c:forEach items="#{misTicketsPorCola.estadosTickets}" var="estado" rendered="#{misTicketsPorCola.mostrarTabsEstados}">
+                        <p:tab title="#{estado.nombre}" id="tab-#{estado.codigo}">
+                        </p:tab>
+                    </c:forEach>
+                    <c:forEach items="#{misTicketsPorCola.prioridadesTickets}" var="prioridad" rendered="#{misTicketsPorCola.mostrarTabsPrioridades}">
+                        <p:tab title="#{prioridad.nombre}" id="tab-#{prioridad.codigo}">
+                        </p:tab>
+                    </c:forEach>-->
                 </p:tabView>
                 <div style="overflow: auto">
                     <p:dataTable id="tabla" var="ticket" value="#{misTicketsPorCola.tickets}" scrollWidth="100%" scrollable="true" selectionMode="single" selection="#{misTicketsPorCola.ticketSeleccionado}"  rowKey="#{ticket.ticketNumber}" >
                         <f:facet name="header">
-                            #{misTicketsPorCola.colaSeleccionada}
+                            #{misTicketsPorCola.tabSeleccionado}
                         </f:facet>
-                        <p:ajax event="rowSelect" immediate="true" listener="#{misTicketsPorCola.registroSeleccionado}" update="@all"></p:ajax>
-                        <p:ajax event="rowUnselect" immediate="true" listener="#{misTicketsPorCola.registroDeseleccionado}" update="@all"></p:ajax>
+                        <p:ajax event="rowSelect" immediate="true" listener="#{misTicketsPorCola.registroSeleccionado}" update=":form:articulos, @this"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" listener="#{misTicketsPorCola.registroDeseleccionado}" update=":form:articulos, @this"></p:ajax>
                         <p:column headerText="Número de Ticket" width="280">
                             <h:outputText value="#{ticket.ticketNumber}"></h:outputText>
                         </p:column>
@@ -56,14 +68,14 @@
                     <p:panel id="asignarT">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione un ingeniero:"></h:outputText>
-                            <p:selectOneMenu value="#{misTicketsPorCola.ticketSeleccionado.usuarioidpropietario}" converter="#{usuarioConverter}">
+                            <p:selectOneMenu value="#{misTicketsPorCola.ticketSeleccionado.usuarioidpropietario}" required="true" requiredMessage="Seleccione un ingeniero!" converter="#{usuarioConverter}">
                                 <p:ajax event="change" update="@this"></p:ajax>
                                 <f:selectItem itemLabel="--Seleccione una opción--" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{misTicketsPorCola.ingenieros}" var="ing" itemLabel="#{ing.nombre} #{ing.apellido}" itemValue="#{ing.id.toString()}"></f:selectItems>
                             </p:selectOneMenu> 
                         </p:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Asignar Ticket" actionListener="#{misTicketsPorEstado.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" process="@this" update="@form"></p:commandButton>
+                            <p:commandButton value="Asignar Ticket" process=":form:asignarT" update="@form" actionListener="#{misTicketsPorCola.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
                         </f:facet>
                     </p:panel>
                 </p:dialog>
@@ -123,12 +135,10 @@
                         </p:panelGrid>
                         <br/>
                         <hr/>
-                        <p:commandButton value="Cerrar Caso" process=":form:cerrarT" update="@form" actionListener="#{misTicketsPorCola.cerrarCaso}"></p:commandButton>
+                        <p:commandButton value="Cerrar Caso" process="@this" update="@form" actionListener="#{misTicketsPorCola.cerrarCaso}"></p:commandButton>
                         <hr/>
                     </p:panel>
                 </p:dialog>
-            </h:form>
-            <h:form id="form1">
                 <p:panel id="articulos" header="Articulos" footer="Articulos disponibles" style="margin-bottom: 20px;" >
                     <c:forEach items="#{misTicketsPorCola.articulos}" var="articulo" rendered="#{misTicketsPorCola.articulos != null}">
                         <p:panel id="articulo#{articulo.id}" header="Articulo ##{articulo.orden}">
@@ -141,34 +151,39 @@
                                 <h:outputText value="#{articulo.asunto}"></h:outputText>
                                 <h:outputLabel>Mensaje: </h:outputLabel>
                                 <p:inputTextarea cols="40" rows="10" value="#{articulo.cuerpo}" readonly="true"></p:inputTextarea> 
+                                <h:outputLabel>Adjunto: </h:outputLabel>
+<!--                                <h:commandLink action="descarga" target="_blank" immediate="true" value="#{not empty articulo.contenidoAdjunto ? 'Descargar' : 'No Disponible'}">
+                                    <f:param name="id" value="#{articulo.id}"></f:param>
+                                </h:commandLink>-->
+                                <h:outputLink value="#" disabled="#{articulo.contenidoAdjunto != null ? 'false' : 'true'}" onclick="window.open('descarga.xhtml?articuloId=#{articulo.id}', 'Descarga', 'dependent=yes, menubar=no, toolbar=no, height=200, width=200'); return false;" target="_blank">#{articulo.contenidoAdjunto != null ? 'Descargar' : 'No disponible'}
+<!--                                    <f:param name="articuloId" value="#{articulo.id}"></f:param>-->
+                                </h:outputLink>
                             </h:panelGrid>
-                            <f:facet name="footer">
-                                <p:commandLink value="#{not empty articulo.contenidoAdjunto ? 'Descargar' : 'No Disponible'}" ajax="false" immediate="true" disabled="#{not empty articulo.contenidoAdjunto ? 'false' : 'true' }" actionListener="#{misTicketsPorCola.descargarArchivoAdjunto}" >
-                                    <f:attribute name="articuloId" value="#{articulo.id}"></f:attribute>
-                                    <p:fileDownload  value="#{misTicketsPorCola.archivoPorDescargar}"></p:fileDownload>
-                                </p:commandLink>
-                            </f:facet>
                         </p:panel>
                     </c:forEach>
+                    <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{misTicketsPorCola.articulos != null}">
+                        <h:panelGrid columns="3" cellpadding="10">
+                            <h:outputLabel>Asunto: </h:outputLabel>
+                            <p:inputText id="asunto" value="#{misTicketsPorCola.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
+                            <p:message for="asunto"></p:message>
+                            <h:outputLabel>Mensaje: </h:outputLabel>
+                            <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
+                            <p:message for="cuerpo"></p:message>
+                            <h:outputLabel>Adjunto: </h:outputLabel>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
+                            <p:message for="archivo"></p:message>
+                        </h:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Agregar Artículo" disabled="#{misTicketsPorCola.desactivarAgregarArticulo}" actionListener="#{misTicketsPorCola.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                        </f:facet>
+                    </p:panel>
                 </p:panel>
-            </h:form>
-            <h:form id="form2">
-                <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{misTicketsPorCola.articulos != null}">
-                    <h:panelGrid columns="3" cellpadding="10">
-                        <h:outputLabel>Asunto: </h:outputLabel>
-                        <p:inputText id="asunto" value="#{misTicketsPorCola.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
-                        <p:message for="asunto"></p:message>
-                        <h:outputLabel>Mensaje: </h:outputLabel>
-                        <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
-                        <p:message for="cuerpo"></p:message>
-                        <h:outputLabel>Adjunto: </h:outputLabel>
-                        <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
-                        <p:message for="archivo"></p:message>
-                    </h:panelGrid>
-                    <f:facet name="footer">
-                        <p:commandButton value="Agregar Artículo" disabled="#{misTicketsPorCola.desactivarAgregarArticulo}" actionListener="#{misTicketsPorCola.crearNuevoArticulo}" update=":form1:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
-                    </f:facet>
-                </p:panel>
+                <script type="text/javascript">
+                    function descargarArchivo(){
+                        var link = document.getElementById("#{misTicketsPorCola.link.clientId}");
+                        link.click();
+                    }
+                </script>
             </h:form>
         </f:view>
     </ui:define>
