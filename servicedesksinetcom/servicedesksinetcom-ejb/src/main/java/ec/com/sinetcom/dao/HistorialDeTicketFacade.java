@@ -36,10 +36,10 @@ public class HistorialDeTicketFacade extends AbstractFacade<HistorialDeTicket> {
      * @return 
      */
     public Date obtenerFechaDePrimerContactoDeTicket(Ticket ticket){
-        String sql = "SELECT h FROM HistorialDeTicket h WHERE h.Ticket_ticketNumber = ?1 AND h.EventoTicket_codigo.codigo = ?2";
+        String sql = "SELECT h FROM HistorialDeTicket h JOIN h.eventoTicketcodigo e WHERE h.ticketticketNumber = ?1 AND e.codigo = :evento";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, ticket);
-        qry.setParameter(2, 6);
+        qry.setParameter("evento", 7);
         return qry.getResultList().isEmpty() ? null : ((HistorialDeTicket)qry.getResultList().get(0)).getFechaDelEvento();
         
     }
@@ -53,7 +53,7 @@ public class HistorialDeTicketFacade extends AbstractFacade<HistorialDeTicket> {
         String sql = "SELECT h FROM HistorialDeTicket h WHERE h.ticketticketNumber = ?1 ORDER BY h.fechaDelEvento DESC";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, ticket);
-        return qry.getResultList().isEmpty() ? 0 : ((HistorialDeTicket)qry.getResultList().get(0)).getOrden();
+        return qry.getResultList().size() + 1;
     }
     
 }

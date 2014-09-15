@@ -41,8 +41,10 @@ public class UtilidadDeEmail {
             // Set To: header field of the header.
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(para));
             // Set CC
-            for(String correo : cc){
-                message.addRecipient(Message.RecipientType.CC, new InternetAddress(correo));
+            if (cc != null) {
+                for (String correo : cc) {
+                    message.addRecipient(Message.RecipientType.CC, new InternetAddress(correo));
+                }
             }
             // Set Subject: header field
             message.setSubject(asunto);
@@ -55,25 +57,25 @@ public class UtilidadDeEmail {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
             //Guardar Archivo Adjunto
-            if(adjunto != null){
+            if (adjunto != null) {
                 guardarArchivoAdjunto(nombreArchivo, adjunto);
+                // Part two is attachment
+                messageBodyPart = new MimeBodyPart();
+                String filename = "/temp/" + nombreArchivo;
+                DataSource source = new FileDataSource(filename);
+                messageBodyPart.setDataHandler(new DataHandler(source));
+                messageBodyPart.setFileName(filename);
+                multipart.addBodyPart(messageBodyPart);
             }
-            // Part two is attachment
-            messageBodyPart = new MimeBodyPart();
-            String filename = "/temp/" + nombreArchivo;
-            DataSource source = new FileDataSource(filename);
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(filename);
-            multipart.addBodyPart(messageBodyPart);
 
             // Send the complete message parts
             message.setContent(multipart);
-            
+
             // Send message
             Transport.send(message);
             //Transport.send(message);
             System.out.println("Sent message successfully....");
-            
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +83,7 @@ public class UtilidadDeEmail {
             return false;
         }
     }
-    
+
     public boolean guardarArchivoAdjunto(String nombreArchivo, byte[] blob) {
 
         boolean success = true;
@@ -98,11 +100,11 @@ public class UtilidadDeEmail {
         }
 
     }
-    
+
     public String getSMTPServer() {
         return SMTPServer;
     }
-    
+
     public String getSMTPServerPort() {
         return SMTPServerPort;
     }
