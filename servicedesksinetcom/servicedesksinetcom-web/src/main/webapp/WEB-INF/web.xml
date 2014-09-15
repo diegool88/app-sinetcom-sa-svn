@@ -41,6 +41,10 @@
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
+    <context-param>
+        <param-name>facelets.SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <!--    <context-param>
          <param-name>quartz:config-file</param-name>
          <param-value>quartz.properties</param-value>
@@ -62,7 +66,7 @@
             org.quartz.ee.servlet.QuartzInitializerListener
         </listener-class>
     </listener>-->
-    <servlet>
+<!--    <servlet>
         <servlet-name>QuartzInitializer</servlet-name>
         <servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
         <init-param>
@@ -74,5 +78,5 @@
             <param-value>true</param-value> 
         </init-param>
         <load-on-startup>1</load-on-startup>
-    </servlet>
+    </servlet>-->
 </web-app>

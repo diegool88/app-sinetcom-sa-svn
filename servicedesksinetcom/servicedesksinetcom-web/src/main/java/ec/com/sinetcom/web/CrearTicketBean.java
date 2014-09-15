@@ -61,8 +61,6 @@ public class CrearTicketBean implements Serializable {
     private TicketServicio ticketServicio;
     @ManagedProperty(value = "#{login}")
     private AdministracionUsuarioBean administracionUsuarioBean;
-    @EJB
-    private EJBTimerTest timerTest;
     
     public void setAdministracionUsuarioBean(AdministracionUsuarioBean administracionUsuarioBean) {
         this.administracionUsuarioBean = administracionUsuarioBean;
@@ -88,28 +86,6 @@ public class CrearTicketBean implements Serializable {
         this.ticket = new Ticket();
         this.articulo = new Articulo();
         this.ticketCreado = false;
-
-//        try {
-//            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-//
-//            JobDetail test = newJob(JobPrueba.class)
-//                    .withIdentity("job1", "group1")
-//                    .build();
-//
-//            Trigger trigger = newTrigger()
-//                    .withIdentity("trigger1", "group1")
-//                    .startNow()
-//                    .withSchedule(simpleSchedule()
-//                    .withIntervalInSeconds(5)
-//                    .repeatForever())
-//                    .build();
-//
-//            scheduler.scheduleJob(test, trigger);
-//
-//            //this.archivoAdjunto = new DefaultUploadedFile();
-//        } catch (SchedulerException ex) {
-//            Logger.getLogger(CrearTicketBean.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     /**
@@ -135,6 +111,10 @@ public class CrearTicketBean implements Serializable {
      */
     public void crearTicket(ActionEvent event) {
         //Agregar el archivo adjunto
+        if(!this.ticketServicio.permisoDeCreacionDeTicket(this.administracionUsuarioBean.getUsuarioActual(), this.ticket.getItemProductonumeroSerial())){
+            Mensajes.mostrarMensajeDeAdvertencia("Su usuario se encuentra temporalmente sin permiso para crear tickets de soporte");
+            return;
+        }
         if (archivoAdjunto != null) {
             this.articulo.setContenidoAdjunto(this.archivoAdjunto.getContents());
             String[] tipo = this.archivoAdjunto.getContentType().split("/");
@@ -145,35 +125,6 @@ public class CrearTicketBean implements Serializable {
         this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticket, this.articulo, this.administracionUsuarioBean.getUsuarioActual(), true);
         Mensajes.mostrarMensajeInformativo("Ticket #" + this.ticket.getTicketNumber() + " creado con éxito!");
         this.ticketCreado = true;
-        this.timerTest.run();
-        
-        //Se envia un Job para hacer recordatorios de atención del ticket
-//        try {
-//            
-//            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-//            JobDataMap dataMap = new JobDataMap();
-//            dataMap.put("ticket", this.ticket.getTicketNumber());
-//
-//            JobDetail tarea = newJob(EnviarNotificacionJob.class)
-//                    .withIdentity("actualizar_" + this.ticket.getTicketNumber(), "tickets")
-//                    .usingJobData(dataMap)
-//                    .build();
-//            Calendar c_notif = Calendar.getInstance();
-//            c_notif.setTime(ticket.getFechaDeProximaActualizacion());
-//            c_notif.add(Calendar.MINUTE, -15);
-//            Trigger tareaTrigger = newTrigger()
-//                    .withIdentity("t_actualizar_" + this.ticket.getTicketNumber(), "tickets")
-//                    .startNow()
-//                    .withSchedule(simpleSchedule()
-//                        .withIntervalInSeconds(10)
-//                        .repeatForever())
-//                    .endAt(this.ticket.getFechaDeCierre())
-//                    .build();
-//            scheduler.scheduleJob(tarea,tareaTrigger);
-//            
-//        } catch (SchedulerException ex) {
-//            Logger.getLogger(CrearTicketBean.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
     }
 

@@ -14,22 +14,22 @@
                     <p:graphicImage library="images" name="ajax_loader.gif" />
                 </p:dialog>
                 <f:facet name="header">
-                    Mis Tickets Por Colas
+                    Mis Tickets Por Prioridades
                 </f:facet>                
                 <p:tabView id="tabview">
-                    <p:ajax event="tabChange" listener="#{misTicketsPorCola.cambioDeTab}" update=":form:tabla, :form:articulos"></p:ajax>
-                    <c:forEach items="#{misTicketsPorCola.colasTickets}" var="cola">
-                        <p:tab title="#{cola.nombre}" id="tab-#{cola.id}">
+                    <p:ajax event="tabChange" listener="#{misTicketsPorPrioridad.cambioDeTab}" update=":form:tabla, :form:articulos"></p:ajax>
+                    <c:forEach items="#{misTicketsPorPrioridad.prioridadesTickets}" var="prioridad">
+                        <p:tab title="#{prioridad.nombre}" id="tab-#{prioridad.codigo}">
                         </p:tab>
                     </c:forEach>
                 </p:tabView>
                 <div style="overflow: auto">
-                    <p:dataTable id="tabla" var="ticket" value="#{misTicketsPorCola.tickets}" scrollWidth="100%" scrollable="true" selectionMode="single" selection="#{misTicketsPorCola.ticketSeleccionado}"  rowKey="#{ticket.ticketNumber}" >
+                    <p:dataTable id="tabla" var="ticket" value="#{misTicketsPorPrioridad.tickets}" scrollWidth="100%" scrollable="true" selectionMode="single" selection="#{misTicketsPorPrioridad.ticketSeleccionado}"  rowKey="#{ticket.ticketNumber}" >
                         <f:facet name="header">
-                            #{misTicketsPorCola.tabSeleccionado}
+                            #{misTicketsPorPrioridad.tabSeleccionado}
                         </f:facet>
-                        <p:ajax event="rowSelect" immediate="true" listener="#{misTicketsPorCola.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:articulos, @this"></p:ajax>
-                        <p:ajax event="rowUnselect" immediate="true" listener="#{misTicketsPorCola.registroDeseleccionado}" update=":form:articulos, @this"></p:ajax>
+                        <p:ajax event="rowSelect" immediate="true" listener="#{misTicketsPorPrioridad.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:articulos, @this"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" listener="#{misTicketsPorPrioridad.registroDeseleccionado}" update=":form:articulos, @this"></p:ajax>
                         <p:column headerText="Número de Ticket" width="280">
                             <h:outputText value="#{ticket.ticketNumber}"></h:outputText>
                         </p:column>
@@ -61,14 +61,14 @@
                             <h:outputText value="Ing. #{ticket.usuarioidpropietario.nombreCompleto}"></h:outputText>
                         </p:column>
                         <f:facet name="footer" rendered="#{login.usuarioActual.grupoid.permisos.administra or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios}">
-                            <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" disabled="#{misTicketsPorCola.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
-                            <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" disabled="#{misTicketsPorCola.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorCola.ponerEnPendiente}" ></p:commandButton>
-                            <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" disabled="#{misTicketsPorCola.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorCola.reAbrirCaso}"></p:commandButton>
-                            <p:commandButton value="Asignar Ticket" icon="ui-icon-person" update=":form:asignarT" disabled="#{misTicketsPorCola.desactivarAsignarTicket}" immediate="true" oncomplete="asignarDialog.show()"></p:commandButton>
-                            <p:commandButton value="Primer Contacto" icon="ui-icon-mail-closed" update=":form:tabla" disabled="#{misTicketsPorCola.desactivarPrimerContacto}" immediate="true" oncomplete="primerContactoDialog.show()"></p:commandButton>
-                            <p:commandButton value="Subir Hoja S." icon="ui-icon-document" update="@form" disabled="#{misTicketsPorCola.desactivarHojaDeServicio}" immediate="true" oncomplete="hojaDeServicio.show()"></p:commandButton>
-                            <p:commandButton value="Descargar Hoja S." icon="ui-icon-arrowthickstop-1-s" ajax="false" disabled="#{misTicketsPorCola.desactivarDescargarHojaDeServicio}" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);">
-                                <p:fileDownload value="#{misTicketsPorCola.archivoPorDescargar}"></p:fileDownload>
+                            <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" disabled="#{misTicketsPorPrioridad.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
+                            <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" disabled="#{misTicketsPorPrioridad.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorPrioridad.ponerEnPendiente}" ></p:commandButton>
+                            <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" disabled="#{misTicketsPorPrioridad.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorPrioridad.reAbrirCaso}"></p:commandButton>
+                            <p:commandButton value="Asignar Ticket" icon="ui-icon-person" update=":form:asignarT" disabled="#{misTicketsPorPrioridad.desactivarAsignarTicket}" immediate="true" oncomplete="asignarDialog.show()"></p:commandButton>
+                            <p:commandButton value="Primer Contacto" icon="ui-icon-mail-closed" update=":form:tabla" disabled="#{misTicketsPorPrioridad.desactivarPrimerContacto}" immediate="true" oncomplete="primerContactoDialog.show()"></p:commandButton>
+                            <p:commandButton value="Subir Hoja S." icon="ui-icon-document" update="@form" disabled="#{misTicketsPorPrioridad.desactivarHojaDeServicio}" immediate="true" oncomplete="hojaDeServicio.show()"></p:commandButton>
+                            <p:commandButton value="Descargar Hoja S." icon="ui-icon-arrowthickstop-1-s" ajax="false" disabled="#{misTicketsPorPrioridad.desactivarDescargarHojaDeServicio}" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);">
+                                <p:fileDownload value="#{misTicketsPorPrioridad.archivoPorDescargar}"></p:fileDownload>
                             </p:commandButton>
                         </f:facet>
                     </p:dataTable>
@@ -77,14 +77,14 @@
                     <p:panel id="asignarT">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione un ingeniero:"></h:outputText>
-                            <p:selectOneMenu value="#{misTicketsPorCola.ticketSeleccionado.usuarioidpropietario}" required="true" requiredMessage="Seleccione un ingeniero!" converter="#{usuarioConverter}">
+                            <p:selectOneMenu value="#{misTicketsPorPrioridad.ticketSeleccionado.usuarioidpropietario}" required="true" requiredMessage="Seleccione un ingeniero!" converter="#{usuarioConverter}">
                                 <p:ajax event="change" update="@this"></p:ajax>
                                 <f:selectItem itemLabel="--Seleccione una opción--" itemValue=""></f:selectItem>
-                                <f:selectItems value="#{misTicketsPorCola.ingenieros}" var="ing" itemLabel="#{ing.nombre} #{ing.apellido}" itemValue="#{ing.id.toString()}"></f:selectItems>
+                                <f:selectItems value="#{misTicketsPorPrioridad.ingenieros}" var="ing" itemLabel="#{ing.nombre} #{ing.apellido}" itemValue="#{ing.id.toString()}"></f:selectItems>
                             </p:selectOneMenu> 
                         </p:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Asignar Ticket" process=":form:asignarT" update="@form" actionListener="#{misTicketsPorCola.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                            <p:commandButton value="Asignar Ticket" process=":form:asignarT" update="@form" actionListener="#{misTicketsPorPrioridad.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
                         </f:facet>
                     </p:panel>
                 </p:dialog>
@@ -93,24 +93,24 @@
                         <h1><strong>Ingreso de Actividad</strong></h1>
                         <p:panelGrid columns="3" columnClasses="label,value">
                             <h:outputText value="Fecha Inicio de la actividad:"></h:outputText>
-                            <p:calendar id="fechaInicio" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaInicio}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
+                            <p:calendar id="fechaInicio" required="true" requiredMessage="* Requerido" value="#{misTicketsPorPrioridad.nuevaActividadEnSitio.fechaInicio}" maxdate="#{misTicketsPorPrioridad.fechaActual}" mindate="#{misTicketsPorPrioridad.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
                             <p:message for="fechaInicio"></p:message>
                             <h:outputText value="Fecha Fin de la actividad:"></h:outputText>
-                            <p:calendar id="fechaFin" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaFin}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
+                            <p:calendar id="fechaFin" required="true" requiredMessage="* Requerido" value="#{misTicketsPorPrioridad.nuevaActividadEnSitio.fechaFin}" maxdate="#{misTicketsPorPrioridad.fechaActual}" mindate="#{misTicketsPorPrioridad.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
                             <p:message for="fechaFin"></p:message>
                             <h:outputText value="Horas de viaje:"></h:outputText>
-                            <p:inputText id="horasViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorCola.nuevaActividadEnSitio.horasDeViaje}" >
+                            <p:inputText id="horasViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorPrioridad.nuevaActividadEnSitio.horasDeViaje}" >
                                 <f:convertNumber integerOnly="true"></f:convertNumber>
                             </p:inputText>
                             <p:message for="horasViaje"></p:message>
                             <h:outputText value="Minutos de viaje:"></h:outputText>
-                            <p:inputText id="minutosViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorCola.nuevaActividadEnSitio.minutosDeViaje}">
+                            <p:inputText id="minutosViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorPrioridad.nuevaActividadEnSitio.minutosDeViaje}">
                                 <f:convertNumber integerOnly="true"></f:convertNumber>
                             </p:inputText>
                             <p:message for="minutosViaje"></p:message>
                         </p:panelGrid>
                         <br/>
-                        <p:dataTable id="actividades" value="#{misTicketsPorCola.actividadesEnSitio}" var="actividad">
+                        <p:dataTable id="actividades" value="#{misTicketsPorPrioridad.actividadesEnSitio}" var="actividad">
                             <f:facet name="header">
                                 Detalle de Actividades
                             </f:facet>
@@ -124,20 +124,20 @@
                                 #{actividad.horasDeViaje != null ? actividad.horasDeViaje : "0"} h / #{actividad.minutosDeViaje != null ? actividad.minutosDeViaje : "0"} m
                             </p:column>
                             <p:column headerText="Eliminar">
-                                <p:commandButton icon="ui-icon-trash" update=":form:actividades" process="@this" actionListener="#{misTicketsPorCola.eliminarActividad}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                <p:commandButton icon="ui-icon-trash" update=":form:actividades" process="@this" actionListener="#{misTicketsPorPrioridad.eliminarActividad}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
                                     <f:attribute name="idActividad" value="#{actividad.id}"></f:attribute>
                                     <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta actividad?" icon="ui-icon-alert"></p:confirm>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
                         <hr/>
-                        <p:commandButton value="Agregar Actividad" actionListener="#{misTicketsPorCola.agregarActividadEnSitio}" process=":form:cerrarT" update=":form:cerrarT"></p:commandButton>
-                        <p:commandButton value="Limpiar" actionListener="#{misTicketsPorCola.enserarActividadEnSitio}" process="@this" update=":form:cerrarT"></p:commandButton>
+                        <p:commandButton value="Agregar Actividad" actionListener="#{misTicketsPorPrioridad.agregarActividadEnSitio}" process=":form:cerrarT" update=":form:cerrarT"></p:commandButton>
+                        <p:commandButton value="Limpiar" actionListener="#{misTicketsPorPrioridad.enserarActividadEnSitio}" process="@this" update=":form:cerrarT"></p:commandButton>
                         <hr/>
                         <br/>
                         <p:panelGrid columns="2">
                             <h:outputLabel for="resuelto" value="Resuelto:"></h:outputLabel>
-                            <p:selectOneRadio id="resuelto" value="#{misTicketsPorCola.resueltoConExito}">
+                            <p:selectOneRadio id="resuelto" value="#{misTicketsPorPrioridad.resueltoConExito}">
                                 <p:ajax event="change" update="@this"></p:ajax>
                                 <f:selectItem itemLabel="Con éxito" itemValue="true"></f:selectItem>
                                 <f:selectItem itemLabel="Sin éxito" itemValue="false"></f:selectItem>
@@ -145,7 +145,7 @@
                         </p:panelGrid>
                         <br/>
                         <hr/>
-                        <p:commandButton value="Cerrar Caso" process="@this" update="@form" actionListener="#{misTicketsPorCola.cerrarCaso}">
+                        <p:commandButton value="Cerrar Caso" process="@this" update="@form" actionListener="#{misTicketsPorPrioridad.cerrarCaso}">
                             <p:confirm header="Confirmación" message="¿Está seguro que desea cerrar este caso?" icon="ui-icon-alert"></p:confirm>
                         </p:commandButton>
                         <hr/>
@@ -155,11 +155,11 @@
                     <p:panel id="primerC">
                         <p:panelGrid columns="3" columnClasses="label,value">
                             <h:outputText value="Ingrese la fecha y hora: "></h:outputText>
-                            <p:calendar id="fechaPrimerC" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.ticketSeleccionado.fechaDePrimerContacto}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
+                            <p:calendar id="fechaPrimerC" required="true" requiredMessage="* Requerido" value="#{misTicketsPorPrioridad.ticketSeleccionado.fechaDePrimerContacto}" maxdate="#{misTicketsPorPrioridad.fechaActual}" mindate="#{misTicketsPorPrioridad.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
                             <p:message for="fechaPrimerC"></p:message>
                         </p:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Ingresar" actionListener="#{misTicketsPorCola.ingresarPrimerContacto}" process=":form:primerC" update="@form">
+                            <p:commandButton value="Ingresar" actionListener="#{misTicketsPorPrioridad.ingresarPrimerContacto}" process=":form:primerC" update="@form">
                                 <p:confirm header="ATENCIÓN" message="No se podrá modificar esta información más adelante, ¿desea continuar?"></p:confirm>
                             </p:commandButton>
                         </f:facet>
@@ -169,17 +169,17 @@
                     <p:panel id="hojaS">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione la hoja de Servicio"></h:outputText>
-                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorCola.adjuntarArchivoHojaS}" ></p:fileUpload>
+                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorPrioridad.adjuntarArchivoHojaS}" ></p:fileUpload>
                         </p:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Guardar Hoja de Servicio" actionListener="#{misTicketsPorCola.guardarArchivoAdjuntoHojaS}" process="@this" update="@form">
+                            <p:commandButton value="Guardar Hoja de Servicio" actionListener="#{misTicketsPorPrioridad.guardarArchivoAdjuntoHojaS}" process="@this" update="@form">
                                 <p:confirm header="ATENCIÓN" message="No se podrá modificar esta información más adelante, ¿desea continuar?"></p:confirm>
                             </p:commandButton>
                         </f:facet>
                     </p:panel>
                 </p:dialog>
                 <p:panel id="articulos" header="Articulos" footer="Articulos disponibles" style="margin-bottom: 20px;" >
-                    <c:forEach items="#{misTicketsPorCola.articulos}" var="articulo" rendered="#{misTicketsPorCola.articulos != null}">
+                    <c:forEach items="#{misTicketsPorPrioridad.articulos}" var="articulo" rendered="#{misTicketsPorPrioridad.articulos != null}">
                         <p:panel id="articulo#{articulo.id}" header="Articulo ##{articulo.orden}">
                             <h:panelGrid columns="2" cellpadding="10">
                                 <h:outputLabel>De: </h:outputLabel>
@@ -197,20 +197,20 @@
                             </h:panelGrid>
                         </p:panel>
                     </c:forEach>
-                    <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{misTicketsPorCola.articulos != null}">
+                    <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{misTicketsPorPrioridad.articulos != null}">
                         <h:panelGrid columns="3" cellpadding="10">
                             <h:outputLabel>Asunto: </h:outputLabel>
-                            <p:inputText id="asunto" value="#{misTicketsPorCola.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
+                            <p:inputText id="asunto" value="#{misTicketsPorPrioridad.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
                             <p:message for="asunto"></p:message>
                             <h:outputLabel>Mensaje: </h:outputLabel>
-                            <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
+                            <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorPrioridad.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
                             <p:message for="cuerpo"></p:message>
                             <h:outputLabel>Adjunto: </h:outputLabel>
-                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorCola.adjuntarArchivo}" ></p:fileUpload>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorPrioridad.adjuntarArchivo}" ></p:fileUpload>
                             <p:message for="archivo"></p:message>
                         </h:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Agregar Artículo" disabled="#{misTicketsPorCola.desactivarAgregarArticulo}" actionListener="#{misTicketsPorCola.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                            <p:commandButton value="Agregar Artículo" disabled="#{misTicketsPorPrioridad.desactivarAgregarArticulo}" actionListener="#{misTicketsPorPrioridad.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
                         </f:facet>
                     </p:panel>
                 </p:panel>
