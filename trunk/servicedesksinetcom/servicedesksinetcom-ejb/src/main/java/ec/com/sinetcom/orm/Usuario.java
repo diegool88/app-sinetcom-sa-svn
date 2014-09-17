@@ -89,11 +89,6 @@ public class Usuario implements Serializable {
     private List<Contrato> contratoList;
     @OneToMany(mappedBy = "intructorSinetcom")
     private List<Curso> cursoList;
-    @JoinTable(name = "UsuarioCompetencias", joinColumns = {
-        @JoinColumn(name = "Usuario_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "Competencias_id", referencedColumnName = "id")})
-    @ManyToMany
-    private List<Competencias> usuarioCompetencias;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<CamposUsuario> camposUsuarioList;
     @OneToMany(mappedBy = "usuarioidmodificacion")
@@ -220,14 +215,8 @@ public class Usuario implements Serializable {
         this.cursoList = cursoList;
     }
 
-    public List<Competencias> getUsuarioCompetencias() {
-        return usuarioCompetencias;
-    }
-
-    public void setUsuarioCompetencias(List<Competencias> usuarioCompetencias) {
-        this.usuarioCompetencias = usuarioCompetencias;
-    }
-
+    
+    
     @XmlTransient
     public List<CamposUsuario> getCamposUsuarioList() {
         return camposUsuarioList;
