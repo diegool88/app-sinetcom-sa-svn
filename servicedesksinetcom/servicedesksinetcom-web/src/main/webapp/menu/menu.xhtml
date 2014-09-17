@@ -17,7 +17,7 @@
                     </p:submenu>
                     <p:submenu label="Gestionar Modelos/Revisiones">
                         <p:menuitem value="Crear Modelo de Producto"></p:menuitem>
-                        <p:menuitem value="Crear VersiÃ³n de Software"></p:menuitem>
+                        <p:menuitem value="Crear Versión de Software"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
@@ -25,9 +25,9 @@
             <p:submenu label="Tickets de Soporte" rendered="#{login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}">
                 <p:column>
                     <p:submenu label="Todos los Tickets" rendered="#{(login.usuarioActual.grupoid.permisos.administra eq true) or login.usuarioActual.grupoid.permisos.consultaTodosLosTickets eq true}">
-                        <p:menuitem value="Tickets por estados" ajax="false" action="tickets?faces-redirect=true"><f:param name="tipo" value="estados"></f:param></p:menuitem>
-                        <p:menuitem value="Tickets por colas" ajax="false" action="tickets?faces-redirect=true"><f:param name="tipo" value="colas"></f:param></p:menuitem>
-                        <p:menuitem value="Tickets por prioridad" ajax="false" action="tickets?faces-redirect=true"><f:param name="tipo" value="prioridad"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por estados" ajax="false" action="ticketsPorEstados?faces-redirect=true"><f:param name="tipo" value="estados"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por colas" ajax="false" action="ticketsPorColas?faces-redirect=true"><f:param name="tipo" value="colas"></f:param></p:menuitem>
+                        <p:menuitem value="Tickets por prioridad" ajax="false" action="ticketsPorPrioridades?faces-redirect=true"><f:param name="tipo" value="prioridad"></f:param></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
@@ -41,6 +41,9 @@
                 <p:column>
                     <p:submenu label="Tareas Programadas" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                         <p:menuitem value="Ver Tareas" ajax="false" action="listaDeTareasProgramadas?faces-redirect=true"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Bloqueo de Clientes" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
+                        <p:menuitem value="Bloqueo/Desbloqueo" ajax="false" action="bloquearUsuario?faces-redirect=true"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
@@ -65,6 +68,13 @@
                     </p:submenu>
                     <p:submenu label="Mi Perfil de Usuario">
                         <p:menuitem value="Editar mi perfil"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            <p:submenu label="Administrar" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
+                <p:column>
+                    <p:submenu label="Usuarios">
+<!--                        <p:menuitem value="Gestionar Usuarios" outcome="ListUsuario.xhtml"></p:menuitem>-->
                     </p:submenu>
                 </p:column>
             </p:submenu>
