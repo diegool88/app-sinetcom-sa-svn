@@ -82,6 +82,11 @@
             <artifactId>omnifaces</artifactId>
             <version>1.1</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>5.6.0</version>
+        </dependency>
     </dependencies>
 
     <build>
