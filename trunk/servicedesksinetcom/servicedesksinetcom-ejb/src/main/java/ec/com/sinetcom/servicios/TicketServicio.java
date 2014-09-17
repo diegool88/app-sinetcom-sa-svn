@@ -226,7 +226,7 @@ public class TicketServicio {
     public List<Ticket> obtenerTodosLosTicketsPorUnEstado(Usuario usuario, int estado) {
         EstadoTicket estadoTicket = this.estadoTicketFacade.find(estado);
         if (estadoTicket != null) {
-            return this.ticketFacade.obtenerTicketsPorEstadoDePropietario(usuario, estadoTicket);
+            return usuario != null ? this.ticketFacade.obtenerTicketsPorEstadoDePropietario(usuario, estadoTicket) : this.ticketFacade.obtenerTodosLosTicketsPorEstado(estadoTicket);
         } else {
             return null;
         }
@@ -242,7 +242,7 @@ public class TicketServicio {
     public List<Ticket> obtenerTodosLosTicketsPorUnaCola(Usuario usuario, int cola) {
         Cola colaTicket = this.colaFacade.find(cola);
         if (colaTicket != null) {
-            return this.ticketFacade.obtenerTicketsPorColaDePropietario(usuario, colaTicket);
+            return usuario != null ? this.ticketFacade.obtenerTicketsPorColaDePropietario(usuario, colaTicket) : this.ticketFacade.obtenerTodosLosTicketsPorCola(colaTicket);
         } else {
             return null;
         }
@@ -258,7 +258,7 @@ public class TicketServicio {
     public List<Ticket> obtenerTodosLosTicketsPorUnaPrioridad(Usuario usuario, int prioridad) {
         PrioridadTicket prioridadTicket = this.prioridadTicketFacade.find(prioridad);
         if (prioridadTicket != null) {
-            return this.ticketFacade.obtenerTicketsPorPrioridadDePropietario(usuario, prioridadTicket);
+            return usuario != null ? this.ticketFacade.obtenerTicketsPorPrioridadDePropietario(usuario, prioridadTicket) : this.ticketFacade.obtenerTodosLosTicketsPorPrioridad(prioridadTicket);
         } else {
             return null;
         }

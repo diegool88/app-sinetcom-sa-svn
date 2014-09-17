@@ -186,6 +186,54 @@ public class TicketFacade extends AbstractFacade<Ticket> {
     }
     
     /**
+     * Función que permite recuperar todos los tickets por servicio
+     * @param cola
+     * @return 
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorCola(Cola cola){
+        String sql = "SELECT t FROM Ticket t WHERE t.colaid = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, cola);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets por estado
+     * @param estado
+     * @return 
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorEstado(EstadoTicket estado){
+        String sql = "SELECT t FROM Ticket t WHERE t.estadoTicketcodigo = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, estado);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets por prioridad
+     * @param prioridad
+     * @return 
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorPrioridad(PrioridadTicket prioridad){
+        String sql = "SELECT t FROM Ticket t WHERE t.prioridadTicketcodigo = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, prioridad);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Función que permite recuperar todos los tickets por servicio
+     * @param servicio
+     * @return 
+     */
+    public List<Ticket> obtenerTodosLosTicketsPorServicio(ServicioTicket servicio){
+        String sql = "SELECT t FROM Ticket t WHERE t.servicioTicketcodigo = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, servicio);
+        return qry.getResultList();
+    }
+    
+    /**
      * Función que permite recuperar todos los tickets que han sido atendidos en el último mes
      * @return 
      */

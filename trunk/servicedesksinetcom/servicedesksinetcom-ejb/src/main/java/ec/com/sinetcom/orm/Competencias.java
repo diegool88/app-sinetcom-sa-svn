@@ -35,10 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Competencias.findAll", query = "SELECT c FROM Competencias c")})
 public class Competencias implements Serializable {
-    @JoinTable(name = "UsuarioCompetencias", joinColumns = {
-        @JoinColumn(name = "Competencias_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "Usuario_id", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "usuarioCompetencias")
     private List<Usuario> usuarioList;
     private static final long serialVersionUID = 1L;
     @Id

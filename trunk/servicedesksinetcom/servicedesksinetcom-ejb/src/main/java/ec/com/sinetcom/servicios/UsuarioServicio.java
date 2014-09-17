@@ -4,15 +4,18 @@
  */
 package ec.com.sinetcom.servicios;
 
+import ec.com.sinetcom.dao.CompetenciasFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
+import ec.com.sinetcom.orm.Competencias;
 import ec.com.sinetcom.orm.Usuario;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.ejb.StatefulTimeout;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -26,6 +29,8 @@ public class UsuarioServicio {
     // "Insert Code > Add Business Method")
     @EJB
     private UsuarioFacade usuarioFacade;
+    @EJB
+    private CompetenciasFacade competenciasFacade;
     
     private Usuario usuario;
     
@@ -51,7 +56,39 @@ public class UsuarioServicio {
             return false;
         }
         return true;
+    }       
+    
+    /**
+     * Permite modificar un usuario
+     * @param usuario 
+     */
+    public void modificarUsuario(Usuario usuario){
+        this.usuarioFacade.edit(usuario);
     }
     
+    /**
+     * Permite obtener todos los clientes
+     * @return 
+     */
+    public List<Usuario> obtenerTodosLosClientes(){
+        return this.usuarioFacade.obtenerTodosLosClientes();
+    }
+    
+    /**
+     * Permite obtener una competencia
+     * @param id
+     * @return 
+     */
+    public Competencias obtenerCompetencia(int id){
+        return this.competenciasFacade.find(id);
+    }
+    
+    /**
+     * Obtiene todas las competencias
+     * @return 
+     */
+    public List<Competencias> obtenerTodasLasCompetencias(){
+        return this.competenciasFacade.findAll();
+    }
     
 }

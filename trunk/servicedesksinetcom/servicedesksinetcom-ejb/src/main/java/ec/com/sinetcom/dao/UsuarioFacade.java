@@ -86,4 +86,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return qry.getResultList();
     }
     
+    /**
+     * Obtiene todos los clientes de la empresa
+     * @return 
+     */
+    public List<Usuario> obtenerTodosLosClientes(){
+        String sql = "SELECT u FROM Usuario u JOIN u.grupoid g WHERE g.id = :grupo";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter("grupo", 4);
+        return qry.getResultList();
+    }
+    
 }
