@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -88,8 +89,11 @@ public class Usuario implements Serializable {
     private List<Contrato> contratoList;
     @OneToMany(mappedBy = "intructorSinetcom")
     private List<Curso> cursoList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private UsuarioCompetencias usuarioCompetencias;
+    @JoinTable(name = "UsuarioCompetencias", joinColumns = {
+        @JoinColumn(name = "Usuario_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "Competencias_id", referencedColumnName = "id")})
+    @ManyToMany
+    private List<Competencias> usuarioCompetencias;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<CamposUsuario> camposUsuarioList;
     @OneToMany(mappedBy = "usuarioidmodificacion")
@@ -216,11 +220,11 @@ public class Usuario implements Serializable {
         this.cursoList = cursoList;
     }
 
-    public UsuarioCompetencias getUsuarioCompetencias() {
+    public List<Competencias> getUsuarioCompetencias() {
         return usuarioCompetencias;
     }
 
-    public void setUsuarioCompetencias(UsuarioCompetencias usuarioCompetencias) {
+    public void setUsuarioCompetencias(List<Competencias> usuarioCompetencias) {
         this.usuarioCompetencias = usuarioCompetencias;
     }
 
