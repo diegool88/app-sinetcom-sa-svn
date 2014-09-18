@@ -4,7 +4,9 @@
  */
 package ec.com.sinetcom.dao;
 
+import ec.com.sinetcom.orm.CategoriaProducto;
 import ec.com.sinetcom.orm.Contrato;
+import ec.com.sinetcom.orm.Fabricante;
 import ec.com.sinetcom.orm.ItemProducto;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,4 +49,27 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
         return qry.getResultList();
     }
     
+    /**
+     * Función que permite obtener todos los productos padre.
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodosLosProductosPadre(){
+        String sql = "SELECT i FROM ItemProducto i WHERE i.itemProductonumeroSerialpadre IS NULL";
+        Query qry = this.em.createQuery(sql);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Obtiene todos los Productos Padre por categoria y fabricante
+     * @param fabricante
+     * @param categoriaProducto
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodosLosProductosPadrePorCategoriaYFabricante(Fabricante fabricante, CategoriaProducto categoriaProducto){
+        String sql = "SELECT i FROM ItemProducto i JOIN i.modeloProductoid m JOIN m.lineaDeProductoid l WHERE i.itemProductonumeroSerialpadre IS NULL AND ( l.fabricanteid = ?1 AND l.categoriaid = ?2 )";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter(1, fabricante);
+        qry.setParameter(2, categoriaProducto);
+        return qry.getResultList();
+    }
 }
