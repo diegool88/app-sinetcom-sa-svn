@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom - Crear Productos</ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panel id="ingresoComponenteE">
+                        <p:panelGrid columns="3" columnClasses="label,value">
+                            <f:facet name="header">
+                                <h:outputText value="Nuevo Componente Electrónico Atómico"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel for="nombre" value="Nombre: "></p:outputLabel>
+                            <p:inputText id="nombre"  required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.componenteElectronicoAtomico.nombre}"></p:inputText>
+                            <p:message for="nombre"></p:message>
+                            <p:outputLabel for="parametros" value="Parámetros: "></p:outputLabel>
+                            <p:selectManyMenu style="width: 100%;" id="parametros" value="#{crearComponenteABean.componenteElectronicoAtomico.parametrosDeProductoList}" converter="#{parametroProductoConverter}"  showCheckbox="true">
+                                <f:selectItems value="#{crearComponenteABean.parametrosDeProductos}" var="parametro" itemLabel="#{parametro.nombre}" itemValue="#{parametro.id.toString()}"></f:selectItems>
+                            </p:selectManyMenu>
+                            <p:message for="parametros"></p:message>
+                            <f:facet name="footer">
+                                <p:commandButton value="Ingresar Componente Electrónico" actionListener="#{crearComponenteABean.crearComponenteElectronico}" process=":form:ingresoComponenteE" update="@form"></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel id="componentesP">
+                        <p:dataTable id="componentes" value="#{crearComponenteABean.componenteElectronicoAtomicos}" var="componente">
+                            <p:column headerText="Id">
+                                #{componente.id}
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                #{componente.nombre}
+                            </p:column>
+                            <p:column headerText="Eliminar">
+                                <p:commandButton icon="ui-icon-trash" update=":form:componentes" process="@this" actionListener="#{crearComponenteABean.borrarComponenteElectronico}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                    <f:attribute name="idComponente" value="#{componente.id}"></f:attribute>
+                                    <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta actividad?" icon="ui-icon-alert"></p:confirm>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable> 
+                    </p:panel>
+                    <p:panel id="ingresoAtributo">
+                        <p:panelGrid columns="3" columnClasses="label,value">
+                            <f:facet name="header">
+                                <h:outputText value="Ingreso de nuevo Atributo"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel for="atributo" value="Nombre: "></p:outputLabel>
+                            <p:inputText id="atributo" required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.nuevoParametro.nombre}"></p:inputText>
+                            <p:message for="atributo"></p:message>
+                            <p:outputLabel for="tipoDato" value="Tipo de Dato: "></p:outputLabel>
+                            <p:selectOneMenu id="tipoDato" value="#{crearComponenteABean.nuevoParametro.tipoDeDato}">
+                                <f:selectItem itemLabel="Entero" itemValue="'1'"></f:selectItem>
+                                <f:selectItem itemLabel="Decimal" itemValue="'2'"></f:selectItem>
+                                <f:selectItem itemLabel="Cadena de Caracteres" itemValue="'3'"></f:selectItem>
+                            </p:selectOneMenu>
+                            <p:message for="tipoDato"></p:message>
+                            <p:outputLabel for="descripcion" value="Descripcion: "></p:outputLabel>
+                            <p:inputTextarea id="descripcion" value="#{crearComponenteABean.nuevoParametro.descripcion}" cols="20" rows="10"></p:inputTextarea>
+                            <p:message for="descripcion"></p:message>
+                            <p:outputLabel for="unidadMedida" value="Unidad de M: "></p:outputLabel>
+                            <p:selectOneMenu id="unidadMedida" value="#{crearComponenteABean.nuevoParametro.unidadMedidaid}" converter="#{unidadMedidaConverter}" required="true" requiredMessage="* Requerido">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteABean.medidas}" var="medida" itemLabel="#{medida.nombre}" itemValue="#{medida.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:message for="unidadMedida"></p:message>
+                            <f:facet name="footer">
+                                <p:commandButton value="Agregar Atributo" process=":form:ingresoAtributo" actionListener="#{crearComponenteABean.ingresarParametro}" update=":form:ingresoAtributo, :form:parametros"></p:commandButton>
+                                <p:commandButton value="Limpiar" process="@this" actionListener="#{crearComponenteABean.enserarPantallaParametro}" update="@form"></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
