@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom - Permisos de Grupo</ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panel id="gruposP" menuTitle="Grupo - Permisos">
+                        <p:dataTable id="grupos" value="#{grupoPermisoBean.grupos}" var="item" selection="#{grupoPermisoBean.grupoSeleccionado}" rowKey="#{item.id}" selectionMode="single" >
+                            <p:ajax event="rowSelect" immediate="true" listener="#{grupoPermisoBean.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:permisosP, :form:grupos"></p:ajax>
+                            <p:ajax event="rowUnselect" immediate="true" listener="#{grupoPermisoBean.registroDeSeleccionado}" update=":form:permisosP, :form:grupos"></p:ajax>
+                            <f:facet name="header">
+                                <h:outputText value="Grupos"></h:outputText>
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Id"/>
+                                </f:facet>
+                                <h:outputText value="#{item.id}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Descripción"/>
+                                </f:facet>
+                                <h:outputText value="#{item.descripcion}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton value="Permisos" onclick="permisosD.show()" disabled="#{not grupoPermisoBean.existeSeleccion}"></p:commandButton>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                    <p:dialog style="overflow: scroll;" height="500" widgetVar="permisosD" id="permisosP">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header">
+                                <h:outputText value="Permisos"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel value="Administra:" for="administra" />
+                            <p:selectOneRadio id="administra" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administra}">
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Registra Contratos:" for="registraContratos" />
+                            <p:selectOneRadio id="registraContratos" value="#{grupoPermisoBean.grupoSeleccionado.permisos.registraContratos}">
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Consulta Contratos:" for="consultaContratos" />
+                            <p:selectOneRadio id="consultaContratos" value="#{grupoPermisoBean.grupoSeleccionado.permisos.consultaContratos}">
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Genera Reportes De Contratos:" for="generaReportesDeContratos" />
+                            <p:selectOneRadio id="generaReportesDeContratos" value="#{grupoPermisoBean.grupoSeleccionado.permisos.generaReportesDeContratos}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Crea Ticket De Soporte:" for="creaTicketDeSoporte" />
+                            <p:selectOneRadio id="creaTicketDeSoporte" value="#{grupoPermisoBean.grupoSeleccionado.permisos.creaTicketDeSoporte}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Bloquea/Desbloquea Cliente:" for="bloqueaDesbloqueaDeCliente" />
+                            <p:selectOneRadio id="bloqueaDesbloqueaDeCliente" value="#{grupoPermisoBean.grupoSeleccionado.permisos.bloqueaDesbloqueaDeCliente}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Asigna Tickets:" for="asignaTickets" />
+                            <p:selectOneRadio id="asignaTickets" value="#{grupoPermisoBean.grupoSeleccionado.permisos.asignaTickets}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Tickets Propietarios:" for="administraTicketsPropietarios" />
+                            <p:selectOneRadio id="administraTicketsPropietarios" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraTicketsPropietarios}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Consulta Todos Los Tickets:" for="consultaTodosLosTickets" />
+                            <p:selectOneRadio id="consultaTodosLosTickets" value="#{grupoPermisoBean.grupoSeleccionado.permisos.consultaTodosLosTickets}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Genera Reportes De Tickets De Soporte:" for="generaReportesDeTicketsDeSoporte" />
+                            <p:selectOneRadio id="generaReportesDeTicketsDeSoporte" value="#{grupoPermisoBean.grupoSeleccionado.permisos.generaReportesDeTicketsDeSoporte}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Ingresa Inventario Al Sistema:" for="ingresaInventarioAlSistema" />
+                            <p:selectOneRadio id="ingresaInventarioAlSistema" value="#{grupoPermisoBean.grupoSeleccionado.permisos.ingresaInventarioAlSistema}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Registro De Movimiento De Inventario:" for="administraRegistroDeMovimientoDeInventario" />
+                            <p:selectOneRadio id="administraRegistroDeMovimientoDeInventario" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraRegistroDeMovimientoDeInventario}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Busca Inventario:" for="buscaInventario" />
+                            <p:selectOneRadio id="buscaInventario" value="#{grupoPermisoBean.grupoSeleccionado.permisos.buscaInventario}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Genera Acta De Entrega/Recepcion:" for="generaActaDeEntregaRecepcion" />
+                            <p:selectOneRadio id="generaActaDeEntregaRecepcion" value="#{grupoPermisoBean.grupoSeleccionado.permisos.generaActaDeEntregaRecepcion}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Genera Reportes De Inventarios:" for="generaReportesDeInventarios" />
+                            <p:selectOneRadio id="generaReportesDeInventarios" value="#{grupoPermisoBean.grupoSeleccionado.permisos.generaReportesDeInventarios}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Productos:" for="administraProductos" />
+                            <p:selectOneRadio id="administraProductos" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraProductos}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Perfiles De Usuario:" for="administraPerfilesDeUsuario" />
+                            <p:selectOneRadio id="administraPerfilesDeUsuario" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraPerfilesDeUsuario}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Marcas Fabricantes:" for="administraMarcasFabricantes" />
+                            <p:selectOneRadio id="administraMarcasFabricantes" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraMarcasFabricantes}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Categorias De Producto Por Fabricante:" for="administraCategoriasDeProductoPorFabricante" />
+                            <p:selectOneRadio id="administraCategoriasDeProductoPorFabricante" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraCategoriasDeProductoPorFabricante}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Categorias De Producto:" for="administraCategoriasDeProducto" />
+                            <p:selectOneRadio id="administraCategoriasDeProducto" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraCategoriasDeProducto}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Modelos/Revisiones:" for="administraModelosRevisiones" />
+                            <p:selectOneRadio id="administraModelosRevisiones" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraModelosRevisiones}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Administra Clientes:" for="administraClientes" />
+                            <p:selectOneRadio id="administraClientes" value="#{grupoPermisoBean.grupoSeleccionado.permisos.administraClientes}" >
+                                <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Actualizar" actionListener="#{grupoPermisoBean.actualizarGrupo}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update="@form"></p:commandButton>
+                        </f:facet>
+                    </p:dialog>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
