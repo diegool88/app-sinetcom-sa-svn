@@ -3,7 +3,9 @@
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
-                template="template/plantilla.xhtml">
+                template="template/plantilla.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:o="http://omnifaces.org/ui">
     <ui:define name="title">Sinetcom - Crear Productos</ui:define>
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
@@ -15,52 +17,135 @@
                         <p:graphicImage library="images" name="ajax_loader.gif" />
                     </p:dialog>
                     <p:panel id="ingresoProducto">
+                        <f:facet name="header">
+                            <h:outputText value="Nuevo Producto de Componente Electrónico Atómico"></h:outputText>
+                        </f:facet>
                         <p:panelGrid columns="3" columnClasses="label,value">
                             <p:outputLabel for="fabricante" value="Fabricante: "></p:outputLabel>
-                            <p:selectOneMenu id="fabricante" required="true" requiredMessage="* Requerido" value="">
-                                <f:selectItem itemLabel="-Seleccione una opción-" itemValue=""></f:selectItem>
-                                <f:selectItems value="" var="" itemLabel="" itemValue=""></f:selectItems>
-                                <p:ajax listener="" update="categoria"></p:ajax>
+                            <p:selectOneMenu id="fabricante" required="true" requiredMessage="* Requerido" value="#{crearComponenteAPBean.fabricanteSeleccionado}" converter="#{fabricanteConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.fabricantes}" var="fabricante" itemLabel="#{fabricante.nombre}" itemValue="#{fabricante.id.toString()}"></f:selectItems>
+                                <p:ajax listener="#{crearComponenteAPBean.actualizarCategorias()}" update="categoria, lineaP, modelo, productoPadre, compatible, :form:productoAtomico" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
                             <p:message for="fabricante"></p:message>
                             <p:outputLabel for="categoria" value="Categoría: "></p:outputLabel>
-                            <p:selectOneMenu id="categoria" required="true" requiredMessage="* Requerido" value="">
-                                <f:selectItem itemLabel="-Seleccione una opción-" itemValue=""></f:selectItem>
-                                <f:selectItems value="" var="" itemLabel="" itemValue=""></f:selectItems>
-                                <p:ajax listener="" update="productoPadre"></p:ajax>
+                            <p:selectOneMenu id="categoria" required="true" requiredMessage="* Requerido" value="#{crearComponenteAPBean.categoriaProductoSeleccionada}" converter="#{categoriaConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.fabricanteSeleccionado.categoriaProductoList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.id.toString()}"></f:selectItems>
+                                <p:ajax listener="#{crearComponenteAPBean.actualizarLineaDeProducto()}" update="lineaP, modelo, productoPadre, compatible, :form:productoAtomico" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
                             <p:message for="categoria"></p:message>
+                            <p:outputLabel for="lineaP" value="Linea de Producto: "></p:outputLabel>
+                            <p:selectOneMenu id="lineaP" required="true" requiredMessage="* Requerido" value="#{crearComponenteAPBean.lineaDeProductoSeleccionada}" converter="#{lineaProductoConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.lineaDeProductos}" var="linea" itemLabel="#{linea.nombre}" itemValue="#{linea.id.toString()}"></f:selectItems>
+                                <p:ajax update="modelo, productoPadre, :form:productoAtomico" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                            </p:selectOneMenu>
+                            <p:message for="lineaP"></p:message>
+                            <p:outputLabel for="modelo" value="Modelo: "></p:outputLabel>
+                            <p:selectOneMenu id="modelo" required="true" requiredMessage="* Requerido" value="#{crearComponenteAPBean.modeloProductoSeleccionado}" converter="#{modeloConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.lineaDeProductoSeleccionada.modeloProductoList}" var="modelo" itemLabel="#{modelo.modelo}" itemValue="#{modelo.id.toString()}"></f:selectItems>
+                                <p:ajax listener="#{crearComponenteAPBean.actualizarProductoPadre()}" update="productoPadre, :form:productoAtomico" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                            </p:selectOneMenu>
+                            <p:message for="modelo"></p:message>
                             <p:outputLabel for="productoPadre" value="Producto Padre: "></p:outputLabel>
-                            <p:selectOneMenu id="productoPadre" value="" >
-                                <f:selectItem itemLabel="-Seleccione una opción-" itemValue=""></f:selectItem>
-                                <f:selectItems value="" var="" itemLabel="" itemValue=""></f:selectItems>
+                            <p:selectOneMenu id="productoPadre" value="#{crearComponenteAPBean.nuevoProductoCA.itemProductonumeroSerialpadre}" converter="#{itemProductoConverter}" filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.productosPadre}" var="padre" itemLabel="SN: #{padre.numeroSerial}" itemValue="#{padre.numeroSerial}"></f:selectItems>
+                                <p:ajax update=":form:contrato" listener="#{crearComponenteAPBean.actualizarContrato()}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
                             <p:message for="productoPadre"></p:message>
-                            <p:outputLabel for="atributos" value="Atributos: "></p:outputLabel>
-                            <p:selectManyMenu id="atributos" value="" var="" required="true" requiredMessage="* Requerido" converter="" showCheckbox="true">
-                                <f:selectItems value="" itemLabel="" itemValue=""></f:selectItems>
+                            <p:outputLabel for="compatible" value="Productos Compatibles"></p:outputLabel>
+                            <p:selectManyMenu id="compatible" style="width: 100%;" value="#{crearComponenteAPBean.nuevoProductoCA.modeloProductoList}" converter="#{modeloConverter}" showCheckbox="true">
+                                <f:selectItems value="#{crearComponenteAPBean.modeloProductosCompatibles}" var="modeloC" itemLabel="#{modeloC.lineaDeProductoid.nombre} - #{modeloC.modelo}" itemValue="#{modeloC.id.toString()}"></f:selectItems>
                             </p:selectManyMenu>
-                            <p:message for="atributos"></p:message>
+                            <p:message for="compatible"></p:message>
                         </p:panelGrid>
                     </p:panel>
-                    <p:panel id="ingresoAtributo">
-                        <p:panelGrid columns="4" columnClasses="label,value">
+                    <p:panel id="productoAtomico" >
+                        <f:facet name="header">
+                            <h:outputText value="Componente Atómico"></h:outputText>
+                        </f:facet>
+                        <p:panelGrid rendered="#{crearComponenteAPBean.modeloProductoSeleccionado != null}" columns="3" columnClasses="label,value">
                             <f:facet name="header">
-                                <h:outputText value="Ingreso de nuevo Atributo"></h:outputText>
+                                <h:outputText value="Selección de Componente Electrónico"></h:outputText>
                             </f:facet>
-                            <p:outputLabel for="nuevoAtributo" value="Nuevo Atributo: "></p:outputLabel>
-                            <p:inputText id="nuevoAtributo" required="true" requiredMessage="* Requerido" value=""></p:inputText>
-                            <p:selectOneMenu id="tipoDato" value="">
-                                <f:selectItem itemLabel="Entero" itemValue="1"></f:selectItem>
-                                <f:selectItem itemLabel="Decimal" itemValue="2"></f:selectItem>
-                                <f:selectItem itemLabel="Cadena de Caracteres" itemValue="3"></f:selectItem>
+                            <p:outputLabel for="componenteA" value="Componente Atómico: "></p:outputLabel>
+                            <p:selectOneMenu id="componenteA" value="#{crearComponenteAPBean.componenteEASeleccionado}" converter="#{componenteElectronicoAConverter}" required="true" requiredMessage="* Requerido">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.componentesEA}" var="componenteEA" itemLabel="#{componenteEA.nombre}" itemValue="#{componenteEA.id.toString()}"></f:selectItems>
+                                <p:ajax listener="#{crearComponenteAPBean.crearArregloDeEntradas()}" update=":form:atributos, :form:atributosItemP" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
-                            <p:message for="nuevoAtributo"></p:message>
-                            <f:facet name="footer">
-                                <p:commandButton value="Agregar Atributo" process=":form:ingresoAtributo" actionListener="" update=":form:ingresoProducto:atributos"></p:commandButton>
-                                <p:commandButton value="Limpiar" process="@this" actionListener="" update=":form:ingresoAtributo"></p:commandButton>
-                            </f:facet>
+                            <p:message for="componenteA"></p:message>
+                            <p:outputLabel for="numeroItems" value="Número de items: "></p:outputLabel>
+                            <p:inputText id="numeroItems" value="#{crearComponenteAPBean.numeroSeriales}">
+                                <p:ajax event="keyup" listener="#{crearComponenteAPBean.actualizarCamposDeSeriales()}" update=":form:atributos"></p:ajax>
+                            </p:inputText>
+                            <p:message for="numeroItems"></p:message>
                         </p:panelGrid>
+                        <p:panelGrid rendered="#{crearComponenteAPBean.modeloProductoSeleccionado != null}" columns="2" id="atributos">
+                            <ui:repeat id="loop" value="#{crearComponenteAPBean.atributosCA}" var="parametro">
+                                <p:panelGrid columns="4">
+                                    <p:outputLabel for="param" value="#{parametro.parametrosDeProducto.nombre}:  "></p:outputLabel>
+                                    <p:inputText id="param" required="true" value="#{parametro.valor}" validatorMessage="#{parametro.parametrosDeProducto.tipoDeDato == '1' ? 'Ingrese solo enteros' : parametro.parametrosDeProducto.tipoDeDato == '2' ? 'Ingrese solo decimales' : '' }" requiredMessage="* Requerido">
+                                        <o:validator validatorId="enterosValidator" disabled="#{parametro.parametrosDeProducto.tipoDeDato != '1'}"></o:validator>
+                                        <o:validator validatorId="decimalesValidator" disabled="#{parametro.parametrosDeProducto.tipoDeDato != '2'}"></o:validator>
+                                    </p:inputText>
+                                    <p:watermark for="param" value="#{parametro.parametrosDeProducto.unidadMedidaid.nombre}"></p:watermark>
+                                    <p:message for="param"></p:message>
+                                </p:panelGrid>
+                            </ui:repeat>
+                            <ui:repeat id="loop2" value="#{crearComponenteAPBean.seriales}" var="sn" varStatus="i">
+                                <p:panelGrid columns="3">
+                                    <p:outputLabel for="seriales" value="Serial #{i.index + 1}"></p:outputLabel>
+                                    <p:inputText id="seriales" value="#{crearComponenteAPBean.seriales[i.index]}" required="true" requiredMessage="* Requerido">
+                                        <f:ajax event="keyup" execute="@this" render="alertaSN"></f:ajax>
+                                        <f:validator binding="#{numeroSerialValidator}"></f:validator>
+                                    </p:inputText>
+                                    <p:message id="alertaSN" for="seriales"></p:message>
+                                </p:panelGrid>
+                            </ui:repeat>
+                        </p:panelGrid>
+                        <p:panelGrid rendered="#{crearComponenteAPBean.modeloProductoSeleccionado != null}" columns="3" id="atributosItemP">
+                            <f:facet name="header">
+                                <h:outputText value="Atributos de Producto"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel for="condicion" value="Condición Física: "></p:outputLabel>
+                            <p:selectOneMenu id="condicion" value="#{crearComponenteAPBean.nuevoProductoCA.condicionFisicaid}" required="true" requiredMessage="* Requerido" converter="#{condicionFisicaConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.condicionesFisicas}" var="condicionF" itemLabel="#{condicionF.nombre}" itemValue="#{condicionF.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:message for="condicion"></p:message>
+                            <p:outputLabel for="numeroParte" value="N/P: "></p:outputLabel>
+                            <p:inputText id="numeroParte" value="#{crearComponenteAPBean.nuevoProductoCA.numeroDeParte}" required="true" requiredMessage="* Requerido"></p:inputText>
+                            <p:message for="numeroParte"></p:message>
+                            <p:outputLabel for="bodega" value="Bodega: "></p:outputLabel>
+                            <p:selectOneMenu id="bodega" value="#{crearComponenteAPBean.nuevoProductoCA.bodegaid}" converter="#{bodegaConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.bodegas}" var="bodega" itemLabel="#{bodega.nombre}" itemValue="#{bodega.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:message for="bodega"></p:message>
+                            <p:outputLabel for="contrato" value="Contrato: "></p:outputLabel>
+                            <p:selectOneMenu id="contrato" value="#{crearComponenteAPBean.nuevoProductoCA.contratonumero}" converter="#{contratoConverter}" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearComponenteAPBean.contratos}" var="contrato" itemLabel="#{contrato.clienteEmpresaruc.nombreComercial} - #{contrato.numero}" itemValue="#{contrato.numero}"></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:message for="contrato"></p:message>
+                            <p:outputLabel for="fechaCompra" value="Fecha de Compra: "></p:outputLabel>
+                            <p:calendar id="fechaCompra" pattern="MM/dd/yyyy" mode="popup" value="#{crearComponenteAPBean.nuevoProductoCA.fechaDeCompra}" required="true" requiredMessage="* Requerido"></p:calendar>
+                            <p:message for="fechaCompra"></p:message>
+                            <p:outputLabel for="numFactura" value="N. Factura: "></p:outputLabel>
+                            <p:inputText id="numFactura" value="#{crearComponenteAPBean.nuevoProductoCA.numeroDeFactura}" required="true" requiredMessage="* Requerido"></p:inputText>
+                            <p:message for="numFactura"></p:message>
+                            <p:outputLabel for="numPedido" value="N. Pedido: "></p:outputLabel>
+                            <p:inputText id="numPedido" value="#{crearComponenteAPBean.nuevoProductoCA.numeroDePedido}" required="true" requiredMessage="* Requerido"></p:inputText>
+                            <p:message for="numPedido"></p:message>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton rendered="#{crearComponenteAPBean.modeloProductoSeleccionado != null}" id="ingresar1" value="Ingresar Componente E." actionListener="#{crearComponenteAPBean.ingresarComponenteElectronico}" update="@form"></p:commandButton>
+                            <p:commandButton rendered="#{crearComponenteAPBean.modeloProductoSeleccionado != null}" id="ingresar2" value="Ingresar Componente E. y Continuar con similar" actionListener="#{crearComponenteAPBean.ingresarComponenteElectronico}" update="@form"></p:commandButton>
+                        </f:facet>
                     </p:panel>
                 </h:form>
             </h:body>
