@@ -34,6 +34,9 @@
                     </p:panel>
                     <p:panel id="componentesP">
                         <p:dataTable id="componentes" value="#{crearComponenteABean.componenteElectronicoAtomicos}" var="componente">
+                            <f:facet name="header">
+                                <h:outputText value="Componentes Atómicos"></h:outputText>
+                            </f:facet>
                             <p:column headerText="Id">
                                 #{componente.id}
                             </p:column>
@@ -58,9 +61,9 @@
                             <p:message for="atributo"></p:message>
                             <p:outputLabel for="tipoDato" value="Tipo de Dato: "></p:outputLabel>
                             <p:selectOneMenu id="tipoDato" value="#{crearComponenteABean.nuevoParametro.tipoDeDato}">
-                                <f:selectItem itemLabel="Entero" itemValue="'1'"></f:selectItem>
-                                <f:selectItem itemLabel="Decimal" itemValue="'2'"></f:selectItem>
-                                <f:selectItem itemLabel="Cadena de Caracteres" itemValue="'3'"></f:selectItem>
+                                <f:selectItem itemLabel="Entero" itemValue="1"></f:selectItem>
+                                <f:selectItem itemLabel="Decimal" itemValue="2"></f:selectItem>
+                                <f:selectItem itemLabel="Cadena de Caracteres" itemValue="3"></f:selectItem>
                             </p:selectOneMenu>
                             <p:message for="tipoDato"></p:message>
                             <p:outputLabel for="descripcion" value="Descripcion: "></p:outputLabel>

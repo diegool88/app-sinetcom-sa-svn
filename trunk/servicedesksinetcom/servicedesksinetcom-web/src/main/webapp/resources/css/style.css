@@ -613,4 +613,11 @@ img {
     width: auto;
 }
 
+.subtitulo{
+    font-size: 20px;
+    font-weight: bold;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
 /*------------------------------ For IE6 ------------------------------*/
