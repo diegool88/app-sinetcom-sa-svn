@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ItemProducto.findAll", query = "SELECT i FROM ItemProducto i")})
-public class ItemProducto implements Serializable {
+public class ItemProducto implements Serializable, Cloneable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerial")
     private List<Ticket> ticketList;
     private static final long serialVersionUID = 1L;
@@ -263,6 +263,11 @@ public class ItemProducto implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.ItemProducto[ numeroSerial=" + numeroSerial + " ]";
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
     }
 
     @XmlTransient

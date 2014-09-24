@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AtributoItemProducto.findAll", query = "SELECT a FROM AtributoItemProducto a")})
-public class AtributoItemProducto implements Serializable {
+public class AtributoItemProducto implements Serializable,  Cloneable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AtributoItemProductoPK atributoItemProductoPK;
@@ -114,6 +114,11 @@ public class AtributoItemProducto implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.AtributoItemProducto[ atributoItemProductoPK=" + atributoItemProductoPK + " ]";
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
     }
     
 }

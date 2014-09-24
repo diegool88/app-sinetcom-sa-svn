@@ -8,6 +8,7 @@ import ec.com.sinetcom.orm.CategoriaProducto;
 import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.Fabricante;
 import ec.com.sinetcom.orm.ItemProducto;
+import ec.com.sinetcom.orm.ModeloProducto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -39,7 +40,7 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
      * @return 
      */
     public List<ItemProducto> obtenerTodosLosProductosDeCliente(List<Contrato> contratos){
-        String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero.numero IN :contratos";
+        String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero.numero IN :contratos AND i.itemProductonumeroSerialpadre IS NULL";
         Query qry = this.em.createQuery(sql);
         List<String> numeroContratos = new ArrayList<String>();
         for(Contrato contrato: contratos){
@@ -56,6 +57,18 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
     public List<ItemProducto> obtenerTodosLosProductosPadre(){
         String sql = "SELECT i FROM ItemProducto i WHERE i.itemProductonumeroSerialpadre IS NULL";
         Query qry = this.em.createQuery(sql);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Obtiene todos los Productos padre que no son elementos atómicos
+     * @param modeloProducto
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodosLosProductosPadrePorModelo(ModeloProducto modeloProducto){
+        String sql = "SELECT i FROM ItemProducto i WHERE i.modeloProductoid = ?1 AND i.componenteElectronicoAtomicoid IS NULL";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter(1, modeloProducto);
         return qry.getResultList();
     }
     
