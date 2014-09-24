@@ -4,10 +4,13 @@
  */
 package ec.com.sinetcom.dao;
 
+import ec.com.sinetcom.orm.CategoriaProducto;
 import ec.com.sinetcom.orm.Fabricante;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
