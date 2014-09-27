@@ -5,16 +5,16 @@
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.dao.CompetenciasFacade;
+import ec.com.sinetcom.dao.GrupoFacade;
+import ec.com.sinetcom.dao.PermisosFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
 import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.Grupo;
+import ec.com.sinetcom.orm.Permisos;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateful;
-import javax.ejb.StatefulTimeout;
 import javax.ejb.Stateless;
 
 /**
@@ -31,9 +31,10 @@ public class UsuarioServicio {
     private UsuarioFacade usuarioFacade;
     @EJB
     private CompetenciasFacade competenciasFacade;
-    
-    private Usuario usuario;
-    
+    @EJB
+    private GrupoFacade grupoFacade;
+    @EJB
+    private PermisosFacade permisosFacade;
     
     
     /**
@@ -89,6 +90,47 @@ public class UsuarioServicio {
      */
     public List<Competencias> obtenerTodasLasCompetencias(){
         return this.competenciasFacade.findAll();
+    }
+    
+    /**
+     * Obtiene todos los grupos
+     * @return 
+     */
+    public List<Grupo> obtenerTodosLosGrupos(){
+        return this.grupoFacade.findAll();
+    }
+    
+    /**
+     * Obtiene un grupo por id
+     * @param id
+     * @return 
+     */
+    public Grupo obtenerGrupoPorId(int id){
+        return this.grupoFacade.find(id);
+    }
+    
+    /**
+     * Obtiene un Permiso
+     * @param id
+     * @return 
+     */
+    public Permisos obtenerPermisosPorId(int id){
+        return this.permisosFacade.find(id);
+    }
+    
+    /**
+     * Actualiza el grupo seleccionado
+     * @param grupo
+     * @return 
+     */
+    public boolean actualizarGrupo(Grupo grupo){
+        try{
+            this.grupoFacade.edit(grupo);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
 }

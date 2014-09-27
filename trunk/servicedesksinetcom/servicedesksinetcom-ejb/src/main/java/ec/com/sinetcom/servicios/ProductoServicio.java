@@ -14,6 +14,8 @@ import ec.com.sinetcom.dao.FabricanteFacade;
 import ec.com.sinetcom.dao.ItemProductoFacade;
 import ec.com.sinetcom.dao.LineaDeProductoFacade;
 import ec.com.sinetcom.dao.ModeloProductoFacade;
+import ec.com.sinetcom.dao.ParametrosDeProductoFacade;
+import ec.com.sinetcom.dao.UnidadMedidaFacade;
 import ec.com.sinetcom.orm.AtributoItemProducto;
 import ec.com.sinetcom.orm.AtributoItemProductoPK;
 import ec.com.sinetcom.orm.Bodega;
@@ -25,6 +27,8 @@ import ec.com.sinetcom.orm.Fabricante;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.LineaDeProducto;
 import ec.com.sinetcom.orm.ModeloProducto;
+import ec.com.sinetcom.orm.ParametrosDeProducto;
+import ec.com.sinetcom.orm.UnidadMedida;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -46,8 +50,6 @@ public class ProductoServicio {
     @EJB
     private ItemProductoFacade itemProductoFacade;
     @EJB
-    private ComponenteElectronicoAtomicoFacade atomicoFacade;
-    @EJB
     private ModeloProductoFacade modeloProductoFacade;
     @EJB
     private LineaDeProductoFacade lineaDeProductoFacade;
@@ -59,6 +61,84 @@ public class ProductoServicio {
     private BodegaFacade bodegaFacade;
     @EJB
     private CondicionFisicaFacade condicionFisicaFacade;
+    @EJB
+    private ParametrosDeProductoFacade parametrosDeProductoFacade;
+    @EJB
+    private UnidadMedidaFacade unidadMedidaFacade;
+    
+    /**
+     * Servicio que permite crear un nuevo componente electrónico
+     * @param atomico 
+     */
+    public void crearComponenteElectronico(ComponenteElectronicoAtomico atomico){
+        this.componenteElectronicoAtomicoFacade.create(atomico);
+    }
+    
+    /**
+     * Servicio que obtiene todos los parametros declarados
+     * @return 
+     */
+    public List<ParametrosDeProducto> obtenerTodosLosParametrosDeProducto(){
+        return this.parametrosDeProductoFacade.findAll();
+    }
+    
+    /**
+     * Servicio que obtiene todas la unidades de medida
+     * @return 
+     */
+    public List<UnidadMedida> obtenerTodasLasUnidadesDeMedida(){
+        return this.unidadMedidaFacade.findAll();
+    }
+    
+    /**
+     * Obtiene un parametro producto
+     * @param id
+     * @return 
+     */
+    public ParametrosDeProducto obtenerParametroProducto(int id){
+        return this.parametrosDeProductoFacade.find(id);
+    }
+    
+    /**
+     * Obtiene una unidad de medida
+     * @param id
+     * @return 
+     */
+    public UnidadMedida obtenerUnidadMedida(int id){
+        return this.unidadMedidaFacade.find(id);
+    }
+    
+    /**
+     * Crea un parámetro producto
+     * @param parametrosDeProducto 
+     */
+    public void crearParametroProducto(ParametrosDeProducto parametrosDeProducto){
+        this.parametrosDeProductoFacade.create(parametrosDeProducto);
+    }
+    
+    /**
+     * Obtiene todos los componentes electronicos atómicos
+     * @return 
+     */
+    public List<ComponenteElectronicoAtomico> obtenerTodosLosComponentesElectronicos(){
+        return this.componenteElectronicoAtomicoFacade.findAll();
+    }
+    
+    /**
+     * Elimina un componente electrónico
+     * @param electronicoAtomico
+     * @return 
+     */
+    public boolean eliminarComponenteElectronico(int electronicoAtomico){
+        try{
+            ComponenteElectronicoAtomico componenteElectronicoAtomico = this.componenteElectronicoAtomicoFacade.find(electronicoAtomico);
+            this.componenteElectronicoAtomicoFacade.remove(componenteElectronicoAtomico);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
     
     /**
      * Servicio que obtiene todos los fabricantes
@@ -98,6 +178,14 @@ public class ProductoServicio {
      */
     public List<Contrato> obtenerTodosLosContratos(){
         return this.contratoFacade.findAll();
+    }
+    
+    /**
+     * Obtiene todas las líneas de producto
+     * @return 
+     */
+    public List<LineaDeProducto> obtenerTodasLasLineasDeProducto(){
+        return this.lineaDeProductoFacade.findAll();
     }
     
     /**
@@ -144,7 +232,15 @@ public class ProductoServicio {
      * @return 
      */
     public List<ComponenteElectronicoAtomico> obtenerTodosLosComponentesEA(){
-        return this.atomicoFacade.findAll();
+        return this.componenteElectronicoAtomicoFacade.findAll();
+    }
+    
+    /**
+     * Obtiene todos los modelos de productos
+     * @return 
+     */
+    public List<ModeloProducto> obtenerTodosLosModelosDeProductos(){
+        return this.modeloProductoFacade.findAll();
     }
     
     /**
@@ -249,6 +345,89 @@ public class ProductoServicio {
             }
             itemProducto.setAtributoItemProductoList(clon);
             this.itemProductoFacade.edit(itemProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Ingresa un nuevo producto electrónico atómico
+     * @param itemProducto
+     * @return 
+     */
+    public boolean ingresarNuevoProducto(ItemProducto itemProducto){
+        try{
+            this.itemProductoFacade.create(itemProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Ingresa una nueva línea de producto
+     * @param lineaDeProducto
+     * @return 
+     */
+    public boolean ingresarNuevaLineaDeProducto(LineaDeProducto lineaDeProducto){
+        try{
+            this.lineaDeProductoFacade.create(lineaDeProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Elimina una línea de Producto
+     * @param id
+     * @return 
+     */
+    public boolean eliminarLineaDeProducto(int id){
+        try{
+            LineaDeProducto lineaP = this.lineaDeProductoFacade.find(id);
+            if(lineaP.getModeloProductoList() != null && !lineaP.getModeloProductoList().isEmpty()){
+                throw new Exception("La línea de Producto ya tiene modelos creados!");
+            }else{
+                this.lineaDeProductoFacade.remove(lineaP);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Ingresa un nuevo modelo de producto
+     * @param modeloProducto
+     * @return 
+     */
+    public boolean ingresarNuevoModeloDeProducto(ModeloProducto modeloProducto){
+        try{
+            this.modeloProductoFacade.create(modeloProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Eliminar un modelo de producto
+     * @param id
+     * @return 
+     */
+    public boolean eliminarModeloDeProducto(int id){
+        try{
+            ModeloProducto modeloProducto = this.modeloProductoFacade.find(id);
+            if((modeloProducto.getItemProductoList() != null && !modeloProducto.getItemProductoList().isEmpty()) || (modeloProducto.getItemProductoList1() != null && !modeloProducto.getItemProductoList1().isEmpty())){
+                throw new Exception("No puede eliminar el modelo por que está siendo usado por algún Item Producto");
+            }
         }catch(Exception e){
             e.printStackTrace();
             return false;
