@@ -4,9 +4,7 @@
  */
 package ec.com.sinetcom.converter;
 
-import ec.com.sinetcom.servicios.ComponenteAtomicoServicio;
-import ec.com.sinetcom.servicios.GrupoServicio;
-import ec.com.sinetcom.servicios.TicketServicio;
+import ec.com.sinetcom.servicios.UsuarioServicio;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -21,12 +19,12 @@ import javax.faces.convert.Converter;
 public class GrupoConverter implements Converter{
 
     @EJB
-    private GrupoServicio grupoServicio;
+    private UsuarioServicio usuarioServicio;
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if(value != null && value.trim().length() > 0){
-            return this.grupoServicio.obtenerGrupoPorId(Integer.parseInt(value));
+            return this.usuarioServicio.obtenerGrupoPorId(Integer.parseInt(value));
         }else{
             return null;
         }

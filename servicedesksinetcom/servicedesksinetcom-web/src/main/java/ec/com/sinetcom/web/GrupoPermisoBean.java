@@ -7,7 +7,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.Permisos;
-import ec.com.sinetcom.servicios.GrupoServicio;
+import ec.com.sinetcom.servicios.UsuarioServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
@@ -28,7 +28,7 @@ import org.primefaces.event.UnselectEvent;
 public class GrupoPermisoBean implements Serializable {
 
     @EJB
-    private GrupoServicio grupoServicio;
+    private UsuarioServicio usuarioServicio;
     //Todos los grupos
     private List<Grupo> grupos;
     //Grupo seleccionado
@@ -40,7 +40,7 @@ public class GrupoPermisoBean implements Serializable {
 
     @PostConstruct
     public void doInit() {
-        this.grupos = this.grupoServicio.obtenerTodosLosGrupos();
+        this.grupos = this.usuarioServicio.obtenerTodosLosGrupos();
         this.grupoSeleccionado = new Grupo();
         this.existeSeleccion = false;
     }
@@ -70,10 +70,7 @@ public class GrupoPermisoBean implements Serializable {
     }
 
     public void actualizarGrupo(ActionEvent event) {
-        //this.nuevoPermisos.setGrupo(this.grupoSeleccionado);
-        //this.grupoSeleccionado.setPermisos(this.nuevoPermisos);
-        //this.grupoSeleccionado.setPermisos(this.nuevoPermisos);
-        this.grupoServicio.actualizarGrupo(this.grupoSeleccionado);
+        this.usuarioServicio.actualizarGrupo(this.grupoSeleccionado);
         Mensajes.mostrarMensajeInformativo("Permisos Actualizados!");
     }
 
