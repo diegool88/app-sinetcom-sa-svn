@@ -60,6 +60,9 @@ public class ItemProducto implements Serializable, Cloneable {
     @Size(max = 45)
     @Column(name = "numeroDePedido")
     private String numeroDePedido;
+    @Size(max = 300)
+    @Column(name = "descripcion")
+    private String descripcion;
     @JoinTable(name = "Compatibilidad", joinColumns = {
         @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")}, inverseJoinColumns = {
         @JoinColumn(name = "ModeloProducto_id", referencedColumnName = "id")})
@@ -145,6 +148,14 @@ public class ItemProducto implements Serializable, Cloneable {
 
     public void setNumeroDePedido(String numeroDePedido) {
         this.numeroDePedido = numeroDePedido;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @XmlTransient
