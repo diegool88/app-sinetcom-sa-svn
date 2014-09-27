@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Fabricantes Y Categorias"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panel id="fabricantesCategorias">
+                        <f:facet name="header">
+                            <h:outputText value="Fabricantes - Categorias"></h:outputText>
+                        </f:facet>
+                        <p:dataTable value="#{fabricantesYCategorias.fabricantes}" var="fabricante" selection="#{fabricantesYCategorias.fabricanteSeleccionado}" selectionMode="single" rowKey="#{fabricante.id}" rows="10" rowsPerPageTemplate="5,10,15" >
+                            <p:ajax event="rowSelect" listener="#{fabricantesYCategorias.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=""></p:ajax>
+                            <p:ajax event="rowUnselect" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=""></p:ajax>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Id"/>
+                                </f:facet>
+                                <h:outputText value="#{fabricante.id}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{fabricante.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Descripción"/>
+                                </f:facet>
+                                <h:outputText value="#{fabricante.descripcion}"/>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <f:facet name="footer">
+                            <p:commandButton value="Categorías de Fabricante" disabled="#{empty fabricantesYCategorias.fabricanteSeleccionado}" onclick="" update=""></p:commandButton>
+                        </f:facet>
+                    </p:panel>
+                    <p:dialog id="categorias">
+                        
+                    </p:dialog>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>

@@ -5,28 +5,20 @@
  */
 package ec.com.sinetcom.web;
 
-import ec.com.sinetcom.orm.AtributoItemProducto;
-import ec.com.sinetcom.orm.AtributoItemProductoPK;
+
 import ec.com.sinetcom.orm.Bodega;
 import ec.com.sinetcom.orm.CategoriaProducto;
-import ec.com.sinetcom.orm.ComponenteElectronicoAtomico;
 import ec.com.sinetcom.orm.CondicionFisica;
 import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.Fabricante;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.LineaDeProducto;
 import ec.com.sinetcom.orm.ModeloProducto;
-import ec.com.sinetcom.orm.ParametrosDeProducto;
-import ec.com.sinetcom.orm.UnidadMedida;
-import ec.com.sinetcom.servicios.ComponenteAtomicoServicio;
 import ec.com.sinetcom.servicios.ProductoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -38,25 +30,15 @@ import javax.faces.event.ActionEvent;
  *
  * @author diegoflores
  */
-@ManagedBean(name = "crearComponenteAPBean")
+@ManagedBean(name = "ingresarProductoPiezaNA")
 @ViewScoped
-public class CrearComponenteAPBean implements Serializable {
-
+public class IngresarProductoPiezaNA implements Serializable{
+    
     @EJB
     private ProductoServicio productoServicio;
-    @EJB
-    private ComponenteAtomicoServicio atomicoServicio;
-    //Todos los Atributos ya existentes
-    private List<ParametrosDeProducto> parametrosDeProductos;
-    //Todas los componentes
-    private List<ComponenteElectronicoAtomico> componentesEA;
-    //Nuevo Componente Atómico
-    private ComponenteElectronicoAtomico componenteEASeleccionado;
     //Todos los fabricantes
     private List<Fabricante> fabricantes;
     //Todas las categorias del fabricante
-    private List<CategoriaProducto> cpFabricante;
-    //Todos los producto por categoria y fabricante
     private List<ItemProducto> productosPadre;
     //Todos los modelos disponibles por categoria y fabricante
     private List<ModeloProducto> modeloProductosCompatibles;
@@ -76,36 +58,37 @@ public class CrearComponenteAPBean implements Serializable {
     private LineaDeProducto lineaDeProductoSeleccionada;
     //Modelo seleccionado
     private ModeloProducto modeloProductoSeleccionado;
+    //Producto Padre seleccionado
+    private ItemProducto productoPadreSeleccionado;
+    //Lista de productos seleccionados
+    private List<ModeloProducto> modelosCompatiblesSeleccionados;
     //Nuevo Producto Componente Atómico
-    private ItemProducto nuevoProductoCA;
+    private ItemProducto nuevoProducto;
     //Atributos ingresado
     private List<String> seriales;
     //Numero de seriales
     private int numeroSeriales;
-    //Atributos ingresados Lista
-    private List<AtributoItemProducto> atributosCA;
-
+    //Verifica si se trata de producto padre (Sistema) o subparte
+    private Boolean esSistema;
+    
     @PostConstruct
-    public void doInit() {
+    public void doInit(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
             this.fabricantes = this.productoServicio.obtenerTodosLosFabricantes();
-            this.componentesEA = this.productoServicio.obtenerTodosLosComponentesEA();
             this.bodegas = this.productoServicio.obtenerTodasLasBodegas();
             this.contratos = this.productoServicio.obtenerTodosLosContratos();
             this.condicionesFisicas = this.productoServicio.obtenerTodasLasCondicionesFisicas();
-            this.nuevoProductoCA = new ItemProducto();
+            this.nuevoProducto = new ItemProducto();
             this.seriales = new ArrayList<String>();
         }
     }
-
+    
     public void actualizarCategorias() {
         this.categoriaProductoSeleccionada = null;
         this.lineaDeProductoSeleccionada = null;
         this.modeloProductoSeleccionado = null;
         this.modeloProductosCompatibles = null;
-        this.nuevoProductoCA.setItemProductonumeroSerialpadre(null);
-        this.componenteEASeleccionado = null;
-        this.atributosCA = null;
+        this.nuevoProducto.setItemProductonumeroSerialpadre(null);
         this.seriales = null;
     }
 
@@ -113,10 +96,8 @@ public class CrearComponenteAPBean implements Serializable {
         this.lineaDeProductoSeleccionada = null;
         this.modeloProductoSeleccionado = null;
         this.modeloProductosCompatibles = null;
-        this.componenteEASeleccionado = null;
-        this.nuevoProductoCA.setItemProductonumeroSerialpadre(null);
+        this.nuevoProducto.setItemProductonumeroSerialpadre(null);
         this.lineaDeProductos = this.productoServicio.obtenerTodasLasLineasDeProductoPorCategoriaYFabricante(this.fabricanteSeleccionado, this.categoriaProductoSeleccionada);
-        this.atributosCA = null;
         this.seriales = null;
         this.actualizarCompatibilidad();
     }
@@ -127,10 +108,31 @@ public class CrearComponenteAPBean implements Serializable {
 
     public void actualizarProductoPadre() {
         this.productosPadre = this.productoServicio.obtenerTodosLosProductosPadrePorModelo(this.modeloProductoSeleccionado);
+        this.actualizarNumeroParte();
     }
 
     public void actualizarContrato() {
-        this.nuevoProductoCA.setContratonumero(this.nuevoProductoCA.getItemProductonumeroSerialpadre().getContratonumero());
+        if (this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null) {
+            this.nuevoProducto.setContratonumero(this.productoPadreSeleccionado.getContratonumero());
+            this.nuevoProducto.setBodegaid(null);
+        }else{
+            this.nuevoProducto.setContratonumero(null);
+        }
+    }
+    
+    public void desactivarBodega(){
+        if(this.nuevoProducto != null && this.nuevoProducto.getContratonumero() != null){
+            this.nuevoProducto.setBodegaid(null);
+        }
+    }
+    
+    public void desactivarContrato(){
+        if(this.nuevoProducto != null && this.nuevoProducto.getBodegaid()!= null){
+            this.nuevoProducto.setContratonumero(null);
+            if(this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null){
+                this.productoPadreSeleccionado = null;
+            }
+        }
     }
 
     public void actualizarCamposDeSeriales() {
@@ -139,37 +141,41 @@ public class CrearComponenteAPBean implements Serializable {
             this.seriales.add("");
         }
     }
-
-    public void crearArregloDeEntradas() {
-        //this.seriales = new String[this.componenteEASeleccionado.getParametrosDeProductoList().size()];
-        this.atributosCA = new ArrayList<AtributoItemProducto>();
-        for (ParametrosDeProducto parametro : this.componenteEASeleccionado.getParametrosDeProductoList()) {
-            AtributoItemProducto atributoItemProducto = new AtributoItemProducto();
-            atributoItemProducto.setParametrosDeProducto(parametro);
-            this.atributosCA.add(atributoItemProducto);
+    
+    public void actualizarNumeroParte(){
+        if(this.esSistema != null && this.esSistema){
+            this.nuevoProducto.setNumeroDeParte(this.modeloProductoSeleccionado.getNumeroDeParte());
         }
     }
-
-    public void ingresarComponenteElectronico(ActionEvent event) throws CloneNotSupportedException {
-        this.nuevoProductoCA.setModeloProductoid(this.modeloProductoSeleccionado);
-        this.nuevoProductoCA.setComponenteElectronicoAtomicoid(this.componenteEASeleccionado);
-        ItemProducto itemProducto = (ItemProducto) this.nuevoProductoCA.clone();
-        List<AtributoItemProducto> atributosIP = this.atributosCA;
+    
+    public void ingresarProducto(ActionEvent event) throws CloneNotSupportedException {
+        this.nuevoProducto.setModeloProductoid(this.modeloProductoSeleccionado);
+        /*
+        Nuevo Condigo
+        */
+        this.nuevoProducto.setItemProductonumeroSerialpadre(this.productoPadreSeleccionado);
+        this.nuevoProducto.setModeloProductoList(this.modeloProductosCompatibles);
+        /*
+        Fin
+        */
+        ItemProducto itemProducto = (ItemProducto) this.nuevoProducto.clone();
+        
         for (String serial : seriales) {
             itemProducto = copiarItemProducto(itemProducto);
             itemProducto.setNumeroSerial(serial);
-            if (this.productoServicio.ingresarNuevoProductoComponenteAtomico(itemProducto, atributosIP)) {
+            if (this.productoServicio.ingresarNuevoProducto(itemProducto)) {
                 Mensajes.mostrarMensajeInformativo("Item con S/N: " + serial + " ingresado exitosamente!");
-                this.enserarTodosLosCampos();
+                //this.enserarTodosLosCampos();
             } else {
                 Mensajes.mostrarMensajeDeError("Hubo un error creando el Item con S/N: " + serial);
             }
         }
+        this.productosPadre = this.productoServicio.obtenerTodosLosProductosPadrePorModelo(this.modeloProductoSeleccionado);
         String boton = (String) event.getComponent().getAttributes().get("id");
         if (boton.equals("ingresar1")) {
-            this.enserarTodosLosCampos();
+            this.encerarTodosLosCampos();
         } else {
-            this.enserarCamposDeItemProducto();
+            this.encerarCamposDeItemProducto();
         }
     }
 
@@ -188,71 +194,20 @@ public class CrearComponenteAPBean implements Serializable {
         return nuevoItemProducto;
     }
 
-    public void ingresarComponenteElectronicoYContinuar(ActionEvent event) throws CloneNotSupportedException {
-        this.nuevoProductoCA.setModeloProductoid(this.modeloProductoSeleccionado);
-        this.nuevoProductoCA.setComponenteElectronicoAtomicoid(this.componenteEASeleccionado);
-        ItemProducto itemProducto = (ItemProducto) this.nuevoProductoCA.clone();
-        List<AtributoItemProducto> atributosIP = this.atributosCA;
-        for (String serial : seriales) {
-            itemProducto = copiarItemProducto(itemProducto);
-            itemProducto.setNumeroSerial(serial);
-            if (this.productoServicio.ingresarNuevoProductoComponenteAtomico(itemProducto, atributosIP)) {
-                Mensajes.mostrarMensajeInformativo("Item con S/N: " + serial + " ingresado exitosamente!");
-                this.enserarTodosLosCampos();
-            } else {
-                Mensajes.mostrarMensajeDeError("Hubo un error creando el Item con S/N: " + serial);
-            }
-        }
-
-        this.enserarCamposDeItemProducto();
-    }
-
-    public void enserarTodosLosCampos() {
+    public void encerarTodosLosCampos() {
         this.doInit();
         this.categoriaProductoSeleccionada = null;
         this.lineaDeProductoSeleccionada = null;
         this.modeloProductoSeleccionado = null;
         this.modeloProductosCompatibles = null;
-        this.nuevoProductoCA.setItemProductonumeroSerialpadre(null);
-        this.componenteEASeleccionado = null;
-        this.atributosCA = null;
         this.seriales = null;
         this.numeroSeriales = 0;
     }
 
-    public void enserarCamposDeItemProducto() {
+    public void encerarCamposDeItemProducto() {
         this.seriales = null;
         this.numeroSeriales = 0;
-        this.nuevoProductoCA.setCondicionFisicaid(null);
-        this.nuevoProductoCA.setNumeroDeParte(null);
-        this.nuevoProductoCA.setBodegaid(null);
-        this.nuevoProductoCA.setFechaDeCompra(null);
-        this.nuevoProductoCA.setNumeroDeFactura(null);
-        this.nuevoProductoCA.setNumeroDePedido(null);
-    }
-
-    public List<ParametrosDeProducto> getParametrosDeProductos() {
-        return parametrosDeProductos;
-    }
-
-    public void setParametrosDeProductos(List<ParametrosDeProducto> parametrosDeProductos) {
-        this.parametrosDeProductos = parametrosDeProductos;
-    }
-
-    public List<ComponenteElectronicoAtomico> getComponentesEA() {
-        return componentesEA;
-    }
-
-    public void setComponentesEA(List<ComponenteElectronicoAtomico> componentesEA) {
-        this.componentesEA = componentesEA;
-    }
-
-    public ComponenteElectronicoAtomico getComponenteEASeleccionado() {
-        return componenteEASeleccionado;
-    }
-
-    public void setComponenteEASeleccionado(ComponenteElectronicoAtomico componenteEASeleccionado) {
-        this.componenteEASeleccionado = componenteEASeleccionado;
+        this.nuevoProducto.setNumeroDeParte(null);
     }
 
     public List<Fabricante> getFabricantes() {
@@ -319,12 +274,12 @@ public class CrearComponenteAPBean implements Serializable {
         this.lineaDeProductos = lineaDeProductos;
     }
 
-    public ItemProducto getNuevoProductoCA() {
-        return nuevoProductoCA;
+    public ItemProducto getNuevoProducto() {
+        return nuevoProducto;
     }
 
-    public void setNuevoProductoCA(ItemProducto nuevoProductoCA) {
-        this.nuevoProductoCA = nuevoProductoCA;
+    public void setNuevoProducto(ItemProducto nuevoProducto) {
+        this.nuevoProducto = nuevoProducto;
     }
 
     public List<String> getSeriales() {
@@ -359,14 +314,6 @@ public class CrearComponenteAPBean implements Serializable {
         this.condicionesFisicas = condicionesFisicas;
     }
 
-    public List<AtributoItemProducto> getAtributosCA() {
-        return atributosCA;
-    }
-
-    public void setAtributosCA(List<AtributoItemProducto> atributosCA) {
-        this.atributosCA = atributosCA;
-    }
-
     public int getNumeroSeriales() {
         return numeroSeriales;
     }
@@ -375,4 +322,28 @@ public class CrearComponenteAPBean implements Serializable {
         this.numeroSeriales = numeroSeriales;
     }
 
+    public ItemProducto getProductoPadreSeleccionado() {
+        return productoPadreSeleccionado;
+    }
+
+    public void setProductoPadreSeleccionado(ItemProducto productoPadreSeleccionado) {
+        this.productoPadreSeleccionado = productoPadreSeleccionado;
+    }
+
+    public List<ModeloProducto> getModelosCompatiblesSeleccionados() {
+        return modelosCompatiblesSeleccionados;
+    }
+
+    public void setModelosCompatiblesSeleccionados(List<ModeloProducto> modelosCompatiblesSeleccionados) {
+        this.modelosCompatiblesSeleccionados = modelosCompatiblesSeleccionados;
+    }
+
+    public Boolean getEsSistema() {
+        return esSistema;
+    }
+
+    public void setEsSistema(Boolean esSistema) {
+        this.esSistema = esSistema;
+    }
+    
 }

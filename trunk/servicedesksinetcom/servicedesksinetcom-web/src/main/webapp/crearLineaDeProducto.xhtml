@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Crear Línea de Producto"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panel id="ingresoLineaProducto">
+                        <f:facet name="header">
+                            <h:outputText value="Creación de Nueva Linea de Producto"></h:outputText>
+                        </f:facet>
+                        <p:panelGrid columns="3" columnClasses="label,value">
+                            <p:outputLabel for="fabricante" value="Fabricante: "></p:outputLabel>
+                            <p:selectOneMenu id="fabricante" required="true" requiredMessage="* Requerido" value="#{crearLineaDeProductoBean.fabricanteSeleccionado}" converter="#{fabricanteConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearLineaDeProductoBean.fabricantes}" var="fabricante" itemLabel="#{fabricante.nombre}" itemValue="#{fabricante.id.toString()}"></f:selectItems>
+                                <p:ajax update="categoria" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                            </p:selectOneMenu>
+                            <p:message for="fabricante"></p:message>
+                            <p:outputLabel for="categoria" value="Categoría: "></p:outputLabel>
+                            <p:selectOneMenu id="categoria" required="true" requiredMessage="* Requerido" value="#{crearLineaDeProductoBean.categoriaSeleccionada}" converter="#{categoriaConverter}">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{crearLineaDeProductoBean.fabricanteSeleccionado.categoriaProductoList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:message for="categoria"></p:message>
+                            <p:outputLabel for="nombre" value="Nombre: "></p:outputLabel>
+                            <p:inputText id="nombre" value="#{crearLineaDeProductoBean.nuevaLineaDeProducto.nombre}" required="true" requiredMessage="* Requerido"></p:inputText>
+                            <p:message for="nombre"></p:message>
+                            <p:outputLabel for="referencia" value="N. Referencia: "></p:outputLabel>
+                            <p:inputText id="referencia" value="#{crearLineaDeProductoBean.nuevaLineaDeProducto.numeroDeReferencia}"></p:inputText>
+                            <p:message for="referencia"></p:message>
+                            <p:outputLabel for="descripcion" value="Descripción: "></p:outputLabel>
+                            <p:inputText id="descripcion" value="#{crearLineaDeProductoBean.nuevaLineaDeProducto.descripcion}"></p:inputText>
+                            <p:message for="descripcion"></p:message>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Crear Línea de Producto" actionListener="#{crearLineaDeProductoBean.ingresarNuevaLineaDeProducto}" update="@form" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                        </f:facet>
+                    </p:panel>
+                    <p:dataTable id="listaLineasP" value="#{crearLineaDeProductoBean.lineasDeProducto}" var="linea" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15" rows="10">
+                        <f:facet name="header">
+                            <h:outputText value="Líneas de Producto"></h:outputText>
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            #{linea.nombre}
+                        </p:column>
+                        <p:column headerText="Categoría">
+                            #{linea.categoriaid.nombre}
+                        </p:column>
+                        <p:column headerText="Fabricante">
+                            #{linea.fabricanteid.nombre}
+                        </p:column>
+                        <p:column headerText="Eliminar">
+                            <p:commandButton icon="ui-icon-trash" process="@this" actionListener="#{crearLineaDeProductoBean.eliminarLineaDeProducto}" update=":form:listaLineasP" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                <f:attribute name="idLineaP" value="#{linea.id}"></f:attribute>
+                                <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta línea de Producto?" icon="ui-icon-alert"></p:confirm>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>

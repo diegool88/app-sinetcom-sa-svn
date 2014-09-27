@@ -8,7 +8,6 @@ package ec.com.sinetcom.web;
 import ec.com.sinetcom.orm.ComponenteElectronicoAtomico;
 import ec.com.sinetcom.orm.ParametrosDeProducto;
 import ec.com.sinetcom.orm.UnidadMedida;
-import ec.com.sinetcom.servicios.ComponenteAtomicoServicio;
 import ec.com.sinetcom.servicios.ProductoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
@@ -30,8 +29,6 @@ public class CrearComponenteABean implements Serializable {
 
     @EJB
     private ProductoServicio productoServicio;
-    @EJB
-    private ComponenteAtomicoServicio atomicoServicio;
     //Todos los Atributos ya existentes
     private List<ParametrosDeProducto> parametrosDeProductos;
     //Todas las unidades de medida
@@ -45,16 +42,16 @@ public class CrearComponenteABean implements Serializable {
 
     @PostConstruct
     public void doInit() {
-        this.medidas = this.atomicoServicio.obtenerTodasLasUnidadesDeMedida();
-        this.parametrosDeProductos = this.atomicoServicio.obtenerTodosLosParametrosDeProducto();
-        this.componenteElectronicoAtomicos = this.atomicoServicio.obtenerTodosLosComponentesElectronicos();
+        this.medidas = this.productoServicio.obtenerTodasLasUnidadesDeMedida();
+        this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
+        this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
         this.nuevoParametro = new ParametrosDeProducto();
         this.componenteElectronicoAtomico = new ComponenteElectronicoAtomico();
     }
 
     public void ingresarParametro(ActionEvent event) {
-        this.atomicoServicio.crearParametroProducto(this.nuevoParametro);
-        this.parametrosDeProductos = this.atomicoServicio.obtenerTodosLosParametrosDeProducto();
+        this.productoServicio.crearParametroProducto(this.nuevoParametro);
+        this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
         this.nuevoParametro = new ParametrosDeProducto();
         Mensajes.mostrarMensajeInformativo("Se ha creado un nuevo parámetro de producto");
     }
@@ -64,18 +61,18 @@ public class CrearComponenteABean implements Serializable {
     }
     
     public void crearComponenteElectronico(ActionEvent event){
-        this.atomicoServicio.crearComponenteElectronico(this.componenteElectronicoAtomico);
+        this.productoServicio.crearComponenteElectronico(this.componenteElectronicoAtomico);
         this.componenteElectronicoAtomico = new ComponenteElectronicoAtomico();
-        this.componenteElectronicoAtomicos = this.atomicoServicio.obtenerTodosLosComponentesElectronicos();
+        this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
         Mensajes.mostrarMensajeInformativo("Componente creado satisfactoriamente");
     }
     
     public void borrarComponenteElectronico(ActionEvent event){
-        if(!this.atomicoServicio.eliminarComponenteElectronico((Integer)event.getComponent().getAttributes().get("idComponente"))){
+        if(!this.productoServicio.eliminarComponenteElectronico((Integer)event.getComponent().getAttributes().get("idComponente"))){
             Mensajes.mostrarMensajeDeError("El Componente no pudo ser borrado, se encuentra en uso!");
         }else{
             Mensajes.mostrarMensajeInformativo("Componente borrado exitosamente!");
-            this.componenteElectronicoAtomicos = this.atomicoServicio.obtenerTodosLosComponentesElectronicos();
+            this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
         }
     }
 

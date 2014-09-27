@@ -4,8 +4,7 @@
  */
 package ec.com.sinetcom.converter;
 
-import ec.com.sinetcom.servicios.ComponenteAtomicoServicio;
-import ec.com.sinetcom.servicios.TicketServicio;
+import ec.com.sinetcom.servicios.ProductoServicio;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -20,12 +19,12 @@ import javax.faces.convert.Converter;
 public class PermisosConverter implements Converter{
 
     @EJB
-    private ComponenteAtomicoServicio atomicoServicio;
+    private ProductoServicio productoServicio;
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if(value != null && value.trim().length() > 0){
-            return this.atomicoServicio.obtenerUnidadMedida(Integer.parseInt(value));
+            return this.productoServicio.obtenerUnidadMedida(Integer.parseInt(value));
         }else{
             return null;
         }
