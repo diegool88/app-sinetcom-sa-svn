@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom Home</ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            Lista de Reportes de Inventario Disponibles
+                        </f:facet>
+                        <p:outputLabel value="Inventario Disponible"></p:outputLabel>
+                        <p:panel>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px"  name="pdf.png"></p:graphicImage>
+                                <f:attribute name="tipo" value="g"></f:attribute>
+                                <f:attribute name="archivo" value="pdf"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="pdf2.png"></p:graphicImage>
+                                <f:attribute name="tipo" value="d"></f:attribute>
+                                <f:attribute name="archivo" value="pdf"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="word.png"></p:graphicImage>
+                                <f:attribute name="archivo" value="word"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="excel.png"></p:graphicImage>
+                                <f:attribute name="archivo" value="excel"></f:attribute>
+                            </h:commandLink>
+                        </p:panel>
+                        <p:outputLabel value="Inventario Faltante Por Abastecer"></p:outputLabel>
+                        <p:panel>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px"  name="pdf.png"></p:graphicImage>
+                                <f:attribute name="tipo" value="g"></f:attribute>
+                                <f:attribute name="archivo" value="pdf"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="pdf2.png"></p:graphicImage>
+                                <f:attribute name="tipo" value="d"></f:attribute>
+                                <f:attribute name="archivo" value="pdf"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="word.png"></p:graphicImage>
+                                <f:attribute name="archivo" value="word"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="excel.png"></p:graphicImage>
+                                <f:attribute name="archivo" value="excel"></f:attribute>
+                            </h:commandLink>
+                        </p:panel>
+                        <p:outputLabel value="Cambios realizados en clientes"></p:outputLabel>
+                        <p:panel>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px"  name="pdf.png"></p:graphicImage>
+                                <f:attribute name="tipo" value="g"></f:attribute>
+                                <f:attribute name="archivo" value="pdf"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="pdf2.png"></p:graphicImage>
+                                <f:attribute name="tipo" value="d"></f:attribute>
+                                <f:attribute name="archivo" value="pdf"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="word.png"></p:graphicImage>
+                                <f:attribute name="archivo" value="word"></f:attribute>
+                            </h:commandLink>
+                            <h:commandLink actionListener="#{reportesBean.generarReporteDeInventariosDisponiblesAgrupadoPorSitio}">
+                                <p:graphicImage library="images" height="40px" width="40px" name="excel.png"></p:graphicImage>
+                                <f:attribute name="archivo" value="excel"></f:attribute>
+                            </h:commandLink>
+                        </p:panel>
+                    </p:panelGrid>
+                    <script type="text/javascript">
+                        function start() {
+                            statusDialog.show();
+                        }
+
+                        function stop() {
+                            statusDialog.hide();
+                        }
+                    </script>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>

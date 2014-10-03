@@ -14,13 +14,43 @@
                     <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
                     </p:dialog>
+                    <p:panelGrid columns="2">
+                        <p:panelGrid id="ingresoFabricante" columns="3">
+                            <f:facet name="header">
+                                <h:outputText value="Ingreso de Fabricantes"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel value="Nombre: " for="nombreF" />
+                            <p:inputText id="nombreF" value="#{fabricantesYCategorias.nuevoFabricante.nombre}" title="Nombre" required="true" requiredMessage="* Requerido"/>
+                            <p:message for="nombreF"></p:message>
+                            <p:outputLabel value="Descripción: " for="descripcionF" />
+                            <p:inputTextarea id="descripcionF" rows="10" cols="20" value="#{fabricantesYCategorias.nuevoFabricante.descripcion}" title="Descripcion" />
+                            <p:message for="descripcionF"></p:message>
+                            <f:facet name="footer">
+                                <p:commandButton value="Ingresar Fabricante" actionListener="#{fabricantesYCategorias.crearFabricante}" update="@form" process=":form:ingresoFabricante" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                        <p:panelGrid id="ingresoCategoria" columns="3">
+                            <f:facet name="header">
+                                <h:outputText value="Ingreso de Categorías"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel value="Nombre: " for="nombreC" />
+                            <p:inputText id="nombreC" value="#{fabricantesYCategorias.nuevaCategoriaProducto.nombre}" title="Nombre" required="true" requiredMessage="* Requerido"/>
+                            <p:message for="nombreC"></p:message>
+                            <p:outputLabel value="Descripción: " for="descripcionC" />
+                            <p:inputTextarea id="descripcionC" rows="10" cols="20" value="#{fabricantesYCategorias.nuevaCategoriaProducto.descripcion}" title="Descripcion" />
+                            <p:message for="descripcionC"></p:message>
+                            <f:facet name="footer">
+                                <p:commandButton value="Ingresar Categoría" actionListener="#{fabricantesYCategorias.crearCategoria}" update="@form" process=":form:ingresoCategoria" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:panelGrid>
                     <p:panel id="fabricantesCategorias">
                         <f:facet name="header">
                             <h:outputText value="Fabricantes - Categorias"></h:outputText>
                         </f:facet>
                         <p:dataTable value="#{fabricantesYCategorias.fabricantes}" var="fabricante" selection="#{fabricantesYCategorias.fabricanteSeleccionado}" selectionMode="single" rowKey="#{fabricante.id}" rows="10" rowsPerPageTemplate="5,10,15" >
-                            <p:ajax event="rowSelect" listener="#{fabricantesYCategorias.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=""></p:ajax>
-                            <p:ajax event="rowUnselect" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=""></p:ajax>
+                            <p:ajax event="rowSelect" listener="#{fabricantesYCategorias.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:fabricantesCategorias, :form:categorias"></p:ajax>
+                            <p:ajax event="rowUnselect" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:fabricantesCategorias, :form:categorias"></p:ajax>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Id"/>
@@ -40,13 +70,30 @@
                                 <h:outputText value="#{fabricante.descripcion}"/>
                             </p:column>
                         </p:dataTable>
-                        
                         <f:facet name="footer">
-                            <p:commandButton value="Categorías de Fabricante" disabled="#{empty fabricantesYCategorias.fabricanteSeleccionado}" onclick="" update=""></p:commandButton>
+                            <p:commandButton value="Categorías de Fabricante" disabled="#{empty fabricantesYCategorias.fabricanteSeleccionado.id}" onclick="categorias.show()" immediate="true"></p:commandButton>
                         </f:facet>
                     </p:panel>
-                    <p:dialog id="categorias">
-                        
+                    <p:dialog id="categorias" modal="true" widgetVar="categorias">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header">
+                                <h:outputText value="Selección de Categorías"></h:outputText>
+                            </f:facet>
+                            <p:outputLabel value="Seleccione las categorías activas: "></p:outputLabel>
+                            <p:pickList id="categoriasS" value="#{fabricantesYCategorias.categoriasSeleccionadas}" var="categoria" showTargetControls="false" itemValue="#{categoria.id.toString()}" itemLabel="#{categoria.nombre}" converter="#{categoriaConverter}">
+                                <f:facet name="sourceCaption">Disponibles</f:facet>
+                                <f:facet name="targetCaption">Asignados</f:facet>
+                                <p:ajax event="transfer" listener="#{fabricantesYCategorias.transferirCategoria}" />
+                                <p:column>
+                                    <h:outputText value="#{categoria.nombre}"></h:outputText>
+                                </p:column>
+                            </p:pickList>
+                            <f:facet name="footer">
+                                <p:commandButton value="Actualizar" actionListener="#{fabricantesYCategorias.actualizarCategoriasDeFabricante}" process="@this" update="@form" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                    <p:confirm header="Confirmación" message="¿Está seguro que desea actualizar este fabricante?" icon="ui-icon-alert"></p:confirm>
+                                </p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
                     </p:dialog>
                     <p:confirmDialog global="true">
                         <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>

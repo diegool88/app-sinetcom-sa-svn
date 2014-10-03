@@ -71,6 +71,10 @@ public class BotonesTickets {
         this.desactivarDescargarHojaDeServicio = Boolean.FALSE;
     }
     
+    public void mostrarHojaDeServicio(){
+        this.desactivarHojaDeServicio = Boolean.FALSE;
+    }
+    
     public Boolean getDesactivarCerrarTicket() {
         return desactivarCerrarTicket;
     }

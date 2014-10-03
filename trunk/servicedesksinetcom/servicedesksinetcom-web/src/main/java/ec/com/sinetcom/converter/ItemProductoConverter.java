@@ -4,9 +4,11 @@
  */
 package ec.com.sinetcom.converter;
 
+import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.servicios.TicketServicio;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

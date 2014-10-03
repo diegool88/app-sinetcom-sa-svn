@@ -116,8 +116,15 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
 
     public void asignarIngeniero(ActionEvent event) {
         if (this.ticketSeleccionado != null) {
+            boolean esNuevoTicket = this.ticketSeleccionado.getEstadoTicketcodigo().getNombre().toLowerCase().trim().equals("nuevo");
             this.ticketServicio.asignarTicketAPropietario(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
             Mensajes.mostrarMensajeInformativo("Ticket #" + this.ticketSeleccionado.getTicketNumber() + " asignado a Ing. " + this.ticketSeleccionado.getUsuarioidpropietario().getNombreCompleto());
+            if(esNuevoTicket){
+                this.tickets.remove(this.ticketSeleccionado);
+                this.ticketSeleccionado = null;
+                this.articulos = null;
+                this.sinSeleccion();
+            }
         }
     }
 
@@ -177,6 +184,8 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
         if(this.archivoAdjuntoHojaS != null){
             this.ticketSeleccionado.setHojaDeServicio(this.archivoAdjuntoHojaS.getContents());
             this.ticketServicio.actualizarInformacionTicket(this.ticketSeleccionado);
+            ByteArrayInputStream stream = new ByteArrayInputStream(this.ticketSeleccionado.getHojaDeServicio());
+            this.archivoPorDescargar = new DefaultStreamedContent(stream, "application/pdf", "hojaDeServicio.pdf");
             Mensajes.mostrarMensajeInformativo("Se ha subido la hoja de Servicio de forma satisfactoria");
             this.actualizarBotones();
         }
@@ -190,6 +199,7 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
         }
         this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticketSeleccionado, this.articuloNuevo, this.administracionUsuarioBean.getUsuarioActual(), false);
         this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket(this.ticketSeleccionado);
+        Mensajes.mostrarMensajeInformativo("Se ha ingresado un nuevo artículo");
     }
     
     public void agregarActividadEnSitio(ActionEvent event) {
@@ -229,22 +239,30 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
             this.ticketSeleccionado.setFechaDeModificacion(new Date());
             this.ticketSeleccionado.setFechaDeCierre(new Date());
             this.ticketServicio.cerrarTicket(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual(), this.resueltoConExito);
-            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(this.administracionUsuarioBean.getUsuarioActual(), this.ticketSeleccionado.getEstadoTicketcodigo().getCodigo());
             Mensajes.mostrarMensajeInformativo("El Ticket# " + this.ticketSeleccionado.getTicketNumber() + " ha sido cerrado con éxito!");
-            this.actualizarBotones();
+            this.tickets.remove(this.ticketSeleccionado);
+            this.ticketSeleccionado = null;
+            this.articulos = null;
+            this.sinSeleccion();
         }
     }
 
     public void ponerEnPendiente(ActionEvent event){
         this.ticketServicio.ponerEnPendiente(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
-        Mensajes.mostrarMensajeInformativo("El ticket# " + this.ticketSeleccionado.getTicketNumber() + " se ha cambiado a estado pendiente!");
-        this.actualizarBotones();
+        Mensajes.mostrarMensajeInformativo("El ticket# " + this.ticketSeleccionado.getTicketNumber() + " se ha cambiado a estado pendiente!");  
+        this.tickets.remove(this.ticketSeleccionado);
+        this.ticketSeleccionado = null;
+        this.articulos = null;
+        this.sinSeleccion();
     }
     
     public void reAbrirCaso(ActionEvent event){
         this.ticketServicio.reabrirCaso(this.ticketSeleccionado, this.administracionUsuarioBean.getUsuarioActual());
         Mensajes.mostrarMensajeInformativo("El ticket# " + this.ticketSeleccionado.getTicketNumber() + " ha sido re-abierto!");
-        this.actualizarBotones();
+        this.tickets.remove(this.ticketSeleccionado);
+        this.ticketSeleccionado = null;
+        this.articulos = null;
+        this.sinSeleccion();
     }
     
     public void ingresarPrimerContacto(ActionEvent event){
@@ -269,6 +287,8 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
         if(this.ticketSeleccionado.getHojaDeServicio() != null){
             this.desactivarHojaDeServicio();
             this.mostrarDescargarHojaDeServicio();
+        }else{
+            this.mostrarHojaDeServicio();
         }
     }
     

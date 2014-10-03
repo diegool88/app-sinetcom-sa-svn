@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportePorAbastecerConInfo_subreport1" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="03f0ac82-a71f-4ea8-97b8-501fc713930d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="itemProducto_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA["QWERTY124"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     AtributoItemProducto.`valor` AS AtributoItemProducto_valor,
+AtributoItemProducto.`ItemProducto_numeroSerial` AS AtributoItemProducto_item,
+     ParametrosDeProducto.`nombre` AS ParametrosDeProducto_nombre,
+     UnidadMedida.`nombre` AS UnidadMedida_nombre
+FROM
+     `AtributoItemProducto` AtributoItemProducto INNER JOIN `ParametrosDeProducto` ParametrosDeProducto ON AtributoItemProducto.`ParametrosDeProducto_id` = ParametrosDeProducto.`id`
+     INNER JOIN `UnidadMedida` UnidadMedida ON ParametrosDeProducto.`UnidadMedida_id` = UnidadMedida.`id`
+WHERE AtributoItemProducto.`ItemProducto_numeroSerial` =  $P{itemProducto_id}]]>
+	</queryString>
+	<field name="AtributoItemProducto_valor" class="java.lang.String"/>
+	<field name="AtributoItemProducto_item" class="java.lang.String"/>
+	<field name="ParametrosDeProducto_nombre" class="java.lang.String"/>
+	<field name="UnidadMedida_nombre" class="java.lang.String"/>
+	<group name="AtributoItemProducto_item">
+		<groupExpression><![CDATA[$F{AtributoItemProducto_item}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement x="31" y="44" width="100" height="20" uuid="40b0a6e1-5a70-4a36-9ab2-dd25627fd468"/>
+				<text><![CDATA[Valor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="131" y="44" width="100" height="20" uuid="281b387f-5acb-4688-8a07-b42125881d47"/>
+				<textFieldExpression><![CDATA[$F{AtributoItemProducto_valor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="31" y="4" width="100" height="20" uuid="5c7f3e18-484e-4b4b-ac1e-34fb93a886b0"/>
+				<text><![CDATA[Parámetro:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="131" y="4" width="100" height="20" uuid="c300e9b6-2f27-4efb-9aaa-c77d8a6e4643"/>
+				<textFieldExpression><![CDATA[$F{ParametrosDeProducto_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="31" y="24" width="100" height="20" uuid="ea9f5ebf-7c9f-4faf-8351-4b9b9c25febb"/>
+				<text><![CDATA[Unidad de Medida:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="131" y="24" width="100" height="20" uuid="7f112838-ded5-4387-8456-c21821be9387"/>
+				<textFieldExpression><![CDATA[$F{UnidadMedida_nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

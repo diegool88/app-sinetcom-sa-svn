@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="e6e17378-3525-449e-84f8-49c304123f55">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="registroMov_id" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     RegistroDeMovimientoDeInventario.`codigo` AS RegistroDeMovimientoDeInventario_codigo,
+     RegistroDeMovimientoDeInventario.`detalleMotivoDelMovimiento` AS RegistroDeMovimientoDeInventario_detalleMotivoDelMovimiento,
+     RegistroDeMovimientoDeInventario.`fechaDeSalida` AS RegistroDeMovimientoDeInventario_fechaDeSalida,
+     RegistroDeMovimientoDeInventario.`numeroDeFactura` AS RegistroDeMovimientoDeInventario_numeroDeFactura,
+     ClienteEmpresa.`ruc` AS ClienteEmpresa_ruc,
+     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
+     TipoDeMovimiento.`nombre` AS TipoDeMovimiento_nombre,
+     RegistroDeMovimientoDeInventario.`fechaDeEmision` AS RegistroDeMovimientoDeInventario_fechaDeEmision,
+     RegistroDeMovimientoDeInventario.`fechaDeEntrada` AS RegistroDeMovimientoDeInventario_fechaDeEntrada
+FROM
+     `RegistroDeMovimientoDeInventario` RegistroDeMovimientoDeInventario INNER JOIN `ClienteEmpresa` ClienteEmpresa ON RegistroDeMovimientoDeInventario.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `TipoDeMovimiento` TipoDeMovimiento ON RegistroDeMovimientoDeInventario.`TipoDeMovimiento_id` = TipoDeMovimiento.`id`
+WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
+	</queryString>
+	<field name="RegistroDeMovimientoDeInventario_codigo" class="java.lang.Integer"/>
+	<field name="RegistroDeMovimientoDeInventario_detalleMotivoDelMovimiento" class="java.lang.String"/>
+	<field name="RegistroDeMovimientoDeInventario_fechaDeSalida" class="java.sql.Timestamp"/>
+	<field name="RegistroDeMovimientoDeInventario_numeroDeFactura" class="java.lang.String"/>
+	<field name="ClienteEmpresa_ruc" class="java.lang.String"/>
+	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
+	<field name="TipoDeMovimiento_nombre" class="java.lang.String"/>
+	<field name="RegistroDeMovimientoDeInventario_fechaDeEmision" class="java.sql.Timestamp"/>
+	<field name="RegistroDeMovimientoDeInventario_fechaDeEntrada" class="java.sql.Timestamp"/>
+	<background>
+		<band height="575" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="532" height="67" uuid="068d3931-80bf-48ef-b537-cf155e650f1f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="24" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[Inventarios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="200" y="67" width="334" height="37" uuid="cdd5d30e-97bf-4aec-957f-eda49c11a508"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Registro de Movimiento de Inventario [ RE-GAF-13]]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="173" height="47" uuid="38ebcc63-57f4-474f-8bc9-1e97b96d3edd"/>
+				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="487">
+			<staticText>
+				<reportElement x="0" y="7" width="100" height="20" uuid="30ad3899-9347-4919-810a-4c0beddc3331"/>
+				<text><![CDATA[Fecha de Emisión: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="7" width="156" height="20" uuid="5db66275-31f2-40c8-b558-fee18b96d9f9"/>
+				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_fechaDeEmision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="27" width="22" height="20" uuid="3a759a12-2a9b-4a93-a9e9-d504a764dfc9"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="22" y="27" width="100" height="20" uuid="36c9563f-bed7-4cf6-a7c8-fccffc2d9e30"/>
+				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="47" width="100" height="20" uuid="a6c2c38b-aef9-437f-a06c-4939e72baad6"/>
+				<text><![CDATA[Tipo de Movimiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="47" width="156" height="20" uuid="912c3473-1597-42e8-8d5d-48c559f1d955"/>
+				<textFieldExpression><![CDATA[$F{TipoDeMovimiento_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="84" width="100" height="20" uuid="e297211b-e3a3-4906-8944-3c6bc81bd4fb"/>
+				<text><![CDATA[Nombre del Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="84" width="432" height="20" uuid="5ee04815-87cd-4aa5-a1a4-c5d8acac0b7d"/>
+				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="104" width="122" height="20" uuid="82caa717-e9e5-4106-8dbc-e12e8ab06e37"/>
+				<text><![CDATA[Detalle del Movimiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="122" y="104" width="410" height="87" uuid="d1dad7d7-54c6-432f-99d3-effc739cd90d"/>
+				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_detalleMotivoDelMovimiento}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="227" width="532" height="81" uuid="e14d86dc-e586-4b2d-abd6-715f492c5a04"/>
+				<subreportParameter name="registro_id">
+					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "registroDeMovimiento_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="207" width="150" height="20" uuid="4c695aee-9241-48ca-8ee7-f8cce9297421"/>
+				<text><![CDATA[Detalle de Partes Salientes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="391" width="100" height="20" uuid="e201d27b-3379-43dc-81e8-ea965afb91a0"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="131" y="392" width="125" height="20" uuid="09468a6f-e5c6-4e9a-bd5f-5b78fcbc859c"/>
+				<text><![CDATA[Nombre y Firma Técnico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="392" width="159" height="20" uuid="4ca58746-b314-4f22-ac3e-99d22c23befa"/>
+				<text><![CDATA[Nombre Y Firma Autorizada]]></text>
+			</staticText>
+			<line>
+				<reportElement x="31" y="444" width="100" height="1" uuid="a18b3933-0b30-4708-989d-2979f6a11673"/>
+			</line>
+			<line>
+				<reportElement x="216" y="443" width="100" height="1" uuid="e6c35ebf-8755-46d8-8420-dbdafb05e992"/>
+			</line>
+			<line>
+				<reportElement x="398" y="442" width="100" height="1" uuid="59ccffaa-ef0c-4654-af8d-054d5bf2ba93"/>
+			</line>
+			<staticText>
+				<reportElement x="31" y="450" width="100" height="20" uuid="68a7d686-93bd-4dd7-ad4d-ce48c53ad585"/>
+				<text><![CDATA[Elaborado Por]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="450" width="100" height="20" uuid="7ccdf434-da00-41a0-ba51-3a7104c50f53"/>
+				<text><![CDATA[Técnico Sinetcom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="398" y="450" width="100" height="20" uuid="2eae9b3e-6dc2-44ed-80ea-42df8c234133"/>
+				<text><![CDATA[Firma Autorizada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="315" width="150" height="20" uuid="d9de2bfb-7a04-469e-80ad-aebeb99aa23a"/>
+				<text><![CDATA[Detalle de Partes Entrantes:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="420" y="1" width="131" height="20" forecolor="#000000" uuid="b6040df5-d362-4cba-96c6-216695369b52"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="96" y="0" width="267" height="20" uuid="bb4b6409-0034-4473-84d6-d94de134ff5b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Registro de Movimiento]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
