@@ -8,16 +8,19 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,6 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "RegistroDeMovimientoDeInventario.findAll", query = "SELECT r FROM RegistroDeMovimientoDeInventario r")})
 public class RegistroDeMovimientoDeInventario implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "registroDeMovimientoDeInventariocodigo")
+    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +66,11 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
     @Size(max = 45)
     @Column(name = "numeroDeFactura")
     private String numeroDeFactura;
-    @ManyToMany(mappedBy = "registroDeMovimientoDeInventarioList")
+//    @ManyToMany(mappedBy = "registroDeMovimientoDeInventarioList")
+    @JoinTable(name = "ItemProductosRegistroMovimiento", joinColumns = {
+        @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")}, inverseJoinColumns = {
+        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")})
+    @ManyToMany
     private List<ItemProducto> itemProductoList;
     @JoinColumn(name = "TipoDeMovimiento_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -190,6 +199,15 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.RegistroDeMovimientoDeInventario[ codigo=" + codigo + " ]";
+    }
+
+    @XmlTransient
+    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoList() {
+        return historialDeMovimientoDeProductoList;
+    }
+
+    public void setHistorialDeMovimientoDeProductoList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList) {
+        this.historialDeMovimientoDeProductoList = historialDeMovimientoDeProductoList;
     }
     
 }

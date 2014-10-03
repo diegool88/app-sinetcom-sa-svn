@@ -33,6 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "HistorialDeMovimientoDeProducto.findAll", query = "SELECT h FROM HistorialDeMovimientoDeProducto h")})
 public class HistorialDeMovimientoDeProducto implements Serializable {
+    @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")
+    @ManyToOne(optional = false)
+    private RegistroDeMovimientoDeInventario registroDeMovimientoDeInventariocodigo;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -132,6 +135,14 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.HistorialDeMovimientoDeProducto[ id=" + id + " ]";
+    }
+
+    public RegistroDeMovimientoDeInventario getRegistroDeMovimientoDeInventariocodigo() {
+        return registroDeMovimientoDeInventariocodigo;
+    }
+
+    public void setRegistroDeMovimientoDeInventariocodigo(RegistroDeMovimientoDeInventario registroDeMovimientoDeInventariocodigo) {
+        this.registroDeMovimientoDeInventariocodigo = registroDeMovimientoDeInventariocodigo;
     }
     
 }

@@ -37,6 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "ItemProducto.findAll", query = "SELECT i FROM ItemProducto i")})
 public class ItemProducto implements Serializable, Cloneable {
+    @ManyToMany(mappedBy = "itemProductoList1")
+    private List<Contrato> contratoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerial")
     private List<Ticket> ticketList;
     private static final long serialVersionUID = 1L;
@@ -68,10 +70,11 @@ public class ItemProducto implements Serializable, Cloneable {
         @JoinColumn(name = "ModeloProducto_id", referencedColumnName = "id")})
     @ManyToMany
     private List<ModeloProducto> modeloProductoList;
-    @JoinTable(name = "ItemProductosRegistroMovimiento", joinColumns = {
-        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")}, inverseJoinColumns = {
-        @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")})
-    @ManyToMany
+//    @JoinTable(name = "ItemProductosRegistroMovimiento", joinColumns = {
+//        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")}, inverseJoinColumns = {
+//        @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")})
+//    @ManyToMany
+    @ManyToMany(mappedBy = "itemProductoList")
     private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProducto")
     private List<AtributoItemProducto> atributoItemProductoList;
@@ -288,6 +291,15 @@ public class ItemProducto implements Serializable, Cloneable {
 
     public void setTicketList(List<Ticket> ticketList) {
         this.ticketList = ticketList;
+    }
+
+    @XmlTransient
+    public List<Contrato> getContratoList() {
+        return contratoList;
+    }
+
+    public void setContratoList(List<Contrato> contratoList) {
+        this.contratoList = contratoList;
     }
     
 }

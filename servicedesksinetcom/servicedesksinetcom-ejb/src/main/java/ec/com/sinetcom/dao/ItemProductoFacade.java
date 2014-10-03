@@ -85,4 +85,14 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
         qry.setParameter(2, categoriaProducto);
         return qry.getResultList();
     }
+    
+    /**
+     * Obtiene todo el inventario que se encuentra disponible en bodega
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodoElInventarioDisponibleEnBodegaLocal(){
+        String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero IS NULL AND i.bodegaid IS NOT NULL";
+        Query qry = this.em.createQuery(sql);
+        return qry.getResultList();
+    }
 }

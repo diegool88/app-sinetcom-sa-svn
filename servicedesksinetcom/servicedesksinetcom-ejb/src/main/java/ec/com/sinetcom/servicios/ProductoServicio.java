@@ -7,29 +7,39 @@ package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.dao.BodegaFacade;
 import ec.com.sinetcom.dao.CategoriaProductoFacade;
+import ec.com.sinetcom.dao.ClienteEmpresaFacade;
 import ec.com.sinetcom.dao.ComponenteElectronicoAtomicoFacade;
 import ec.com.sinetcom.dao.CondicionFisicaFacade;
 import ec.com.sinetcom.dao.ContratoFacade;
 import ec.com.sinetcom.dao.FabricanteFacade;
+import ec.com.sinetcom.dao.HistorialDeMovimientoDeProductoFacade;
 import ec.com.sinetcom.dao.ItemProductoFacade;
 import ec.com.sinetcom.dao.LineaDeProductoFacade;
 import ec.com.sinetcom.dao.ModeloProductoFacade;
 import ec.com.sinetcom.dao.ParametrosDeProductoFacade;
+import ec.com.sinetcom.dao.RegistroDeMovimientoDeInventarioFacade;
+import ec.com.sinetcom.dao.TipoDeMovimientoFacade;
 import ec.com.sinetcom.dao.UnidadMedidaFacade;
 import ec.com.sinetcom.orm.AtributoItemProducto;
 import ec.com.sinetcom.orm.AtributoItemProductoPK;
 import ec.com.sinetcom.orm.Bodega;
 import ec.com.sinetcom.orm.CategoriaProducto;
+import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.ComponenteElectronicoAtomico;
 import ec.com.sinetcom.orm.CondicionFisica;
 import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.Fabricante;
+import ec.com.sinetcom.orm.HistorialDeMovimientoDeProducto;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.LineaDeProducto;
 import ec.com.sinetcom.orm.ModeloProducto;
 import ec.com.sinetcom.orm.ParametrosDeProducto;
+import ec.com.sinetcom.orm.RegistroDeMovimientoDeInventario;
+import ec.com.sinetcom.orm.TipoDeMovimiento;
 import ec.com.sinetcom.orm.UnidadMedida;
+import ec.com.sinetcom.orm.Usuario;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -65,7 +75,14 @@ public class ProductoServicio {
     private ParametrosDeProductoFacade parametrosDeProductoFacade;
     @EJB
     private UnidadMedidaFacade unidadMedidaFacade;
-    
+    @EJB
+    private TipoDeMovimientoFacade tipoDeMovimientoFacade;
+    @EJB
+    private ClienteEmpresaFacade clienteEmpresaFacade;
+    @EJB
+    private RegistroDeMovimientoDeInventarioFacade movimientoDeInventarioFacade;
+    @EJB
+    private HistorialDeMovimientoDeProductoFacade historialDeMovimientoDeProductoFacade;
     /**
      * Servicio que permite crear un nuevo componente electrónico
      * @param atomico 
@@ -244,6 +261,22 @@ public class ProductoServicio {
     }
     
     /**
+     * Obtiene todos los tipos de movimiento
+     * @return 
+     */
+    public List<TipoDeMovimiento> obtenerTodosLosTiposDeMovimiento(){
+        return this.tipoDeMovimientoFacade.findAll();
+    }
+    
+    /**
+     * Obtiene todos los clientes de Sinetcom
+     * @return 
+     */
+    public List<ClienteEmpresa> obtenerTodosLosClientes(){
+        return this.clienteEmpresaFacade.findAll();
+    }
+    
+    /**
      * Obtiene un fabricante por Id
      * @param id
      * @return 
@@ -313,6 +346,32 @@ public class ProductoServicio {
      */
     public Bodega obtenerBodegaPorId(int id){
         return this.bodegaFacade.find(id);
+    }
+    
+    /**
+     * Obtiene una tipo de movimiento por Id
+     * @param id
+     * @return 
+     */
+    public TipoDeMovimiento obtenerTipoDeMovimientoPorId(int id){
+        return this.tipoDeMovimientoFacade.find(id);
+    }
+    
+    /**
+     * Obtiene todas las categorías que no posee un fabricante
+     * @param fabricante
+     * @return 
+     */
+    public List<CategoriaProducto> obtenerTodasLasCategoriasProductoOpuestasDeFabricante(Fabricante fabricante){
+        return this.categoriaProductoFacade.obtenerTodasLasCategoriasProductoOpuestasDeFabricante(fabricante);
+    }
+    
+    /**
+     * Obtiene todo el inventario disponible en bodega local
+     * @return
+     */
+    public List<ItemProducto> obtenerTodoElInventarioDisponibleEnBodegaLocal(){
+        return this.itemProductoFacade.obtenerTodoElInventarioDisponibleEnBodegaLocal();
     }
     
     /**
@@ -428,6 +487,105 @@ public class ProductoServicio {
             if((modeloProducto.getItemProductoList() != null && !modeloProducto.getItemProductoList().isEmpty()) || (modeloProducto.getItemProductoList1() != null && !modeloProducto.getItemProductoList1().isEmpty())){
                 throw new Exception("No puede eliminar el modelo por que está siendo usado por algún Item Producto");
             }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Actualiza un fabricante
+     * @param fabricante
+     * @return 
+     */
+    public boolean actualizarFabricante(Fabricante fabricante){
+        try{
+            this.fabricanteFacade.edit(fabricante);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Actualiza un item producto
+     * @param itemProducto
+     * @return 
+     */
+    public boolean actualizarItemProducto(ItemProducto itemProducto){
+        try{
+            this.itemProductoFacade.edit(itemProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Crea un nuevo registro de movimiento de inventario
+     * @param registroDeMovimientoDeInventario
+     * @return 
+     */
+    public boolean crearRegistroDeMovimientoDeInventario(RegistroDeMovimientoDeInventario registroDeMovimientoDeInventario){
+        try{
+            this.movimientoDeInventarioFacade.create(registroDeMovimientoDeInventario);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Se crea el hostorial de movimiento de inventario
+     * @param itemProducto
+     * @param registroDeMovimientoDeInventario
+     * @param usuario
+     * @param evento
+     * @return 
+     */
+    public boolean crearHistorialDeMovimientoDeInventario(ItemProducto itemProducto, RegistroDeMovimientoDeInventario registroDeMovimientoDeInventario, Usuario usuario, String evento){
+        try{
+            HistorialDeMovimientoDeProducto historialDeMovimientoDeProducto = new HistorialDeMovimientoDeProducto();
+            historialDeMovimientoDeProducto.setEvento(evento);
+            historialDeMovimientoDeProducto.setFechaEvento(Calendar.getInstance().getTime());
+            historialDeMovimientoDeProducto.setItemProductonumeroSerial(itemProducto);
+            historialDeMovimientoDeProducto.setUsuarioid(usuario);
+            historialDeMovimientoDeProducto.setRegistroDeMovimientoDeInventariocodigo(registroDeMovimientoDeInventario);
+            this.historialDeMovimientoDeProductoFacade.create(historialDeMovimientoDeProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Crea un nuevo fabricante
+     * @param fabricante
+     * @return 
+     */
+    public boolean crearFabricante(Fabricante fabricante){
+        try{
+            this.fabricanteFacade.create(fabricante);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Crea una categoría de producto
+     * @param categoriaProducto
+     * @return 
+     */
+    public boolean crearCategoria(CategoriaProducto categoriaProducto){
+        try{
+            this.categoriaProductoFacade.edit(categoriaProducto);
         }catch(Exception e){
             e.printStackTrace();
             return false;

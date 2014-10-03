@@ -14,7 +14,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,6 +44,11 @@ public class Contrato implements Serializable {
     @Lob
     @Column(name = "contratoDigital")
     private byte[] contratoDigital;
+    @JoinTable(name = "HistorialDeContratosYEquipos", joinColumns = {
+        @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")}, inverseJoinColumns = {
+        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")})
+    @ManyToMany
+    private List<ItemProducto> itemProductoList1;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -449,6 +456,15 @@ public class Contrato implements Serializable {
 
     public void setContratoDigital(byte[] contratoDigital) {
         this.contratoDigital = contratoDigital;
+    }
+
+    @XmlTransient
+    public List<ItemProducto> getItemProductoList1() {
+        return itemProductoList1;
+    }
+
+    public void setItemProductoList1(List<ItemProducto> itemProductoList) {
+        this.itemProductoList1 = itemProductoList;
     }
     
 }
