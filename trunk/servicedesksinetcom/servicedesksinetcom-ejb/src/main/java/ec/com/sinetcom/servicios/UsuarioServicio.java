@@ -133,4 +133,12 @@ public class UsuarioServicio {
         return true;
     }
     
+    /**
+     * Obtiene un usuario por Id
+     * @param id
+     * @return 
+     */
+    public Usuario obtenerUsuarioPorId(int id){
+        return this.usuarioFacade.find(id);
+    }
 }
