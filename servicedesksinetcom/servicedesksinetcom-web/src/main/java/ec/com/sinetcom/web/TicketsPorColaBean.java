@@ -192,6 +192,7 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
         }
         this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticketSeleccionado, this.articuloNuevo, this.administracionUsuarioBean.getUsuarioActual(), false);
         this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket(this.ticketSeleccionado);
+        Mensajes.mostrarMensajeInformativo("Se ha ingresado un nuevo artículo");
     }
     
     public void agregarActividadEnSitio(ActionEvent event) {
@@ -271,6 +272,8 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
         if(this.ticketSeleccionado.getHojaDeServicio() != null){
             this.desactivarHojaDeServicio();
             this.mostrarDescargarHojaDeServicio();
+        }else{
+            this.mostrarHojaDeServicio();
         }
     }
     

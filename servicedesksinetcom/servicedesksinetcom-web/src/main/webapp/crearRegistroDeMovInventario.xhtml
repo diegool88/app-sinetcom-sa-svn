@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Fabricantes Y Categorias"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panelGrid columns="3">
+                        <f:facet name="header">
+                            <h:outputText value="Registro de Movimiento de Inventario"></h:outputText>
+                        </f:facet>
+                        <p:outputLabel value="Detalle Motivo Del Movimiento: " for="detalleMotivoDelMovimiento" />
+                        <p:inputTextarea id="detalleMotivoDelMovimiento" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.detalleMotivoDelMovimiento}" title="DetalleMotivoDelMovimiento" required="true" requiredMessage="* Requerido"/>
+                        <p:message for="detalleMotivoDelMovimiento"></p:message>
+                        <p:outputLabel value="Número De Factura:" for="numeroDeFactura" />
+                        <p:inputText id="numeroDeFactura" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.numeroDeFactura}" title="NumeroDeFactura" />
+                        <p:message for="numeroDeFactura"></p:message>
+                        <p:outputLabel value="Motivo: " for="tipoDeMovimientoid" />
+                        <p:selectOneMenu id="tipoDeMovimientoid" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid}" converter="#{tipoDeMovimientoConverter}" required="true" requiredMessage="* Requerido">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.tipoDeMovimientos}" var="tipo" itemLabel="#{tipo.nombre}" itemValue="#{tipo.id.toString()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoDeMovimientoid"></p:message>
+                        <p:outputLabel value="Contrato: " for="contratonumero" />
+                        <p:selectOneMenu id="contratonumero" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.contratonumero}" converter="#{contratoConverter}" >
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.contratos}" var="contrato" itemLabel="#{contrato.clienteEmpresaruc.nombreComercial} - #{contrato.numero}" itemValue="#{contrato.numero.toString()}"/>
+                            <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarUbicacionPorContrato()}" update="clienteEmpresaruc" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                        </p:selectOneMenu>
+                        <p:message for="contratonumero" ></p:message>
+                        <p:outputLabel value="Empresa: " for="clienteEmpresaruc" />
+                        <p:selectOneMenu id="clienteEmpresaruc" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" >
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.clienteEmpresas}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                            <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarUbicacionPorCliente()}" update="contratonumero" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                        </p:selectOneMenu>
+                        <p:message for="clienteEmpresaruc" ></p:message>
+                        <p:outputLabel for="inventario" value="Inventario Saliente: "></p:outputLabel>
+                        <p:dataTable id="inventario" widgetVar="inventarioT" filteredValue="#{crearRegistroDeMovInventarioBean.inventarioFiltrado}" selection="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.itemProductoList}" value="#{crearRegistroDeMovInventarioBean.inventarioDisponible}" var="item" rowKey="#{item.numeroSerial}" rows="5" paginator="true">
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('inventarioT').filter()" style="width:150px" placeholder="Ingrese Búsqueda"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:column selectionMode="multiple" ></p:column>
+                            <p:column filterBy="#{item.numeroSerial}" filterMatchMode="contains" headerText="S/N">
+                                #{item.numeroSerial}
+                            </p:column>
+                            <p:column filterBy="#{item.numeroDeParte}" filterMatchMode="contains" headerText="N/P">
+                                #{item.numeroDeParte}
+                            </p:column>
+                            <p:column filterBy="#{item.condicionFisicaid.nombre}" filterMatchMode="exact" filterOptions="#{crearRegistroDeMovInventarioBean.estadosFisicos}" headerText="Condición Fisica">
+                                #{item.condicionFisicaid.nombre}
+                            </p:column>
+                        </p:dataTable>
+                        <p:message for="inventario" ></p:message>
+                        <f:facet name="footer">
+                            <p:commandButton value="Generar Registro" actionListener="#{crearRegistroDeMovInventarioBean.generarRegistroDeMovimiento}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" ajax="false" update="@form">
+                                <p:confirm header="Confirmación" message="¿Está seguro que desea generar este registro de movimiento?"></p:confirm>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:panelGrid>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>

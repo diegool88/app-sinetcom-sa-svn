@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="bb3d007b-4185-4a75-9c89-82dd2c189eff">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
+     ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
+     ItemProducto.`ItemProducto_numeroSerial_padre` AS ItemProducto_ItemProducto_numeroSerial_padre,
+     CondicionFisica.`nombre` AS CondicionFisica_nombre,
+     ComponenteElectronicoAtomico.`nombre` AS ComponenteElectronicoAtomico_nombre,
+     ModeloProducto.`numeroDeParte` AS ModeloProducto_numeroDeParte,
+     ModeloProducto.`modelo` AS ModeloProducto_modelo,
+     LineaDeProducto.`nombre` AS LineaDeProducto_nombre,
+     Fabricante.`nombre` AS Fabricante_nombre,
+     Bodega.`nombre` AS Bodega_nombre
+FROM
+     `ItemProducto` ItemProducto INNER JOIN `CondicionFisica` CondicionFisica ON ItemProducto.`CondicionFisica_id` = CondicionFisica.`id`
+     INNER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
+     INNER JOIN `ModeloProducto` ModeloProducto ON ItemProducto.`ModeloProducto_id` = ModeloProducto.`id`
+     INNER JOIN `Bodega` Bodega ON ItemProducto.`Bodega_id` = Bodega.`id`
+     INNER JOIN `LineaDeProducto` LineaDeProducto ON ModeloProducto.`LineaDeProducto_id` = LineaDeProducto.`id`
+     INNER JOIN `Fabricante` Fabricante ON LineaDeProducto.`Fabricante_id` = Fabricante.`id`
+WHERE
+     ItemProducto.`Contrato_numero` IS NULL
+ AND ItemProducto.`Bodega_id` IS NOT NULL]]>
+	</queryString>
+	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
+	<field name="ItemProducto_ItemProducto_numeroSerial_padre" class="java.lang.String"/>
+	<field name="CondicionFisica_nombre" class="java.lang.String"/>
+	<field name="ComponenteElectronicoAtomico_nombre" class="java.lang.String"/>
+	<field name="ModeloProducto_numeroDeParte" class="java.lang.String"/>
+	<field name="ModeloProducto_modelo" class="java.lang.String"/>
+	<field name="LineaDeProducto_nombre" class="java.lang.String"/>
+	<field name="Fabricante_nombre" class="java.lang.String"/>
+	<field name="Bodega_nombre" class="java.lang.String"/>
+	<group name="Bodega_nombre">
+		<groupExpression><![CDATA[$F{Bodega_nombre}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="143" y="13" width="657" height="24" forecolor="#000000" uuid="cbbb6f3e-76b2-4e20-aa97-34aedcb9b38a"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Bodega_nombre}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="97" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="1c3ce261-b1c7-4a7d-adfd-30ba5ead1c8e"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<frame>
+					<reportElement mode="Opaque" x="652" y="0" width="150" height="30" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="8b932f04-39db-415b-99e8-e7438701c63e"/>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="575" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="802" height="67" uuid="8c845754-ccf8-43a0-959d-44203ee11f4e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="54" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[INVENTARIOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="232" y="67" width="568" height="37" uuid="589bf875-5592-4cbe-8025-dc9ed8520cc6"/>
+				<textElement textAlignment="Right">
+					<font size="26"/>
+				</textElement>
+				<text><![CDATA[Reporte de Inventarios]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="409" height="55" uuid="0661ab15-fb88-48a5-8141-ddfa37019fb0"/>
+				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="97" y="5" width="705" height="20" backcolor="#666666" uuid="3cc708ec-df21-44bb-83c0-ca9b5b175cdd"/>
+				<staticText>
+					<reportElement style="Column header" x="0" y="0" width="78" height="15" uuid="870973a5-07a3-4210-911f-53d14d9b7216"/>
+					<text><![CDATA[S/N]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="78" y="0" width="78" height="15" uuid="2bd0b3be-fb0b-486d-a8bb-26abd37005df"/>
+					<text><![CDATA[P/N]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="156" y="0" width="78" height="15" uuid="c9ed2f12-3dab-43c4-88e9-f72dca5a7677"/>
+					<text><![CDATA[S/N Padre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="234" y="0" width="78" height="15" uuid="b041f306-67f2-4eaa-a3a0-e19c073e0536"/>
+					<text><![CDATA[Condición]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="312" y="0" width="78" height="15" uuid="7b349ec8-95b0-4c5d-83a5-aa2fc093aaf4"/>
+					<text><![CDATA[Componente]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="390" y="0" width="78" height="15" uuid="d66a39fc-6ccb-4c84-8aab-5a010f357e60"/>
+					<text><![CDATA[Modelo P/N]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="468" y="0" width="78" height="15" uuid="beb2e6a5-ba9b-4eda-86f8-03187b2f5171"/>
+					<text><![CDATA[Modelo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="546" y="0" width="78" height="15" uuid="926877f1-f304-4eee-93e2-41d426789b0d"/>
+					<text><![CDATA[Producto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="624" y="0" width="78" height="15" uuid="f3ddcc5c-c577-422a-85f4-940c0f945d90"/>
+					<text><![CDATA[Fabricante]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement x="97" y="1" width="705" height="15" uuid="261388a8-01ed-41f1-80e1-ebdae088dd10"/>
+				<textField>
+					<reportElement style="Detail" x="0" y="0" width="78" height="15" uuid="5230a7f3-0ffe-4bdd-a304-5f47edc8a3b6"/>
+					<textFieldExpression><![CDATA[$F{ItemProducto_numeroSerial}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="78" y="0" width="78" height="15" uuid="759d8dad-8cbe-4c89-af52-8f2f605e5283"/>
+					<textFieldExpression><![CDATA[$F{ItemProducto_numeroDeParte}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="156" y="0" width="78" height="15" uuid="6c06d20b-a439-4f6f-abcc-8f382dd155c2"/>
+					<textFieldExpression><![CDATA[$F{ItemProducto_ItemProducto_numeroSerial_padre} != null ? $F{ItemProducto_ItemProducto_numeroSerial_padre} : "N/A"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="234" y="0" width="78" height="15" uuid="1d09e6ef-5749-4588-ac59-0d2c85511168"/>
+					<textFieldExpression><![CDATA[$F{CondicionFisica_nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="312" y="0" width="78" height="15" uuid="5c5c6f90-c492-4862-bdd6-b397f55b07c4"/>
+					<textFieldExpression><![CDATA[$F{ComponenteElectronicoAtomico_nombre} != null ? $F{ComponenteElectronicoAtomico_nombre} : "N/A"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="390" y="0" width="78" height="15" uuid="64717dc5-adc7-4e4d-98de-db7a392138c8"/>
+					<textFieldExpression><![CDATA[$F{ModeloProducto_numeroDeParte}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="468" y="0" width="78" height="15" uuid="d0db1b18-9336-42b5-a22c-3987c8f55691"/>
+					<textFieldExpression><![CDATA[$F{ModeloProducto_modelo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="546" y="0" width="78" height="15" uuid="45144292-5672-4d7a-9133-fac57f944522"/>
+					<textFieldExpression><![CDATA[$F{LineaDeProducto_nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="624" y="0" width="78" height="15" uuid="ff79ceed-81cf-441a-aa1e-6c79d934a028"/>
+					<textFieldExpression><![CDATA[$F{Fabricante_nombre}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="705" height="1" uuid="27935398-93c9-4f84-ab5c-4d56c2ba7ebf"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="671" y="0" width="131" height="20" forecolor="#000000" uuid="b49fa00e-3010-4b1a-84d0-032a71c42374"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="96" y="0" width="267" height="20" uuid="47918a56-bca3-4ff3-aba5-5d93bdf9fb7b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Reporte de Inventarios]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

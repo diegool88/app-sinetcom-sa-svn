@@ -191,6 +191,7 @@ public class MisTicketsPorPrioridadBean extends BotonesTickets implements Serial
         }
         this.ticketServicio.ingresarNuevoArticuloAlTicket(this.ticketSeleccionado, this.articuloNuevo, this.administracionUsuarioBean.getUsuarioActual(), false);
         this.articulos = this.ticketServicio.obtenerTodosLosArticulosDeTicket(this.ticketSeleccionado);
+        Mensajes.mostrarMensajeInformativo("Se ha ingresado un nuevo artículo");
     }
     
     public void agregarActividadEnSitio(ActionEvent event) {
@@ -270,6 +271,8 @@ public class MisTicketsPorPrioridadBean extends BotonesTickets implements Serial
         if(this.ticketSeleccionado.getHojaDeServicio() != null){
             this.desactivarHojaDeServicio();
             this.mostrarDescargarHojaDeServicio();
+        }else{
+            this.mostrarHojaDeServicio();
         }
     }
     

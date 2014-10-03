@@ -169,7 +169,7 @@
                     <p:panel id="hojaS">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione la hoja de Servicio"></h:outputText>
-                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorEstado.adjuntarArchivoHojaS}" ></p:fileUpload>
+                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorEstado.adjuntarArchivoHojaS}" ></p:fileUpload>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar Hoja de Servicio" actionListener="#{misTicketsPorEstado.guardarArchivoAdjuntoHojaS}" process="@this" update="@form">

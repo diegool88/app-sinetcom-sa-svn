@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cambiosEnCliente_subreport1" language="groovy" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4617472f-493d-46ca-832e-1ca3d96919b1">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="35"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#87CEFA">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE7FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="d3c6aa13-167d-4232-b48d-bdbc09a93e56"/>
+	<parameter name="registro_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
+     ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
+     ItemProducto.`descripcion` AS ItemProducto_descripcion,
+     ComponenteElectronicoAtomico.`nombre` AS ComponenteElectronicoAtomico_nombre,
+     Fabricante.`nombre` AS Fabricante_nombre
+FROM
+     `ItemProducto` ItemProducto INNER JOIN `ItemProductosRegistroMovimiento` ItemProductosRegistroMovimiento ON ItemProducto.`numeroSerial` = ItemProductosRegistroMovimiento.`ItemProducto_numeroSerial`
+     INNER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
+     INNER JOIN `ModeloProducto` ModeloProducto ON ItemProducto.`ModeloProducto_id` = ModeloProducto.`id`
+     INNER JOIN `LineaDeProducto` LineaDeProducto ON ModeloProducto.`LineaDeProducto_id` = LineaDeProducto.`id`
+     INNER JOIN `Fabricante` Fabricante ON LineaDeProducto.`Fabricante_id` = Fabricante.`id`
+WHERE `ItemProductosRegistroMovimiento`.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
+	</queryString>
+	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
+	<field name="ItemProducto_descripcion" class="java.lang.String"/>
+	<field name="ComponenteElectronicoAtomico_nombre" class="java.lang.String"/>
+	<field name="Fabricante_nombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement x="15" y="0" width="100" height="20" uuid="586755f0-fddc-4449-911b-647e0c7ad5bc"/>
+				<text><![CDATA[S/N]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="15" y="20" width="100" height="20" uuid="c0d9541b-700e-4b22-a35d-87d7e911524d"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_numeroSerial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="215" y="0" width="100" height="20" uuid="6dfa8dd1-38f2-4b9a-a8eb-900cd3da10a4"/>
+				<text><![CDATA[P/N]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="215" y="20" width="100" height="20" uuid="61fb09ba-a115-4639-b23f-20781cba37b6"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_numeroDeParte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="415" y="0" width="100" height="20" uuid="a896f8e0-a6c6-4f38-8ac5-92714bfb794c"/>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="415" y="20" width="100" height="20" uuid="1ea93e47-c240-4d8f-a4ec-c6ede0495ffd"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_descripcion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="115" y="0" width="100" height="20" uuid="3514d00a-3439-477d-82c2-df636f6046e3"/>
+				<text><![CDATA[Componente]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="115" y="20" width="100" height="20" uuid="31d369cf-4a03-437d-8a8c-a3d7fc19aa88"/>
+				<textFieldExpression><![CDATA[$F{ComponenteElectronicoAtomico_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="315" y="0" width="100" height="20" uuid="c5c2920b-bcfb-4014-8090-8f5dd58483f7"/>
+				<text><![CDATA[Fabricante]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="315" y="20" width="100" height="20" uuid="655ddd73-97a3-4455-b961-10420a262d24"/>
+				<textFieldExpression><![CDATA[$F{Fabricante_nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

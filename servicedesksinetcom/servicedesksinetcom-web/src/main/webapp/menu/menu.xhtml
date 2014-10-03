@@ -15,13 +15,17 @@
                         <p:menuitem value="Crear Componente E. Atómico" action="crearComponenteAtomico?faces-redirect=true"></p:menuitem>
                         <p:menuitem value="Crear Línea de Producto" action="crearLineaDeProducto?faces-redirect=true"></p:menuitem>
                         <p:menuitem value="Crear Modelos de Líneas de Producto" action="crearModeloDeProducto?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Gestionar Fabricantes y Categorías" action="fabricantesYCategorias?faces-redirect=true"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Reportes Inventarios">
+                        <p:menuitem value="Ver Reportes" action="reportesInventarios?faces-redirect=true"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
                     <p:submenu label="Gestión de Inventario">
                         <p:menuitem value="Ingresar Inventario de Componente E. Atómico" action="ingresarComponenteAtomicoProducto?faces-redirect=true"></p:menuitem>
                         <p:menuitem value="Ingresar Inventario no Atómico" action="ingresarProductoPiezaNA?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Modificar Inventario"></p:menuitem>
+                        <p:menuitem value="Nuevo Registro de Movimiento de I." action="crearRegistroDeMovInventario?faces-redirect=true"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Gestionar Modelos/Revisiones">
                         <p:menuitem value="Crear Modelo de Producto"></p:menuitem>

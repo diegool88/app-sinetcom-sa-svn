@@ -141,7 +141,7 @@ public class IngresarComponenteAPBean implements Serializable {
     public void desactivarContrato(){
         if(this.nuevoProductoCA != null & this.nuevoProductoCA.getBodegaid()!= null){
             this.nuevoProductoCA.setContratonumero(null);
-            if(this.productoPadreSeleccionado != null & this.productoPadreSeleccionado.getContratonumero() != null){
+            if(this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null){
                 this.productoPadreSeleccionado = null;
             }
         }
@@ -207,6 +207,7 @@ public class IngresarComponenteAPBean implements Serializable {
         nuevoItemProducto.setFechaDeCompra(itemProducto.getFechaDeCompra());
         nuevoItemProducto.setNumeroDeFactura(itemProducto.getNumeroDeFactura());
         nuevoItemProducto.setNumeroDePedido(itemProducto.getNumeroDePedido());
+        nuevoItemProducto.setModeloProductoList(itemProducto.getModeloProductoList());
         return nuevoItemProducto;
     }
 

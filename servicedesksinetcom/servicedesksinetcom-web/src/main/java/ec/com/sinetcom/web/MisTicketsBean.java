@@ -31,6 +31,7 @@ import javax.faces.event.ActionEvent;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.primefaces.component.tabview.Tab;
+import org.primefaces.component.tabview.TabView;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
@@ -91,6 +92,47 @@ public class MisTicketsBean extends BotonesTickets implements Serializable {
     private UICommand link;
     //Tipo de Selección
     private String ticketPor;
+    private TabView tabView;
+
+    public void init() {
+
+        if (this.ticketPor.isEmpty()) {
+            Mensajes.mostrarMensajeDeError("No se logra ver el parámetro");
+        } else {
+            Mensajes.mostrarMensajeInformativo(this.ticketPor);
+        }
+
+        if (this.ticketPor.equals("cola")) {
+            this.colasTickets = this.ticketServicio.obtenerTodasLasColas();
+            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), 1);
+            //this.seleccionarTabsColas();
+        } else if (this.ticketPor.equals("estado")) {
+            this.estadosTickets = this.ticketServicio.obtenerTodosLosEstados();
+            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(administracionUsuarioBean.getUsuarioActual(), 1);
+            this.tabView = new TabView();
+            for (EstadoTicket estado : this.estadosTickets) {
+                Tab tab = new Tab();
+                tab.setTitle(estado.getNombre());
+                tab.setId("tab-" + estado.getCodigo());
+                this.tabView.getChildren().add(tab);
+            }
+//this.seleccionarTabsEstados();
+        } else if (this.ticketPor.equals("prioridad")) {
+            this.prioridadesTickets = this.ticketServicio.obtenerTodasLasPrioridades();
+            this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaPrioridad(administracionUsuarioBean.getUsuarioActual(), 1);
+            //this.seleccionarTabsPrioridades();
+        }
+        this.ingenieros = this.ticketServicio.obtenerTodosLosIngenieros();
+        this.articuloNuevo = new Articulo();
+        this.articuloNuevo.setDe(this.administracionUsuarioBean.getUsuarioActual());
+        this.actividadesEnSitio = new ArrayList<ActividadEnSitio>();
+        this.nuevaActividadEnSitio = new ActividadEnSitio();
+        this.fechaActual = new Date();
+        if (this.ticketSeleccionado == null) {
+            this.sinSeleccion();
+        }
+        this.resueltoConExito = true;
+    }
 
     @PostConstruct
     public void doInit() {
@@ -100,7 +142,7 @@ public class MisTicketsBean extends BotonesTickets implements Serializable {
         //this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), 1);
         if (!FacesContext.getCurrentInstance().isPostback()) {
             this.ticketPor = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tipo");
-
+            //this.ticketPor = 
             if (this.ticketPor.equals("cola")) {
                 this.colasTickets = this.ticketServicio.obtenerTodasLasColas();
                 this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), 1);
@@ -108,6 +150,13 @@ public class MisTicketsBean extends BotonesTickets implements Serializable {
             } else if (this.ticketPor.equals("estado")) {
                 this.estadosTickets = this.ticketServicio.obtenerTodosLosEstados();
                 this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(administracionUsuarioBean.getUsuarioActual(), 1);
+//                this.tabView = new TabView();
+//                for (EstadoTicket estado : this.estadosTickets) {
+//                    Tab tab = new Tab();
+//                    tab.setTitle(estado.getNombre());
+//                    tab.setId("tab-" + estado.getCodigo());
+//                    this.tabView.getChildren().add(tab);
+//                }
                 //this.seleccionarTabsEstados();
             } else if (this.ticketPor.equals("prioridad")) {
                 this.prioridadesTickets = this.ticketServicio.obtenerTodasLasPrioridades();
@@ -146,7 +195,7 @@ public class MisTicketsBean extends BotonesTickets implements Serializable {
 //    }
     public void cambioDeTab(TabChangeEvent event) {
         Tab activo = event.getTab();
-        int seleccion = Integer.parseInt(activo.getAttributes().get("id").toString().split("-")[1]);
+        int seleccion = Integer.parseInt(activo.getAttributes().get("tab-id").toString());
         if (this.ticketPor.equals("cola")) {
             this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), seleccion);
         } else if (this.ticketPor.equals("estado")) {
@@ -403,6 +452,14 @@ public class MisTicketsBean extends BotonesTickets implements Serializable {
 
     public void setPrioridadesTickets(List<PrioridadTicket> prioridadesTickets) {
         this.prioridadesTickets = prioridadesTickets;
+    }
+
+    public TabView getTabView() {
+        return tabView;
+    }
+
+    public void setTabView(TabView tabView) {
+        this.tabView = tabView;
     }
 
 }
