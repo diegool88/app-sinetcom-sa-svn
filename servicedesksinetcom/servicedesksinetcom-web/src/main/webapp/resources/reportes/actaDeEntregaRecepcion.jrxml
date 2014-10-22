@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActaDeEntrega" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="629f0941-bad5-4840-80c8-0d1a8e7b345f">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="numeroContrato" class="java.lang.String">
+		<defaultValueExpression><![CDATA["059-2013-RE-CNT"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
+     ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
+     ItemProducto.`descripcion` AS ItemProducto_descripcion,
+     Contrato.`numero` AS Contrato_numero,
+     Contrato.`fechaDeEntregaRecepcion` AS Contrato_fechaDeEntregaRecepcion,
+     ClienteEmpresa.`ruc` AS ClienteEmpresa_ruc,
+     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
+     Contacto.`cedulaDeCuidadania` AS Contacto_cedulaDeCuidadania,
+     Contacto.`nombre` AS Contacto_nombre,
+     Contacto.`cargo` AS Contacto_cargo,
+     ClienteEmpresa.`razonSocial` AS ClienteEmpresa_razonSocial,
+     ClienteEmpresa.`nombreRepresentanteLegal` AS ClienteEmpresa_nombreRepresentanteLegal,
+     ItemProducto.`ItemProducto_numeroSerial_padre` AS ItemProducto_ItemProducto_numeroSerial_padre,
+     Usuario.`cedulaDeCuidadania` AS Usuario_cedulaDeCuidadania,
+     Usuario.`nombre` AS Usuario_nombre,
+     Usuario.`apellido` AS Usuario_apellido
+FROM
+     `ItemProducto` ItemProducto INNER JOIN `Contrato` Contrato ON ItemProducto.`Contrato_numero` = Contrato.`numero`
+     INNER JOIN `Contacto` Contacto ON Contrato.`administradorDeContrato` = Contacto.`id`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `Usuario` Usuario ON Contrato.`accountManagerAsignado` = Usuario.`id`
+WHERE `ItemProducto`.`Contrato_numero` = $P{numeroContrato}]]>
+	</queryString>
+	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
+	<field name="ItemProducto_descripcion" class="java.lang.String"/>
+	<field name="Contrato_numero" class="java.lang.String"/>
+	<field name="Contrato_fechaDeEntregaRecepcion" class="java.sql.Timestamp"/>
+	<field name="ClienteEmpresa_ruc" class="java.lang.String"/>
+	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
+	<field name="Contacto_cedulaDeCuidadania" class="java.lang.String"/>
+	<field name="Contacto_nombre" class="java.lang.String"/>
+	<field name="Contacto_cargo" class="java.lang.String"/>
+	<field name="ClienteEmpresa_razonSocial" class="java.lang.String"/>
+	<field name="ClienteEmpresa_nombreRepresentanteLegal" class="java.lang.String"/>
+	<field name="ItemProducto_ItemProducto_numeroSerial_padre" class="java.lang.String"/>
+	<field name="Usuario_cedulaDeCuidadania" class="java.lang.String"/>
+	<field name="Usuario_nombre" class="java.lang.String"/>
+	<field name="Usuario_apellido" class="java.lang.String"/>
+	<group name="ItemProducto_ItemProducto_numeroSerial_padre">
+		<groupExpression><![CDATA[$F{ItemProducto_ItemProducto_numeroSerial_padre}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="218" height="38" uuid="a2efdba3-374b-45c6-ac8f-2810e0584355"/>
+				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="189" y="7" width="199" height="20" uuid="9fabac8f-b233-48c7-9a8f-dc6e9dce8520"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ACTA DE ENTREGA - RECEPCION]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="95" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="yyyy/MM/dd" isBlankWhenNull="false">
+				<reportElement x="0" y="0" width="568" height="55" uuid="a864f7f6-9857-4c97-bdc1-d86e462d4950"/>
+				<textFieldExpression><![CDATA["En la ciudad de Quito, al " + $F{Contrato_fechaDeEntregaRecepcion} + 
+", se procede a la Entrega - Recepción de Equipamiento adquirido por " +
+$F{ClienteEmpresa_nombreComercial}.toUpperCase() + ", a la empresa SINETCOM S.A. \"SOLUCIONES INTEGRALES EN TECNOLOGÍA\", según el siguiente detalle:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="55" width="189" height="13" uuid="fd791e47-04db-44e0-a1e2-58af31e0654a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIMERA: Descripción del equipo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="82" width="383" height="13" uuid="3b035da7-53a7-4f83-871e-12459e2d8a5c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="82" width="189" height="13" uuid="47e40d10-21fd-464f-aca4-852ca99edace"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[SERIE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="383" y="0" width="189" height="13" uuid="2a330f98-3302-4c25-b518-f9b0f01effab"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_numeroSerial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="383" height="13" uuid="faac3ffa-2405-4eef-9b7e-38ffead8af44"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_descripcion} != null ? $F{ItemProducto_descripcion} : "No disponible"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="102" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="135" height="13" uuid="a850cb5e-154b-47fa-a524-c4335e00a18a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEGUNDA: Observaciones:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="13" width="572" height="29" uuid="89d796bf-b683-459c-9964-3dbe67133551"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["El " + $F{ClienteEmpresa_nombreComercial}.toUpperCase() +  ", luego de haber efectuado la constatación física de los equipos y sus dispositivos, expresan que los mismos corresponden a lo contratado."
+]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="48" width="571" height="36" uuid="5b149582-14a5-4bd9-9822-7714d89ecbb1"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Para Contancia firman; el Representante de " + $F{ClienteEmpresa_nombreComercial}.toUpperCase() +
+", conjuntamente con el Representante de la empresa SINETCOM S.A. \"SOLUCIONES INTEGRALES EN TECNOLOGÍA\"."
+]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="147" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="68" width="310" height="13" uuid="74eb14b3-b7a9-48d7-82a2-9f00bdd84df7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="49" y="81" width="209" height="20" uuid="8a80bc3d-bd88-4bee-aea3-3a7309447af7"/>
+				<textFieldExpression><![CDATA[$F{Contacto_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="81" width="49" height="20" uuid="55242b86-277c-4e5a-91ec-bab813bfec24"/>
+				<text><![CDATA[NOMBRE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="101" width="49" height="20" uuid="f78ddb1b-b91f-44ed-8bb2-bd451bbed993"/>
+				<text><![CDATA[C.I. NO.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="101" width="208" height="20" uuid="18ee161c-faa6-4035-8099-6f11685608a9"/>
+				<textFieldExpression><![CDATA[$F{Contacto_cedulaDeCuidadania}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="121" width="49" height="20" uuid="c131eced-28db-45ff-8a10-8d5534cd4c81"/>
+				<text><![CDATA[CARGO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="121" width="208" height="20" uuid="d195466c-9066-4329-823d-2696f2299bc7"/>
+				<textFieldExpression><![CDATA[$F{Contacto_cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="101" width="208" height="20" uuid="49585097-4b76-4075-8199-4113bf9a1502"/>
+				<textFieldExpression><![CDATA[$F{Usuario_cedulaDeCuidadania}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="311" y="121" width="49" height="20" uuid="5fa2d6ba-8adb-4167-8983-1349551e2fe3"/>
+				<text><![CDATA[CARGO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="81" width="49" height="20" uuid="e4799340-1ea4-4317-ae4f-6f0e2fb1676c"/>
+				<text><![CDATA[NOMBRE:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="359" y="81" width="209" height="20" uuid="bbca18ca-c2ff-4671-8309-4e43e0ca31ef"/>
+				<textFieldExpression><![CDATA[$F{Usuario_nombre} + " " + $F{Usuario_apellido}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="310" y="101" width="49" height="20" uuid="1c3b036a-180d-441f-9915-ba342f712a34"/>
+				<text><![CDATA[C.I. NO.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="68" width="100" height="13" uuid="e6635dd8-8d3d-471b-b0ee-b3c34c7c369b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SINETCOM S.A.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="121" width="100" height="20" uuid="9c360b8b-b333-4e6e-8840-662c979b73ae"/>
+				<text><![CDATA[Account Manager]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="67" width="257" height="1" uuid="bf3ff799-85a4-418a-a7c9-edab86797c1b"/>
+			</line>
+			<line>
+				<reportElement x="311" y="67" width="257" height="1" uuid="20689986-88f9-4cd3-a1d3-857ba76f68f3"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

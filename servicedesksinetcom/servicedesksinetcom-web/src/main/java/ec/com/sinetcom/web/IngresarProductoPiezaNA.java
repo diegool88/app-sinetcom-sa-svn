@@ -18,6 +18,7 @@ import ec.com.sinetcom.servicios.ProductoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -70,6 +71,8 @@ public class IngresarProductoPiezaNA implements Serializable{
     private int numeroSeriales;
     //Verifica si se trata de producto padre (Sistema) o subparte
     private Boolean esSistema;
+    //Desactivar campos por ingreso de item dañado
+    private Boolean esProductoDanado;
     
     @PostConstruct
     public void doInit(){
@@ -101,6 +104,21 @@ public class IngresarProductoPiezaNA implements Serializable{
         this.seriales = null;
         this.actualizarCompatibilidad();
     }
+    
+    public void actualizarCamposPorProductoDanado(){
+        if(this.nuevoProducto != null && this.nuevoProducto.getCondicionFisicaid() != null && 
+                this.nuevoProducto.getCondicionFisicaid().getNombre().toLowerCase().trim().equals("dañado")){
+            this.nuevoProducto.setFechaDeCompra(Calendar.getInstance().getTime());
+            this.nuevoProducto.setNumeroDeFactura("N/A");
+            this.nuevoProducto.setNumeroDePedido("N/A");
+            this.esProductoDanado = Boolean.TRUE;
+        }else if(this.nuevoProducto != null && this.nuevoProducto.getCondicionFisicaid() != null){
+            this.esProductoDanado = Boolean.FALSE;
+            this.nuevoProducto.setFechaDeCompra(null);
+            this.nuevoProducto.setNumeroDeFactura(null);
+            this.nuevoProducto.setNumeroDePedido(null);
+        }
+    }
 
     public void actualizarCompatibilidad() {
         this.modeloProductosCompatibles = this.productoServicio.obtenerTodosLosModelosPorCategoriaDeFabricante(this.fabricanteSeleccionado, this.categoriaProductoSeleccionada);
@@ -115,6 +133,10 @@ public class IngresarProductoPiezaNA implements Serializable{
         if (this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null) {
             this.nuevoProducto.setContratonumero(this.productoPadreSeleccionado.getContratonumero());
             this.nuevoProducto.setBodegaid(null);
+            this.nuevoProducto.setNumeroDeFactura(this.productoPadreSeleccionado.getNumeroDeFactura());
+            this.nuevoProducto.setNumeroDePedido(this.productoPadreSeleccionado.getNumeroDePedido());
+            this.nuevoProducto.setFechaDeCompra(this.productoPadreSeleccionado.getFechaDeCompra());
+            this.nuevoProducto.setCondicionFisicaid(this.productoPadreSeleccionado.getCondicionFisicaid());
         }else{
             this.nuevoProducto.setContratonumero(null);
         }
@@ -158,6 +180,8 @@ public class IngresarProductoPiezaNA implements Serializable{
         /*
         Fin
         */
+        if(this.nuevoProducto.getNumeroDeFactura() != null && this.nuevoProducto.getNumeroDeFactura().equals("N/A"))this.nuevoProducto.setNumeroDeFactura(null);
+        if(this.nuevoProducto.getNumeroDeParte() != null && this.nuevoProducto.getNumeroDeParte().equals("N/A"))this.nuevoProducto.setNumeroDeParte(null);
         ItemProducto itemProducto = (ItemProducto) this.nuevoProducto.clone();
         
         for (String serial : seriales) {
@@ -344,6 +368,14 @@ public class IngresarProductoPiezaNA implements Serializable{
 
     public void setEsSistema(Boolean esSistema) {
         this.esSistema = esSistema;
+    }
+    
+    public Boolean getEsProductoDanado() {
+        return esProductoDanado;
+    }
+
+    public void setEsProductoDanado(Boolean esProductoDanado) {
+        this.esProductoDanado = esProductoDanado;
     }
     
 }

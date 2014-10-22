@@ -20,6 +20,7 @@ import ec.com.sinetcom.servicios.ProductoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -80,6 +81,8 @@ public class IngresarComponenteAPBean implements Serializable {
     private int numeroSeriales;
     //Atributos ingresados Lista
     private List<AtributoItemProducto> atributosCA;
+    //Desactivar campos por ingreso de item dañado
+    private Boolean esProductoDanado;
 
     @PostConstruct
     public void doInit() {
@@ -91,6 +94,7 @@ public class IngresarComponenteAPBean implements Serializable {
             this.condicionesFisicas = this.productoServicio.obtenerTodasLasCondicionesFisicas();
             this.nuevoProductoCA = new ItemProducto();
             this.seriales = new ArrayList<String>();
+            this.esProductoDanado = Boolean.FALSE;
         }
     }
 
@@ -116,7 +120,22 @@ public class IngresarComponenteAPBean implements Serializable {
         this.seriales = null;
         this.actualizarCompatibilidad();
     }
-
+    
+    public void actualizarCamposPorProductoDanado(){
+        if(this.nuevoProductoCA != null && this.nuevoProductoCA.getCondicionFisicaid() != null && 
+                this.nuevoProductoCA.getCondicionFisicaid().getNombre().toLowerCase().trim().equals("dañado")){
+            this.nuevoProductoCA.setFechaDeCompra(Calendar.getInstance().getTime());
+            this.nuevoProductoCA.setNumeroDeFactura("N/A");
+            this.nuevoProductoCA.setNumeroDePedido("N/A");
+            this.esProductoDanado = Boolean.TRUE;
+        }else if(this.nuevoProductoCA != null && this.nuevoProductoCA.getCondicionFisicaid() != null){
+            this.esProductoDanado = Boolean.FALSE;
+            this.nuevoProductoCA.setFechaDeCompra(null);
+            this.nuevoProductoCA.setNumeroDeFactura(null);
+            this.nuevoProductoCA.setNumeroDePedido(null);
+        }
+    }
+    
     public void actualizarCompatibilidad() {
         this.modeloProductosCompatibles = this.productoServicio.obtenerTodosLosModelosPorCategoriaDeFabricante(this.fabricanteSeleccionado, this.categoriaProductoSeleccionada);
     }
@@ -129,6 +148,12 @@ public class IngresarComponenteAPBean implements Serializable {
         if (this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null) {
             this.nuevoProductoCA.setContratonumero(this.productoPadreSeleccionado.getContratonumero());
             this.nuevoProductoCA.setBodegaid(null);
+            this.nuevoProductoCA.setNumeroDeFactura(this.productoPadreSeleccionado.getNumeroDeFactura());
+            this.nuevoProductoCA.setNumeroDePedido(this.productoPadreSeleccionado.getNumeroDePedido());
+            this.nuevoProductoCA.setFechaDeCompra(this.productoPadreSeleccionado.getFechaDeCompra());
+            this.nuevoProductoCA.setCondicionFisicaid(this.productoPadreSeleccionado.getCondicionFisicaid());
+        }else{
+            this.nuevoProductoCA.setContratonumero(null);
         }
     }
     
@@ -175,6 +200,8 @@ public class IngresarComponenteAPBean implements Serializable {
         /*
         Fin
         */
+        if(this.nuevoProductoCA.getNumeroDeFactura() != null && this.nuevoProductoCA.getNumeroDeFactura().equals("N/A"))this.nuevoProductoCA.setNumeroDeFactura(null);
+        if(this.nuevoProductoCA.getNumeroDeParte() != null && this.nuevoProductoCA.getNumeroDeParte().equals("N/A"))this.nuevoProductoCA.setNumeroDeParte(null);
         ItemProducto itemProducto = (ItemProducto) this.nuevoProductoCA.clone();
         List<AtributoItemProducto> atributosIP = this.atributosCA;
         for (String serial : seriales) {
@@ -214,6 +241,8 @@ public class IngresarComponenteAPBean implements Serializable {
     public void ingresarComponenteElectronicoYContinuar(ActionEvent event) throws CloneNotSupportedException {
         this.nuevoProductoCA.setModeloProductoid(this.modeloProductoSeleccionado);
         this.nuevoProductoCA.setComponenteElectronicoAtomicoid(this.componenteEASeleccionado);
+        if(this.nuevoProductoCA.getNumeroDeFactura() != null && this.nuevoProductoCA.getNumeroDeFactura().equals("N/A"))this.nuevoProductoCA.setNumeroDeFactura(null);
+        if(this.nuevoProductoCA.getNumeroDeParte() != null && this.nuevoProductoCA.getNumeroDeParte().equals("N/A"))this.nuevoProductoCA.setNumeroDeParte(null);
         ItemProducto itemProducto = (ItemProducto) this.nuevoProductoCA.clone();
         List<AtributoItemProducto> atributosIP = this.atributosCA;
         for (String serial : seriales) {
@@ -408,6 +437,14 @@ public class IngresarComponenteAPBean implements Serializable {
 
     public void setModelosCompatiblesSeleccionados(List<ModeloProducto> modelosCompatiblesSeleccionados) {
         this.modelosCompatiblesSeleccionados = modelosCompatiblesSeleccionados;
+    }
+
+    public Boolean getEsProductoDanado() {
+        return esProductoDanado;
+    }
+
+    public void setEsProductoDanado(Boolean esProductoDanado) {
+        this.esProductoDanado = esProductoDanado;
     }
 
 }

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AtencionesPorIngeniero" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dd1b8bb5-dbc4-4d7e-97d7-bffe4b07935a">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
+		<pen lineColor="#FFFFFF"/>
+	</style>
+	<style name="detalles" forecolor="#000000" backcolor="#000000" fontSize="8">
+		<pen lineColor="#FFFFFF"/>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     Ticket.`ticketNumber` AS Ticket_ticketNumber,
+     Ticket.`Usuario_id_propietario` AS Ticket_Usuario_id_propietario,
+     Ticket.`Usuario_id_creador` AS Ticket_Usuario_id_creador,
+     Ticket.`ItemProducto_numeroSerial` AS Ticket_ItemProducto_numeroSerial,
+     Ticket.`ClienteEmpresa_ruc` AS Ticket_ClienteEmpresa_ruc,
+     Ticket.`titulo` AS Ticket_titulo,
+     Ticket.`tiempoDeVida` AS Ticket_tiempoDeVida,
+     Ticket.`fechaDeCreacion` AS Ticket_fechaDeCreacion,
+     Ticket.`fechaDeProximaActualizacion` AS Ticket_fechaDeProximaActualizacion,
+     Ticket.`fechaDeModificacion` AS Ticket_fechaDeModificacion,
+     Ticket.`fechaDeCierre` AS Ticket_fechaDeCierre,
+     Ticket.`fechaDePrimerContacto` AS Ticket_fechaDePrimerContacto,
+     Ticket.`hojaDeServicio` AS Ticket_hojaDeServicio,
+     UsuarioPropietario.`nombre` AS UsuarioP_nombre,
+     UsuarioPropietario.`apellido` AS UsuarioP_apellido,
+     UsuarioCreador.`nombre` AS UsuarioC_nombre,
+     UsuarioCreador.`apellido` AS UsuarioC_apellido,
+     Cola.`nombre` AS Cola_nombre,
+     EstadoTicket.`nombre` AS EstadoTicket_nombre,
+     ItemProducto.`descripcion` AS ItemProducto_descripcion,
+     PrioridadTicket.`nombre` AS PrioridadTicket_nombre,
+     ServicioTicket.`nombre` AS ServicioTicket_nombre,
+     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
+     ItemProducto.`Contrato_numero` AS ItemProducto_Contrato_numero
+FROM
+     `Ticket` Ticket INNER JOIN `EstadoTicket` EstadoTicket ON Ticket.`EstadoTicket_codigo` = EstadoTicket.`codigo`
+     INNER JOIN `Usuario` UsuarioPropietario ON Ticket.`Usuario_id_propietario` = UsuarioPropietario.`id`
+     INNER JOIN `Usuario` UsuarioCreador ON Ticket.`Usuario_id_creador` = UsuarioCreador.`id`
+     INNER JOIN `Cola` Cola ON Ticket.`Cola_id` = Cola.`id`
+     INNER JOIN `ItemProducto` ItemProducto ON Ticket.`ItemProducto_numeroSerial` = ItemProducto.`numeroSerial`
+     INNER JOIN `PrioridadTicket` PrioridadTicket ON Ticket.`PrioridadTicket_codigo` = PrioridadTicket.`codigo`
+     INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Ticket.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`]]>
+	</queryString>
+	<field name="Ticket_ticketNumber" class="java.lang.Integer"/>
+	<field name="Ticket_Usuario_id_propietario" class="java.lang.Integer"/>
+	<field name="Ticket_Usuario_id_creador" class="java.lang.Integer"/>
+	<field name="Ticket_ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="Ticket_ClienteEmpresa_ruc" class="java.lang.String"/>
+	<field name="Ticket_titulo" class="java.lang.String"/>
+	<field name="Ticket_tiempoDeVida" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDeCreacion" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDeProximaActualizacion" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDeModificacion" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDeCierre" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDePrimerContacto" class="java.sql.Timestamp"/>
+	<field name="Ticket_hojaDeServicio" class="java.lang.Object"/>
+	<field name="UsuarioP_nombre" class="java.lang.String"/>
+	<field name="UsuarioP_apellido" class="java.lang.String"/>
+	<field name="UsuarioC_nombre" class="java.lang.String"/>
+	<field name="UsuarioC_apellido" class="java.lang.String"/>
+	<field name="Cola_nombre" class="java.lang.String"/>
+	<field name="EstadoTicket_nombre" class="java.lang.String"/>
+	<field name="ItemProducto_descripcion" class="java.lang.String"/>
+	<field name="PrioridadTicket_nombre" class="java.lang.String"/>
+	<field name="ServicioTicket_nombre" class="java.lang.String"/>
+	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
+	<field name="ItemProducto_Contrato_numero" class="java.lang.String"/>
+	<group name="UsuarioP_nombre">
+		<groupExpression><![CDATA[$F{UsuarioP_nombre}]]></groupExpression>
+		<groupHeader>
+			<band height="16">
+				<textField>
+					<reportElement x="1" y="0" width="319" height="15" uuid="7fa7e29e-2479-4052-a92f-f473486efb2b"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Ing. " + $F{UsuarioP_nombre} + " " + $F{UsuarioP_apellido}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="218" height="38" uuid="774d68bf-c3d6-4b38-9390-9447ab1c9088"/>
+				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="1" y="48" width="554" height="31" uuid="78b9fbb2-f982-4229-8f3e-ffc235986422"/>
+				<textElement textAlignment="Right">
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Atenciones por Ingeniero]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<frame>
+				<reportElement style="columnas" mode="Opaque" x="1" y="2" width="554" height="12" backcolor="#666666" uuid="7a96f766-7598-45ae-9fcc-52c91d86146b"/>
+				<staticText>
+					<reportElement style="columnas" x="1" y="0" width="50" height="12" uuid="38bcae55-449e-4a08-a047-bc925aab3dc7"/>
+					<text><![CDATA[Ticket #]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="columnas" x="51" y="0" width="100" height="12" uuid="efb0d347-5070-49f5-9904-a5645264608a"/>
+					<textElement textAlignment="Justified"/>
+					<text><![CDATA[Fecha de Creación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="columnas" x="151" y="0" width="107" height="12" uuid="5aa5c20b-2bd0-4be3-b05e-09e788b16799"/>
+					<text><![CDATA[Fecha de Cierre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="columnas" x="258" y="0" width="118" height="12" uuid="b61e284f-7339-476e-bca8-80cb646b10bc"/>
+					<text><![CDATA[Contrato]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="columnas" x="501" y="0" width="53" height="12" uuid="17e52a1d-abf8-425b-9701-b8b4877cf410"/>
+					<text><![CDATA[Estado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="columnas" x="376" y="0" width="125" height="12" uuid="afe52a29-34dc-4d2d-a627-2952070dcbf0"/>
+					<text><![CDATA[Cliente]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="102" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalles" x="1" y="0" width="51" height="11" uuid="200efe11-6f7e-4e94-8700-895bba6fed7a"/>
+				<textFieldExpression><![CDATA[$F{Ticket_ticketNumber}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement style="detalles" x="52" y="0" width="100" height="11" uuid="0734de6f-527e-47dd-9d0f-2673017efba5"/>
+				<textFieldExpression><![CDATA[$F{Ticket_fechaDeCreacion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement style="detalles" x="152" y="0" width="107" height="11" uuid="39a9dd65-ad4b-4431-a013-9f243008bebf"/>
+				<textFieldExpression><![CDATA[$F{Ticket_fechaDeCierre}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalles" x="259" y="0" width="118" height="11" uuid="707e6f3f-00cf-4012-8848-050b967f9f2e"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_Contrato_numero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalles" x="377" y="0" width="125" height="11" uuid="c9002b87-3941-4070-8e4c-4829ffb8e63b"/>
+				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalles" x="502" y="0" width="53" height="11" uuid="bea8a84e-fdb0-4c32-82eb-23f841aca832"/>
+				<textFieldExpression><![CDATA[$F{EstadoTicket_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="11" width="52" height="11" uuid="b008779e-85cb-4b34-97ec-0add5e78a437"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalles:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="detalles" x="0" y="22" width="21" height="11" uuid="cd948883-bd52-43a9-a7c1-1dde421111ab"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[S/N:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="detalles" x="21" y="22" width="170" height="11" uuid="72b41577-e4a3-4228-a894-0d6ed759bd92"/>
+				<textFieldExpression><![CDATA[$F{Ticket_ItemProducto_numeroSerial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="33" width="32" height="11" uuid="21c0d2ff-fd77-48a1-b7c4-329f1bf05647"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Título:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="detalles" x="32" y="33" width="274" height="11" uuid="7c6a661e-e185-4fa8-8b01-fc38283c2d8c"/>
+				<textFieldExpression><![CDATA[$F{Ticket_titulo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="44" width="71" height="11" uuid="125148ed-04bc-4fab-9eb6-c0dd1c9ca778"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Primer Contacto:]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement style="detalles" x="71" y="44" width="137" height="11" uuid="adeb4333-a96f-48bc-aeda-94d9bd78f8c1"/>
+				<textFieldExpression><![CDATA[$F{Ticket_fechaDePrimerContacto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="88" width="104" height="11" uuid="96f1ccc2-0eca-42cc-9147-a7a03e80ff81"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Tiene Hoja de Servicio: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="detalles" x="104" y="88" width="30" height="11" uuid="04052e43-1cad-479d-a355-da52173c2452"/>
+				<textFieldExpression><![CDATA[$F{Ticket_hojaDeServicio} != null ? "Si" : "No"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="55" width="32" height="11" uuid="3299ff65-d9e7-4d65-9138-109f07351fd0"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Cola: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="detalles" x="32" y="55" width="100" height="11" uuid="8cdc023d-bd77-4052-9fd1-207f7a955335"/>
+				<textFieldExpression><![CDATA[$F{Cola_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="66" width="46" height="11" uuid="fe7bb049-3a67-4601-ba3d-55b0cd121874"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Prioridad:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="detalles" x="46" y="66" width="100" height="11" uuid="9a7b6b3e-6a96-4d54-bf67-4728fe7cc553"/>
+				<textFieldExpression><![CDATA[$F{PrioridadTicket_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="detalles" x="0" y="77" width="46" height="11" uuid="c5d9b108-efa5-495f-b368-47d94e1c2ea6"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Servicio: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="detalles" x="46" y="77" width="100" height="11" uuid="d5e1cda5-ab73-4fd8-b52e-82f92c152070"/>
+				<textFieldExpression><![CDATA[$F{ServicioTicket_nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="22" width="80" height="20" uuid="a221f6ca-2482-4624-bea0-bf5fea80f0e9"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="130" y="22" width="40" height="20" uuid="bd726ca9-9f65-4f0f-a38a-a9fc2e484c11"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="22" width="100" height="20" uuid="d96331cb-2165-417a-8c19-4ba2b7d4f2ab"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="402" y="22" width="153" height="20" uuid="0b8e9e87-0f4a-4ce8-82df-7c741d2ed995"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

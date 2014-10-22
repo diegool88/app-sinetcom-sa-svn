@@ -26,6 +26,8 @@
                         <p:menuitem value="Ingresar Inventario de Componente E. Atómico" action="ingresarComponenteAtomicoProducto?faces-redirect=true"></p:menuitem>
                         <p:menuitem value="Ingresar Inventario no Atómico" action="ingresarProductoPiezaNA?faces-redirect=true"></p:menuitem>
                         <p:menuitem value="Nuevo Registro de Movimiento de I." action="crearRegistroDeMovInventario?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Actualizar Registro de Mov. de inventario" action="actualizarRegistroDeMovimiento?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Buscar Inventario" action="buscarStockDeInventario?faces-redirect=true"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Gestionar Modelos/Revisiones">
                         <p:menuitem value="Crear Modelo de Producto"></p:menuitem>
@@ -34,7 +36,7 @@
                 </p:column>
             </p:submenu>
             
-            <p:submenu label="Tickets de Soporte" rendered="#{login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}">
+            <p:submenu label="Tickets de Soporte" rendered="#{login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true or login.usuarioActual.grupoid.permisos.consultaTicketsPropietarios}">
                 <p:column>
                     <p:submenu label="Todos los Tickets" rendered="#{(login.usuarioActual.grupoid.permisos.administra eq true) or login.usuarioActual.grupoid.permisos.consultaTodosLosTickets eq true}">
                         <p:menuitem value="Tickets por estados" ajax="false" action="ticketsPorEstados?faces-redirect=true"></p:menuitem>
@@ -56,6 +58,9 @@
                     </p:submenu>
                     <p:submenu label="Bloqueo de Clientes" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                         <p:menuitem value="Bloqueo/Desbloqueo" ajax="false" action="bloquearUsuario?faces-redirect=true"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Reportes" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.generaReportesDeInventarios eq true}">
+                        <p:menuitem value="Reportes" ajax="false" action="reportesTickets?faces-redirect=true"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>

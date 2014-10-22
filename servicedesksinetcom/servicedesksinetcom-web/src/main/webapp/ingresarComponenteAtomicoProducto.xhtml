@@ -6,7 +6,7 @@
                 template="template/plantilla.xhtml"
                 xmlns:c="http://java.sun.com/jsp/jstl/core"
                 xmlns:o="http://omnifaces.org/ui">
-    <ui:define name="title"><h:outputText value="Sinetcom - Ingresar Producto Componente Atómico"></h:outputText></ui:define>
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingresar Inventario Componente Atómico"></h:outputText></ui:define>
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
@@ -53,7 +53,7 @@
                             <p:selectOneMenu id="productoPadre" value="#{ingresarComponenteAPBean.productoPadreSeleccionado}" converter="#{itemProductoConverter}" filter="true" filterMatchMode="contains" >
                                 <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{ingresarComponenteAPBean.productosPadre}" var="padre" itemLabel="SN: #{padre.numeroSerial}" itemValue="#{padre.numeroSerial}"></f:selectItems>
-                                <p:ajax update=":form:contrato, :form:bodega" listener="#{ingresarComponenteAPBean.actualizarContrato()}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                                <p:ajax update=":form:contrato, :form:bodega, :form:fechaCompra, :form:numFactura, :form:numPedido" listener="#{ingresarComponenteAPBean.actualizarContrato()}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
                             <p:message for="productoPadre"></p:message>
                             <p:outputLabel for="compatible" value="Productos Compatibles"></p:outputLabel>
@@ -111,10 +111,14 @@
                             <f:facet name="header">
                                 <h:outputText value="Atributos de Producto"></h:outputText>
                             </f:facet>
+                            <p:outputLabel for="descripcion" value="Descripción: "></p:outputLabel>
+                            <p:inputTextarea id="descripcion" rows="5" cols="20" value="#{ingresarComponenteAPBean.nuevoProductoCA.descripcion}" required="true" requiredMessage="* Requerido"></p:inputTextarea>
+                            <p:message for="descripcion"></p:message>
                             <p:outputLabel for="condicion" value="Condición Física: "></p:outputLabel>
                             <p:selectOneMenu id="condicion" value="#{ingresarComponenteAPBean.nuevoProductoCA.condicionFisicaid}" required="true" requiredMessage="* Requerido" converter="#{condicionFisicaConverter}">
                                 <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{ingresarComponenteAPBean.condicionesFisicas}" var="condicionF" itemLabel="#{condicionF.nombre}" itemValue="#{condicionF.id.toString()}"></f:selectItems>
+                                <p:ajax listener="#{ingresarComponenteAPBean.actualizarCamposPorProductoDanado()}" update="fechaCompra, numFactura, numPedido"></p:ajax>
                             </p:selectOneMenu>
                             <p:message for="condicion"></p:message>
                             <p:outputLabel for="numeroParte" value="N/P: "></p:outputLabel>
@@ -135,13 +139,13 @@
                             </p:selectOneMenu>
                             <p:message for="contrato"></p:message>
                             <p:outputLabel for="fechaCompra" value="Fecha de Compra: "></p:outputLabel>
-                            <p:calendar id="fechaCompra" pattern="MM/dd/yyyy" mode="popup" value="#{ingresarComponenteAPBean.nuevoProductoCA.fechaDeCompra}" required="true" requiredMessage="* Requerido"></p:calendar>
+                            <p:calendar id="fechaCompra" pattern="MM/dd/yyyy" mode="popup" value="#{ingresarComponenteAPBean.nuevoProductoCA.fechaDeCompra}" disabled="#{ingresarComponenteAPBean.esProductoDanado}" required="true" requiredMessage="* Requerido"></p:calendar>
                             <p:message for="fechaCompra"></p:message>
                             <p:outputLabel for="numFactura" value="N. Factura: "></p:outputLabel>
-                            <p:inputText id="numFactura" value="#{ingresarComponenteAPBean.nuevoProductoCA.numeroDeFactura}" required="true" requiredMessage="* Requerido"></p:inputText>
+                            <p:inputText id="numFactura" value="#{ingresarComponenteAPBean.nuevoProductoCA.numeroDeFactura}" disabled="#{ingresarComponenteAPBean.esProductoDanado}" required="true" requiredMessage="* Requerido"></p:inputText>
                             <p:message for="numFactura"></p:message>
                             <p:outputLabel for="numPedido" value="N. Pedido: "></p:outputLabel>
-                            <p:inputText id="numPedido" value="#{ingresarComponenteAPBean.nuevoProductoCA.numeroDePedido}" required="true" requiredMessage="* Requerido"></p:inputText>
+                            <p:inputText id="numPedido" value="#{ingresarComponenteAPBean.nuevoProductoCA.numeroDePedido}" disabled="#{ingresarComponenteAPBean.esProductoDanado}" required="true" requiredMessage="* Requerido"></p:inputText>
                             <p:message for="numPedido"></p:message>
                         </p:panelGrid>
                         <f:facet name="footer">

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InclumplimientoSLA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b59f3c66-61a9-4621-ae14-fb0ff89e4567">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="160"/>
+	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
+		<pen lineColor="#FFFFFF"/>
+	</style>
+	<style name="detalles" forecolor="#000000" backcolor="#000000" fontSize="8">
+		<pen lineColor="#FFFFFF"/>
+	</style>
+	<queryString>
+		<![CDATA[SELECT
+     Ticket.`ticketNumber` AS Ticket_ticketNumber,
+     Ticket.`ItemProducto_numeroSerial` AS Ticket_ItemProducto_numeroSerial,
+     Ticket.`fechaDeCreacion` AS Ticket_fechaDeCreacion,
+     Ticket.`fechaDeCierre` AS Ticket_fechaDeCierre,
+     Ticket.`fechaDePrimerContacto` AS Ticket_fechaDePrimerContacto,
+     Contrato.`numero` AS Contrato_numero,
+     Contrato.`Sla_id` AS Contrato_Sla_id,
+     Sla.`tiempoRespuestaPrioridadMedia` AS Sla_tiempoRespuestaPrioridadMedia,
+     Sla.`tiempoRespuestaPrioridadBaja` AS Sla_tiempoRespuestaPrioridadBaja,
+     Sla.`tiempoDeEscalacion` AS Sla_tiempoDeEscalacion,
+     Sla.`tiempoDeActualizacionDeEscalacion` AS Sla_tiempoDeActualizacionDeEscalacion,
+     Sla.`tiempoDeRespuestaDeEscalacion` AS Sla_tiempoDeRespuestaDeEscalacion,
+     Sla.`tiempoDeSolucion` AS Sla_tiempoDeSolucion,
+     TipoDisponibilidad.`disponibilidad` AS TipoDisponibilidad_disponibilidad,
+     Contrato.`ClienteEmpresa_ruc` AS Contrato_ClienteEmpresa_ruc,
+     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
+     Sla.`tiempoRespuestaPrioridadAlta` AS Sla_tiempoRespuestaPrioridadAlta,
+     PrioridadTicket.`nombre` AS PrioridadTicket_nombre,
+     ServicioTicket.`nombre` AS ServicioTicket_nombre,
+     Usuario.`nombre` AS Usuario_nombre,
+     Usuario.`apellido` AS Usuario_apellido,
+     PrioridadTicket.`valor` AS PrioridadTicket_valor
+FROM
+     `Ticket` Ticket INNER JOIN `ItemProducto` ItemProducto ON Ticket.`ItemProducto_numeroSerial` = ItemProducto.`numeroSerial`
+     INNER JOIN `Contrato` Contrato ON ItemProducto.`Contrato_numero` = Contrato.`numero`
+     INNER JOIN `Sla` Sla ON Contrato.`Sla_id` = Sla.`id`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `TipoDisponibilidad` TipoDisponibilidad ON Sla.`TipoDisponibilidad_id` = TipoDisponibilidad.`id`
+     INNER JOIN `PrioridadTicket` PrioridadTicket ON Ticket.`PrioridadTicket_codigo` = PrioridadTicket.`codigo`
+     INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
+     INNER JOIN `Usuario` Usuario ON Ticket.`Usuario_id_propietario` = Usuario.`id`
+WHERE
+     Ticket.`fechaDeCierre` IS NOT NULL]]>
+	</queryString>
+	<field name="Ticket_ticketNumber" class="java.lang.Integer"/>
+	<field name="Ticket_ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="Ticket_fechaDeCreacion" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDeCierre" class="java.sql.Timestamp"/>
+	<field name="Ticket_fechaDePrimerContacto" class="java.sql.Timestamp"/>
+	<field name="Contrato_numero" class="java.lang.String"/>
+	<field name="Contrato_Sla_id" class="java.lang.Integer"/>
+	<field name="Sla_tiempoRespuestaPrioridadMedia" class="java.lang.Integer"/>
+	<field name="Sla_tiempoRespuestaPrioridadBaja" class="java.lang.Integer"/>
+	<field name="Sla_tiempoDeEscalacion" class="java.lang.Integer"/>
+	<field name="Sla_tiempoDeActualizacionDeEscalacion" class="java.lang.Integer"/>
+	<field name="Sla_tiempoDeRespuestaDeEscalacion" class="java.lang.Integer"/>
+	<field name="Sla_tiempoDeSolucion" class="java.lang.Integer"/>
+	<field name="TipoDisponibilidad_disponibilidad" class="java.lang.String"/>
+	<field name="Contrato_ClienteEmpresa_ruc" class="java.lang.String"/>
+	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
+	<field name="Sla_tiempoRespuestaPrioridadAlta" class="java.lang.Integer"/>
+	<field name="PrioridadTicket_nombre" class="java.lang.String"/>
+	<field name="ServicioTicket_nombre" class="java.lang.String"/>
+	<field name="Usuario_nombre" class="java.lang.String"/>
+	<field name="Usuario_apellido" class="java.lang.String"/>
+	<field name="PrioridadTicket_valor" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="218" height="38" uuid="747a80df-f6f4-41bd-a5af-4fb36565bcab"/>
+				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="48" width="554" height="31" uuid="d2076773-68c2-4ab8-aa5e-1e8731ab3f8c"/>
+				<textElement textAlignment="Right">
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de SLAs]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="218" splitType="Stretch">
+			<textField>
+				<reportElement x="51" y="0" width="189" height="20" uuid="3a437853-7511-4e23-ba45-e9f87ca01d8a"/>
+				<textFieldExpression><![CDATA[$F{Ticket_ticketNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="51" height="20" uuid="523a0ac5-40c2-4f94-80a2-b1c28ddd5fde"/>
+				<text><![CDATA[Ticket #:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="65" height="20" uuid="375057db-6d47-4c4c-a686-00dbefe4891e"/>
+				<text><![CDATA[Contrato #:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="65" y="20" width="299" height="20" uuid="26946da8-dec9-4836-89a5-4255b0c0827c"/>
+				<textFieldExpression><![CDATA[$F{Contrato_numero}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="126" height="20" uuid="616838c8-8691-4b50-84c3-06dcb44ff301"/>
+				<text><![CDATA[Tiempo de Respuesta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="126" y="60" width="92" height="20" uuid="52bb7287-032e-42a7-ae5c-29c556c8425e"/>
+				<textFieldExpression><![CDATA[($F{PrioridadTicket_valor} == 1 ? $F{Sla_tiempoRespuestaPrioridadAlta} : $F{PrioridadTicket_valor} == 2 ? $F{Sla_tiempoRespuestaPrioridadMedia} : $F{Sla_tiempoRespuestaPrioridadBaja}) + " h"]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd hh:mm">
+				<reportElement x="105" y="80" width="188" height="20" uuid="564969ae-8cb7-4036-98f4-7c8ef42eebf0"/>
+				<textFieldExpression><![CDATA[$F{Ticket_fechaDeCreacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="104" height="20" uuid="2019e0a6-f8f6-44fc-bb56-5d493713ffde"/>
+				<text><![CDATA[Fecha de Creación:]]></text>
+			</staticText>
+			<textField pattern="yyyy/MM/dd hh:mm">
+				<reportElement x="91" y="100" width="202" height="20" uuid="38f3439e-7c35-4301-b677-71790f2f644c"/>
+				<textFieldExpression><![CDATA[$F{Ticket_fechaDeCierre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="100" width="91" height="20" uuid="4dfce13c-78ea-4465-959e-c7e2a6d25352"/>
+				<text><![CDATA[Fecha de Cierre:]]></text>
+			</staticText>
+			<textField pattern="yyyy/MM/dd hh:mm">
+				<reportElement x="91" y="120" width="202" height="20" uuid="c39ce0e4-2cc1-43ab-8ff8-53c8ff71caaa"/>
+				<textFieldExpression><![CDATA[$F{Ticket_fechaDePrimerContacto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="91" height="20" uuid="7e145aa0-6970-426a-aefa-51d6d501551e"/>
+				<text><![CDATA[Primer Contacto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="51" y="40" width="313" height="20" uuid="bc90f922-3eea-4801-8823-33ed8023216a"/>
+				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="51" height="20" uuid="dc07f1f1-18a9-486b-87ca-cdbee053c720"/>
+				<text><![CDATA[Empresa: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="140" width="182" height="20" uuid="85cb04de-6d7c-42c2-899e-a3587b92d20d"/>
+				<text><![CDATA[Cumplió Tiempo de de Respuesta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="160" width="169" height="20" uuid="e8d64aa2-05ba-4c1a-8031-1bf345108d25"/>
+				<text><![CDATA[Cumplió Tiempo de Resolución:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="182" y="140" width="100" height="20" uuid="886cca0f-5d7d-4240-a869-f79f79031fea"/>
+				<textFieldExpression><![CDATA[(($F{Ticket_fechaDeCreacion} - $F{Ticket_fechaDePrimerContacto}) / (60 * 60 * 1000) % 24) 
+]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="160" width="100" height="20" uuid="c012f3c1-e9c1-4ce6-8f2c-d05d12dc5b48"/>
+				<textFieldExpression><![CDATA[$F{field}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="180" width="294" height="20" uuid="5335f7e2-0d0b-4c8c-ba47-5b773bbeae3c"/>
+				<textFieldExpression><![CDATA[$F{Usuario_nombre} + " " + $F{Usuario_apellido}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="180" width="116" height="20" uuid="e93c4cfe-70cd-4017-b0da-a7314fc1f7f8"/>
+				<text><![CDATA[Técnico Responsable:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

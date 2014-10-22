@@ -82,7 +82,12 @@ public class CrearTicketBean implements Serializable {
         this.colas = this.ticketServicio.obtenerTodasLasColas();
         this.prioridadTickets = this.ticketServicio.obtenerTodasLasPrioridades();
         this.servicioTickets = this.ticketServicio.obtenerTodosLosServiciosDeTicket();
-        this.clienteEmpresas = this.ticketServicio.obtenerTodosLosClientes();
+        if(this.administracionUsuarioBean.getUsuarioActual().getGrupoid().getId() == 4){
+            this.clienteEmpresas = this.administracionUsuarioBean.getUsuarioActual().getClienteEmpresaList();
+        }else{
+            this.clienteEmpresas = this.ticketServicio.obtenerTodosLosClientes();
+        }
+        
         this.ticket = new Ticket();
         this.articulo = new Articulo();
         this.ticketCreado = false;

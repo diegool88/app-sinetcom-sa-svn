@@ -76,11 +76,23 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
     }
 
     public void actualizarUbicacionPorContrato() {
-        this.movimientoDeInventario.setClienteEmpresaruc(null);
+        if (this.movimientoDeInventario.getContratonumero() != null) {
+            this.movimientoDeInventario.setClienteEmpresaruc(this.movimientoDeInventario.getContratonumero().getClienteEmpresaruc());
+        }
     }
 
     public void actualizarUbicacionPorCliente() {
         this.movimientoDeInventario.setContratonumero(null);
+    }
+
+    public void actualizarClienteYContrato() {
+        if (this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 4 || this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 3) {
+            this.movimientoDeInventario.setClienteEmpresaruc(null);
+            this.movimientoDeInventario.setContratonumero(null);
+        } else if (this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 1 || this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 2) {
+            this.movimientoDeInventario.setClienteEmpresaruc(null);
+            this.movimientoDeInventario.setContratonumero(null);
+        }
     }
 
     public void generarRegistroDeMovimiento(ActionEvent event) throws IOException, JRException {
@@ -88,7 +100,12 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
             if (this.movimientoDeInventario.getContratonumero() != null) {
                 item.setContratonumero(this.movimientoDeInventario.getContratonumero());
             }
+            //Se lo saca de la bodega
             item.setBodegaid(null);
+            //Si es un contrato asociado se lo carga al contrato
+            //if(this.movimientoDeInventario.getContratonumero() != null){
+            //    item.setContratonumero(this.movimientoDeInventario.getContratonumero());
+            //}
             if (this.productoServicio.actualizarItemProducto(item)) {
                 Mensajes.mostrarMensajeInformativo("Producto con S/N: " + item.getNumeroSerial() + " fue modificado!");
             }
@@ -97,8 +114,8 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
         this.movimientoDeInventario.setFechaDeSalida(Calendar.getInstance().getTime());
         if (this.productoServicio.crearRegistroDeMovimientoDeInventario(this.movimientoDeInventario)) {
             Mensajes.mostrarMensajeInformativo("Registro de Movimiento de Inventario creado satisfactoriamente!");
-            for(ItemProducto itemProducto : this.movimientoDeInventario.getItemProductoList()){
-                this.productoServicio.crearHistorialDeMovimientoDeInventario(itemProducto, this.movimientoDeInventario, this.administracionUsuarioBean.getUsuarioActual(), "salida");
+            for (ItemProducto itemProducto : this.movimientoDeInventario.getItemProductoList()) {
+                this.productoServicio.crearHistorialDeMovimientoDeInventario(itemProducto, this.movimientoDeInventario, this.administracionUsuarioBean.getUsuarioActual());
                 Mensajes.mostrarMensajeInformativo("Movimiento de salida para el item: " + itemProducto.getNumeroSerial());
             }
         } else {
