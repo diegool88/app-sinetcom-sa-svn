@@ -44,6 +44,8 @@ public class Contrato implements Serializable {
     @Lob
     @Column(name = "contratoDigital")
     private byte[] contratoDigital;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
+    private List<VisitasTecnicas> visitasTecnicasList;
     @JoinTable(name = "HistorialDeContratosYEquipos", joinColumns = {
         @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")}, inverseJoinColumns = {
         @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")})
@@ -141,8 +143,6 @@ public class Contrato implements Serializable {
     private ClienteEmpresa clienteEmpresaruc;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
     private List<Curso> cursoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
-    private List<VisitasMantenimiento> visitasMantenimientoList;
     @OneToMany(mappedBy = "contratonumero")
     private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
@@ -390,15 +390,6 @@ public class Contrato implements Serializable {
     }
 
     @XmlTransient
-    public List<VisitasMantenimiento> getVisitasMantenimientoList() {
-        return visitasMantenimientoList;
-    }
-
-    public void setVisitasMantenimientoList(List<VisitasMantenimiento> visitasMantenimientoList) {
-        this.visitasMantenimientoList = visitasMantenimientoList;
-    }
-
-    @XmlTransient
     public List<RegistroDeMovimientoDeInventario> getRegistroDeMovimientoDeInventarioList() {
         return registroDeMovimientoDeInventarioList;
     }
@@ -450,6 +441,16 @@ public class Contrato implements Serializable {
         return "ec.com.sinetcom.orm.Contrato[ numero=" + numero + " ]";
     }
 
+
+    @XmlTransient
+    public List<ItemProducto> getItemProductoList1() {
+        return itemProductoList1;
+    }
+
+    public void setItemProductoList1(List<ItemProducto> itemProductoList) {
+        this.itemProductoList1 = itemProductoList;
+    }
+
     public byte[] getContratoDigital() {
         return contratoDigital;
     }
@@ -459,12 +460,12 @@ public class Contrato implements Serializable {
     }
 
     @XmlTransient
-    public List<ItemProducto> getItemProductoList1() {
-        return itemProductoList1;
+    public List<VisitasTecnicas> getVisitasTecnicasList() {
+        return visitasTecnicasList;
     }
 
-    public void setItemProductoList1(List<ItemProducto> itemProductoList) {
-        this.itemProductoList1 = itemProductoList;
+    public void setVisitasTecnicasList(List<VisitasTecnicas> visitasTecnicasList) {
+        this.visitasTecnicasList = visitasTecnicasList;
     }
     
 }

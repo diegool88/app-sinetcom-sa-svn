@@ -5,6 +5,7 @@
 package ec.com.sinetcom.dao;
 
 import ec.com.sinetcom.orm.ClienteEmpresa;
+import ec.com.sinetcom.orm.Usuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,6 +33,13 @@ public class ClienteEmpresaFacade extends AbstractFacade<ClienteEmpresa> {
         String sql = "SELECT c FROM ClienteEmpresa c WHERE c.ruc = ?1";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, ruc);
+        return qry.getResultList().isEmpty() ? null : (ClienteEmpresa)qry.getResultList().get(0);
+    }
+    
+    public ClienteEmpresa obtenerClienteEmpresaPorUsuario(Usuario usuario){
+        String sql = "SELECT c FROM ClienteEmpresa c WHERE c.usuarioid = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, usuario);
         return qry.getResultList().isEmpty() ? null : (ClienteEmpresa)qry.getResultList().get(0);
     }
 }

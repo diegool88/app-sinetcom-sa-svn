@@ -314,12 +314,13 @@ public class TicketServicio {
             this.actividadEnSitioFacade.remove(actividadEnSitio);
         }
     }
-    
+
     /**
      * Sirve para actualizar los datos ingresados en el ticket pasado
-     * @param ticket 
+     *
+     * @param ticket
      */
-    public void actualizarInformacionTicket(Ticket ticket){
+    public void actualizarInformacionTicket(Ticket ticket) {
         this.ticketFacade.edit(ticket);
     }
 
@@ -346,10 +347,43 @@ public class TicketServicio {
             //se ingresa la fecha de última modificación
             ticket.setFechaDeModificacion(ticket.getFechaDeCreacion());
             //Se determina el tiempo de actualizacion segun el SLA
-            int tiempoDeActualizacion = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeActualizacionDeEscalacion();
+            //int tiempoDeActualizacion = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeActualizacionDeEscalacion();
+            //Información del ticket y el sla
+            Sla ticketSla = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid();
+            PrioridadTicket prioridadTicket = ticket.getPrioridadTicketcodigo();
+            int tiempoDeActualizacion = prioridadTicket.getValor() == 1 ? ticketSla.getTiempoRespuestaPrioridadAlta() : prioridadTicket.getValor() == 2 ? ticketSla.getTiempoRespuestaPrioridadMedia() : ticketSla.getTiempoRespuestaPrioridadBaja();
+            //Se añade el tiempo de actualización para pos-validación según SLA
             c = Calendar.getInstance();
             c.add(Calendar.HOUR, tiempoDeActualizacion);
+            //Se hacen verificaciones por tipo de disponibilidad es decir 24x7 o 8x5
+            int horaActual = c.get(Calendar.HOUR_OF_DAY);
+            int diaDeLaSemana = c.get(Calendar.DAY_OF_WEEK);
+            if (ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (diaDeLaSemana == Calendar.SATURDAY || diaDeLaSemana == Calendar.SUNDAY || (diaDeLaSemana == Calendar.FRIDAY && horaActual > 17))) {
+                if (diaDeLaSemana == Calendar.FRIDAY) {
+                    c.add(Calendar.DAY_OF_MONTH, 3);
+                } else if (diaDeLaSemana == Calendar.SATURDAY) {
+                    c.add(Calendar.DAY_OF_MONTH, 2);
+                } else {
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+            } else if (ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (horaActual < 8 || horaActual > 17) && (diaDeLaSemana != Calendar.SATURDAY && diaDeLaSemana != Calendar.SUNDAY)) {
+                if (horaActual > 17) {
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+            }
             ticket.setFechaDeProximaActualizacion(c.getTime());
+            if(ticket.getFechaDeProximaActualizacion().compareTo(ticket.getFechaDeCierre()) > 0){
+                Calendar cierre = Calendar.getInstance();
+                cierre.setTime(c.getTime());
+                cierre.add(Calendar.HOUR,tiempoDeVida);
+                ticket.setFechaDeCierre(cierre.getTime());
+            }
             //Se indica la persona que crea el ticket
             ticket.setUsuarioidcreador(usuario);
             //Se indica el usuario propietario por defecto y el responsable (Soporte HELPDESK)
@@ -364,18 +398,18 @@ public class TicketServicio {
             //Creamos el Notificador
             TareaTicketInfo tareaTicketInfo = new TareaTicketInfo("t_sla" + ticket.getTicketNumber(), "Notificador SLA ticket# " + ticket.getTicketNumber(), "LoteTareaNotificarSLA", ticket);
             //Información del ticket y el sla
-            Sla ticketSla = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid();
-            PrioridadTicket prioridadTicket = ticket.getPrioridadTicketcodigo();
+            //Sla ticketSla = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid();
+            //PrioridadTicket prioridadTicket = ticket.getPrioridadTicketcodigo();
             String hora = prioridadTicket.getValor() == 1 ? String.valueOf(ticketSla.getTiempoRespuestaPrioridadAlta()) : prioridadTicket.getValor() == 2 ? String.valueOf(ticketSla.getTiempoRespuestaPrioridadMedia()) : String.valueOf(ticketSla.getTiempoRespuestaPrioridadBaja());
             //Definir la hora de inicio
-            c = Calendar.getInstance();
-            c.add(Calendar.HOUR, Integer.parseInt(hora));
+            //c = Calendar.getInstance();
+            //c.add(Calendar.HOUR, Integer.parseInt(hora));
             c.add(Calendar.MINUTE, -30);
             tareaTicketInfo.setStartDate(c.getTime());
             tareaTicketInfo.setEndDate(ticket.getFechaDeCierre());
             tareaTicketInfo.setSecond(String.valueOf(c.get(Calendar.SECOND)));
-            tareaTicketInfo.setMinute(String.valueOf(c.get(Calendar.MINUTE)));
-            tareaTicketInfo.setHour(c.get(Calendar.HOUR_OF_DAY) + "/" + hora);
+            tareaTicketInfo.setMinute(String.valueOf(c.get(Calendar.MINUTE)) + "/10");
+            tareaTicketInfo.setHour(String.valueOf(c.get(Calendar.HOUR_OF_DAY)));
             tareaTicketInfo.setMonth("*");
             tareaTicketInfo.setDayOfMonth("*");
             tareaTicketInfo.setDayOfWeek(ticketSla.getTipoDisponibilidadid().getDisponibilidad().equals("8x5") ? "Mon, Tue, Wed, Thu, Fri" : "*");
@@ -514,9 +548,18 @@ public class TicketServicio {
     public boolean ponerEnPendiente(Ticket ticket, Usuario usuario) {
         EstadoTicket pendiente = this.estadoTicketFacade.find(5);
         try {
+            if (ticket.getFechaDePrimerContacto() != null) {
+                ticket.setFechaDePrimerContacto(null);
+            }
             this.cambiarEstadoDeTicket(ticket, pendiente, usuario);
             Timer tarea = this.notificadorServicio.getTareaInfoById("t_sla" + ticket.getTicketNumber());
-            tarea.cancel();
+            if (tarea != null) {
+                tarea.cancel();
+            }
+            Timer tarea2 = this.notificadorServicio.getTareaInfoById("t_update" + ticket.getTicketNumber());
+            if (tarea2 != null) {
+                tarea2.cancel();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -534,29 +577,65 @@ public class TicketServicio {
     public boolean reabrirCaso(Ticket ticket, Usuario usuario) {
         EstadoTicket abierto = this.estadoTicketFacade.find(2);
         try {
+            //Definimos el tiempo de vida del ticket nuevamente de 0
+            int tiempoDeVida = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeSolucion();
             //Cambiamos el estado
             this.cambiarEstadoDeTicket(ticket, abierto, usuario);
-            //Creamos el notificador
+            //Reseteamos la fecha de creación y modificación
+            ticket.setFechaDeCreacion(Calendar.getInstance().getTime());
+            ticket.setFechaDeModificacion(Calendar.getInstance().getTime());
+            //Creamos el notificador del tiempo de respuesta inicial
             TareaTicketInfo tareaTicketInfo = new TareaTicketInfo("t_sla" + ticket.getTicketNumber(), "Notificador SLA ticket# " + ticket.getTicketNumber(), "LoteTareaNotificarSLA", ticket);
             Sla ticketSla = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid();
             PrioridadTicket prioridadTicket = ticket.getPrioridadTicketcodigo();
-            String hora = prioridadTicket.getValor() == 1 ? String.valueOf(ticketSla.getTiempoRespuestaPrioridadAlta()) : prioridadTicket.getValor() == 2 ? String.valueOf(ticketSla.getTiempoRespuestaPrioridadMedia()) : String.valueOf(ticketSla.getTiempoRespuestaPrioridadBaja());
+            int tiempoDeActualizacion = prioridadTicket.getValor() == 1 ? ticketSla.getTiempoRespuestaPrioridadAlta() : prioridadTicket.getValor() == 2 ? ticketSla.getTiempoRespuestaPrioridadMedia() : ticketSla.getTiempoRespuestaPrioridadBaja();
             Calendar c = Calendar.getInstance();
-            c.add(Calendar.HOUR, Integer.parseInt(hora));
+            c.add(Calendar.HOUR, tiempoDeActualizacion);
+            //Se hacen verificaciones por tipo de disponibilidad es decir 24x7 o 8x5
+            int horaActual = c.get(Calendar.HOUR_OF_DAY);
+            int diaDeLaSemana = c.get(Calendar.DAY_OF_WEEK);
+            if (ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (diaDeLaSemana == Calendar.SATURDAY || diaDeLaSemana == Calendar.SUNDAY || (diaDeLaSemana == Calendar.FRIDAY && horaActual > 17))) {
+                if (diaDeLaSemana == Calendar.FRIDAY) {
+                    c.add(Calendar.DAY_OF_MONTH, 3);
+                } else if (diaDeLaSemana == Calendar.SATURDAY) {
+                    c.add(Calendar.DAY_OF_MONTH, 2);
+                } else {
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+            } else if (ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (horaActual < 8 || horaActual > 17) && (diaDeLaSemana != Calendar.SATURDAY && diaDeLaSemana != Calendar.SUNDAY)) {
+                if (horaActual > 17) {
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+            }
+            ticket.setFechaDeProximaActualizacion(c.getTime());
+            if(ticket.getFechaDeProximaActualizacion().compareTo(ticket.getFechaDeCierre()) > 0){
+                Calendar cierre = Calendar.getInstance();
+                cierre.setTime(c.getTime());
+                cierre.add(Calendar.HOUR,tiempoDeVida);
+                ticket.setFechaDeCierre(cierre.getTime());
+            }
+            //Se actualiza el ticket
+            this.ticketFacade.edit(ticket);
+            //Se crea un notificador para 30 minutos antes del vencimiento del primer contacto
             c.add(Calendar.MINUTE, -30);
             tareaTicketInfo.setStartDate(c.getTime());
             tareaTicketInfo.setSecond(String.valueOf(c.get(Calendar.SECOND)));
-            tareaTicketInfo.setMinute(String.valueOf(c.get(Calendar.MINUTE)));
-            tareaTicketInfo.setHour(c.get(Calendar.HOUR_OF_DAY) + "/" + hora);
-            c = Calendar.getInstance();
-            c.add(Calendar.HOUR, ticketSla.getTiempoDeSolucion());
-            tareaTicketInfo.setEndDate(c.getTime());
+            tareaTicketInfo.setMinute(String.valueOf(c.get(Calendar.MINUTE)) + "/10");
+            tareaTicketInfo.setHour(String.valueOf(c.get(Calendar.HOUR_OF_DAY)));
+            tareaTicketInfo.setEndDate(ticket.getFechaDeCierre());
             tareaTicketInfo.setMonth("*");
             tareaTicketInfo.setDayOfMonth("*");
             tareaTicketInfo.setDayOfWeek(ticketSla.getTipoDisponibilidadid().getDisponibilidad().equals("8x5") ? "Mon, Tue, Wed, Thu, Fri" : "*");
             tareaTicketInfo.setYear("*");
             tareaTicketInfo.setDescription("Tarea SLA para ticket# " + ticket.getTicketNumber());
             this.notificadorServicio.createJob(tareaTicketInfo);
+            //Creamos el notificador de tiempo de actualización
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -598,6 +677,7 @@ public class TicketServicio {
      * @param ticket
      * @param articulo
      * @param usuario
+     * @param esArticuloInicial
      * @return
      */
     public boolean ingresarNuevoArticuloAlTicket(Ticket ticket, Articulo articulo, Usuario usuario, boolean esArticuloInicial) {
@@ -606,10 +686,42 @@ public class TicketServicio {
             //Se determina el tiempo de actualizacion segun el SLA
             int tiempoDeActualizacion = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeActualizacionDeEscalacion();
             Calendar c = Calendar.getInstance();
-            c = Calendar.getInstance();
+            //c = Calendar.getInstance();
             c.add(Calendar.HOUR, tiempoDeActualizacion);
+            //Se hacen verificaciones por tipo de disponibilidad es decir 24x7 o 8x5
+            int horaActual = c.get(Calendar.HOUR_OF_DAY);
+            int diaDeLaSemana = c.get(Calendar.DAY_OF_WEEK);
+            if (ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (diaDeLaSemana == Calendar.SATURDAY || diaDeLaSemana == Calendar.SUNDAY || (diaDeLaSemana == Calendar.FRIDAY && horaActual > 17))) {
+                if (diaDeLaSemana == Calendar.FRIDAY) {
+                    c.add(Calendar.DAY_OF_MONTH, 3);
+                } else if (diaDeLaSemana == Calendar.SATURDAY) {
+                    c.add(Calendar.DAY_OF_MONTH, 2);
+                } else {
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+            } else if (ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (horaActual < 8 || horaActual > 17) && (diaDeLaSemana != Calendar.SATURDAY && diaDeLaSemana != Calendar.SUNDAY)) {
+                if (horaActual > 17) {
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+            }
             ticket.setFechaDeProximaActualizacion(c.getTime());
             this.ticketFacade.edit(ticket);
+            //Se actualiza el notificador
+            Timer tarea = this.notificadorServicio.getTareaInfoById("t_update" + ticket.getTicketNumber());
+            if (tarea != null) {
+                TareaTicketInfo info = (TareaTicketInfo) tarea.getInfo();
+                info.setStartDate(c.getTime());
+                info.setHour(String.valueOf(c.get(Calendar.HOUR)));
+                info.setMinute(String.valueOf(c.get(Calendar.MINUTE)));
+                info.setSecond(String.valueOf(c.get(Calendar.SECOND)));
+                this.notificadorServicio.updateJob(info);
+            }
             articulo.setDe(usuario);
             articulo.setPara(ticket.getUsuarioidcreador());
             StringBuilder cc = new StringBuilder();
@@ -668,7 +780,13 @@ public class TicketServicio {
             this.historialDeTicketFacade.create(historialDeTicket);
             //Se elimina el Notificador de SLA
             Timer tarea = this.notificadorServicio.getTareaInfoById("t_sla" + ticket.getTicketNumber());
-            tarea.cancel();
+            if (tarea != null) {
+                tarea.cancel();
+            }
+            Timer tarea2 = this.notificadorServicio.getTareaInfoById("t_update" + ticket.getTicketNumber());
+            if (tarea2 != null) {
+                tarea2.cancel();
+            }
             //Se envia el correo electrónico
             UtilidadDeEmail utilidadDeCorreoElectronico = new UtilidadDeEmail();
             utilidadDeCorreoElectronico.enviarMensajeConAdjunto(utilidadDeCorreoElectronico.getSMTPEmail(), "soporte@sinetcom.com.ec", "Ticket#" + ticket.getTicketNumber() + " fue cerrado", crearCuerpoDeCorreoTicketCerrado(ticket, usuario), contactosDeTicket(ticket), null, null);
@@ -679,16 +797,23 @@ public class TicketServicio {
         }
         return true;
     }
-    
+
     /**
      * Servicio que permite ingresar la fecha de primer contacto
+     *
      * @param ticket
      * @param usuario
      * @param fechaDeContacto
-     * @return 
+     * @return
      */
     public boolean ingresarPrimerContactoDeTicket(Ticket ticket, Usuario usuario) {
         try {
+            //Se agrega la información de actualización y modificación
+            ticket.setFechaDeModificacion(new Date());
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeActualizacionDeEscalacion());
+            ticket.setFechaDeProximaActualizacion(c.getTime());
+            //Se modifica el ticket y se agrega en el historial
             this.ticketFacade.edit(ticket);
             HistorialDeTicket historialDeTicket = new HistorialDeTicket();
             historialDeTicket.setEventoTicketcodigo(this.eventoTicketFacade.find(7));
@@ -697,6 +822,29 @@ public class TicketServicio {
             historialDeTicket.setUsuarioid(usuario);
             historialDeTicket.setTicketticketNumber(ticket);
             this.historialDeTicketFacade.create(historialDeTicket);
+            //Eliminamos el notificador de primer contacto
+            Timer tarea = this.notificadorServicio.getTareaInfoById("t_sla" + ticket.getTicketNumber());
+            if (tarea != null) {
+                tarea.cancel();
+            }
+            //Creamos el notificador de actualización de ticket
+            TareaTicketInfo tareaTicketInfo = new TareaTicketInfo("t_update" + ticket.getTicketNumber(), "Notificador Actualizacion ticket# " + ticket.getTicketNumber(), "LoteTareaNotificarTiempoDeActualizacion", ticket);
+            Sla ticketSla = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid();
+            c = Calendar.getInstance();
+            c.add(Calendar.HOUR, ticketSla.getTiempoDeActualizacionDeEscalacion());
+            tareaTicketInfo.setStartDate(c.getTime());
+            tareaTicketInfo.setSecond(String.valueOf(c.get(Calendar.SECOND)));
+            tareaTicketInfo.setMinute(String.valueOf(c.get(Calendar.MINUTE)));
+            tareaTicketInfo.setHour(String.valueOf(c.get(Calendar.HOUR_OF_DAY)) + "/" + ticketSla.getTiempoDeActualizacionDeEscalacion());
+            c = Calendar.getInstance();
+            c.add(Calendar.HOUR, ticketSla.getTiempoDeSolucion());
+            tareaTicketInfo.setEndDate(c.getTime());
+            tareaTicketInfo.setMonth("*");
+            tareaTicketInfo.setDayOfMonth("*");
+            tareaTicketInfo.setDayOfWeek(ticketSla.getTipoDisponibilidadid().getDisponibilidad().equals("8x5") ? "Mon, Tue, Wed, Thu, Fri" : "*");
+            tareaTicketInfo.setYear("*");
+            tareaTicketInfo.setDescription("Tarea Actualizacion para ticket# " + ticket.getTicketNumber());
+            this.notificadorServicio.createJob(tareaTicketInfo);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -804,10 +952,17 @@ public class TicketServicio {
         //ccTodos.add("jorge.yanez@sinetcom.com.ec");
         //Agregando al Helpdesk en copia
         ccTodos.add("soporte@sinetcom.com.ec");
+        //Agregando al Presidente de la compañia
+        /*
+         Por activar en etapa de producción
+         */
+        //ccTodos.add("jorge.yanez@sinetcom.com.ec");
         //Agrenado al Gerente de soporte
         ccTodos.add("antonio.bassignana@sinetcom.com.ec");
         //Agregando a la persona que creo el ticket
         ccTodos.add(ticket.getUsuarioidcreador().getCorreoElectronico());
+        //Agregando al propietario del ticket
+        ccTodos.add(ticket.getUsuarioidpropietario().getCorreoElectronico());
 
         return ccTodos;
     }
@@ -833,6 +988,15 @@ public class TicketServicio {
         cuerpo.append("Servicio Solicitado: ").append(ticket.getServicioTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Estado: ").append(ticket.getEstadoTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Equipo: ").append(ticket.getItemProductonumeroSerial().getModeloProductoid().getLineaDeProductoid().getNombre()).append(ticket.getItemProductonumeroSerial().getModeloProductoid().getModelo()).append(" - S/N ").append(ticket.getItemProductonumeroSerial().getNumeroSerial()).append("\n");
+        //Se verifica si la fecha de fin de contrato está próxima
+        Calendar fechaMaximaDeValidez = Calendar.getInstance();
+        Contrato contrato = ticket.getItemProductonumeroSerial().getContratonumero();
+        fechaMaximaDeValidez.setTime(contrato.getFechaDeEntregaRecepcion());
+        fechaMaximaDeValidez.add(Calendar.YEAR, contrato.getTiempoDeValidez());
+        long diferenciaTiempo = (int) ((new Date()).getTime() - fechaMaximaDeValidez.getTime().getTime()) / (1000 * 60 * 60 * 24);
+        if (diferenciaTiempo <= 30) {
+            cuerpo.append("NOTA: Recuerde que solo quedan ").append(diferenciaTiempo).append(" días para la finalización del contrato de soporte sobre este equipo.").append("\n");
+        }
         //Se agrega la informacion a la empresa de soporte
         if (empresaDeSoporte) {
             cuerpo.append("SLA: ").append(ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTipoDisponibilidadid().getDisponibilidad()).append("\n");
@@ -840,15 +1004,15 @@ public class TicketServicio {
             switch (ticket.getPrioridadTicketcodigo().getValor()) {
                 case 1:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadAlta());
-                    cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
+                    cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
                     break;
                 case 2:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadMedia());
-                    cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
+                    cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
                     break;
                 case 3:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadBaja());
-                    cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
+                    cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
                     break;
             }
             Calendar g = Calendar.getInstance();
@@ -856,12 +1020,32 @@ public class TicketServicio {
             cuerpo.append("Tiempo de resolución: ").append(ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeSolucion()).append(" h\n");
             cuerpo.append("Repuestos: ").append(ticket.getItemProductonumeroSerial().getContratonumero().getIncluyeRepuestos() ? "Incluye" : "No Incluye").append("\n");
             cuerpo.append("Garantía Técnica: ").append(g.getTime().compareTo(new Date()) < 0 ? "Vencido" : "En vigencia").append(" Fecha: ").append(g.getTime()).append("\n");
+            Contacto contacto = ticket.getItemProductonumeroSerial().getContratonumero().getAdministradorDeContrato();
+            cuerpo.append("Persona de Contacto: ").append(contacto.getNombre()).append("\n");
+            cuerpo.append("Teléfono fijo: ").append(contacto.getTelefonoFijo()).append("\n");
+            cuerpo.append("Teléfono Móvil: ").append(contacto.getTelefonoMovil()).append("\n");
+            cuerpo.append("Correo Electrónico: ").append(contacto.getCorreoElectronico()).append("\n");
         }
         //Se agrega la información del Articulo
         cuerpo.append("---------------------------------------------------").append("\n");
         cuerpo.append("Asunto: ").append(ticket.getTitulo()).append("\n");
-        cuerpo.append("Descripción del problema: ").append(articulo.getCuerpo()).append("\n");
-
+        cuerpo.append("Descripción del problema: ").append(articulo.getCuerpo()).append("\n\n");
+        if (!empresaDeSoporte) {
+            int horasMaximasDeContacto = 0;
+            switch (ticket.getPrioridadTicketcodigo().getValor()) {
+                case 1:
+                    horasMaximasDeContacto = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadAlta();
+                    break;
+                case 2:
+                    horasMaximasDeContacto = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadMedia();
+                    break;
+                case 3:
+                    horasMaximasDeContacto = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadBaja();
+                    break;
+            }
+            cuerpo.append("Recuerde que un técnico se pondrá en contacto con usted en un plazo máximo de ").append(horasMaximasDeContacto).append(" horas.\n\n");
+            cuerpo.append("Saludos Cordiales\n");
+        }
         return cuerpo.toString();
     }
 
@@ -875,7 +1059,7 @@ public class TicketServicio {
     private String crearCuerpoDeCorreoNuevoArticuloEnTicket(Articulo articulo) {
         StringBuilder cuerpo = new StringBuilder();
         //Agregamos el nuevo articulo al ticket
-        cuerpo.append("Se ha agregado un nuevo artículo al ticket# ").append(articulo.getTicketticketNumber().getTicketNumber()).append("\n");
+        cuerpo.append("Se ha agregado un nuevo artículo al ticket# ").append(articulo.getTicketticketNumber().getTicketNumber()).append("\n\n");
         //Agregamos el cuerpo del articulo
         cuerpo.append(articulo.getCuerpo()).append("\n");
         return cuerpo.toString();
@@ -917,6 +1101,20 @@ public class TicketServicio {
     }
 
     /**
+     *
+     * @param ticket
+     * @return
+     */
+    private String crearCuerpoDeCorreoPrimerContactoTicket(Ticket ticket) {
+        StringBuilder cuerpo = new StringBuilder();
+        cuerpo.append("Este es un correo autómatico de recordatorio.").append("\n\n");
+        cuerpo.append("Le recordamos que debe establecer contacto con el cliente ").append(ticket.getClienteEmpresaruc().getNombreComercial()).append(" a favor del ticket# ").append(ticket.getTicketNumber()).append(".\n");
+        cuerpo.append("NOTA: Evite incumplir con el SLA de este ticket!").append("\n\n");
+        cuerpo.append("Saludos!").append("\n");
+        return cuerpo.toString();
+    }
+
+    /**
      * Función que permite crear el cuerpo de correo de la asignación de ticket
      * a un ingeniero
      *
@@ -940,15 +1138,15 @@ public class TicketServicio {
         switch (ticket.getPrioridadTicketcodigo().getValor()) {
             case 1:
                 c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadAlta());
-                cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
+                cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
                 break;
             case 2:
                 c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadMedia());
-                cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
+                cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
                 break;
             case 3:
                 c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadBaja());
-                cuerpo.append("Tiempo de Primer Contacto: ").append(c.getTime()).append("\n");
+                cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
                 break;
         }
         Calendar g = Calendar.getInstance();
@@ -971,20 +1169,32 @@ public class TicketServicio {
         //Ticket ticketActual = this.ticketFacade.find(ticket.getTicketNumber());
         Sla sla = ticket.getItemProductonumeroSerial().getContratonumero().getSlaid();
         int horaDelDia = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        if(sla.getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (horaDelDia < 8 || horaDelDia > 17)){
+        if (sla.getTipoDisponibilidadid().getDisponibilidad().equals("8x5") && (horaDelDia < 8 || horaDelDia > 17)) {
             System.out.println("Se ha omitido notificador por horario no disponible del ticket# " + ticket.getTicketNumber());
             return;
         }
         long diferencia = new Date().getTime() - ticket.getFechaDeModificacion().getTime();
         long horas = diferencia / (60 * 60 * 1000) % 24;
-        long minutos = diferencia / (60 * 1000) % 60;
-        if ((horas == 1 && minutos > 30) || horas > 1) {
+        //Se verifica si el último tiempo de actualización supera al estipulado en el contrato
+        if (horas >= ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeActualizacionDeEscalacion()) {
             String cuerpo = this.crearCuerpoDeCorreoTicketSLA(ticket);
             UtilidadDeEmail utilidadDeEmail = new UtilidadDeEmail();
-            utilidadDeEmail.enviarMensajeConAdjunto("soporte@sinetcom.com.ec", ticket.getUsuarioidpropietario().getCorreoElectronico(), "Recordatorio Ticket de Soporte# " + ticket.getTicketNumber(), cuerpo, null, null, null);
+            utilidadDeEmail.enviarMensajeConAdjunto("soporte@sinetcom.com.ec", ticket.getUsuarioidpropietario().getCorreoElectronico(), "Recordatorio - Ticket de Soporte# " + ticket.getTicketNumber(), cuerpo, null, null, null);
             System.out.println("Se acaba de enviar un correo de notificación del ticket# " + ticket.getTicketNumber() + " a " + ticket.getUsuarioidpropietario().getCorreoElectronico());
-        }else{
+        } else {
             System.out.println("Se ha omitido notificador por haber actualizado el ticket# " + ticket.getTicketNumber());
         }
+    }
+
+    /**
+     * Función que permite enviar un correo de notificación para primer contacto
+     *
+     * @param ticket
+     */
+    public void enviarNotificacionDePrimerContacto(Ticket ticket) {
+        String cuerpo = this.crearCuerpoDeCorreoPrimerContactoTicket(ticket);
+        UtilidadDeEmail utilidadDeEmail = new UtilidadDeEmail();
+        utilidadDeEmail.enviarMensajeConAdjunto("soporte@sinetcom.com.ec", ticket.getUsuarioidpropietario().getCorreoElectronico(), "Primer Contacto - Ticket de Soporte# " + ticket.getTicketNumber(), cuerpo, null, null, null);
+        System.out.println("Se acaba de enviar un correo de notificación del ticket# " + ticket.getTicketNumber() + " a " + ticket.getUsuarioidpropietario().getCorreoElectronico());
     }
 }

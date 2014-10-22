@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ec.com.sinetcom.orm;
@@ -29,17 +30,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author diegoflores
  */
 @Entity
-@Table(name = "VisitasMantenimiento", catalog = "dbsinetcom", schema = "")
+@Table(name = "VisitasTecnicas", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "VisitasMantenimiento.findAll", query = "SELECT v FROM VisitasMantenimiento v")})
-public class VisitasMantenimiento implements Serializable {
-    @Lob
-    @Column(name = "hojaDeServicio")
-    private byte[] hojaDeServicio;
-    @JoinColumn(name = "Ticket_ticketNumber", referencedColumnName = "ticketNumber")
-    @ManyToOne(optional = false)
-    private Ticket ticketticketNumber;
+    @NamedQuery(name = "VisitasTecnicas.findAll", query = "SELECT v FROM VisitasTecnicas v"),
+    @NamedQuery(name = "VisitasTecnicas.findById", query = "SELECT v FROM VisitasTecnicas v WHERE v.id = :id"),
+    @NamedQuery(name = "VisitasTecnicas.findByFecha", query = "SELECT v FROM VisitasTecnicas v WHERE v.fecha = :fecha"),
+    @NamedQuery(name = "VisitasTecnicas.findByHora", query = "SELECT v FROM VisitasTecnicas v WHERE v.hora = :hora"),
+    @NamedQuery(name = "VisitasTecnicas.findByDescripcion", query = "SELECT v FROM VisitasTecnicas v WHERE v.descripcion = :descripcion"),
+    @NamedQuery(name = "VisitasTecnicas.findByIdNotificador", query = "SELECT v FROM VisitasTecnicas v WHERE v.idNotificador = :idNotificador")})
+public class VisitasTecnicas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,24 +56,33 @@ public class VisitasMantenimiento implements Serializable {
     @Column(name = "hora")
     @Temporal(TemporalType.TIME)
     private Date hora;
+    @Lob
+    @Column(name = "hojaDeServicio")
+    private byte[] hojaDeServicio;
     @Size(max = 254)
     @Column(name = "descripcion")
     private String descripcion;
     @Size(max = 45)
     @Column(name = "idNotificador")
     private String idNotificador;
+    @JoinColumn(name = "TipoDeVisita_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TipoDeVisita tipoDeVisitaid;
+    @JoinColumn(name = "Ticket_ticketNumber", referencedColumnName = "ticketNumber")
+    @ManyToOne(optional = false)
+    private Ticket ticketticketNumber;
     @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")
     @ManyToOne(optional = false)
     private Contrato contratonumero;
 
-    public VisitasMantenimiento() {
+    public VisitasTecnicas() {
     }
 
-    public VisitasMantenimiento(Integer id) {
+    public VisitasTecnicas(Integer id) {
         this.id = id;
     }
 
-    public VisitasMantenimiento(Integer id, Date fecha, Date hora) {
+    public VisitasTecnicas(Integer id, Date fecha, Date hora) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
@@ -103,6 +112,14 @@ public class VisitasMantenimiento implements Serializable {
         this.hora = hora;
     }
 
+    public byte[] getHojaDeServicio() {
+        return hojaDeServicio;
+    }
+
+    public void setHojaDeServicio(byte[] hojaDeServicio) {
+        this.hojaDeServicio = hojaDeServicio;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -117,6 +134,22 @@ public class VisitasMantenimiento implements Serializable {
 
     public void setIdNotificador(String idNotificador) {
         this.idNotificador = idNotificador;
+    }
+
+    public TipoDeVisita getTipoDeVisitaid() {
+        return tipoDeVisitaid;
+    }
+
+    public void setTipoDeVisitaid(TipoDeVisita tipoDeVisitaid) {
+        this.tipoDeVisitaid = tipoDeVisitaid;
+    }
+
+    public Ticket getTicketticketNumber() {
+        return ticketticketNumber;
+    }
+
+    public void setTicketticketNumber(Ticket ticketticketNumber) {
+        this.ticketticketNumber = ticketticketNumber;
     }
 
     public Contrato getContratonumero() {
@@ -137,10 +170,10 @@ public class VisitasMantenimiento implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VisitasMantenimiento)) {
+        if (!(object instanceof VisitasTecnicas)) {
             return false;
         }
-        VisitasMantenimiento other = (VisitasMantenimiento) object;
+        VisitasTecnicas other = (VisitasTecnicas) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -149,23 +182,7 @@ public class VisitasMantenimiento implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.VisitasMantenimiento[ id=" + id + " ]";
-    }
-
-    public byte[] getHojaDeServicio() {
-        return hojaDeServicio;
-    }
-
-    public void setHojaDeServicio(byte[] hojaDeServicio) {
-        this.hojaDeServicio = hojaDeServicio;
-    }
-
-    public Ticket getTicketticketNumber() {
-        return ticketticketNumber;
-    }
-
-    public void setTicketticketNumber(Ticket ticketticketNumber) {
-        this.ticketticketNumber = ticketticketNumber;
+        return "ec.com.sinetcom.orm.VisitasTecnicas[ id=" + id + " ]";
     }
     
 }

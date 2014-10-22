@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "RegistroDeMovimientoDeInventario.findAll", query = "SELECT r FROM RegistroDeMovimientoDeInventario r")})
 public class RegistroDeMovimientoDeInventario implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "registroDeMovimientoDeInventariocodigo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "registroDeMovimientoDeInventariocodigo", fetch = FetchType.EAGER)
     private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList;
     private static final long serialVersionUID = 1L;
     @Id
