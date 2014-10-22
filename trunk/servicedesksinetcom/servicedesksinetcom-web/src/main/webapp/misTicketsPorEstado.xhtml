@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="template/plantilla.xhtml"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <ui:define name="title">Sinetcom - Tickets</ui:define>
+    <ui:define name="title"><h:outputText value="Sinetcom - Tickets"></h:outputText></ui:define>
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
@@ -60,14 +60,14 @@
                         <p:column headerText="Propietario" width="280">
                             <h:outputText value="Ing. #{ticket.usuarioidpropietario.nombreCompleto}"></h:outputText>
                         </p:column>
-                        <f:facet name="footer" rendered="#{login.usuarioActual.grupoid.permisos.administra or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios}">
-                            <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" disabled="#{misTicketsPorEstado.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
-                            <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" disabled="#{misTicketsPorEstado.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorEstado.ponerEnPendiente}" ></p:commandButton>
-                            <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" disabled="#{misTicketsPorEstado.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorEstado.reAbrirCaso}"></p:commandButton>
-                            <p:commandButton value="Asignar Ticket" icon="ui-icon-person" update=":form:asignarT" disabled="#{misTicketsPorEstado.desactivarAsignarTicket}" immediate="true" oncomplete="asignarDialog.show()"></p:commandButton>
-                            <p:commandButton value="Primer Contacto" icon="ui-icon-mail-closed" update=":form:tabla" disabled="#{misTicketsPorEstado.desactivarPrimerContacto}" immediate="true" oncomplete="primerContactoDialog.show()"></p:commandButton>
-                            <p:commandButton value="Subir Hoja S." icon="ui-icon-document" update="@form" disabled="#{misTicketsPorEstado.desactivarHojaDeServicio}" immediate="true" oncomplete="hojaDeServicio.show()"></p:commandButton>
-                            <p:commandButton value="Descargar Hoja S." icon="ui-icon-arrowthickstop-1-s" ajax="false" disabled="#{misTicketsPorEstado.desactivarDescargarHojaDeServicio}" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);">
+                        <f:facet name="footer">
+                            <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
+                            <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorEstado.ponerEnPendiente}" ></p:commandButton>
+                            <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorEstado.reAbrirCaso}"></p:commandButton>
+                            <p:commandButton value="Asignar Ticket" icon="ui-icon-person" update=":form:asignarT" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarAsignarTicket}" immediate="true" oncomplete="asignarDialog.show()"></p:commandButton>
+                            <p:commandButton value="Primer Contacto" icon="ui-icon-mail-closed" update=":form:tabla" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarPrimerContacto}" immediate="true" oncomplete="primerContactoDialog.show()"></p:commandButton>
+                            <p:commandButton value="Subir Hoja S." icon="ui-icon-document" update="@form" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarHojaDeServicio}" immediate="true" oncomplete="hojaDeServicio.show()"></p:commandButton>
+                            <p:commandButton value="Descargar Hoja S." icon="ui-icon-arrowthickstop-1-s" ajax="false" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorEstado.desactivarDescargarHojaDeServicio}" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);">
                                 <p:fileDownload value="#{misTicketsPorEstado.archivoPorDescargar}"></p:fileDownload>
                             </p:commandButton>
                         </f:facet>

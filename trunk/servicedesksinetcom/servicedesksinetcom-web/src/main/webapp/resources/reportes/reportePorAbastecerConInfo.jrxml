@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PorAbastecer" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="66284476-54d3-4246-b83a-a45ceae7e2c6">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PorAbastecer" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="66284476-54d3-4246-b83a-a45ceae7e2c6">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="53"/>
 	<property name="ireport.y" value="0"/>
@@ -11,7 +11,9 @@
 		<defaultValueExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT
+		<![CDATA[SELECT * FROM
+(
+(SELECT
      COUNT(`ItemProducto`.`numeroDeParte`) AS ItemProducto_cantidad,
      ItemProducto.`descripcion` AS ItemProducto_descripcion,
      ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
@@ -22,15 +24,42 @@ FROM
 WHERE
      `ItemProducto`.`numeroDeParte` IS NOT NULL
  AND `ItemProducto`.`ComponenteElectronicoAtomico_id` IS NOT NULL
+ AND `ItemProducto`.`Bodega_id` IS NOT NULL
+ AND `ItemProducto`.`numeroDeParte` IN (SELECT DISTINCT `ItemProducto`.`numeroDeParte` FROM `ItemProducto` WHERE `ItemProducto`.`Contrato_numero` IS NOT NULL AND `ItemProducto`.`numeroDeParte` IS NOT NULL)
 GROUP BY
      ItemProducto_numeroDeParte
 HAVING
-     COUNT(`ItemProducto`.`numeroDeParte`) < 5]]>
+     COUNT(`ItemProducto`.`numeroDeParte`) < 5
+)
+
+UNION
+
+(SELECT
+     COUNT(`ItemProducto`.`numeroDeParte`) AS ItemProducto_cantidad,
+     ItemProducto.`descripcion` AS ItemProducto_descripcion,
+     ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
+     ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
+     ComponenteElectronicoAtomico.`nombre` AS ComponenteElectronicoAtomico_nombre
+FROM
+     `ItemProducto` ItemProducto INNER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
+WHERE
+     `ItemProducto`.`numeroDeParte` IS NOT NULL
+ AND `ItemProducto`.`ComponenteElectronicoAtomico_id` IS NOT NULL
+ AND `ItemProducto`.`Bodega_id` IS NOT NULL
+ AND `ItemProducto`.`numeroDeParte` NOT IN (SELECT DISTINCT `ItemProducto`.`numeroDeParte` FROM `ItemProducto` WHERE `ItemProducto`.`Contrato_numero` IS NOT NULL AND `ItemProducto`.`numeroDeParte` IS NOT NULL)
+GROUP BY
+     ItemProducto_numeroDeParte
+HAVING
+     COUNT(`ItemProducto`.`numeroDeParte`) < 5 
+)
+) RESULT]]>
 	</queryString>
 	<field name="ItemProducto_cantidad" class="java.lang.Long"/>
 	<field name="ItemProducto_descripcion" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
-	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="ItemProducto_numeroSerial" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="ComponenteElectronicoAtomico_nombre" class="java.lang.String"/>
 	<background>
 		<band height="575" splitType="Stretch"/>
@@ -88,12 +117,6 @@ HAVING
 			<frame>
 				<reportElement x="46" y="1" width="756" height="15" uuid="84dec135-3eb7-4311-97e3-a4dae661b84c"/>
 			</frame>
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="705" height="1" uuid="158ff82a-351f-4a0e-a6e8-72ea44da8db3"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
 			<subreport>
 				<reportElement x="96" y="58" width="363" height="56" uuid="7c9c4f06-1834-4be4-ab8d-c45e5ff4af71"/>
 				<subreportParameter name="itemProducto_id">

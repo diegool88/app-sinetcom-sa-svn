@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="e6e17378-3525-449e-84f8-49c304123f55">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RegistroDeMovimiento" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="e6e17378-3525-449e-84f8-49c304123f55">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="112"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
@@ -65,7 +65,7 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<detail>
-		<band height="487">
+		<band height="607">
 			<staticText>
 				<reportElement x="0" y="7" width="100" height="20" uuid="30ad3899-9347-4919-810a-4c0beddc3331"/>
 				<text><![CDATA[Fecha de Emisión: ]]></text>
@@ -119,42 +119,50 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 				<text><![CDATA[Detalle de Partes Salientes:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="391" width="100" height="20" uuid="e201d27b-3379-43dc-81e8-ea965afb91a0"/>
+				<reportElement x="31" y="502" width="100" height="20" uuid="e201d27b-3379-43dc-81e8-ea965afb91a0"/>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="131" y="392" width="125" height="20" uuid="09468a6f-e5c6-4e9a-bd5f-5b78fcbc859c"/>
+				<reportElement x="200" y="502" width="125" height="20" uuid="09468a6f-e5c6-4e9a-bd5f-5b78fcbc859c"/>
 				<text><![CDATA[Nombre y Firma Técnico]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="392" width="159" height="20" uuid="4ca58746-b314-4f22-ac3e-99d22c23befa"/>
+				<reportElement x="375" y="502" width="159" height="20" uuid="4ca58746-b314-4f22-ac3e-99d22c23befa"/>
 				<text><![CDATA[Nombre Y Firma Autorizada]]></text>
 			</staticText>
 			<line>
-				<reportElement x="31" y="444" width="100" height="1" uuid="a18b3933-0b30-4708-989d-2979f6a11673"/>
+				<reportElement x="31" y="554" width="100" height="1" uuid="a18b3933-0b30-4708-989d-2979f6a11673"/>
 			</line>
 			<line>
-				<reportElement x="216" y="443" width="100" height="1" uuid="e6c35ebf-8755-46d8-8420-dbdafb05e992"/>
+				<reportElement x="216" y="553" width="100" height="1" uuid="e6c35ebf-8755-46d8-8420-dbdafb05e992"/>
 			</line>
 			<line>
-				<reportElement x="398" y="442" width="100" height="1" uuid="59ccffaa-ef0c-4654-af8d-054d5bf2ba93"/>
+				<reportElement x="398" y="552" width="100" height="1" uuid="59ccffaa-ef0c-4654-af8d-054d5bf2ba93"/>
 			</line>
 			<staticText>
-				<reportElement x="31" y="450" width="100" height="20" uuid="68a7d686-93bd-4dd7-ad4d-ce48c53ad585"/>
+				<reportElement x="31" y="560" width="100" height="20" uuid="68a7d686-93bd-4dd7-ad4d-ce48c53ad585"/>
 				<text><![CDATA[Elaborado Por]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="216" y="450" width="100" height="20" uuid="7ccdf434-da00-41a0-ba51-3a7104c50f53"/>
+				<reportElement x="216" y="560" width="100" height="20" uuid="7ccdf434-da00-41a0-ba51-3a7104c50f53"/>
 				<text><![CDATA[Técnico Sinetcom]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="398" y="450" width="100" height="20" uuid="2eae9b3e-6dc2-44ed-80ea-42df8c234133"/>
+				<reportElement x="398" y="560" width="100" height="20" uuid="2eae9b3e-6dc2-44ed-80ea-42df8c234133"/>
 				<text><![CDATA[Firma Autorizada]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="315" width="150" height="20" uuid="d9de2bfb-7a04-469e-80ad-aebeb99aa23a"/>
 				<text><![CDATA[Detalle de Partes Entrantes:]]></text>
 			</staticText>
+			<subreport>
+				<reportElement x="0" y="335" width="532" height="73" uuid="b367e230-d6ec-44a9-a283-ab2c291cb0f2"/>
+				<subreportParameter name="registro_id">
+					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "registroDeMovimiento_subreport2.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>

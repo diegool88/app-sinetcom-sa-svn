@@ -4,7 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
                 template="template/plantilla.xhtml">
-    <ui:define name="title"><h:outputText value="Sinetcom - Fabricantes Y Categorias"></h:outputText></ui:define>
+    <ui:define name="title"><h:outputText value="Sinetcom - Registro de Movimiento de Inv."></h:outputText></ui:define>
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
@@ -28,17 +28,18 @@
                         <p:selectOneMenu id="tipoDeMovimientoid" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid}" converter="#{tipoDeMovimientoConverter}" required="true" requiredMessage="* Requerido">
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                             <f:selectItems value="#{crearRegistroDeMovInventarioBean.tipoDeMovimientos}" var="tipo" itemLabel="#{tipo.nombre}" itemValue="#{tipo.id.toString()}"/>
+                            <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarClienteYContrato()}" update="clienteEmpresaruc, contratonumero"></p:ajax>
                         </p:selectOneMenu>
                         <p:message for="tipoDeMovimientoid"></p:message>
                         <p:outputLabel value="Contrato: " for="contratonumero" />
-                        <p:selectOneMenu id="contratonumero" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.contratonumero}" converter="#{contratoConverter}" >
+                        <p:selectOneMenu id="contratonumero" required="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 3 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 4}" disabled="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 1 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 2}" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.contratonumero}" converter="#{contratoConverter}" >
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                             <f:selectItems value="#{crearRegistroDeMovInventarioBean.contratos}" var="contrato" itemLabel="#{contrato.clienteEmpresaruc.nombreComercial} - #{contrato.numero}" itemValue="#{contrato.numero.toString()}"/>
                             <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarUbicacionPorContrato()}" update="clienteEmpresaruc" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>
                         <p:message for="contratonumero" ></p:message>
                         <p:outputLabel value="Empresa: " for="clienteEmpresaruc" />
-                        <p:selectOneMenu id="clienteEmpresaruc" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" >
+                        <p:selectOneMenu id="clienteEmpresaruc" required="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 1 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 2}" disabled="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 3 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 4}" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" >
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                             <f:selectItems value="#{crearRegistroDeMovInventarioBean.clienteEmpresas}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
                             <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarUbicacionPorCliente()}" update="contratonumero" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>

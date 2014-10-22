@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cambiosRealizadosPorCliente_subreport1" pageWidth="555" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6bf55d34-f930-4abb-b9b3-fe3ebef822ab">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="registro_id" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+     HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale` AS HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_sale,
+     ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
+     ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
+     ItemProducto.`descripcion` AS ItemProducto_descripcion,
+     HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario
+FROM
+     `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale` = ItemProducto.`numeroSerial`
+WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
+	</queryString>
+	<field name="HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_sale" class="java.lang.String"/>
+	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
+	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
+	<field name="ItemProducto_descripcion" class="java.lang.String"/>
+	<field name="HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="30" width="140" height="20" uuid="b38d9c03-d383-4ce6-8552-d91989dd1f5c"/>
+				<text><![CDATA[S/N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="30" width="125" height="20" uuid="193ac99e-16ef-4d94-ad66-16a126bc2fc6"/>
+				<text><![CDATA[P/N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="30" width="100" height="20" uuid="3c12277b-673e-427d-8fb3-0eff04b2074b"/>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="10" width="118" height="20" uuid="377a3945-10d8-4f05-a9ae-53465fe2a4ed"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partes que salen:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="140" height="20" uuid="6e524791-ca3e-4cab-a2a4-035bc44def54"/>
+				<textFieldExpression><![CDATA[$F{HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_sale}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="125" height="20" uuid="d8823365-fc5a-43d0-bf73-af9fa5d1194b"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_numeroDeParte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="275" height="20" uuid="ef9e43ec-0bc8-41b8-a8f5-f23b3e3c3a5a"/>
+				<textFieldExpression><![CDATA[$F{ItemProducto_descripcion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

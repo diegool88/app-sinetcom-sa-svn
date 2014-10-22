@@ -139,5 +139,4 @@ public class BotonesTickets {
         this.desactivarDescargarHojaDeServicio = desactivarDescargarHojaDeServicio;
     }
     
-    
 }

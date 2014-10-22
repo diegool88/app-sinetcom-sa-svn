@@ -101,6 +101,72 @@ public class ReportesBean implements Serializable {
         FacesContext.getCurrentInstance().responseComplete();
     }
     
+    public void generarReporteDeCambiosRealizadosPorCliente(ActionEvent event) throws JRException, IOException {
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "cambiosRealizadosPorCliente.jasper"), new HashMap(), this.connection);
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        String tipo = (String) event.getComponent().getAttributes().get("tipo");
+        String archivo = (String) event.getComponent().getAttributes().get("archivo");
+        //Se valida la cabecera
+        if (archivo.equals("pdf")) {
+            if (tipo != null && !tipo.isEmpty() && tipo.equals("d")) {
+                httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReporteCambiosRealizadosPorCLiente" + formatoFecha.format(Calendar.getInstance().getTime()) + ".pdf");
+            }
+        } else if (archivo.equals("word")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReporteCambiosRealizadosPorCLiente" + formatoFecha.format(Calendar.getInstance().getTime()) + ".docx");
+        } else if (archivo.equals("excel")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReporteCambiosRealizadosPorCLiente" + formatoFecha.format(Calendar.getInstance().getTime()) + ".xlsx");
+        }
+        ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+        //Se define el Jasper Export
+        if (archivo.equals("pdf")) {
+            JasperExportManager.exportReportToPdfStream(this.jasperPrint, servletOutputStream);
+        } else if (archivo.equals("word")) {
+            JRDocxExporter docxExporter = new JRDocxExporter();
+            docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
+            docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            docxExporter.exportReport();
+        } else if (archivo.equals("excel")) {
+            JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+            xlsxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            xlsxExporter.exportReport();
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+    
+    public void generarReporteDePartesPorAbastecer(ActionEvent event) throws JRException, IOException {
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "reportePorAbastecerConInfo.jasper"), new HashMap(), this.connection);
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        String tipo = (String) event.getComponent().getAttributes().get("tipo");
+        String archivo = (String) event.getComponent().getAttributes().get("archivo");
+        //Se valida la cabecera
+        if (archivo.equals("pdf")) {
+            if (tipo != null && !tipo.isEmpty() && tipo.equals("d")) {
+                httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReportePartesPorAbastecer" + formatoFecha.format(Calendar.getInstance().getTime()) + ".pdf");
+            }
+        } else if (archivo.equals("word")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReportePartesPorAbastecer" + formatoFecha.format(Calendar.getInstance().getTime()) + ".docx");
+        } else if (archivo.equals("excel")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReportePartesPorAbastecer" + formatoFecha.format(Calendar.getInstance().getTime()) + ".xlsx");
+        }
+        ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+        //Se define el Jasper Export
+        if (archivo.equals("pdf")) {
+            JasperExportManager.exportReportToPdfStream(this.jasperPrint, servletOutputStream);
+        } else if (archivo.equals("word")) {
+            JRDocxExporter docxExporter = new JRDocxExporter();
+            docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
+            docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            docxExporter.exportReport();
+        } else if (archivo.equals("excel")) {
+            JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+            xlsxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            xlsxExporter.exportReport();
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+    
     public void generarRegistroDeMovimientoDeInventario(int idRegistro) throws IOException, JRException{
         Map parametros = new HashMap();
         parametros.put("registroMov_id", idRegistro);
@@ -108,6 +174,39 @@ public class ReportesBean implements Serializable {
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
         JasperExportManager.exportReportToPdfStream(this.jasperPrint, servletOutputStream);
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+    
+    public void generarReporteDeAtencionesMesActual(ActionEvent event) throws JRException, IOException{
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "atencionesMesActual.jasper"), new HashMap(), this.connection);
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        String tipo = (String) event.getComponent().getAttributes().get("tipo");
+        String archivo = (String) event.getComponent().getAttributes().get("archivo");
+        //Se valida la cabecera
+        if (archivo.equals("pdf")) {
+            if (tipo != null && !tipo.isEmpty() && tipo.equals("d")) {
+                httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReporteAtencionesMesActual" + formatoFecha.format(Calendar.getInstance().getTime()) + ".pdf");
+            }
+        } else if (archivo.equals("word")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReporteAtencionesMesActual" + formatoFecha.format(Calendar.getInstance().getTime()) + ".docx");
+        } else if (archivo.equals("excel")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReporteAtencionesMesActual" + formatoFecha.format(Calendar.getInstance().getTime()) + ".xlsx");
+        }
+        ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+        //Se define el Jasper Export
+        if (archivo.equals("pdf")) {
+            JasperExportManager.exportReportToPdfStream(this.jasperPrint, servletOutputStream);
+        } else if (archivo.equals("word")) {
+            JRDocxExporter docxExporter = new JRDocxExporter();
+            docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
+            docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            docxExporter.exportReport();
+        } else if (archivo.equals("excel")) {
+            JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+            xlsxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            xlsxExporter.exportReport();
+        }
         FacesContext.getCurrentInstance().responseComplete();
     }
 

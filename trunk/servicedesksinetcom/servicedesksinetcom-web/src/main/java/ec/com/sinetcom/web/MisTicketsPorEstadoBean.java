@@ -85,7 +85,7 @@ public class MisTicketsPorEstadoBean extends BotonesTickets implements Serializa
     //Archivo para descargar
     private StreamedContent archivoPorDescargar;
     //Link de descarga
-    private UICommand link;
+    private UICommand link; 
 
     @PostConstruct
     public void doInit() {
