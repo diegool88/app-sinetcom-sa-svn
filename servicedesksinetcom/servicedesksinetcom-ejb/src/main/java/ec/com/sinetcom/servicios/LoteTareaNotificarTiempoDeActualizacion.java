@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.configuracion.TareaTicketInfo;
-import ec.com.sinetcom.configuracion.UtilidadDeEmail;
+import static ec.com.sinetcom.servicios.LoteTareaNotificarSLA.logger;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.ejb.Asynchronous;
@@ -15,13 +14,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.Timer;
 
-
 /**
  *
  * @author diegoflores
  */
 @Stateless
-public class LoteTareaNotificarSLA implements InterfazLoteDeTareas {
+public class LoteTareaNotificarTiempoDeActualizacion implements InterfazLoteDeTareas{
 
     static Logger logger = Logger.getLogger("LoteTareaNotificarSLA");
     
@@ -31,12 +29,12 @@ public class LoteTareaNotificarSLA implements InterfazLoteDeTareas {
     @Asynchronous
     @Override
     public void ejecutarTarea(Timer timer) {
-        logger.info("Start of LoteTareaNotificarSLA at " + new Date() + "...");
+        logger.info("Start of LoteTareaNotificarTiempoDeActualizacion at " + new Date() + "...");
         TareaTicketInfo jobInfo = (TareaTicketInfo) timer.getInfo();
         try
         {
-            System.out.println("Disparador del SLA del ticket# " + jobInfo.getTicket().getTicketNumber());
-            this.ticketServicio.enviarNotificacionDePrimerContacto(jobInfo.getTicket());
+            System.out.println("Disparador de tiempo de actualización del ticket# " + jobInfo.getTicket().getTicketNumber());
+            this.ticketServicio.enviarNotificacionDeActualizacionDeTicket(jobInfo.getTicket());
             logger.info("Running job: " + jobInfo);
             Thread.sleep(30000); //Sleep for 30 seconds
         }
@@ -46,8 +44,4 @@ public class LoteTareaNotificarSLA implements InterfazLoteDeTareas {
         logger.info("End of LoteTareaNotificadorSLA at " + new Date());
     }
     
-    
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 }

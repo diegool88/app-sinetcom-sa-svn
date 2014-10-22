@@ -33,6 +33,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "HistorialDeMovimientoDeProducto.findAll", query = "SELECT h FROM HistorialDeMovimientoDeProducto h")})
 public class HistorialDeMovimientoDeProducto implements Serializable {
+    @JoinColumn(name = "ItemProducto_numeroSerial_entra", referencedColumnName = "numeroSerial")
+    @ManyToOne
+    private ItemProducto itemProductonumeroSerialentra;
+    @JoinColumn(name = "ItemProducto_numeroSerial_sale", referencedColumnName = "numeroSerial")
+    @ManyToOne(optional = false)
+    private ItemProducto itemProductonumeroSerialsale;
     @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")
     @ManyToOne(optional = false)
     private RegistroDeMovimientoDeInventario registroDeMovimientoDeInventariocodigo;
@@ -47,17 +53,9 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
     @Column(name = "fechaEvento")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEvento;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "evento")
-    private String evento;
     @JoinColumn(name = "Usuario_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Usuario usuarioid;
-    @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")
-    @ManyToOne(optional = false)
-    private ItemProducto itemProductonumeroSerial;
 
     public HistorialDeMovimientoDeProducto() {
     }
@@ -66,10 +64,9 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
         this.id = id;
     }
 
-    public HistorialDeMovimientoDeProducto(Integer id, Date fechaEvento, String evento) {
+    public HistorialDeMovimientoDeProducto(Integer id, Date fechaEvento) {
         this.id = id;
         this.fechaEvento = fechaEvento;
-        this.evento = evento;
     }
 
     public Integer getId() {
@@ -88,28 +85,12 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
         this.fechaEvento = fechaEvento;
     }
 
-    public String getEvento() {
-        return evento;
-    }
-
-    public void setEvento(String evento) {
-        this.evento = evento;
-    }
-
     public Usuario getUsuarioid() {
         return usuarioid;
     }
 
     public void setUsuarioid(Usuario usuarioid) {
         this.usuarioid = usuarioid;
-    }
-
-    public ItemProducto getItemProductonumeroSerial() {
-        return itemProductonumeroSerial;
-    }
-
-    public void setItemProductonumeroSerial(ItemProducto itemProductonumeroSerial) {
-        this.itemProductonumeroSerial = itemProductonumeroSerial;
     }
 
     @Override
@@ -143,6 +124,22 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
 
     public void setRegistroDeMovimientoDeInventariocodigo(RegistroDeMovimientoDeInventario registroDeMovimientoDeInventariocodigo) {
         this.registroDeMovimientoDeInventariocodigo = registroDeMovimientoDeInventariocodigo;
+    }
+
+    public ItemProducto getItemProductonumeroSerialentra() {
+        return itemProductonumeroSerialentra;
+    }
+
+    public void setItemProductonumeroSerialentra(ItemProducto itemProductonumeroSerialentra) {
+        this.itemProductonumeroSerialentra = itemProductonumeroSerialentra;
+    }
+
+    public ItemProducto getItemProductonumeroSerialsale() {
+        return itemProductonumeroSerialsale;
+    }
+
+    public void setItemProductonumeroSerialsale(ItemProducto itemProductonumeroSerialsale) {
+        this.itemProductonumeroSerialsale = itemProductonumeroSerialsale;
     }
     
 }

@@ -27,6 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Permisos.findAll", query = "SELECT p FROM Permisos p")})
 public class Permisos implements Serializable {
+    @Column(name = "consultaTicketsPropietarios")
+    private Boolean consultaTicketsPropietarios;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -303,6 +305,14 @@ public class Permisos implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Permisos[ grupoid=" + grupoid + " ]";
+    }
+
+    public Boolean getConsultaTicketsPropietarios() {
+        return consultaTicketsPropietarios;
+    }
+
+    public void setConsultaTicketsPropietarios(Boolean consultaTicketsPropietarios) {
+        this.consultaTicketsPropietarios = consultaTicketsPropietarios;
     }
     
 }

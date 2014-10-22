@@ -98,8 +98,10 @@ public class ItemProducto implements Serializable, Cloneable {
     @JoinColumn(name = "Bodega_id", referencedColumnName = "id")
     @ManyToOne
     private Bodega bodegaid;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerial")
-    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerialentra")
+    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoEntraList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerialsale")
+    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoSaleList;
 
     public ItemProducto() {
     }
@@ -246,13 +248,24 @@ public class ItemProducto implements Serializable, Cloneable {
     }
 
     @XmlTransient
-    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoList() {
-        return historialDeMovimientoDeProductoList;
+    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoEntraList() {
+        return historialDeMovimientoDeProductoEntraList;
     }
 
-    public void setHistorialDeMovimientoDeProductoList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList) {
-        this.historialDeMovimientoDeProductoList = historialDeMovimientoDeProductoList;
+    public void setHistorialDeMovimientoDeProductoEntraList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoEntraList) {
+        this.historialDeMovimientoDeProductoEntraList = historialDeMovimientoDeProductoEntraList;
     }
+    
+    @XmlTransient
+    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoSaleList() {
+        return historialDeMovimientoDeProductoSaleList;
+    }
+
+    public void setHistorialDeMovimientoDeProductoSaleList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoSaleList) {
+        this.historialDeMovimientoDeProductoSaleList = historialDeMovimientoDeProductoSaleList;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -300,6 +313,22 @@ public class ItemProducto implements Serializable, Cloneable {
 
     public void setContratoList(List<Contrato> contratoList) {
         this.contratoList = contratoList;
+    }
+    
+    public String getDescripcionDelComponente(){
+        StringBuilder resultado = new StringBuilder();
+        if(this.componenteElectronicoAtomicoid != null){
+            resultado.append(this.componenteElectronicoAtomicoid.getNombre()).append(" de");
+            for(AtributoItemProducto atributo : this.atributoItemProductoList){
+                resultado.append(" ").append(atributo.getParametrosDeProducto().getNombre()).append(": ").append(atributo.getValor()).append(" ").append(atributo.getParametrosDeProducto().getUnidadMedidaid().getNombre());
+                if(this.atributoItemProductoList.indexOf(atributo) < this.atributoItemProductoList.size() -1){
+                    resultado.append(",");
+                }
+            }
+            return resultado.toString();
+        }else{
+            return "No disponible";
+        }
     }
     
 }

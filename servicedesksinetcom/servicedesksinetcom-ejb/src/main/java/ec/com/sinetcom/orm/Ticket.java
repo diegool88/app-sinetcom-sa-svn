@@ -38,14 +38,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ticket.findAll", query = "SELECT t FROM Ticket t")})
 public class Ticket implements Serializable {
-    @Column(name = "fechaDePrimerContacto")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaDePrimerContacto;
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
-    private List<VisitasMantenimiento> visitasMantenimientoList;
+    private List<VisitasTecnicas> visitasTecnicasList;
+    @Column(name = "fechaDePrimerContacto")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaDePrimerContacto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
     private List<ActividadEnSitio> actividadEnSitioList;
     @Basic(optional = false)
@@ -330,16 +330,6 @@ public class Ticket implements Serializable {
         this.titulo = titulo;
     }
 
-
-    @XmlTransient
-    public List<VisitasMantenimiento> getVisitasMantenimientoList() {
-        return visitasMantenimientoList;
-    }
-
-    public void setVisitasMantenimientoList(List<VisitasMantenimiento> visitasMantenimientoList) {
-        this.visitasMantenimientoList = visitasMantenimientoList;
-    }
-
     @XmlTransient
     public List<ActividadEnSitio> getActividadEnSitioList() {
         return actividadEnSitioList;
@@ -363,6 +353,15 @@ public class Ticket implements Serializable {
 
     public void setHojaDeServicio(byte[] hojaDeServicio) {
         this.hojaDeServicio = hojaDeServicio;
+    }
+
+    @XmlTransient
+    public List<VisitasTecnicas> getVisitasTecnicasList() {
+        return visitasTecnicasList;
+    }
+
+    public void setVisitasTecnicasList(List<VisitasTecnicas> visitasTecnicasList) {
+        this.visitasTecnicasList = visitasTecnicasList;
     }
     
 }

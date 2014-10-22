@@ -142,6 +142,15 @@ public class ProductoServicio {
     }
     
     /**
+     * Forza la carga del historial de un registro de movimiento de inventario
+     * @param registro
+     * @return 
+     */
+    public List<HistorialDeMovimientoDeProducto> forzarCargaDeHistorialDeMovimientoPorRegistro(RegistroDeMovimientoDeInventario registro){
+        return this.historialDeMovimientoDeProductoFacade.forzarCargaDeHistorialDeMovimientoPorRegistro(registro);
+    }
+    
+    /**
      * Elimina un componente electrónico
      * @param electronicoAtomico
      * @return 
@@ -203,6 +212,22 @@ public class ProductoServicio {
      */
     public List<LineaDeProducto> obtenerTodasLasLineasDeProducto(){
         return this.lineaDeProductoFacade.findAll();
+    }
+    
+    /**
+     * Obtiene todos los registros de movimiento de inventario por actualizar
+     * @return 
+     */
+    public List<RegistroDeMovimientoDeInventario> obtenerTodosLosMovimientoDeInventariosPorActualizar(){
+        return this.movimientoDeInventarioFacade.obtenerTodosLosRegistrosDeMovimientoDeInventariosPorActualizar();
+    }
+    
+    /**
+     * Obtiene todos los registros de movimiento de inventario que están completos
+     * @return 
+     */
+    public List<RegistroDeMovimientoDeInventario> obtenerTodosLosMovimientoDeInventarioFinalizados(){
+        return this.movimientoDeInventarioFacade.obtenerTodosLosRegistrosDeMovimientoDeInventariosFinalizados();
     }
     
     /**
@@ -274,6 +299,23 @@ public class ProductoServicio {
      */
     public List<ClienteEmpresa> obtenerTodosLosClientes(){
         return this.clienteEmpresaFacade.findAll();
+    }
+    
+    /**
+     * Obtiene todo el inventario dañado
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodoElInventarioDanado(){
+        return this.itemProductoFacade.obtenerTodoElInventarioDanado();
+    }
+    
+    /**
+     * Obtiene todas las partes y piezas intaladas en el cliente por contrato
+     * @param contrato
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodasLasPartesYPiezasDeContrato(Contrato contrato){
+        return this.itemProductoFacade.obtenerTodoElInventarioDeUnContrato(contrato);
     }
     
     /**
@@ -372,6 +414,14 @@ public class ProductoServicio {
      */
     public List<ItemProducto> obtenerTodoElInventarioDisponibleEnBodegaLocal(){
         return this.itemProductoFacade.obtenerTodoElInventarioDisponibleEnBodegaLocal();
+    }
+    
+    /**
+     * Obtiene todo el inventario disponible en bodega local incluyendo las partes dañadas
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodoElInventarioDisponibleEnBogegaLocalConPartesDanadas(){
+        return this.itemProductoFacade.obtenerTodoElInventarioDisponibleEnBogegaLocalConPartesDanadas();
     }
     
     /**
@@ -547,15 +597,46 @@ public class ProductoServicio {
      * @param evento
      * @return 
      */
-    public boolean crearHistorialDeMovimientoDeInventario(ItemProducto itemProducto, RegistroDeMovimientoDeInventario registroDeMovimientoDeInventario, Usuario usuario, String evento){
+    public boolean crearHistorialDeMovimientoDeInventario(ItemProducto itemProducto, RegistroDeMovimientoDeInventario registroDeMovimientoDeInventario, Usuario usuario){
         try{
             HistorialDeMovimientoDeProducto historialDeMovimientoDeProducto = new HistorialDeMovimientoDeProducto();
-            historialDeMovimientoDeProducto.setEvento(evento);
             historialDeMovimientoDeProducto.setFechaEvento(Calendar.getInstance().getTime());
-            historialDeMovimientoDeProducto.setItemProductonumeroSerial(itemProducto);
+            historialDeMovimientoDeProducto.setItemProductonumeroSerialsale(itemProducto);
             historialDeMovimientoDeProducto.setUsuarioid(usuario);
             historialDeMovimientoDeProducto.setRegistroDeMovimientoDeInventariocodigo(registroDeMovimientoDeInventario);
             this.historialDeMovimientoDeProductoFacade.create(historialDeMovimientoDeProducto);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Actualiza un registro de movimiento de inventario
+     * @param registroDeMovimientoDeInventario
+     * @return 
+     */
+    public boolean actualizarRegistroDeMovimientoDeInventario(RegistroDeMovimientoDeInventario registroDeMovimientoDeInventario){
+        try{
+            this.movimientoDeInventarioFacade.edit(registroDeMovimientoDeInventario);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Se coloca en estado dañado el item
+     * @param itemProducto
+     * @return 
+     */
+    public boolean colocarItemProductoComoDanado(ItemProducto itemProducto){
+        try{
+            CondicionFisica danado = this.condicionFisicaFacade.find(2);
+            itemProducto.setCondicionFisicaid(danado);
+            this.itemProductoFacade.edit(itemProducto);
         }catch(Exception e){
             e.printStackTrace();
             return false;
