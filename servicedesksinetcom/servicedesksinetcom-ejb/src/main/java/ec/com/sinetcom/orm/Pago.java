@@ -5,6 +5,7 @@
 package ec.com.sinetcom.orm;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -33,6 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Pago.findAll", query = "SELECT p FROM Pago p")})
 public class Pago implements Serializable {
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "monto")
+    private BigDecimal monto;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +49,6 @@ public class Pago implements Serializable {
     @NotNull
     @Column(name = "orden")
     private int orden;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "monto")
-    private String monto;
     @Basic(optional = false)
     @NotNull
     @Column(name = "plazo")
@@ -69,7 +70,7 @@ public class Pago implements Serializable {
         this.id = id;
     }
 
-    public Pago(Integer id, int orden, String monto, Date plazo) {
+    public Pago(Integer id, int orden, BigDecimal monto, Date plazo) {
         this.id = id;
         this.orden = orden;
         this.monto = monto;
@@ -92,13 +93,6 @@ public class Pago implements Serializable {
         this.orden = orden;
     }
 
-    public String getMonto() {
-        return monto;
-    }
-
-    public void setMonto(String monto) {
-        this.monto = monto;
-    }
 
     public Date getPlazo() {
         return plazo;
@@ -155,6 +149,14 @@ public class Pago implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Pago[ id=" + id + " ]";
+    }
+
+    public BigDecimal getMonto() {
+        return monto;
+    }
+
+    public void setMonto(BigDecimal monto) {
+        this.monto = monto;
     }
     
 }
