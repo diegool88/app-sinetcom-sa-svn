@@ -12,103 +12,97 @@
             <p:submenu label="Productos" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                 <p:column>
                     <p:submenu label="Gestión de Productos">
-                        <p:menuitem value="Crear Componente E. Atómico" action="crearComponenteAtomico?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Crear Línea de Producto" action="crearLineaDeProducto?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Crear Modelos de Líneas de Producto" action="crearModeloDeProducto?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Gestionar Fabricantes y Categorías" action="fabricantesYCategorias?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Crear Componente E. Atómico" url="/inventarios/crearComponenteAtomico.xhtml"></p:menuitem>
+                        <p:menuitem value="Crear Línea de Producto" url="/inventarios/crearLineaDeProducto.xhtml"></p:menuitem>
+                        <p:menuitem value="Crear Modelos de Líneas de Producto" url="/inventarios/crearModeloDeProducto.xhtml"></p:menuitem>
+                        <p:menuitem value="Gestionar Fabricantes y Categorías" url="/inventarios/fabricantesYCategorias.xhtml"></p:menuitem>
                     </p:submenu>
-                    <p:submenu label="Reportes Inventarios">
-                        <p:menuitem value="Ver Reportes" action="reportesInventarios?faces-redirect=true"></p:menuitem>
+                    <p:submenu label="Reportes De Inventarios">
+                        <p:menuitem value="Ver Reportes" url="/inventarios/reportesInventarios.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
                     <p:submenu label="Gestión de Inventario">
-                        <p:menuitem value="Ingresar Inventario de Componente E. Atómico" action="ingresarComponenteAtomicoProducto?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Ingresar Inventario no Atómico" action="ingresarProductoPiezaNA?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Nuevo Registro de Movimiento de I." action="crearRegistroDeMovInventario?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Actualizar Registro de Mov. de inventario" action="actualizarRegistroDeMovimiento?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Buscar Inventario" action="buscarStockDeInventario?faces-redirect=true"></p:menuitem>
-                    </p:submenu>
-                    <p:submenu label="Gestionar Modelos/Revisiones">
-                        <p:menuitem value="Crear Modelo de Producto"></p:menuitem>
-                        <p:menuitem value="Crear Versión de Software"></p:menuitem>
+                        <p:menuitem value="Ingresar Inventario de Componente E. Atómico" url="/inventarios/ingresarComponenteAtomicoProducto.xhtml"></p:menuitem>
+                        <p:menuitem value="Ingresar Inventario no Atómico" url="/inventarios/ingresarProductoPiezaNA.xhtml"></p:menuitem>
+                        <p:menuitem value="Nuevo Registro de Movimiento de I." url="/inventarios/crearRegistroDeMovInventario.xhtml"></p:menuitem>
+                        <p:menuitem value="Actualizar Registro de Mov. de inventario" url="/inventarios/actualizarRegistroDeMovimiento.xhtml"></p:menuitem>
+                        <p:menuitem value="Buscar Inventario" url="/inventarios/buscarStockDeInventario.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
-            
+
             <p:submenu label="Tickets de Soporte" rendered="#{login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true or login.usuarioActual.grupoid.permisos.consultaTicketsPropietarios}">
                 <p:column>
                     <p:submenu label="Todos los Tickets" rendered="#{(login.usuarioActual.grupoid.permisos.administra eq true) or login.usuarioActual.grupoid.permisos.consultaTodosLosTickets eq true}">
-                        <p:menuitem value="Tickets por estados" ajax="false" action="ticketsPorEstados?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Tickets por colas" ajax="false" action="ticketsPorColas?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Tickets por prioridad" ajax="false" action="ticketsPorPrioridades?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Tickets por estados" url="/soporte/ticketsPorEstados.xhtml"></p:menuitem>
+                        <p:menuitem value="Tickets por colas" url="/soporte/ticketsPorColas.xhtml"></p:menuitem>
+                        <p:menuitem value="Tickets por prioridad" url="/soporte/ticketsPorPrioridades.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
                     <p:submenu label="Mis tickets">
-                        <p:menuitem value="Tickets por estados" ajax="false" action="misTicketsPorEstado?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Tickets por colas" ajax="false" action="misTicketsPorColas?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Tickets por prioridad" ajax="false" action="misTicketsPorPrioridad?faces-redirect=true"></p:menuitem>
-                        <p:menuitem value="Crear Ticket de Soporte" ajax="false" action="crearTicket?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Tickets por estados" url="/soporte/misTicketsPorEstado.xhtml"></p:menuitem>
+                        <p:menuitem value="Tickets por colas" url="/soporte/misTicketsPorColas.xhtml"></p:menuitem>
+                        <p:menuitem value="Tickets por prioridad" url="/soporte/misTicketsPorPrioridad.xhtml"></p:menuitem>
+                        <p:menuitem value="Crear Ticket de Soporte" url="/soporte/crearTicket.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
                     <p:submenu label="Tareas Programadas" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
-                        <p:menuitem value="Ver Tareas" ajax="false" action="listaDeTareasProgramadas?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Ver Tareas" url="/soporte/listaDeTareasProgramadas.xhtml"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Bloqueo de Clientes" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
-                        <p:menuitem value="Bloqueo/Desbloqueo" ajax="false" action="bloquearUsuario?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Bloqueo/Desbloqueo" url="/soporte/bloquearUsuario.xhtml"></p:menuitem>
                     </p:submenu>
-                    <p:submenu label="Reportes" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.generaReportesDeInventarios eq true}">
-                        <p:menuitem value="Reportes" ajax="false" action="reportesTickets?faces-redirect=true"></p:menuitem>
+                    <p:submenu label="Reportes De Soporte" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.generaReportesDeInventarios eq true}">
+                        <p:menuitem value="Ver Reportes" url="/soporte/reportesTickets.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
-            
             <p:submenu label="Contratos">
-                <!--Menu item-->
-                
-                
-            </p:submenu>
-            
-            <p:submenu label="Perfiles de Usuario">
                 <p:column>
-                    <p:submenu label="Gestion de Usuarios" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
-                        <p:menuitem value="Crear Usuario"></p:menuitem>
-                        <p:menuitem value="Modificar Usuario"></p:menuitem>
-                        <p:menuitem value="Eliminar Usuario"></p:menuitem>
-                    </p:submenu>
-                    <p:submenu label="Gestion de Roles" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
-                        <p:menuitem value="Crear Rol"></p:menuitem>
-                        <p:menuitem value="Modificar Rol"></p:menuitem>
-                        <p:menuitem value="Eliminar Rol"></p:menuitem>
-                    </p:submenu>
-                    <p:submenu label="Mi Perfil de Usuario">
-                        <p:menuitem value="Editar mi perfil"></p:menuitem>
+                    <p:submenu label="Reportes De Contratos">
+                        <p:menuitem value="Ver Reportes" url="/contratos/reportesContratos.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
+
+            <!--            <p:submenu label="Perfiles de Usuario">
+                            <p:column>
+                                <p:submenu label="Gestion de Usuarios" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
+                                    <p:menuitem value="Crear Usuario"></p:menuitem>
+                                    <p:menuitem value="Modificar Usuario"></p:menuitem>
+                                    <p:menuitem value="Eliminar Usuario"></p:menuitem>
+                                </p:submenu>
+                                <p:submenu label="Gestion de Roles" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
+                                    <p:menuitem value="Crear Rol"></p:menuitem>
+                                    <p:menuitem value="Modificar Rol"></p:menuitem>
+                                    <p:menuitem value="Eliminar Rol"></p:menuitem>
+                                </p:submenu>
+                                <p:submenu label="Mi Perfil de Usuario">
+                                    <p:menuitem value="Editar mi perfil"></p:menuitem>
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>-->
             <p:submenu label="Administrar" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                 <p:column>
-                    <p:submenu label="Usuarios">
-<!--                        <p:menuitem value="Gestionar Usuarios" outcome="ListUsuario.xhtml"></p:menuitem>-->
-                    </p:submenu>
                     <p:submenu label="Grupos">
-                        <p:menuitem value="Grupos-Permisos" action="grupoPermisos?faces-redirect=true"></p:menuitem>
+                        <p:menuitem value="Grupos-Permisos" url="/grupoPermisos.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
-<!--            
-            <p:menuitem value="Home" url="index.xhtml"></p:menuitem>
-            <p:submenu label="Casos" icon="ui-icon-person">
-                <p:column>
-                    <p:submenu label="Opciones de Casos">
-                        <p:menuitem value="Todos los Casos" url="casos.xhtml"></p:menuitem>
-                        <p:menuitem value="Mis Casos" url="misCasos.xhtml"></p:menuitem>
-                        <p:menuitem value="Nuevo Caso" url="nuevoCaso.xhtml"></p:menuitem>
-                    </p:submenu>
-                </p:column>
-            </p:submenu>-->
+            <!--            
+                        <p:menuitem value="Home" url="index.xhtml"></p:menuitem>
+                        <p:submenu label="Casos" icon="ui-icon-person">
+                            <p:column>
+                                <p:submenu label="Opciones de Casos">
+                                    <p:menuitem value="Todos los Casos" url="casos.xhtml"></p:menuitem>
+                                    <p:menuitem value="Mis Casos" url="misCasos.xhtml"></p:menuitem>
+                                    <p:menuitem value="Nuevo Caso" url="nuevoCaso.xhtml"></p:menuitem>
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>-->
         </p:megaMenu>
     </h:form>
 </ui:composition>

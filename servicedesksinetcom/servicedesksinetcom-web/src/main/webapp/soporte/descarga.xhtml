@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:metadata>
+        <f:viewParam name="articuloId" value="#{descargaBean.idArticulo}"></f:viewParam>
+    </f:metadata>
+    <ui:define name="title">Sinetcom - Descarga</ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage library="images" name="ajax_loader.gif" />
+            </p:dialog>
+            <h:form>
+                <p:commandButton binding="#{descargaBean.boton}" value="Descargar Archivo" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+                    <p:fileDownload value="#{descargaBean.archivoPorDescargar}" />
+                    <f:param name="articuloId" value="#{descargaBean.idArticulo}"></f:param> 
+                </p:commandButton>
+            </h:form>
+            <script type="text/javascript">
+        
+                //window.onload(function(){
+                //    statusDialog.hide();
+                //});
+        
+                $(document).ready(function(){
+                    var boton = document.getElementById("#{descargaBean.boton.clientId}");
+                    boton.click();
+                });
+                
+                function start() {
+                    statusDialog.show();
+                }
+ 
+                function stop() {
+                    statusDialog.hide();
+                }
+            </script>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

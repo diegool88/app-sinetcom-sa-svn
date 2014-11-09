@@ -20,6 +20,10 @@
             <base-name>/MyBundle</base-name>
             <var>myBundle</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
     </application>
     
 </faces-config>

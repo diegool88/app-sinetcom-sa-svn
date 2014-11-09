@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="template/plantilla.xhtml">
+    <ui:define name="title">Sinetcom Error</ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:form>
+                <p:panel menuTitle="Error De Permisos">
+                    <h:outputText style="font-size: xx-large; line-height: 60%" value="Lo sentimos, usted no está autorizado para ver la página solicitada"></h:outputText>
+                </p:panel>
+            </h:form>
+        </f:view>
+    </ui:define>
+</ui:composition>

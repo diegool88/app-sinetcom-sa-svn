@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Tareas Programadas"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <h1>Lista de tareas programadas</h1>
+                    <p:dataTable id="tablaTareasP" var="tarea" selectionMode="single" value="#{listaTareasProgramadasBean.listaDeTareas}" rowKey="#{tarea.jobId}" selection="#{listaTareasProgramadasBean.tareaInfoSeleccionada}" scrollable="true" scrollWidth="100%" paginator="true" rows="10">
+                        <p:ajax event="rowSelect" immediate="true" listener="#{listaTareasProgramadasBean.tareaSelecionada}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:tablaTareasP, @this"></p:ajax>
+                        <f:facet name="header">
+                            Tareas Ejecutándose
+                        </f:facet>
+                        <p:column headerText="ID Tarea">
+                            #{tarea.jobId}
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            #{tarea.jobName}
+                        </p:column>
+                        <p:column headerText="Clase">
+                            #{tarea.jobClassName}
+                        </p:column>
+                        <p:column headerText="Inicio">
+                            #{tarea.startDate}
+                        </p:column>
+                        <p:column headerText="Fin">
+                            #{tarea.endDate}
+                        </p:column>
+                        <p:column headerText="Próxima Ejecución">
+                            #{tarea.nextTimeout}
+                        </p:column>
+                        <p:column headerText="Expresión">
+                            #{tarea.expression}
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Eliminar" disabled="#{listaTareasProgramadasBean.tareaInfoSeleccionada == null}" actionListener="#{listaTareasProgramadasBean.eliminarTarea}" update="@form"></p:commandButton>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
