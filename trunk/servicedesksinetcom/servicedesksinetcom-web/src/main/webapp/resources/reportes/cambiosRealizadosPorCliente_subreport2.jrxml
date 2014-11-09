@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="registro_id" class="java.lang.Integer"/>
-	<queryString language="SQL">
+	<queryString>
 		<![CDATA[SELECT
      ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
      ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
@@ -12,7 +12,8 @@
      HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario,
      HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` AS HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_entra
 FROM
-     `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` = ItemProducto.`numeroSerial`]]>
+     `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` = ItemProducto.`numeroSerial`
+WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
 	</queryString>
 	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
@@ -55,7 +56,7 @@ FROM
 				<reportElement x="140" y="0" width="125" height="20" uuid="ca8aad61-3fb2-476e-9671-5e08aee9ab14"/>
 				<textFieldExpression><![CDATA[$F{ItemProducto_numeroDeParte}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="265" y="0" width="268" height="20" uuid="807bcb76-d299-45ef-8a67-737f754b940e"/>
 				<textFieldExpression><![CDATA[$F{ItemProducto_descripcion}]]></textFieldExpression>
 			</textField>

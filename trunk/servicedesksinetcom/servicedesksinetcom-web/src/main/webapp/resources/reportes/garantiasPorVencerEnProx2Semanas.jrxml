@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GarantiasEconomicasPorVencer" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1ff79806-843f-4516-8870-d79af0509520">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     Contrato.`numero` AS Contrato_numero,
+     Contrato.`fechaDeSuscripcion` AS Contrato_fechaDeSuscripcion,
+     Contrato.`tiempoDeValidez` AS Contrato_tiempoDeValidez,
+     Contrato.`garantiaTecnica` AS Contrato_garantiaTecnica,
+     Contrato.`fechaInicioGarantiaTecnica` AS Contrato_fechaInicioGarantiaTecnica,
+     Contrato.`pagosAlDia` AS Contrato_pagosAlDia,
+     Contrato.`razonDemoraDelPago` AS Contrato_razonDemoraDelPago,
+     Contrato.`plazoDeEntrega` AS Contrato_plazoDeEntrega,
+     TipoContrato.`tipo` AS TipoContrato_tipo,
+     ClienteEmpresa.`ruc` AS ClienteEmpresa_ruc,
+     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
+     Usuario.`nombre` AS Usuario_nombre,
+     Usuario.`apellido` AS Usuario_apellido,
+     Contacto.`nombre` AS Contacto_nombre,
+     Contacto.`cargo` AS Contacto_cargo,
+     Contrato.`objeto` AS Contrato_objeto,
+     Contrato.`inicioPorAnticipo` AS Contrato_inicioPorAnticipo
+FROM
+     `Contrato` Contrato INNER JOIN `TipoContrato` TipoContrato ON Contrato.`TipoContrato_id` = TipoContrato.`id`
+     INNER JOIN `Contacto` Contacto ON Contrato.`administradorDeContrato` = Contacto.`id`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `Usuario` Usuario ON Contrato.`accountManagerAsignado` = Usuario.`id`
+WHERE (SELECT COUNT(*) FROM
+     `GarantiaEconomica` GarantiaEconomica WHERE GarantiaEconomica.`Contrato_numero` = Contrato.`numero` AND TIMESTAMPDIFF(DAY, NOW(),`GarantiaEconomica`.`fechaFin`) < 15) >= 1]]>
+	</queryString>
+	<field name="Contrato_numero" class="java.lang.String"/>
+	<field name="Contrato_fechaDeSuscripcion" class="java.sql.Timestamp"/>
+	<field name="Contrato_tiempoDeValidez" class="java.lang.Integer"/>
+	<field name="Contrato_garantiaTecnica" class="java.lang.Integer"/>
+	<field name="Contrato_fechaInicioGarantiaTecnica" class="java.sql.Timestamp"/>
+	<field name="Contrato_pagosAlDia" class="java.lang.Boolean"/>
+	<field name="Contrato_razonDemoraDelPago" class="java.lang.String"/>
+	<field name="Contrato_plazoDeEntrega" class="java.lang.Integer"/>
+	<field name="TipoContrato_tipo" class="java.lang.String"/>
+	<field name="ClienteEmpresa_ruc" class="java.lang.String"/>
+	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
+	<field name="Usuario_nombre" class="java.lang.String"/>
+	<field name="Usuario_apellido" class="java.lang.String"/>
+	<field name="Contacto_nombre" class="java.lang.String"/>
+	<field name="Contacto_cargo" class="java.lang.String"/>
+	<field name="Contrato_objeto" class="java.lang.String"/>
+	<field name="Contrato_inicioPorAnticipo" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="218" height="38" uuid="a060a833-9628-4261-8b37-663e00c3aeea"/>
+				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="48" width="554" height="31" uuid="a2c04bdf-4b7b-450c-8814-c8d92f10e895"/>
+				<textElement textAlignment="Right">
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte Garantías X Vencer 2 Prox. Sem.]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="274" splitType="Stretch">
+			<subreport>
+				<reportElement x="12" y="146" width="525" height="121" uuid="82b44eda-681e-4022-8c2b-84f4606abc3d"/>
+				<subreportParameter name="contrato_id">
+					<subreportParameterExpression><![CDATA[$F{Contrato_numero}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "garantiasPorVencerEnProx2Semanas_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="12" y="126" width="100" height="20" uuid="c5af6637-841b-4262-8e81-69db55078d0e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalles:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="12" width="64" height="20" uuid="32ab2822-c7cc-405b-bdfb-cd8cf06eaeb8"/>
+				<text><![CDATA[Contrato #:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="131" y="12" width="200" height="20" uuid="157d469a-aa95-4291-8a03-2a208d3b9a84"/>
+				<textFieldExpression><![CDATA[$F{Contrato_numero}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="32" width="100" height="20" uuid="f66eb9ef-9330-41a2-96bd-d4b263a09db8"/>
+				<text><![CDATA[Fecha Suscripción:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="131" y="32" width="200" height="20" uuid="b19c7888-a7dd-4569-86b1-dce1639cc08e"/>
+				<textFieldExpression><![CDATA[$F{Contrato_fechaDeSuscripcion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="52" width="50" height="20" uuid="b3e9f2a8-ef45-4bb4-b80a-d26a98bf2d19"/>
+				<text><![CDATA[Validez:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="131" y="52" width="222" height="20" uuid="7afefc7e-a56a-446f-bf09-0ffc25d2a738"/>
+				<textFieldExpression><![CDATA[$F{Contrato_tiempoDeValidez} + " año/s"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="72" width="96" height="20" uuid="81b6f3b6-2fdc-44f0-b71d-3c6ebc8a0703"/>
+				<text><![CDATA[Plazo de Entrega:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="131" y="72" width="200" height="20" uuid="4a85d624-5eb2-4e60-a8d7-d28ab7254726"/>
+				<textFieldExpression><![CDATA[$F{Contrato_plazoDeEntrega} + " días"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="92" width="64" height="20" uuid="2c75b371-2d4c-4c0f-ae9b-5b6d5f959fd0"/>
+				<text><![CDATA[Empresa:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="131" y="92" width="222" height="20" uuid="e17d6585-d0ce-444f-a8cc-669ad49b0dd5"/>
+				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="28" y="22" width="80" height="20" uuid="1f9c3c1e-910b-4095-aaa0-5e50261d4061"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="108" y="22" width="40" height="20" uuid="d485a099-7d60-4455-ad45-90088f645aae"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="231" y="22" width="100" height="20" uuid="5f10d0e9-0e9f-42ef-a3dc-f4ce7b3d5876"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="399" y="22" width="138" height="20" uuid="c217076f-b93f-4fb7-b099-1e6851bb3be6"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

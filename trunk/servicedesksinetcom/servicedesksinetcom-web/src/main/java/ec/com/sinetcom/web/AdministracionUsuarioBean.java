@@ -49,13 +49,13 @@ public class AdministracionUsuarioBean implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error de Autenticacion","Usuario/Contraseña inválidos!"));
             return (this.nombreUsuario = this.password = null);
         } else {
-            return "welcome?faces-redirect=true";
+            return "/welcome?faces-redirect=true";
         }
     }
     
     public String logout(){
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "login?faces-redirect=true";
+        return "/login?faces-redirect=true";
     }
     
     public boolean estaUsuarioAutenticado() {

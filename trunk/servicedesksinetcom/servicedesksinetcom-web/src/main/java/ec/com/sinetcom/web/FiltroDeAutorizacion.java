@@ -4,6 +4,7 @@
  */
 package ec.com.sinetcom.web;
 
+import ec.com.sinetcom.orm.Usuario;
 import java.io.IOException;
 import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;
@@ -38,10 +39,12 @@ public class FiltroDeAutorizacion implements Filter {
         AdministracionUsuarioBean auth = (AdministracionUsuarioBean) req.getSession().getAttribute("login");
         //URL de Login
         String loginURL = req.getContextPath() + "/login.xhtml";
-        
+        //Error de Permisos Login
+        String errorPermisos = req.getContextPath() + "/errorDePermisos.xhtml";
         //Validaciones de autorizacion y contenido
         boolean estaAutenticado = auth != null && auth.estaUsuarioAutenticado();
         boolean esPaginaDeLogin = req.getRequestURI().equals(loginURL);
+        boolean esPaginaDeError = req.getRequestURI().equals(errorPermisos);
         //boolean aceptarRecursosDeSolicitud = req.getRequestURI().startsWith(req.getContextPath() + "/faces" + ResourceHandler.RESOURCE_IDENTIFIER);
         boolean aceptarRecursosDeSolicitud = req.getRequestURI().startsWith(req.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER) || req.getRequestURI().startsWith(req.getContextPath() + PrimeResourceHandler.RESOURCE_IDENTIFIER);
         //throw new UnsupportedOperationException("Not supported yet.");
@@ -56,6 +59,9 @@ public class FiltroDeAutorizacion implements Filter {
             response.setCharacterEncoding("UTF-8");
             request.setCharacterEncoding("UTF-8");
             
+            if(auth != null && auth.getUsuarioActual() != null && !esPaginaDeError && !verificarPermiso(auth.getUsuarioActual(), req) && !aceptarRecursosDeSolicitud){
+                res.sendRedirect(req.getContextPath() + "/errorDePermisos.xhtml");
+            }
             // User is logged in, so just continue request.
             chain.doFilter(request, response);
         } else {
@@ -67,6 +73,15 @@ public class FiltroDeAutorizacion implements Filter {
     @Override
     public void destroy() {
         //throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    private boolean verificarPermiso(Usuario usuario, HttpServletRequest req){
+        if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("cliente")){
+            return !(!req.getRequestURI().toLowerCase().contains("mistickets") && !req.getRequestURI().toLowerCase().contains("crearticket") 
+                    && !req.getRequestURI().toLowerCase().contains("login")
+                    && !req.getRequestURI().toLowerCase().contains("welcome"));
+        }
+        return true;
     }
     
 }

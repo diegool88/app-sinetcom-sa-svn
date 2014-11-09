@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pagosPorVencerEnProx2Semanas_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dc47c33c-8064-4388-9e00-9cc1b0b1a9ca">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="contrato_id" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     Pago.`id` AS Pago_id,
+     Pago.`Contrato_numero` AS Pago_Contrato_numero,
+     Pago.`orden` AS Pago_orden,
+     Pago.`monto` AS Pago_monto,
+     Pago.`plazo` AS Pago_plazo,
+     Pago.`anticipo` AS Pago_anticipo,
+     Pago.`idNotificador` AS Pago_idNotificador
+FROM
+     `Pago` Pago
+WHERE Pago.`Contrato_numero` = $P{contrato_id}]]>
+	</queryString>
+	<field name="Pago_id" class="java.lang.Integer"/>
+	<field name="Pago_Contrato_numero" class="java.lang.String"/>
+	<field name="Pago_orden" class="java.lang.Integer"/>
+	<field name="Pago_monto" class="java.math.BigDecimal"/>
+	<field name="Pago_plazo" class="java.sql.Timestamp"/>
+	<field name="Pago_anticipo" class="java.lang.Boolean"/>
+	<field name="Pago_idNotificador" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="92" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="6" width="51" height="20" uuid="fd32fa6b-de70-4410-ac2f-ab330c805ab1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Orden #:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="55" y="6" width="158" height="20" uuid="19ec65a2-8564-4590-bd47-00c00e7b5eca"/>
+				<textFieldExpression><![CDATA[$F{Pago_orden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="26" width="51" height="20" uuid="1b75bc8f-801d-4ab6-8cda-f16c9421ef83"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto: ]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="55" y="26" width="158" height="20" uuid="b9e07ee3-b5ce-489c-81fa-d9273aeb2357"/>
+				<textFieldExpression><![CDATA[$F{Pago_monto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="46" width="51" height="20" uuid="4edfc039-a94a-443d-a875-857045550051"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plazo: ]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="55" y="46" width="158" height="20" uuid="9f0bd579-21a7-40e7-85f7-e7b850be6b3c"/>
+				<textFieldExpression><![CDATA[$F{Pago_plazo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="66" width="51" height="20" uuid="5c6d3681-f430-4f79-8363-7193fe75c05a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Anticipo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="55" y="66" width="158" height="20" uuid="3b9095cd-23c1-41e2-920c-282095f566d8"/>
+				<textFieldExpression><![CDATA[$F{Pago_anticipo} ? "Si" : "No"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

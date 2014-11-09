@@ -56,7 +56,7 @@ WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` 
 				<reportElement x="140" y="0" width="125" height="20" uuid="d8823365-fc5a-43d0-bf73-af9fa5d1194b"/>
 				<textFieldExpression><![CDATA[$F{ItemProducto_numeroDeParte}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="265" y="0" width="275" height="20" uuid="ef9e43ec-0bc8-41b8-a8f5-f23b3e3c3a5a"/>
 				<textFieldExpression><![CDATA[$F{ItemProducto_descripcion}]]></textFieldExpression>
 			</textField>

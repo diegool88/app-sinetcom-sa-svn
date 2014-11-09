@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Buscar Stock"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head />
+            <h:body>
+                <h:form id="form">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panel style="overflow: auto">
+                        <f:facet name="header">
+                            <h:outputText value="Búsqueda de Stock Local"></h:outputText>
+                        </f:facet>
+                        <div style="overflow: auto">
+                            <p:dataTable id="inventario" widgetVar="inventario" rows="10" paginator="true" value="#{buscarStockDeInventario.itemProductos}" filteredValue="#{buscarStockDeInventario.itemProductosFiltrados}" scrollWidth="100%" scrollable="true" var="item" >
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar en todos los campos:" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('inventario').filter()" style="width:150px" placeholder="Ingrese Búsqueda"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column exportable="false" width="10">
+                                    <p:rowToggler></p:rowToggler>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.numeroSerial}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="S/N"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.numeroSerial}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.numeroDeParte}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="P/N"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.numeroDeParte}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.modeloProductoid.lineaDeProductoid.fabricanteid.nombre}" filterMatchMode="exact" filterOptions="#{buscarStockDeInventario.fabricantes}">
+                                    <f:facet name="header">
+                                        <h:outputText value="Fabricante"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.modeloProductoid.lineaDeProductoid.fabricanteid.nombre}"></h:outputText>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.numeroDeFactura}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Factura"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.numeroDeFactura}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.numeroDePedido}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Pedido"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.numeroDePedido}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.descripcion}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Descripción"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{not empty item.descripcion ? item.descripcion : 'No disponible'}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.descripcionDelComponente}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Descripción Componente"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.descripcionDelComponente}"></h:outputText>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.condicionFisicaid.nombre}" filterMatchMode="exact" filterOptions="#{buscarStockDeInventario.estados}">
+                                    <f:facet name="header">
+                                        <h:outputText value="Estado"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.condicionFisicaid.nombre}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.componenteElectronicoAtomicoid.nombre}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputText value="Componente"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.componenteElectronicoAtomicoid != null ? item.componenteElectronicoAtomicoid.nombre : 'N/A'}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.bodegaid.nombre}" filterMatchMode="exact" filterOptions="#{buscarStockDeInventario.bodegas}">
+                                    <f:facet name="header">
+                                        <h:outputText value="Bodega"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.bodegaid.nombre}"/>
+                                </p:column>
+                                <p:rowExpansion>
+                                    <p:panelGrid style="width: 700px;" columns="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="Item S/N: #{item.numeroSerial}"></h:outputText>
+                                        </f:facet>
+                                        <p:outputLabel for="componente" value="Componente: "></p:outputLabel>
+                                        <h:outputText id="componente" value="#{item.componenteElectronicoAtomicoid != null ? item.componenteElectronicoAtomicoid.nombre : item.descripcion != null ? item.descripcion : 'No dispoible'}"/>
+                                        <p:outputLabel for="detalles" value="Detalles: "></p:outputLabel>
+                                        <ui:repeat id="detalles" value="#{item.atributoItemProductoList}" var="atributo">
+                                            <p:panelGrid columns="2">
+                                                <p:outputLabel for="param" value="#{atributo.parametrosDeProducto.nombre}: "></p:outputLabel>
+                                                <h:outputText id="param" value="#{atributo.valor} #{atributo.parametrosDeProducto.unidadMedidaid.nombre}"></h:outputText>
+                                            </p:panelGrid>
+                                        </ui:repeat>
+                                        <p:outputLabel for="modelo" value="Modelo: "></p:outputLabel>
+                                        <h:outputText id="modelo" value="#{item.modeloProductoid.lineaDeProductoid.nombre} - #{item.modeloProductoid.modelo}"></h:outputText>
+                                        <p:outputLabel for="padre" value="Parte de: "></p:outputLabel>
+                                        <h:outputText id="padre" value="#{item.itemProductonumeroSerialpadre.numeroSerial}"></h:outputText>
+                                        <p:outputLabel for="fechaCompra" value="Fecha de Compra: "></p:outputLabel>
+                                        <h:outputText id="fechaCompra" value="#{item.fechaDeCompra}">
+                                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                                        </h:outputText>
+                                        <p:outputLabel for="compatible" value="Compatible con: "></p:outputLabel>
+                                        <ui:repeat id="compatible" value="#{item.modeloProductoList}" var="modeloC">
+                                            <p:panelGrid columns="1">
+                                                <h:outputText value="#{modeloC.lineaDeProductoid.nombre} - #{modeloC.modelo}"></h:outputText>
+                                            </p:panelGrid>
+                                        </ui:repeat>
+                                    </p:panelGrid>
+                                </p:rowExpansion>
+                                <f:facet name="footer">
+                                    <h:commandLink>
+                                        <p:graphicImage library="images" name="excel.png" width="24"/>
+                                        <p:dataExporter type="xls" target="inventario" fileName="inventario" />
+                                    </h:commandLink>
+                                    <h:commandLink>
+                                        <p:graphicImage library="images" name="pdf.png" width="24"/>
+                                        <p:dataExporter type="pdf" target="inventario" fileName="inventario"/>
+                                    </h:commandLink>
+                                </f:facet>
+                            </p:dataTable>
+                        </div>
+                    </p:panel>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>

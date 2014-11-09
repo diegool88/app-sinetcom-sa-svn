@@ -1,0 +1,232 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="title"><h:outputText value="Sinetcom - Tickets"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:form id="form" enctype="multipart/form-data">
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage library="images" name="ajax_loader.gif" />
+                </p:dialog>
+                <f:facet name="header">
+                    Mis Tickets Por Colas
+                </f:facet>                
+                <p:tabView id="tabview">
+                    <p:ajax event="tabChange" listener="#{misTicketsPorCola.cambioDeTab}" update=":form:tabla, :form:articulos"></p:ajax>
+                    <c:forEach items="#{misTicketsPorCola.colasTickets}" var="cola">
+                        <p:tab title="#{cola.nombre}" id="tab-#{cola.id}">
+                        </p:tab>
+                    </c:forEach>
+                </p:tabView>
+                <div style="overflow: auto">
+                    <p:dataTable id="tabla" var="ticket" value="#{misTicketsPorCola.tickets}" scrollWidth="100%" scrollable="true" selectionMode="single" selection="#{misTicketsPorCola.ticketSeleccionado}"  rowKey="#{ticket.ticketNumber}" >
+                        <f:facet name="header">
+                            #{misTicketsPorCola.tabSeleccionado}
+                        </f:facet>
+                        <p:ajax event="rowSelect" immediate="true" listener="#{misTicketsPorCola.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:articulos, @this"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" listener="#{misTicketsPorCola.registroDeseleccionado}" update=":form:articulos, @this"></p:ajax>
+                        <p:column headerText="Número de Ticket" width="280">
+                            <h:outputText value="#{ticket.ticketNumber}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Prioridad" width="280">
+                            <h:outputText value="#{ticket.prioridadTicketcodigo.nombre}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Estado" width="280">
+                            <h:outputText value="#{ticket.estadoTicketcodigo.nombre}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Fecha de Creación" width="280">
+                            <h:outputText value="#{ticket.fechaDeCreacion}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Asunto" width="280">
+                            <h:outputText value="#{ticket.titulo}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Empresa" width="280">
+                            <h:outputText value="#{ticket.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Equipo" width="280">
+                            <h:outputText value="#{ticket.itemProductonumeroSerial.numeroSerial} - #{ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{ticket.itemProductonumeroSerial.modeloProductoid.modelo}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Servicio" width="280">
+                            <h:outputText value="#{ticket.servicioTicketcodigo.nombre}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Creador" width="280">
+                            <h:outputText value="#{ticket.usuarioidcreador.nombreCompleto}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Propietario" width="280">
+                            <h:outputText value="Ing. #{ticket.usuarioidpropietario.nombreCompleto}"></h:outputText>
+                        </p:column>
+                        <f:facet name="footer" rendered="#{login.usuarioActual.grupoid.permisos.administra or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios}">
+                            <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
+                            <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorCola.ponerEnPendiente}" ></p:commandButton>
+                            <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{misTicketsPorCola.reAbrirCaso}"></p:commandButton>
+                            <p:commandButton value="Asignar Ticket" icon="ui-icon-person" update=":form:asignarT" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarAsignarTicket}" immediate="true" oncomplete="asignarDialog.show()"></p:commandButton>
+                            <p:commandButton value="Primer Contacto" icon="ui-icon-mail-closed" update=":form:tabla" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarPrimerContacto}" immediate="true" oncomplete="primerContactoDialog.show()"></p:commandButton>
+                            <p:commandButton value="Subir Hoja S." icon="ui-icon-document" update="@form" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarHojaDeServicio}" immediate="true" oncomplete="hojaDeServicio.show()"></p:commandButton>
+                            <p:commandButton value="Descargar Hoja S." icon="ui-icon-arrowthickstop-1-s" ajax="false" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios eq true}" disabled="#{misTicketsPorCola.desactivarDescargarHojaDeServicio}" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);">
+                                <p:fileDownload value="#{misTicketsPorCola.archivoPorDescargar}"></p:fileDownload>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:dataTable>
+                </div>
+                <p:dialog header="Asignar Ticket a Ingeniero" widgetVar="asignarDialog" modal="true" showEffect="fade" hideEffect="fade">
+                    <p:panel id="asignarT">
+                        <p:panelGrid columns="2" columnClasses="label,value">
+                            <h:outputText value="Seleccione un ingeniero:"></h:outputText>
+                            <p:selectOneMenu value="#{misTicketsPorCola.ticketSeleccionado.usuarioidpropietario}" required="true" requiredMessage="Seleccione un ingeniero!" converter="#{usuarioConverter}">
+                                <p:ajax event="change" update="@this"></p:ajax>
+                                <f:selectItem itemLabel="--Seleccione una opción--" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{misTicketsPorCola.ingenieros}" var="ing" itemLabel="#{ing.nombre} #{ing.apellido}" itemValue="#{ing.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu> 
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Asignar Ticket" process=":form:asignarT" update="@form" actionListener="#{misTicketsPorCola.asignarIngeniero}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                        </f:facet>
+                    </p:panel>
+                </p:dialog>
+                <p:dialog header="Cerrar Ticket de Soporte" height="500" style="overflow: scroll;"  widgetVar="cerrarTicketDialog" modal="true" showEffect="fade" hideEffect="fade">
+                    <p:panel id="cerrarT">
+                        <h1><strong>Ingreso de Actividad</strong></h1>
+                        <p:panelGrid columns="3" columnClasses="label,value">
+                            <h:outputText value="Fecha Inicio de la actividad:"></h:outputText>
+                            <p:calendar id="fechaInicio" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaInicio}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
+                            <p:message for="fechaInicio"></p:message>
+                            <h:outputText value="Fecha Fin de la actividad:"></h:outputText>
+                            <p:calendar id="fechaFin" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaFin}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
+                            <p:message for="fechaFin"></p:message>
+                            <h:outputText value="Horas de viaje:"></h:outputText>
+                            <p:inputText id="horasViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorCola.nuevaActividadEnSitio.horasDeViaje}" >
+                                <f:convertNumber integerOnly="true"></f:convertNumber>
+                            </p:inputText>
+                            <p:message for="horasViaje"></p:message>
+                            <h:outputText value="Minutos de viaje:"></h:outputText>
+                            <p:inputText id="minutosViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorCola.nuevaActividadEnSitio.minutosDeViaje}">
+                                <f:convertNumber integerOnly="true"></f:convertNumber>
+                            </p:inputText>
+                            <p:message for="minutosViaje"></p:message>
+                        </p:panelGrid>
+                        <br/>
+                        <p:dataTable id="actividades" value="#{misTicketsPorCola.actividadesEnSitio}" var="actividad">
+                            <f:facet name="header">
+                                Detalle de Actividades
+                            </f:facet>
+                            <p:column headerText="Fecha Inicio">
+                                #{actividad.fechaInicio}
+                            </p:column>
+                            <p:column headerText="Fecha Fin">
+                                #{actividad.fechaFin}
+                            </p:column>
+                            <p:column headerText="Tiempo de Viaje">
+                                #{actividad.horasDeViaje != null ? actividad.horasDeViaje : "0"} h / #{actividad.minutosDeViaje != null ? actividad.minutosDeViaje : "0"} m
+                            </p:column>
+                            <p:column headerText="Eliminar">
+                                <p:commandButton icon="ui-icon-trash" update=":form:actividades" process="@this" actionListener="#{misTicketsPorCola.eliminarActividad}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                    <f:attribute name="idActividad" value="#{actividad.id}"></f:attribute>
+                                    <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta actividad?" icon="ui-icon-alert"></p:confirm>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <hr/>
+                        <p:commandButton value="Agregar Actividad" actionListener="#{misTicketsPorCola.agregarActividadEnSitio}" process=":form:cerrarT" update=":form:cerrarT"></p:commandButton>
+                        <p:commandButton value="Limpiar" actionListener="#{misTicketsPorCola.enserarActividadEnSitio}" process="@this" update=":form:cerrarT"></p:commandButton>
+                        <hr/>
+                        <br/>
+                        <p:panelGrid columns="2">
+                            <h:outputLabel for="resuelto" value="Resuelto:"></h:outputLabel>
+                            <p:selectOneRadio id="resuelto" value="#{misTicketsPorCola.resueltoConExito}">
+                                <p:ajax event="change" update="@this"></p:ajax>
+                                <f:selectItem itemLabel="Con éxito" itemValue="true"></f:selectItem>
+                                <f:selectItem itemLabel="Sin éxito" itemValue="false"></f:selectItem>
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                        <br/>
+                        <hr/>
+                        <p:commandButton value="Cerrar Caso" process="@this" update="@form" actionListener="#{misTicketsPorCola.cerrarCaso}">
+                            <p:confirm header="Confirmación" message="¿Está seguro que desea cerrar este caso?" icon="ui-icon-alert"></p:confirm>
+                        </p:commandButton>
+                        <hr/>
+                    </p:panel>
+                </p:dialog>
+                <p:dialog header="Ingresar fecha y hora de Primer Contacto" widgetVar="primerContactoDialog" modal="true" showEffect="fade" hideEffect="fade">
+                    <p:panel id="primerC">
+                        <p:panelGrid columns="3" columnClasses="label,value">
+                            <h:outputText value="Ingrese la fecha y hora: "></h:outputText>
+                            <p:calendar id="fechaPrimerC" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.ticketSeleccionado.fechaDePrimerContacto}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
+                            <p:message for="fechaPrimerC"></p:message>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Ingresar" actionListener="#{misTicketsPorCola.ingresarPrimerContacto}" process=":form:primerC" update="@form">
+                                <p:confirm header="ATENCIÓN" message="No se podrá modificar esta información más adelante, ¿desea continuar?"></p:confirm>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:panel>
+                </p:dialog>
+                <p:dialog header="Subir Hoja de Servicio" widgetVar="hojaDeServicio" modal="true" showEffect="fade" hideEffect="fade">
+                    <p:panel id="hojaS">
+                        <p:panelGrid columns="2" columnClasses="label,value">
+                            <h:outputText value="Seleccione la hoja de Servicio"></h:outputText>
+                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorCola.adjuntarArchivoHojaS}" ></p:fileUpload>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar Hoja de Servicio" actionListener="#{misTicketsPorCola.guardarArchivoAdjuntoHojaS}" process="@this" update="@form">
+                                <p:confirm header="ATENCIÓN" message="No se podrá modificar esta información más adelante, ¿desea continuar?"></p:confirm>
+                            </p:commandButton>
+                        </f:facet>
+                    </p:panel>
+                </p:dialog>
+                <p:panel id="articulos" header="Articulos" footer="Articulos disponibles" style="margin-bottom: 20px;" >
+                    <c:forEach items="#{misTicketsPorCola.articulos}" var="articulo" rendered="#{misTicketsPorCola.articulos != null}">
+                        <p:panel id="articulo#{articulo.id}" header="Articulo ##{articulo.orden}">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <h:outputLabel>De: </h:outputLabel>
+                                <h:outputText value="#{articulo.de.correoElectronico}"></h:outputText>
+                                <h:outputLabel>Para: </h:outputLabel>
+                                <h:outputText value="#{articulo.para.correoElectronico}"></h:outputText>
+                                <h:outputLabel>Asunto: </h:outputLabel>
+                                <h:outputText value="#{articulo.asunto}"></h:outputText>
+                                <h:outputLabel>Mensaje: </h:outputLabel>
+                                <p:inputTextarea cols="40" rows="10" value="#{articulo.cuerpo}" readonly="true"></p:inputTextarea> 
+                                <h:outputLabel>Adjunto: </h:outputLabel>
+                                <h:outputLink value="#" style="display: inline-table;" disabled="#{articulo.contenidoAdjunto != null ? 'false' : 'true'}" onclick="window.open('descarga.xhtml?articuloId=#{articulo.id}', 'Descarga', 'dependent=yes, menubar=no, toolbar=no, height=200, width=200');
+                                        return false;" target="_blank">#{articulo.contenidoAdjunto != null ? 'Descargar' : 'No disponible'}
+                                </h:outputLink>
+                            </h:panelGrid>
+                        </p:panel>
+                    </c:forEach>
+                    <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{misTicketsPorCola.articulos != null}">
+                        <h:panelGrid columns="3" cellpadding="10">
+                            <h:outputLabel>Asunto: </h:outputLabel>
+                            <p:inputText id="asunto" value="#{misTicketsPorCola.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
+                            <p:message for="asunto"></p:message>
+                            <h:outputLabel>Mensaje: </h:outputLabel>
+                            <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
+                            <p:message for="cuerpo"></p:message>
+                            <h:outputLabel>Adjunto: </h:outputLabel>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorCola.adjuntarArchivo}" ></p:fileUpload>
+                            <p:message for="archivo"></p:message>
+                        </h:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Agregar Artículo" disabled="#{misTicketsPorCola.desactivarAgregarArticulo}" actionListener="#{misTicketsPorCola.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                        </f:facet>
+                    </p:panel>
+                </p:panel>
+                <p:confirmDialog global="true">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </p:confirmDialog>
+                <script type="text/javascript">
+                    function start() {
+                        statusDialog.show();
+                    }
+                    function stop() {
+                        statusDialog.hide();
+                    }
+                </script>
+            </h:form>
+        </f:view>
+    </ui:define>
+</ui:composition>

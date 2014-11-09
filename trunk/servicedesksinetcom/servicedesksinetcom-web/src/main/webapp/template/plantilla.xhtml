@@ -24,7 +24,7 @@
                         <ui:include src="/template/common/commonheader.xhtml" />
                     </ui:insert>
                     <div style="position: absolute; top: 5px; right: 0px; color: #ffffff">
-                        <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenido #{login.usuarioActual.nombre}! - <p:commandLink style="color: #ffffff;" value="(Salir)" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink style="color: #ffffff;" value="Ingresar" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
+                        <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenido #{login.usuarioActual.nombre}! - <p:commandLink style="color: #ffffff;" value="(Cerrar Sesión)" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink style="color: #ffffff;" value="Iniciar Sesión" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
                     </div>
                     <ui:insert name="menu">
                     </ui:insert>
@@ -34,10 +34,6 @@
                         <ui:insert name="content" >
                         </ui:insert>
                     </h:panelGroup>
-                    <!--                    <div class="background">
-                                            <ui:insert name="content" >
-                                            </ui:insert>
-                                        </div>-->
                 </div>
                 <div id="footer">
                     <ui:insert name="footer" >

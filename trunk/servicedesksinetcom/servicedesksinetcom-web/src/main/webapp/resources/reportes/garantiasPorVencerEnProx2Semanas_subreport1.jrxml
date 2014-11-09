@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="garantiasPorVencerEnProx2Semanas_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6875b50a-3bce-410f-9d17-1ba37c30185d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="contrato_id" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     GarantiaEconomica.`Contrato_numero` AS GarantiaEconomica_Contrato_numero,
+     TipoGarantia.`tipo` AS TipoGarantia_tipo,
+     GarantiaEconomica.`porcentaje` AS GarantiaEconomica_porcentaje,
+     GarantiaEconomica.`valor` AS GarantiaEconomica_valor,
+     GarantiaEconomica.`fechaInicio` AS GarantiaEconomica_fechaInicio,
+     GarantiaEconomica.`renovable` AS GarantiaEconomica_renovable,
+     GarantiaEconomica.`fechaFin` AS GarantiaEconomica_fechaFin
+FROM
+     `GarantiaEconomica` GarantiaEconomica INNER JOIN `TipoGarantia` TipoGarantia ON GarantiaEconomica.`TipoGarantia_id` = TipoGarantia.`id`
+WHERE GarantiaEconomica.`Contrato_numero` = $P{contrato_id}]]>
+	</queryString>
+	<field name="GarantiaEconomica_Contrato_numero" class="java.lang.String"/>
+	<field name="TipoGarantia_tipo" class="java.lang.String"/>
+	<field name="GarantiaEconomica_porcentaje" class="java.math.BigDecimal"/>
+	<field name="GarantiaEconomica_valor" class="java.math.BigDecimal"/>
+	<field name="GarantiaEconomica_fechaInicio" class="java.sql.Timestamp"/>
+	<field name="GarantiaEconomica_renovable" class="java.lang.Boolean"/>
+	<field name="GarantiaEconomica_fechaFin" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="134" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="7" width="121" height="20" uuid="3a3b7579-7adb-46d2-956e-551c81223caf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo De Garantia:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="125" y="7" width="100" height="20" uuid="d524d9af-8d8a-45de-9375-0c522aa87dc4"/>
+				<textFieldExpression><![CDATA[$F{TipoGarantia_tipo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="27" width="121" height="20" uuid="4167a6d9-dc10-4c5e-ac39-c2d7f188dc9e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Porcentaje del Monto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="125" y="27" width="100" height="20" uuid="3b867479-3bb5-4408-99d2-8790027f1b82"/>
+				<textFieldExpression><![CDATA[$F{GarantiaEconomica_porcentaje} + "%"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="47" width="121" height="20" uuid="c316bd2b-7030-416c-bc7d-5c16aed8e793"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor:]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="125" y="47" width="100" height="20" uuid="b2ad1369-a11f-4d21-b164-acd698879b3b"/>
+				<textFieldExpression><![CDATA[$F{GarantiaEconomica_valor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="67" width="121" height="20" uuid="3bbab119-e813-46fe-a85c-faed33288f76"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inicio:]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="125" y="67" width="100" height="20" uuid="a47aa5c5-39c3-4467-b1c6-ff00e2f458e4"/>
+				<textFieldExpression><![CDATA[$F{GarantiaEconomica_fechaInicio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="87" width="121" height="20" uuid="31a36ef3-8ac8-480d-bf3f-126e2565a74e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Es Renovable:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="125" y="87" width="100" height="20" uuid="308110ef-a335-4930-b8ac-1dd63a7934e9"/>
+				<textFieldExpression><![CDATA[$F{GarantiaEconomica_renovable} ? "Si" : "No"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="107" width="121" height="20" uuid="35313b81-7c91-4bad-bee6-76e73c1707f8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Fin:]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="125" y="107" width="100" height="20" uuid="26eaf306-247b-4832-a2b1-a82fdac709e0"/>
+				<textFieldExpression><![CDATA[$F{GarantiaEconomica_fechaFin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
