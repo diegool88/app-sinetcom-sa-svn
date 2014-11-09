@@ -4,6 +4,7 @@
  */
 package ec.com.sinetcom.servicios;
 
+import ec.com.sinetcom.configuracion.UtilidadDeEncriptacion;
 import ec.com.sinetcom.dao.UsuarioFacade;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.concurrent.TimeUnit;
@@ -39,8 +40,9 @@ public class AutenticacionServicio {
      * @return 
      */
     public Usuario validarUsuario(String nombreUsuario, String password){
-        
-        this.usuario = this.usuarioFacade.verificarExistenciaDeUsuario(nombreUsuario, password);
+        UtilidadDeEncriptacion utilidadDeEncriptacion = new UtilidadDeEncriptacion();
+        String passwordEncriptado = utilidadDeEncriptacion.encriptar(password);
+        this.usuario = this.usuarioFacade.verificarExistenciaDeUsuario(nombreUsuario, passwordEncriptado);
         if(this.usuario != null){
             return this.usuario;
         }else{

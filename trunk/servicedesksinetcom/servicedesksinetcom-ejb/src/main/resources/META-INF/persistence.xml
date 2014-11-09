@@ -3,6 +3,8 @@
   <persistence-unit name="ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU" transaction-type="JTA">
     <jta-data-source>jdbc/appsinetcomlocal</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties>
+      <property name="eclipselink.jpa.uppercase-column-names" value="false"/>
+    </properties>
   </persistence-unit>
 </persistence>

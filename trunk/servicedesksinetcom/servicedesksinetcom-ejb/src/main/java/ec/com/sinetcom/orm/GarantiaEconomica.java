@@ -5,6 +5,7 @@
 package ec.com.sinetcom.orm;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -34,6 +35,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "GarantiaEconomica.findAll", query = "SELECT g FROM GarantiaEconomica g")})
 public class GarantiaEconomica implements Serializable {
+    @Basic(optional = false)
+    @NotNull()
+    @Column(name = "porcentaje")
+    private int porcentaje;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "valor")
+    private BigDecimal valor;
     @Lob
     @Column(name = "adendum")
     private byte[] adendum;
@@ -43,14 +53,6 @@ public class GarantiaEconomica implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "porcentaje")
-    private long porcentaje;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "valor")
-    private long valor;
     @Basic(optional = false)
     @NotNull
     @Column(name = "renovable")
@@ -82,7 +84,7 @@ public class GarantiaEconomica implements Serializable {
         this.id = id;
     }
 
-    public GarantiaEconomica(Integer id, long porcentaje, long valor, boolean renovable, Date fechaInicio, Date fechaFin) {
+    public GarantiaEconomica(Integer id, int porcentaje, BigDecimal valor, boolean renovable, Date fechaInicio, Date fechaFin) {
         this.id = id;
         this.porcentaje = porcentaje;
         this.valor = valor;
@@ -99,21 +101,6 @@ public class GarantiaEconomica implements Serializable {
         this.id = id;
     }
 
-    public long getPorcentaje() {
-        return porcentaje;
-    }
-
-    public void setPorcentaje(long porcentaje) {
-        this.porcentaje = porcentaje;
-    }
-
-    public long getValor() {
-        return valor;
-    }
-
-    public void setValor(long valor) {
-        this.valor = valor;
-    }
 
     public boolean getRenovable() {
         return renovable;
@@ -186,6 +173,22 @@ public class GarantiaEconomica implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.GarantiaEconomica[ id=" + id + " ]";
+    }
+
+    public int getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(int porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
     public byte[] getAdendum() {

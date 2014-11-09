@@ -6,7 +6,13 @@ package ec.com.sinetcom.configuracion;
 
 import com.sun.mail.smtp.SMTPTransport;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
@@ -30,6 +36,13 @@ public class UtilidadDeEmail {
         Properties properties = System.getProperties();
         // Setup mail server
         properties.setProperty("mail.smtp.host", SMTPServer);
+        // Setup other port if not available
+//        if(!verificarPuertoDisponible(SMTPServer, Integer.parseInt(SMTPServerPort))){
+//            properties.setProperty("mail.smtp.port", "587");
+//            properties.setProperty("mail.smtp.auth", "true");
+//            properties.setProperty("mail.smtp.starttls.enable", "true");
+//            properties.setProperty("mail.smtp.password", "");
+//        }
         // Get the default Session object.
         Session session = Session.getDefaultInstance(properties);
 
@@ -100,7 +113,18 @@ public class UtilidadDeEmail {
         }
 
     }
-
+    
+    private boolean verificarPuertoDisponible(String host, int puerto){
+        try{
+            (new Socket(host, puerto)).close();
+        }catch(SocketException e){
+            return false;
+        }catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
+    
     public String getSMTPServer() {
         return SMTPServer;
     }

@@ -15,7 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.DuplicateKeyException;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
+import javax.ejb.Schedule;
 import javax.ejb.ScheduleExpression;
 import javax.ejb.Stateless;
 import javax.ejb.Timeout;
@@ -34,6 +36,9 @@ import javax.naming.NamingException;
 @LocalBean
 public class NotificadorServicio {
 
+    @EJB
+    private ContratoServicio contratoServicio;
+    
     @Resource
     TimerService timerService;	//Resource Injection
     static Logger logger = Logger.getLogger("NotificadorServicio");
@@ -184,6 +189,13 @@ public class NotificadorServicio {
             }
         }
         return null; 
+    }
+    
+    //Notificadores Automáticos para ser ejecutados una vez al día
+    @Schedule(second = "0", minute = "0", hour = "8", dayOfWeek = "*", persistent = false)
+    public void enviarNotificacionesDiariasDeContratos(){
+        this.contratoServicio.verificarGarantiasEconomicasPorVencerEnProx2Semanas();
+        this.contratoServicio.verificarPagosPorVencerEnProx2Semanas();
     }
     
 }
