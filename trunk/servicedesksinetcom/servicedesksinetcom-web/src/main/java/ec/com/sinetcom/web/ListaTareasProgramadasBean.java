@@ -6,7 +6,7 @@
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.configuracion.TareaTicketInfo;
-import ec.com.sinetcom.servicios.NotificadorServicio;
+import ec.com.sinetcom.servicios.TicketNotificadorServicio;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -25,7 +25,7 @@ import org.primefaces.event.SelectEvent;
 public class ListaTareasProgramadasBean implements Serializable {
 
     @EJB
-    private NotificadorServicio notificadorServicio;
+    private TicketNotificadorServicio notificadorServicio;
     //Lista de tareas programadas ejecutándose en el servidor
     private List<TareaTicketInfo> listaDeTareas = null;
     //Selección de tarea
