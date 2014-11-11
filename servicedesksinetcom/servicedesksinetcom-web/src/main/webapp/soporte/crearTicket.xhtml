@@ -103,13 +103,10 @@
                         <p><strong>Prioridad: </strong>#{crearTicketBean.ticket.prioridadTicketcodigo.nombre}</p>
                         <p><strong>Servicio: </strong>#{crearTicketBean.ticket.servicioTicketcodigo.nombre}</p>
                         <p><strong>Cola: </strong>#{crearTicketBean.ticket.colaid.nombre}</p>
-                        <p:commandButton value="Continuar" id="botonContinuar" immediate="true" action="welcome?faces-redirect=true"></p:commandButton>
+                        <p:commandButton value="Continuar" id="botonContinuar" immediate="true" action="/welcome?faces-redirect=true"></p:commandButton>
                     </div>
                 </p:outputPanel>
             </h:form>
         </f:view>
-    </ui:define>
-    <ui:define name="footer">
-        Nothing Here...
     </ui:define>
 </ui:composition>
