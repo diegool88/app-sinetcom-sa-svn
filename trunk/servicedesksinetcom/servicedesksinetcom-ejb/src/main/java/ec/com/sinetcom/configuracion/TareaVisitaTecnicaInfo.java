@@ -6,6 +6,7 @@
 package ec.com.sinetcom.configuracion;
 
 import ec.com.sinetcom.orm.VisitasTecnicas;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  *
  * @author diegoflores
  */
-public class TareaVisitaTecnicaInfo {
+public class TareaVisitaTecnicaInfo implements Serializable{
     private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     private static SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 

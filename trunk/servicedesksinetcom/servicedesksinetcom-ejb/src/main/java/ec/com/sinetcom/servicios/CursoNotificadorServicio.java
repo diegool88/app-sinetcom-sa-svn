@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.servicios;
 
-import ec.com.sinetcom.configuracion.TareaTicketInfo;
+import ec.com.sinetcom.configuracion.TareaCursoInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -15,18 +14,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.DuplicateKeyException;
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Schedule;
-import javax.ejb.ScheduleExpression;
 import javax.ejb.Stateless;
+import javax.ejb.LocalBean;
+import javax.ejb.ScheduleExpression;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-//import javax.faces.application.Resource;
 
 /**
  *
@@ -34,17 +30,16 @@ import javax.naming.NamingException;
  */
 @Stateless
 @LocalBean
-public class NotificadorServicio {
-
-    @EJB
-    private ContratoServicio contratoServicio;
+public class CursoNotificadorServicio {
     
     @Resource
     TimerService timerService;	//Resource Injection
-    static Logger logger = Logger.getLogger("NotificadorServicio");
-
+    static Logger logger = Logger.getLogger("ContratoNotificadorServicio");
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
+    
     /*
-     * Callback method for the timers. Calls the corresponding Batch Job Session Bean based on the TareaTicketInfo
+     * Callback method for the timers. Calls the corresponding Batch Job Session Bean based on the TareaCursoInfo
      * bounded to the timer
      */
     @Timeout
@@ -53,7 +48,7 @@ public class NotificadorServicio {
         System.out.println("###Timer <" + timer.getInfo() + "> timeout at " + new Date());
         try
         {
-            TareaTicketInfo tareaInfo = (TareaTicketInfo) timer.getInfo();
+            TareaCursoInfo tareaInfo = (TareaCursoInfo) timer.getInfo();
             InterfazLoteDeTareas loteTarea = (InterfazLoteDeTareas) InitialContext.doLookup(
                     tareaInfo.getJobClassName());
             loteTarea.ejecutarTarea(timer); //Asynchronous method
@@ -69,14 +64,14 @@ public class NotificadorServicio {
     }
 
     /*
-     * Returns the Timer object based on the given TareaTicketInfo
+     * Returns the Timer object based on the given TareaCursoInfo
      */
-    private Timer getTimer(TareaTicketInfo tareaInfo)
+    private Timer getTimer(TareaCursoInfo tareaInfo)
     {
         Collection<Timer> timers = timerService.getTimers();
         for (Timer t : timers)
         {
-            if (tareaInfo.equals((TareaTicketInfo) t.getInfo()))
+            if (tareaInfo.equals((TareaCursoInfo) t.getInfo()))
             {
                 return t;
             }
@@ -85,9 +80,9 @@ public class NotificadorServicio {
     }
 
     /*
-     * Creates a timer based on the information in the TareaTicketInfo
+     * Creates a timer based on the information in the TareaCursoInfo
      */
-    public TareaTicketInfo createJob(TareaTicketInfo tareaInfo)
+    public TareaCursoInfo createJob(TareaCursoInfo tareaInfo)
             throws Exception
     {
         //Check for duplicates
@@ -118,16 +113,16 @@ public class NotificadorServicio {
     }
 
     /*
-     * Returns a list of TareaTicketInfo for the active timers
+     * Returns a list of TareaCursoInfo for the active timers
      */
-    public List<TareaTicketInfo> getJobList()
+    public List<TareaCursoInfo> getJobList()
     {
         logger.info("getJobList() called!!!");
-        ArrayList<TareaTicketInfo> jobList = new ArrayList<TareaTicketInfo>();
+        ArrayList<TareaCursoInfo> jobList = new ArrayList<TareaCursoInfo>();
         Collection<Timer> timers = timerService.getTimers();
         for (Timer t : timers)
         {
-            TareaTicketInfo tareaInfo = (TareaTicketInfo) t.getInfo();
+            TareaCursoInfo tareaInfo = (TareaCursoInfo) t.getInfo();
             tareaInfo.setNextTimeout(t.getNextTimeout());
             jobList.add(tareaInfo);
         }
@@ -135,14 +130,14 @@ public class NotificadorServicio {
     }
 
     /*
-     * Returns the updated TareaTicketInfo from the timer
+     * Returns the updated TareaCursoInfo from the timer
      */
-    public TareaTicketInfo getTareaInfo(TareaTicketInfo tareaInfo)
+    public TareaCursoInfo getTareaInfo(TareaCursoInfo tareaInfo)
     {
         Timer t = getTimer(tareaInfo);
         if (t != null)
         {
-            TareaTicketInfo j = (TareaTicketInfo) t.getInfo();
+            TareaCursoInfo j = (TareaCursoInfo) t.getInfo();
             j.setNextTimeout(t.getNextTimeout());
             return j;
         }
@@ -150,9 +145,9 @@ public class NotificadorServicio {
     }
 
     /*
-     * Updates a timer with the given TareaTicketInfo
+     * Updates a timer with the given TareaCursoInfo
      */
-    public TareaTicketInfo updateJob(TareaTicketInfo tareaInfo)
+    public TareaCursoInfo updateJob(TareaCursoInfo tareaInfo)
             throws Exception
     {
         Timer t = getTimer(tareaInfo);
@@ -166,9 +161,9 @@ public class NotificadorServicio {
     }
 
     /*
-     * Remove a timer with the given TareaTicketInfo
+     * Remove a timer with the given TareaCursoInfo
      */
-    public void deleteJob(TareaTicketInfo tareaInfo)
+    public void deleteJob(TareaCursoInfo tareaInfo)
     {
         Timer t = getTimer(tareaInfo);
         if (t != null)
@@ -183,19 +178,12 @@ public class NotificadorServicio {
         Collection<Timer> timers = timerService.getTimers();
         for (Timer t : timers)
         {
-            if (((TareaTicketInfo)t.getInfo()).getJobId().equals(id))
+            if (((TareaCursoInfo)t.getInfo()).getJobId().equals(id))
             {
                 return t;
             }
         }
         return null; 
-    }
-    
-    //Notificadores Automáticos para ser ejecutados una vez al día
-    @Schedule(second = "0", minute = "0", hour = "8", dayOfWeek = "*", persistent = false)
-    public void enviarNotificacionesDiariasDeContratos(){
-        this.contratoServicio.verificarGarantiasEconomicasPorVencerEnProx2Semanas();
-        this.contratoServicio.verificarPagosPorVencerEnProx2Semanas();
     }
     
 }

@@ -99,7 +99,7 @@ public class TicketServicio {
     @EJB
     private ContratoFacade contratoFacade;
     @EJB
-    private NotificadorServicio notificadorServicio;
+    private TicketNotificadorServicio notificadorServicio;
 
     /**
      * Obtiene todas las colas
