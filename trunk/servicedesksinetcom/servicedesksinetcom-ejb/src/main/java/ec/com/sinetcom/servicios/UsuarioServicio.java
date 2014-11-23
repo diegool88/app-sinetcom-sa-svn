@@ -43,6 +43,27 @@ public class UsuarioServicio {
      * @param bloquear
      * @return 
      */
+    
+    public List<Usuario> cragarUsuarios() {
+        return usuarioFacade.findAll();
+    }
+    
+    public void crearUsuario(Usuario usuario) {
+        usuarioFacade.create(usuario);
+    }
+    
+    public void eliminarUsuario(Usuario usuario) {
+        usuarioFacade.remove(usuario);
+    }
+    
+    public List<Grupo> cragarGrupos() {
+        return grupoFacade.findAll();
+    }
+    
+    public Grupo recuperarGrupo(Integer id) {
+        return grupoFacade.find(id);
+    }
+    
     public boolean cambiarActividadDeUsuario(Usuario usuario, boolean bloquear){
         
         if(bloquear){
