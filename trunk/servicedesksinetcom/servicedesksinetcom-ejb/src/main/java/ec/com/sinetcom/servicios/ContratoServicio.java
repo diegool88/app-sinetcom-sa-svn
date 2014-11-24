@@ -6,18 +6,28 @@
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.configuracion.UtilidadDeEmail;
+import ec.com.sinetcom.dao.ClienteEmpresaFacade;
+import ec.com.sinetcom.dao.ContactoFacade;
+import ec.com.sinetcom.dao.ContratoFacade;
 import ec.com.sinetcom.dao.GarantiaEconomicaFacade;
 import ec.com.sinetcom.dao.PagoFacade;
 import ec.com.sinetcom.dao.SlaFacade;
+import ec.com.sinetcom.dao.TipoContratoFacade;
 import ec.com.sinetcom.dao.TipoDisponibilidadFacade;
+import ec.com.sinetcom.dao.UsuarioFacade;
+import ec.com.sinetcom.orm.ClienteEmpresa;
+import ec.com.sinetcom.orm.Contacto;
+import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.GarantiaEconomica;
 import ec.com.sinetcom.orm.Pago;
 import ec.com.sinetcom.orm.Sla;
+import ec.com.sinetcom.orm.TipoContrato;
 import ec.com.sinetcom.orm.TipoDisponibilidad;
+import ec.com.sinetcom.orm.Usuario;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -28,6 +38,16 @@ import javax.ejb.LocalBean;
 public class ContratoServicio {
 
     @EJB
+    private ContratoFacade contratoFacade;    
+    @EJB
+    private TipoContratoFacade tipoContratoFacade;
+    @EJB
+    private ClienteEmpresaFacade clienteEmpresaFacade;
+    @EJB
+    private UsuarioFacade usuarioFacade;
+    @EJB
+    private ContactoFacade contactoFacade;
+    @EJB
     private SlaFacade slaFacade;
     @EJB
     private TipoDisponibilidadFacade tipoDisponibilidadFacade;
@@ -36,6 +56,53 @@ public class ContratoServicio {
     @EJB
     private PagoFacade pagoFacade;
     
+    public List<Contrato> cargarContratos() {
+        return contratoFacade.findAll();
+    }
+    
+    public void crearContrato(Contrato contrato) {
+        contratoFacade.create(contrato);
+    } 
+    
+    public List<TipoContrato> cargarTiposContrato() {
+        return tipoContratoFacade.findAll();
+    }
+    
+    public TipoContrato recuperarTipoContrato(Integer id) {
+        return tipoContratoFacade.find(id);
+    }
+    
+    public List<ClienteEmpresa> cargarEmpresas() {
+        return clienteEmpresaFacade.findAll();
+    }
+    
+    public ClienteEmpresa recuperarRucEmpresa(String id) {
+        return clienteEmpresaFacade.find(id);
+    }
+    
+    public List<Sla> cargarSlas() {
+        return slaFacade.findAll();
+    }    
+    
+    public Sla recuperarSla(Integer id) {
+        return slaFacade.find(id);
+    }
+    
+    public List<Usuario> cargarUsuarios() {
+        return usuarioFacade.findAll();
+    }
+    
+    public Usuario recuperarUsuario(Integer id) {
+        return usuarioFacade.find(id);
+    }
+    
+    public List<Contacto> cargarContactos() {
+        return contactoFacade.findAll();
+    }
+    
+    public Contacto recuperarContacto(Integer id) {
+        return contactoFacade.find(id);
+    }
     
     public void verificarPagosPorVencerEnProx2Semanas(){
         List<Pago> pagos = this.pagoFacade.obtenerTodosLosPagosPorVencerEnProx2Semanas();
