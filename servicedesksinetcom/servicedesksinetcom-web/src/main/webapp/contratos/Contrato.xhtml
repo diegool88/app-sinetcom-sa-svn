@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Contratos"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>        
+            <h:body>
+                <h:form>
+                    
+                </h:form>                                       
+                <h:form id="nuevoContrato" enctype="multipart/form-data">
+                    <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+
+                        <p:outputLabel for="contratoNumero" value="Numero Contrato:"/>
+                        <p:inputText id="contratoNumero" value="#{ingresoContratoBean.numeroContrato}" required="true"/>
+
+                        <p:outputLabel for="contratoTipo" value="Tipo de Contrato:"/>
+                        <p:selectOneMenu id="contratoTipo" value="#{ingresoContratoBean.tipoContrato}" required="true">                    
+                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItems value="#{ingresoContratoBean.tiposContrato}" var="tipos" itemLabel="#{tipos.tipo}" itemValue="#{tipos.id}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="clienteEmpresa" value="Cliente:"/>
+                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoContratoBean.rucClinete}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" required="true">
+                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                            <f:selectItems value="#{ingresoContratoBean.clientesRuc}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                        </p:selectOneMenu>               
+
+                        <p:outputLabel for="contratoSla" value="SLA:"/>
+                        <p:selectOneMenu id="contratoSla" value="#{ingresoContratoBean.numSla}" required="true">
+                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItems value="#{ingresoContratoBean.slas}" var="sla" itemLabel="#{sla.tiempoDeSolucion} Horas" itemValue="#{sla.id}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="contratoManager" value="Account Manager Asignado:"/>
+                        <p:selectOneMenu id="contratoManager" value="#{ingresoContratoBean.numAccountManager}" required="true">
+                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItems value="#{ingresoContratoBean.usuarios}" var="Accounts" itemLabel="#{Accounts.nombre} #{Accounts.apellido}" itemValue="#{Accounts.id}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="contratoAdministrador" value="Administrador de Contrato:"/>
+                        <p:selectOneMenu id="contratoAdministrador" value="#{ingresoContratoBean.numAdminContrato}" required="true">
+                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItems value="#{ingresoContratoBean.contactos}" var="AdminC" itemLabel="#{AdminC.nombre}" itemValue="#{AdminC.id}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="contratoFechaSuscripcion" value="Fecha de Suscripcion:"/>
+                        <p:calendar id="contratoFechaSuscripcion" value="#{ingresoContratoBean.fechaSuscripcion}" showOn="button" required="true"/>
+
+                        <p:outputLabel for="contratoObjeto" value="Objeto:"/>
+                        <p:inputText id="contratoObjeto" value="#{ingresoContratoBean.objeto}" required="true"/>
+
+                        <p:outputLabel for="contratoPrecio" value="Precio:"/>
+                        <p:inputText id="contratoPrecio" type="number" value="#{ingresoContratoBean.precio}" required="true"/>
+
+                        <p:outputLabel for="contratoValidez" value="Tiempo de Validez:"/>
+                        <p:inputText id="contratoValidez" type="number" value="#{ingresoContratoBean.tiempoValidez}" required="true"/>
+
+                        <p:outputLabel for="contratoGarantiaTecnica" value="Garantia Tecnica:"/>
+                        <p:inputText id="contratoGarantiaTecnica" type="number" value="#{ingresoContratoBean.garantiatecnica}"/>
+
+                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Grarantia Tecnica:"/>
+                        <p:calendar id="contratoFechaInicioGarantiaTecnica" value="#{ingresoContratoBean.fechaInicioGTecnica}" showOn="button"/>
+
+                        <p:outputLabel for="contratoDigital" value="Contrato Digitalizado:"/>
+                        <p:fileUpload id="contratoDigital" value="#{ingresoContratoBean.contratoDigital}" mode="simple"/>
+
+                        <p:outputLabel for="srvSoporteMantenimiento" value="Servicio Soporte Mantenimineto:"/>
+                        <p:inputText id="srvSoporteMantenimiento" type="number" value="#{ingresoContratoBean.srvSoportemantenimiento}" required="true"/>
+
+                        <p:outputLabel for="contratoRepuestos" value="Incluye Repuestos?:"/>
+                        <p:selectOneRadio id="contratoRepuestos" value="#{ingresoContratoBean.repuestos}" required="true">
+                            <f:selectItem itemLabel="Si" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </p:selectOneRadio>
+
+                        <p:outputLabel for="contratoHorasSoporteAno" value="Horas de Soporte Anual:"/>
+                        <p:inputText id="contratoHorasSoporteAno" type="number" value="#{ingresoContratoBean.soporteAnual}" required="true"/>
+
+                        <p:outputLabel for="contratoHorasSoporteUtilizadas" value="Horas de Soporte Utilizadas:"/>
+                        <p:inputText id="contratoHorasSoporteUtilizadas" type="number" value="#{ingresoContratoBean.soporteutilizado}" required="true"/>
+
+                        <p:outputLabel for="contratoFechaFacturacion" value="Fecha Facturacion Contrato:"/>
+                        <p:calendar id="contratoFechaFacturacion" value="#{ingresoContratoBean.fechaFacturacion}" showOn="button"/>
+
+                        <p:outputLabel for="contratoFacturaNumero" value="Factura Numero:"/>
+                        <p:inputText id="contratoFacturaNumero" value="#{ingresoContratoBean.numeroFactura}"/>
+
+
+                        <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepcion:"/>
+                        <p:calendar id="contratoFechaEntregaRecepcion" value="#{ingresoContratoBean.fechaEntregaRecepcion}" showOn="button"/>                
+
+                        <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContratoBean.grabarContrato()}">
+                            <f:ajax execute="@all" render="@form"/>
+                        </p:commandButton>
+                    </h:panelGrid>            
+                </h:form>     
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

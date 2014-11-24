@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>       
+            <h:body>
+
+                <h:form>
+                    <p:dataTable rowKey="#{empresas.ruc}" var="empresas" value="#{ingresoClienteEmpresaBean.clientesEnpresa}" paginator="true" rows="15"
+                                 selection="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado}" selectionMode="single" paginatorPosition="bottom"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+                        <f:facet name="header">
+                            <h:outputText value="Clientes / Empresas"/>
+                        </f:facet>
+
+                        <p:column headerText="RUC" sortBy="#{empresas.ruc}" filterBy="#{empresas.ruc}">
+                            <h:outputText value="#{empresas.ruc}"/>
+                        </p:column>
+
+                        <p:column headerText="Razon Social" sortBy="#{empresas.razonSocial}" filterBy="#{empresas.razonSocial}">
+                            <h:outputText value="#{empresas.razonSocial}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre Comercial" sortBy="#{empresas.nombreComercial}" filterBy="#{empresas.nombreComercial}">
+                            <h:outputText value="#{empresas.nombreComercial}"/>
+                        </p:column>
+
+                        <p:column headerText="Telefono" sortBy="#{empresas.telefonoPBX}" filterBy="#{empresas.telefonoPBX}">
+                            <h:outputText value="#{empresas.telefonoPBX}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                        </f:facet>
+                    </p:dataTable>    
+                </h:form>
+
+                <p:dialog header="Insertar Cliente /Empresa" widgetVar="ingreso" modal="true">
+                    <h:form id="clienteEmpresaForm">
+                        <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+
+                            <p:outputLabel for="clienteEmpresaRuc" value="RUC:"/>
+                            <p:inputText id="clienteEmpresaRuc" value="#{ingresoClienteEmpresaBean.numRuc}" required="true"/>
+
+                            <p:outputLabel for="clienteUsuarios" value="Usuario:"/>
+                            <p:selectOneMenu id="clienteUsuarios" value="#{ingresoClienteEmpresaBean.numUsuario}" required="true">
+                               <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                               <f:selectItems value="#{ingresoClienteEmpresaBean.usuarios}" var="Usuarios" itemLabel="#{Usuarios.nombre} #{Usuarios.apellido}" itemValue="#{Usuarios.id}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="clienteTipoEmpresa" value="Tipo Empresa:"/>
+                            <p:selectOneMenu id="clienteTipoEmpresa" value="#{ingresoClienteEmpresaBean.numTipoEmpresa}" required="true">
+                               <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                               <f:selectItems value="#{ingresoClienteEmpresaBean.tiposEmpresa}" var="Tipos" itemLabel="#{Tipos.tipo}" itemValue="#{Tipos.id}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="clienteRazonSocial" value="Razon Social:"/>
+                            <p:inputText id="clienteRazonSocial" value="#{ingresoClienteEmpresaBean.razonSocial}" required="true"/>
+
+                            <p:outputLabel for="clienteNombreComercial" value="Nombre Comercial:"/>
+                            <p:inputText id="clienteNombreComercial" value="#{ingresoClienteEmpresaBean.nombreComercial}" required="true"/>
+
+                            <p:outputLabel for="clientepbx" value="Telefono PBX:"/>
+                            <p:inputText id="clientepbx" value="#{ingresoClienteEmpresaBean.telefono}" required="true"/>
+
+                            <p:outputLabel for="clienteRepresentante" value="Representante Legal:"/>
+                            <p:inputText id="clienteRepresentante" value="#{ingresoClienteEmpresaBean.representantelegal}" required="true"/>
+
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.crearEmpresa()}">
+                                <f:ajax execute="@all" render="@form"/>
+                            </p:commandButton>
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+
+
