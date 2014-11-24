@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>
+
+            <h:body>
+
+                <h:form>
+                    <p:dataTable rowKey="#{disponibilidades.id}" var="disponibilidades" value="#{ingresoTipoDisponibilidadBean.tiposDisponibilidad}" paginator="true" rows="15"
+                                 selection="#{ingresoTipoDisponibilidadBean.tipoDisponibilidadSeleccionada}" selectionMode="single" paginatorPosition="bottom"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+                        <f:facet name="header">
+                            <h:outputText value="Tipos de Disponibilidad"/>
+                        </f:facet>
+
+                        <p:column headerText="Disponibilidad" sortBy="#{disponibilidades.disponibilidad}" filterBy="#{disponibilidades.disponibilidad}">
+                            <h:outputText value="#{disponibilidades.disponibilidad}"/>
+                        </p:column>
+
+                        <p:column headerText="Validez" sortBy="#{disponibilidades.valido}" filterBy="#{disponibilidades.valido}">
+                            <h:outputText value="#{disponibilidades.valido}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                        </f:facet>
+                    </p:dataTable>    
+                </h:form>
+
+                <p:dialog header="Insertar Tipo de Disponibilidad" widgetVar="ingreso" modal="true">        
+                    <h:form id="tipoDisponibilidadForm">
+                        <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+
+                            <p:outputLabel for="tipoDisponibilidadDisponibilidad" value="Disponibilidad:"/>
+                            <p:inputText id="tipoDisponibilidadDisponibilidad" value="#{ingresoTipoDisponibilidadBean.disponibilidad}" required="true"/>
+
+                            <p:outputLabel for="tipoDisponibilidadEstado" value="Valido?:"/>
+                            <p:selectOneRadio id="tipoDisponibilidadEstado" value="#{ingresoTipoDisponibilidadBean.estado}" required="true">
+                                <f:selectItem itemLabel="Si" itemValue="true"/>                    
+                                <f:selectItem itemLabel="No" itemValue="false"/>
+                            </p:selectOneRadio>
+
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoDisponibilidadBean.crearTipoDisponibilidad()}">
+                                <f:ajax execute="@all" render="@form"/>
+                            </p:commandButton>
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>    
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+
+

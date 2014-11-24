@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>
+
+            <h:body>
+                <h:form>
+                    <p:dataTable rowKey="#{usuarios.id}" var="usuarios" value="#{ingresoUsuarioBean.usuarios}" paginator="true" rows="15"
+                                 selection="#{ingresoUsuarioBean.usuarioSeleccionado}" selectionMode="single" paginatorPosition="bottom"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+                        <f:facet name="header">
+                            <h:outputText value="Usuarios"/>
+                        </f:facet>
+
+                        <p:column headerText="Cedula" sortBy="#{usuarios.cedulaDeCuidadania}" filterBy="#{usuarios.cedulaDeCuidadania}">
+                            <h:outputText value="#{usuarios.cedulaDeCuidadania}"/>
+                        </p:column>
+
+                        <p:column headerText="e-Mail" sortBy="#{usuarios.correoElectronico}" filterBy="#{usuarios.correoElectronico}">
+                            <h:outputText value="#{usuarios.correoElectronico}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre" sortBy="#{usuarios.nombre}" filterBy="#{usuarios.nombre}">
+                            <h:outputText value="#{usuarios.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Apellido" sortBy="#{usuarios.apellido}" filterBy="#{usuarios.apellido}">
+                            <h:outputText value="#{usuarios.apellido}"/>
+                        </p:column>             
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                        </f:facet>
+                    </p:dataTable>              
+                </h:form>
+
+                <p:dialog header="Insertar Usuario" widgetVar="ingreso" modal="true">
+                    <h:form id="usuarioForm">
+                        <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+
+                            <p:outputLabel for="usuarioGrupo" value="Grupo:"/>
+                            <p:selectOneMenu id="usuarioGrupo" value="#{ingresoUsuarioBean.numGrupo}" required="true">
+                                <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                                <f:selectItems value="#{ingresoUsuarioBean.grupos}" var="Grupos" itemLabel="#{Grupos.nombre}" itemValue="#{Grupos.id}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="usuarioCedula" value="Cedula:"/>
+                            <p:inputText id="usuarioCedula" value="#{ingresoUsuarioBean.numCedula}" required="true"/>
+
+                            <p:outputLabel for="usuarioMail" value="e-Mail:"/>
+                            <p:inputText id="usuarioMail" value="#{ingresoUsuarioBean.mail}" required="true"/>
+
+                            <p:outputLabel for="usuarioPassword" value="Password:"/>
+                            <p:password id="usuarioPassword" value="#{ingresoUsuarioBean.password}" required="true"/>
+
+                            <p:outputLabel for="usuarioNombre" value="Nombre:"/>
+                            <p:inputText id="usuarioNombre" value="#{ingresoUsuarioBean.nombre}" required="true"/>
+
+                            <p:outputLabel for="usuarioApellido" value="Apellido:"/>
+                            <p:inputText id="usuarioApellido" value="#{ingresoUsuarioBean.apellido}" required="true"/>
+
+                            <p:outputLabel for="usuarioCelular" value="Celular:"/>
+                            <p:inputText id="usuarioCelular" value="#{ingresoUsuarioBean.celular}" required="true"/>
+
+                            <p:outputLabel for="usuarioTelefono" value="Telefono:"/>
+                            <p:inputText id="usuarioTelefono" value="#{ingresoUsuarioBean.telefono}" required="true"/>
+
+                            <p:outputLabel for="usuarioTelfOficina" value="Telefono Oficina:"/>
+                            <p:inputText id="usuarioTelfOficina" value="#{ingresoUsuarioBean.telfoficina}" required="true"/>
+
+                            <p:outputLabel for="usuarioEstado" value="Activo?:"/>
+                            <p:selectOneRadio id="usuarioEstado" value="#{ingresoUsuarioBean.estado}" required="true">
+                                <f:selectItem itemLabel="Si" itemValue="true"/>                    
+                                <f:selectItem itemLabel="No" itemValue="false"/>
+                            </p:selectOneRadio>
+
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.crearUsuario()}">
+                                <f:ajax execute="@all" render="@form"/>
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>        
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

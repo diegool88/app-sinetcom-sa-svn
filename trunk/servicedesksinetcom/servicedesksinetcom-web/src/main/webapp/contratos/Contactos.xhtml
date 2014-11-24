@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>
+
+            <h:body>
+
+                <h:form>
+                    <p:dataTable rowKey="#{contactos.id}" var="contactos" value="#{ingresoContactoBean.contactos}" paginator="true" rows="15"
+                                 selection="#{ingresoContactoBean.contactoSeleccionado}" selectionMode="single" paginatorPosition="bottom"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+                        <f:facet name="header">
+                            <h:outputText value="Contactos"/>
+                        </f:facet>
+
+                        <p:column headerText="Cedula" sortBy="#{contactos.cedulaDeCuidadania}" filterBy="#{contactos.cedulaDeCuidadania}">
+                            <h:outputText value="#{contactos.cedulaDeCuidadania}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre" sortBy="#{contactos.nombre}" filterBy="#{contactos.nombre}">
+                            <h:outputText value="#{contactos.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="e-Mail" sortBy="#{contactos.correoElectronico}" filterBy="#{contactos.correoElectronico}">
+                            <h:outputText value="#{contactos.correoElectronico}"/>
+                        </p:column>
+
+                        <p:column headerText="Telefono" sortBy="#{contactos.telefonoFijo}" filterBy="#{contactos.telefonoFijo}">
+                            <h:outputText value="#{contactos.telefonoFijo}"/>
+                        </p:column>
+
+                        <p:column headerText="Celular" sortBy="#{contactos.telefonoMovil}" filterBy="#{contactos.telefonoMovil}">
+                            <h:outputText value="#{contactos.telefonoMovil}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                        </f:facet>
+                    </p:dataTable>    
+                </h:form>
+
+                <p:dialog header="Insertar Contacto" widgetVar="ingreso" modal="true">
+                    <h:form id="contactosForm">
+                        <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+
+                            <p:outputLabel for="contactoRuc" value="Ruc Cliente"/>
+                            <p:selectOneMenu id="contactoRuc" value="#{ingresoContactoBean.ruc}" required="true">                    
+                                <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                                <f:selectItems value="#{ingresoContactoBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}-#{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
+                             </p:selectOneMenu>
+
+                            <p:outputLabel for="contactoCedula" value="Cedula:"/>
+                            <p:inputText id="contactoCedula" value="#{ingresoContactoBean.cedula}" required="true"/>
+
+                            <p:outputLabel for="contactoNombre" value="Nombre:"/>
+                            <p:inputText id="contactoNombre" value="#{ingresoContactoBean.nombre}" required="true"/>
+
+                            <p:outputLabel for="contactoCargo" value="Cargo:"/>
+                            <p:inputText id="contactoCargo" value="#{ingresoContactoBean.cargo}" required="true"/>
+
+                            <p:outputLabel for="contactoCelular" value="Celular:"/>
+                            <p:inputText id="contactoCelular" value="#{ingresoContactoBean.celular}" required="true"/>
+
+                            <p:outputLabel for="contactoTelefono" value="Telefono:"/>
+                            <p:inputText id="contactoTelefono" value="#{ingresoContactoBean.telefono}" required="true"/>
+
+                            <p:outputLabel for="contactoMail" value="e-Mail:"/>
+                            <p:inputText id="contactoMail" value="#{ingresoContactoBean.mail}" required="true"/>
+
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContactoBean.crearContacto()}">
+                                <f:ajax execute="@all" render="@form"/>
+                            </p:commandButton>
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>    
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+
