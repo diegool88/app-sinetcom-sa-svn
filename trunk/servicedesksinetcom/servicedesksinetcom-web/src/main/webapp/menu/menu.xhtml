@@ -62,8 +62,30 @@
             </p:submenu>
             <p:submenu label="Contratos">
                 <p:column>
+                    <p:submenu label="Contrato">
+                        <p:menuitem value="Ingreso" url="/contratos/Contrato.xhtml"></p:menuitem>
+                        <p:menuitem value="Tipos de Contratos" url="/contratos/TiposContrato.xhtml"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+                    
+                <p:column>
                     <p:submenu label="Reportes De Contratos">
                         <p:menuitem value="Ver Reportes" url="/contratos/reportesContratos.xhtml"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+                
+                <p:column>
+                    <p:submenu label="Clientes/Empresas">
+                        <p:menuitem value="Ver Clientes/Empresas" url="/contratos/ClienteEmpresa.xhtml"></p:menuitem>
+                        <p:menuitem value="Tipos de Empresas" url="/contratos/TipoEmpresa.xhtml"></p:menuitem>
+                        <p:menuitem value="Contactos" url="/contratos/Contactos.xhtml"></p:menuitem>
+                    </p:submenu>
+                </p:column>
+                
+                <p:column>
+                    <p:submenu label="SLAs">
+                        <p:menuitem value="Ver SLAs " url="/contratos/Slas.xhtml"></p:menuitem>
+                        <p:menuitem value="Tipos de Disponibilidad" url="/contratos/TipoDisponibilidad.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
@@ -87,7 +109,11 @@
                         </p:submenu>-->
             <p:submenu label="Administrar" rendered="#{login.usuarioActual.grupoid.permisos.administra eq true}">
                 <p:column>
+                    <p:submenu label="Usuarios">
+                        <p:menuitem value="Administrar Usuarios" url="/Usuarios.xhtml"></p:menuitem>                        
+                    </p:submenu>
                     <p:submenu label="Grupos">
+                        <p:menuitem value="Ver Grupos" url="/Grupos.xhtml"></p:menuitem>
                         <p:menuitem value="Grupos-Permisos" url="/grupoPermisos.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
