@@ -95,7 +95,7 @@
                                             <h:outputText value="Item S/N: #{item.numeroSerial}"></h:outputText>
                                         </f:facet>
                                         <p:outputLabel for="componente" value="Componente: "></p:outputLabel>
-                                        <h:outputText id="componente" value="#{item.componenteElectronicoAtomicoid != null ? item.componenteElectronicoAtomicoid.nombre : item.descripcion != null ? item.descripcion : 'No dispoible'}"/>
+                                        <h:outputText id="componente" value="#{item.componenteElectronicoAtomicoid != null ? item.componenteElectronicoAtomicoid.nombre : item.descripcion != null ? item.descripcion : 'No disponible'}"/>
                                         <p:outputLabel for="detalles" value="Detalles: "></p:outputLabel>
                                         <ui:repeat id="detalles" value="#{item.atributoItemProductoList}" var="atributo">
                                             <p:panelGrid columns="2">
