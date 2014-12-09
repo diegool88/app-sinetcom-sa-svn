@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -58,6 +59,7 @@ public class ingresoContratoBean implements Serializable {
     private Integer soporteAnual;
     private Integer soporteutilizado;
     private String numeroFactura;
+    private Integer cantidadPagos;
     
     private Date fechaSuscripcion;
     private Date fechaInicioGTecnica;
@@ -71,6 +73,8 @@ public class ingresoContratoBean implements Serializable {
     private List<Usuario> Usuarios;
     private List<Contacto> Contactos;
     
+    private List<Date> fechasPagos = new ArrayList<Date>();
+    
     @PostConstruct
     public void init() {
         
@@ -79,7 +83,7 @@ public class ingresoContratoBean implements Serializable {
         this.clientesRuc = contratoServicio.cargarEmpresas();
         this.slas = contratoServicio.cargarSlas();
         this.Usuarios = contratoServicio.cargarUsuarios();
-        this.Contactos = contratoServicio.cargarContactos();
+        this.Contactos = contratoServicio.cargarContactos();             
     }    
     
     public void grabarContrato() {
@@ -115,6 +119,15 @@ public class ingresoContratoBean implements Serializable {
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Fecha Seleccionada", format.format(evento.getObject())));
     }
     
+    public void fechasPago() {
+        
+        
+        
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+                
+        requestContext.execute("PF('fechas').show()");
+    }
+    
     public void click() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         
@@ -140,7 +153,7 @@ public class ingresoContratoBean implements Serializable {
      public void handleFileUpload(FileUploadEvent event) {        
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, message);        
-    }
+    }         
 
     public String getNumeroContrato() {
         return numeroContrato;
@@ -262,6 +275,14 @@ public class ingresoContratoBean implements Serializable {
         this.soporteutilizado = soporteutilizado;
     }
 
+    public Integer getCantidadPagos() {
+        return cantidadPagos;
+    }
+
+    public void setCantidadPagos(Integer cantidadPagos) {
+        this.cantidadPagos = cantidadPagos;
+    }
+
     public String getNumeroFactura() {
         return numeroFactura;
     }
@@ -349,4 +370,12 @@ public class ingresoContratoBean implements Serializable {
     public void setContactos(List<Contacto> Contactos) {
         this.Contactos = Contactos;
     }        
+
+    public List<Date> getFechasPagos() {
+        return fechasPagos;
+    }
+
+    public void setFechasPagos(List<Date> fechasPagos) {
+        this.fechasPagos = fechasPagos;
+    }
 }
