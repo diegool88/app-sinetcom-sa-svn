@@ -12,7 +12,7 @@
             <h:head/>        
             <h:body>
                 <h:form>
-                    
+
                 </h:form>                                       
                 <h:form id="nuevoContrato" enctype="multipart/form-data">
                     <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
@@ -92,13 +92,14 @@
                         <p:outputLabel for="contratoFacturaNumero" value="Factura Numero:"/>
                         <p:inputText id="contratoFacturaNumero" value="#{ingresoContratoBean.numeroFactura}"/>
 
-                        <p:outputLabel for="contratoPagos" value="Cantidad de Pagos:"/>
-                        <h:panelGrid>
-                            <p:inputText id="contratoPagos" value="#{ingresoContratoBean.cantidadPagos}" required="true"/>
-                            <p:commandButton value="Generar Pagos" update="prueba" partialSubmit="true" process="contratoPagos" oncomplete="PF('fechas').show();" />
-                        </h:panelGrid>
-                                          
-                        
+                        <p:outputLabel for="contratoPagos" value="Gestionar Pagos:"/>
+                        <p:commandButton id="contratoPagos" value="Ver Pagos" process="contratoFechaSuscripcion, contratoPrecio, contratoValidez" onclick="PF('fechas').show();" />
+                        <!--                        <h:panelGrid>
+                                                    <p:inputText id="contratoPagos" value="#{ingresoContratoBean.cantidadPagos}" required="true"/>
+                                                    <p:commandButton value="Generar Pagos" update="prueba" partialSubmit="true" process="contratoPagos" oncomplete="PF('fechas').show();" />
+                                                </h:panelGrid>-->
+
+
                         <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepcion:"/>
                         <p:calendar id="contratoFechaEntregaRecepcion" value="#{ingresoContratoBean.fechaEntregaRecepcion}" showOn="button"/>                
 
@@ -106,18 +107,44 @@
                             <f:ajax execute="@all" render="@form"/>
                         </p:commandButton>
                     </h:panelGrid> 
-                    
+
                     <p:dialog header="Insertar Fechas de Pago" widgetVar="fechas" modal="true">                   
                         <h:panelGrid id="prueba" columns="2" columnClasses="colum" cellpadding="5">    
-                            
+
                             <p:outputLabel for="cantidadPagos" value="Cantidad de Pagos"/>
-                            <p:inputText id="cantidadPagos" value="#{ingresoContratoBean.cantidadPagos}" readonly="true"/>
-                            
-                            <ui:repeat value="#{ingresoContratoBean.fechasPagos}" var="fechas" varStatus="status" size="#{ingresoContratoBean.cantidadPagos}">
-                                <p:inputText value="fechas" id="fechas#{status.index}"/>
-                            </ui:repeat>
-                            
-                        </h:panelGrid>                    
+                            <p:inputText id="cantidadPagos" value="#{ingresoContratoBean.cantidadPagos}">
+                                <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularFechas()}" update="pagos"></p:ajax>
+                            </p:inputText>
+
+
+<!--                            <ui:repeat value="#{ingresoContratoBean.fechasPagos}" var="fechas" varStatus="status" size="#{ingresoContratoBean.cantidadPagos}">
+    <p:inputText value="fechas" id="fechas#{status.index}"/>
+</ui:repeat>-->
+
+                        </h:panelGrid>  
+                        <p:dataTable id="pagos" value="#{ingresoContratoBean.pagos}" var="pago" editable="true">
+                            <f:facet name="header">
+                                <h:outputText value="Pagos"></h:outputText>
+                            </f:facet>
+                            <p:column headerText="Orden">
+                                <h:outputText value="#{pago.orden}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Monto">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pago.monto}"></h:outputText></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{pago.monto}"></p:inputText></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Fecha">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pago.plazo}"></h:outputText></f:facet>
+                                    <f:facet name="input"><p:calendar value="#{pago.plazo}"></p:calendar></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
                     </p:dialog>
                 </h:form>                                      
             </h:body>

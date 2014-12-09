@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.orm.Contrato;
+import ec.com.sinetcom.orm.Pago;
 import ec.com.sinetcom.orm.Sla;
 import ec.com.sinetcom.orm.TipoContrato;
 import ec.com.sinetcom.orm.Usuario;
@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -39,10 +40,10 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean(name = "ingresoContratoBean")
 @ViewScoped
 public class ingresoContratoBean implements Serializable {
-    
+
     @EJB
     private ContratoServicio contratoServicio;
-    
+
     private String numeroContrato;
     private Integer tipoContrato;
     private String rucClinete;
@@ -53,42 +54,43 @@ public class ingresoContratoBean implements Serializable {
     private BigDecimal precio;
     private Integer tiempoValidez;
     private Integer garantiatecnica;
-    private UploadedFile contratoDigital;    
+    private UploadedFile contratoDigital;
     private Integer srvSoportemantenimiento;
     private Boolean repuestos;
     private Integer soporteAnual;
     private Integer soporteutilizado;
     private String numeroFactura;
     private Integer cantidadPagos;
-    
+
     private Date fechaSuscripcion;
     private Date fechaInicioGTecnica;
     private Date fechaFacturacion;
     private Date fechaEntregaRecepcion;
-    
+
     private List<Contrato> contratos;
     private List<TipoContrato> tiposContrato;
     private List<ClienteEmpresa> clientesRuc;
     private List<Sla> slas;
     private List<Usuario> Usuarios;
     private List<Contacto> Contactos;
-    
+    private List<Pago> pagos;
+
     private List<Date> fechasPagos = new ArrayList<Date>();
-    
+
     @PostConstruct
     public void init() {
-        
+
         this.contratos = contratoServicio.cargarContratos();
         this.tiposContrato = contratoServicio.cargarTiposContrato();
         this.clientesRuc = contratoServicio.cargarEmpresas();
         this.slas = contratoServicio.cargarSlas();
         this.Usuarios = contratoServicio.cargarUsuarios();
-        this.Contactos = contratoServicio.cargarContactos();             
-    }    
-    
+        this.Contactos = contratoServicio.cargarContactos();
+    }
+
     public void grabarContrato() {
         Contrato contrato = new Contrato();
-        
+
         contrato.setNumero(numeroContrato);
         contrato.setTipoContratoid(contratoServicio.recuperarTipoContrato(tipoContrato));
         contrato.setClienteEmpresaruc(contratoServicio.recuperarRucEmpresa(rucClinete));
@@ -109,51 +111,71 @@ public class ingresoContratoBean implements Serializable {
         contrato.setFechaDeFacturacion(fechaFacturacion);
         contrato.setNumeroDeFactura(numeroFactura);
         contrato.setFechaDeEntregaRecepcion(fechaEntregaRecepcion);
-        
-        contratoServicio.crearContrato(contrato);                
+
+        contratoServicio.crearContrato(contrato);
     }
-    
+
     public void enFechaSeleccionada(SelectEvent evento) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Fecha Seleccionada", format.format(evento.getObject())));
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Fecha Seleccionada", format.format(evento.getObject())));
     }
-    
+
     public void fechasPago() {
-        
-        
-        
+
         RequestContext requestContext = RequestContext.getCurrentInstance();
-                
+
         requestContext.execute("PF('fechas').show()");
     }
-    
+
+    public void calcularFechas() {
+        if (cantidadPagos != null) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(this.fechaSuscripcion);
+            c.add(Calendar.YEAR, this.getTiempoValidez());
+            int diasTotales = (int) ((c.getTime().getTime() - this.fechaSuscripcion.getTime()) / (1000 * 60 * 60 * 24));
+            int diasEntre = (int) Math.round((double) diasTotales / (double) this.cantidadPagos);
+            double monto = this.precio.doubleValue() / (double) this.cantidadPagos;
+            this.pagos = new ArrayList<Pago>();
+
+            c.setTime(this.fechaSuscripcion);
+            for (int i = 0; i < this.cantidadPagos; i++) {
+                if (i == 0) {
+                    this.pagos.add(new Pago(null, i + 1, new BigDecimal(monto), this.fechaSuscripcion));
+                } else {
+                    c.add(Calendar.DAY_OF_MONTH, diasEntre);
+                    this.pagos.add(new Pago(null, i + 1, new BigDecimal(monto), c.getTime()));
+                }
+            }
+        }
+    }
+
     public void click() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        
+
         requestContext.update("form:display");
         requestContext.execute("PF('dlg').show()");
     }
-    
-    public byte[] convetirPDF(UploadedFile file ) {
+
+    public byte[] convetirPDF(UploadedFile file) {
         FileInputStream fileInputStream = null;
-        
+
         byte[] bFile = new byte[(int) file.toString().length()];
-        
+
         try {
             fileInputStream = new FileInputStream(file.toString());
             fileInputStream.read(bFile);
-            fileInputStream.close();                               
-        } catch(IOException e) {
+            fileInputStream.close();
+        } catch (IOException e) {
         }
-        
+
         return bFile;
     }
-    
-     public void handleFileUpload(FileUploadEvent event) {        
+
+    public void handleFileUpload(FileUploadEvent event) {
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-        FacesContext.getCurrentInstance().addMessage(null, message);        
-    }         
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 
     public String getNumeroContrato() {
         return numeroContrato;
@@ -241,7 +263,7 @@ public class ingresoContratoBean implements Serializable {
 
     public void setContratoDigital(UploadedFile contratoDigital) {
         this.contratoDigital = contratoDigital;
-    }   
+    }
 
     public Integer getSrvSoportemantenimiento() {
         return srvSoportemantenimiento;
@@ -289,7 +311,7 @@ public class ingresoContratoBean implements Serializable {
 
     public void setNumeroFactura(String numeroFactura) {
         this.numeroFactura = numeroFactura;
-    }          
+    }
 
     public Date getFechaSuscripcion() {
         return fechaSuscripcion;
@@ -321,7 +343,7 @@ public class ingresoContratoBean implements Serializable {
 
     public void setFechaEntregaRecepcion(Date fechaEntregaRecepcion) {
         this.fechaEntregaRecepcion = fechaEntregaRecepcion;
-    }   
+    }
 
     public List<Contrato> getContratos() {
         return contratos;
@@ -330,14 +352,14 @@ public class ingresoContratoBean implements Serializable {
     public void setContratos(List<Contrato> contratos) {
         this.contratos = contratos;
     }
-    
+
     public List<TipoContrato> getTiposContrato() {
         return tiposContrato;
     }
 
     public void setTiposContrato(List<TipoContrato> tiposContrato) {
         this.tiposContrato = tiposContrato;
-    }        
+    }
 
     public List<ClienteEmpresa> getClientesRuc() {
         return clientesRuc;
@@ -345,7 +367,7 @@ public class ingresoContratoBean implements Serializable {
 
     public void setClientesRuc(List<ClienteEmpresa> clientesRuc) {
         this.clientesRuc = clientesRuc;
-    }    
+    }
 
     public List<Sla> getSlas() {
         return slas;
@@ -353,7 +375,7 @@ public class ingresoContratoBean implements Serializable {
 
     public void setSlas(List<Sla> slas) {
         this.slas = slas;
-    }        
+    }
 
     public List<Usuario> getUsuarios() {
         return Usuarios;
@@ -369,7 +391,7 @@ public class ingresoContratoBean implements Serializable {
 
     public void setContactos(List<Contacto> Contactos) {
         this.Contactos = Contactos;
-    }        
+    }
 
     public List<Date> getFechasPagos() {
         return fechasPagos;
@@ -378,4 +400,13 @@ public class ingresoContratoBean implements Serializable {
     public void setFechasPagos(List<Date> fechasPagos) {
         this.fechasPagos = fechasPagos;
     }
+
+    public List<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(List<Pago> pagos) {
+        this.pagos = pagos;
+    }
+
 }
