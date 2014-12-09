@@ -3,7 +3,8 @@
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
-                template="/template/plantilla.xhtml">
+                template="/template/plantilla.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
     <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Contratos"></h:outputText></ui:define>
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
@@ -91,15 +92,34 @@
                         <p:outputLabel for="contratoFacturaNumero" value="Factura Numero:"/>
                         <p:inputText id="contratoFacturaNumero" value="#{ingresoContratoBean.numeroFactura}"/>
 
-
+                        <p:outputLabel for="contratoPagos" value="Cantidad de Pagos:"/>
+                        <h:panelGrid>
+                            <p:inputText id="contratoPagos" value="#{ingresoContratoBean.cantidadPagos}" required="true"/>
+                            <p:commandButton value="Generar Pagos" update="prueba" partialSubmit="true" process="contratoPagos" oncomplete="PF('fechas').show();" />
+                        </h:panelGrid>
+                                          
+                        
                         <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepcion:"/>
                         <p:calendar id="contratoFechaEntregaRecepcion" value="#{ingresoContratoBean.fechaEntregaRecepcion}" showOn="button"/>                
 
                         <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContratoBean.grabarContrato()}">
                             <f:ajax execute="@all" render="@form"/>
                         </p:commandButton>
-                    </h:panelGrid>            
-                </h:form>     
+                    </h:panelGrid> 
+                    
+                    <p:dialog header="Insertar Fechas de Pago" widgetVar="fechas" modal="true">                   
+                        <h:panelGrid id="prueba" columns="2" columnClasses="colum" cellpadding="5">    
+                            
+                            <p:outputLabel for="cantidadPagos" value="Cantidad de Pagos"/>
+                            <p:inputText id="cantidadPagos" value="#{ingresoContratoBean.cantidadPagos}" readonly="true"/>
+                            
+                            <ui:repeat value="#{ingresoContratoBean.fechasPagos}" var="fechas" varStatus="status" size="#{ingresoContratoBean.cantidadPagos}">
+                                <p:inputText value="fechas" id="fechas#{status.index}"/>
+                            </ui:repeat>
+                            
+                        </h:panelGrid>                    
+                    </p:dialog>
+                </h:form>                                      
             </h:body>
         </f:view>
     </ui:define>
