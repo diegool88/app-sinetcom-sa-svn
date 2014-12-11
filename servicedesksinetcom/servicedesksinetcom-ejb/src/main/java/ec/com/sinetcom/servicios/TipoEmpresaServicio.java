@@ -34,4 +34,15 @@ public class TipoEmpresaServicio {
     public void crearTipoEmpresa(TipoEmpresa tipoEmpresa) {
         tipoEmpresaFacade.create(tipoEmpresa);
     }
+    
+     public void eliminarTipoEmpresa(Integer tipoEmpresa) {
+        try {
+            TipoEmpresa aEliminar = tipoEmpresaFacade.find(tipoEmpresa);
+            if (aEliminar != null) {
+                tipoEmpresaFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }

@@ -46,4 +46,15 @@ public class ContactoServicio {
     public ClienteEmpresa recuperarClienteEmpresa(String id) {
         return clienteEmpresaFacade.find(id);        
     }
+    
+     public void eliminarTipoContrato(Integer contacto) {
+        try {
+            Contacto aEliminar = contactoFacade.find(contacto);
+            if (aEliminar != null) {
+                contactoFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }
