@@ -12,8 +12,8 @@
 
             <h:body>
 
-                <h:form>
-                    <p:dataTable rowKey="#{disponibilidades.id}" var="disponibilidades" value="#{ingresoTipoDisponibilidadBean.tiposDisponibilidad}" paginator="true" rows="15"
+                <h:form id="verTipoDispForm">
+                    <p:dataTable id="dtTipoDisp" rowKey="#{disponibilidades.id}" var="disponibilidades" value="#{ingresoTipoDisponibilidadBean.tiposDisponibilidad}" paginator="true" rows="15"
                                  selection="#{ingresoTipoDisponibilidadBean.tipoDisponibilidadSeleccionada}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -31,7 +31,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnEliminar" process="dtTipoDisp" value="Eliminar" action="#{ingresoTipoDisponibilidadBean.eliminarTipoDisponibilidad()}" update=":verTipoDispForm:dtTipoDisp"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -49,7 +49,7 @@
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoDisponibilidadBean.crearTipoDisponibilidad()}">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoDisponibilidadBean.crearTipoDisponibilidad()}" onclick="PF('ingreso').hide();" update=":verTipoDispForm:dtTipoDisp">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

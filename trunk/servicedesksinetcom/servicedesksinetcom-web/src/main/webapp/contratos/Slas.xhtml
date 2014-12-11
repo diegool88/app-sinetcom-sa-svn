@@ -12,8 +12,8 @@
 
             <h:body>
 
-                <h:form>
-                    <p:dataTable rowKey="#{slas.id}" var="slas" value="#{ingresoSlaBean.slas}" paginator="true" rows="15"
+                <h:form id="verSlaForm">
+                    <p:dataTable id="dtSla" rowKey="#{slas.id}" var="slas" value="#{ingresoSlaBean.slas}" paginator="true" rows="15"
                                  selection="#{ingresoSlaBean.slaSeleccionado}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -39,7 +39,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnEliminar" process="dtSla" value="Eliminar" action="#{ingresoSlaBean.eliminarSla()}" update=":verSlaForm:dtSla"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -76,7 +76,7 @@
                             <p:outputLabel for="slaTiempoSolucion" value="Tiempo de Solucion:"/>
                             <p:inputText id="slaTiempoSolucion" value="#{ingresoSlaBean.tiempoSolucion}" required="true"/> 
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}" onclick="PF('ingreso').hide();" update=":verSlaForm:dtSla">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 
