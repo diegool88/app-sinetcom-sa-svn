@@ -12,8 +12,8 @@
 
             <h:body>
 
-                <h:form>
-                    <p:dataTable rowKey="#{contactos.id}" var="contactos" value="#{ingresoContactoBean.contactos}" paginator="true" rows="15"
+                <h:form id="verContactosForm">
+                    <p:dataTable id="dtContactos" rowKey="#{contactos.id}" var="contactos" value="#{ingresoContactoBean.contactos}" paginator="true" rows="15"
                                  selection="#{ingresoContactoBean.contactoSeleccionado}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -43,7 +43,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnEliminar" process="dtContactos" value="Eliminar" action="#{ingresoContactoBean.eliminarContacto()}" update=":verContactosForm:dtContactos"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -76,7 +76,7 @@
                             <p:outputLabel for="contactoMail" value="e-Mail:"/>
                             <p:inputText id="contactoMail" value="#{ingresoContactoBean.mail}" required="true"/>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContactoBean.crearContacto()}">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContactoBean.crearContacto()}" onclick="PF('ingreso').hide();" update=":verContactosForm:dtContactos">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

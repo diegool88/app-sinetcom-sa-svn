@@ -11,8 +11,8 @@
             <h:head/>
 
             <h:body>        
-                <h:form>
-                    <p:dataTable rowKey="#{tempresas.id}" var="tempresas" value="#{ingresoTipoEmpresaBean.tiposEmpresa}" paginator="true" rows="15"
+                <h:form id="verTipoEmpresaForm">
+                    <p:dataTable id="dtTiposEmpresa" rowKey="#{tempresas.id}" var="tempresas" value="#{ingresoTipoEmpresaBean.tiposEmpresa}" paginator="true" rows="15"
                                  selection="#{ingresoTipoEmpresaBean.tipoEmpresaSeleccionada}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -30,7 +30,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnEliminar" process="dtTiposEmpresa" value="Eliminar" action="#{ingresoTipoEmpresaBean.eliminarTipoEmpresa()}" update=":verTipoEmpresaForm:dtTiposEmpresa"/>                
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -48,7 +48,7 @@
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoEmpresaBean.crearTipoEmpresa()}">
+                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoEmpresaBean.crearTipoEmpresa()}" onclick="PF('ingreso').hide();"  update=":verTipoEmpresaForm:dtTiposEmpresa">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

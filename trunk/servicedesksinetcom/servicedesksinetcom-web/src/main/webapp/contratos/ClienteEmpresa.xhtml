@@ -11,8 +11,8 @@
             <h:head/>       
             <h:body>
 
-                <h:form>
-                    <p:dataTable rowKey="#{empresas.ruc}" var="empresas" value="#{ingresoClienteEmpresaBean.clientesEnpresa}" paginator="true" rows="15"
+                <h:form id="verClientesForm">
+                    <p:dataTable id="dtlClientes" rowKey="#{empresas.ruc}" var="empresas" value="#{ingresoClienteEmpresaBean.clientesEnpresa}" paginator="true" rows="15"
                                  selection="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -38,7 +38,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnEliminar" process="dtlClientes" value="Eliminar" action="#{ingresoClienteEmpresaBean.eliminarEmpresa()}" update=":verClientesForm:dtlClientes"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -74,7 +74,7 @@
                             <p:outputLabel for="clienteRepresentante" value="Representante Legal:"/>
                             <p:inputText id="clienteRepresentante" value="#{ingresoClienteEmpresaBean.representantelegal}" required="true"/>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.crearEmpresa()}">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.crearEmpresa()}" onclick="PF('ingreso').hide();" update=":verClientesForm:dtlClientes">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 
