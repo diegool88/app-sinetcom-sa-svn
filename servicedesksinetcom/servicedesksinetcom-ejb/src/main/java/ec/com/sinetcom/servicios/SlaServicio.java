@@ -46,4 +46,15 @@ public class SlaServicio {
     public TipoDisponibilidad recuperarTipoDisponibilidad(Integer id) {
         return tipoDisponibilidadFacade.find(id);
     }
+    
+     public void eliminarSLA(Integer sla) {
+        try {
+            Sla aEliminar = slaFacade.find(sla);
+            if (aEliminar != null) {
+                slaFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }

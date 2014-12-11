@@ -34,4 +34,15 @@ public class GrupoServicio {
     public void crearGrupo(Grupo grupo) {
         grupoFacade.create(grupo);
     }
+    
+     public void eliminarGrupo(Integer grupo) {
+        try {
+            Grupo aEliminar = grupoFacade.find(grupo);
+            if (aEliminar != null) {
+                grupoFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }
