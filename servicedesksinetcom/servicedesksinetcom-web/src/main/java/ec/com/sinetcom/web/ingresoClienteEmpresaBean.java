@@ -60,6 +60,12 @@ public class ingresoClienteEmpresaBean implements Serializable{
         cliente.setUsuarioid(clienteEmpresaServicio.recuperarUsuario(numUsuario));
         
         clienteEmpresaServicio.crearClienteEmpresa(cliente);
+         this.clientesEnpresa = clienteEmpresaServicio.cargarClientesEmpresa();
+    }
+    
+    public void eliminarEmpresa() {
+        clienteEmpresaServicio.eliminarClienteEmpresa(clienteEmpresaSeleccionado.getRuc());
+        this.clientesEnpresa = clienteEmpresaServicio.cargarClientesEmpresa();
     }
 
     public String getNumRuc() {

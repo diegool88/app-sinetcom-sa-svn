@@ -43,8 +43,14 @@ public class ingresoTipoEmpresaBean {
         tipoEmpresa.setValido(validez);
         
         tipoEmpresaServicio.crearTipoEmpresa(tipoEmpresa);
+        this.tiposEmpresa = tipoEmpresaServicio.cragarTiposEmpresa();
     }    
 
+    public void eliminarTipoEmpresa() {
+        tipoEmpresaServicio.eliminarTipoEmpresa(tipoEmpresaSeleccionada.getId());
+        this.tiposEmpresa = tipoEmpresaServicio.cragarTiposEmpresa();
+    }
+    
     public String getTipo() {
         return tipo;
     }
