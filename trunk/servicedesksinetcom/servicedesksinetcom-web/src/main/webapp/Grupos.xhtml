@@ -11,8 +11,8 @@
             <h:head/>
 
             <h:body>
-                <h:form>
-                    <p:dataTable rowKey="#{grupos.id}" var="grupos" value="#{ingresoGrupoBean.grupos}" paginator="true" rows="15"
+                <h:form id="verGrupoForm">
+                    <p:dataTable id="dtGrupos" rowKey="#{grupos.id}" var="grupos" value="#{ingresoGrupoBean.grupos}" paginator="true" rows="15"
                                  selection="#{ingresoGrupoBean.grupoSeleccionado}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -30,7 +30,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnEliminar" process="dtGrupos" value="Eliminar" action="#{ingresoGrupoBean.eliminarGrupo()}" update=":verGrupoForm:dtGrupos"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -45,7 +45,7 @@
                             <p:outputLabel for="grupoDescripcion" value="Descripción:"/>
                             <p:inputTextarea id="grupoDescripcion" value="#{ingresoGrupoBean.descripcion}" />
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoGrupoBean.crearGrupo()}">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoGrupoBean.crearGrupo()}" onclick="PF('ingreso').hide();" update=":verGrupoForm:dtGrupos">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 
