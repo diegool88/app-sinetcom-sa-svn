@@ -162,4 +162,15 @@ public class UsuarioServicio {
     public Usuario obtenerUsuarioPorId(int id){
         return this.usuarioFacade.find(id);
     }
+    
+     public void eliminarUsuario(Integer usuario) {
+        try {
+            Usuario aEliminar = usuarioFacade.find(usuario);
+            if (aEliminar != null) {
+                usuarioFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }

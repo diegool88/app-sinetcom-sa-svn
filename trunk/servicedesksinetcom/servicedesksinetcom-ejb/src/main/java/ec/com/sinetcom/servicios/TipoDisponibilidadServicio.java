@@ -34,4 +34,15 @@ public class TipoDisponibilidadServicio {
     public void crearTipoDisponibilidad(TipoDisponibilidad tipoDisponibilidad ) {
         tipoDisponibilidadFacade.create(tipoDisponibilidad);
     }
+    
+     public void eliminarTipoDisp(Integer tipoDisp) {
+        try {
+            TipoDisponibilidad aEliminar = tipoDisponibilidadFacade.find(tipoDisp);
+            if (aEliminar != null) {
+                tipoDisponibilidadFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }
