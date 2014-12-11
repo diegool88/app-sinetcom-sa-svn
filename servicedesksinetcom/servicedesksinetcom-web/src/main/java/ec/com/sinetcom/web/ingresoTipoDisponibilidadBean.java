@@ -43,6 +43,12 @@ public class ingresoTipoDisponibilidadBean {
         tipoDisponibilidad.setValido(estado);
         
         tipoDisponibilidadServicio.crearTipoDisponibilidad(tipoDisponibilidad);
+        this.tiposDisponibilidad = tipoDisponibilidadServicio.ccargarTiposDisponibilidad();
+    }
+    
+    public void eliminarTipoDisponibilidad() {
+        tipoDisponibilidadServicio.eliminarTipoDisp(tipoDisponibilidadSeleccionada.getId());
+        this.tiposDisponibilidad = tipoDisponibilidadServicio.ccargarTiposDisponibilidad();
     }
 
     public String getDisponibilidad() {
