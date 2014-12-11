@@ -43,6 +43,12 @@ public class ingresoGrupoBean {
         grupo.setDescripcion(descripcion);
         
         grupoServicio.crearGrupo(grupo);
+        this.grupos = grupoServicio.cragarGrupos();
+    }
+    
+    public void eliminarGrupo() {
+        grupoServicio.eliminarGrupo(grupoSeleccionado.getId());
+        this.grupos = grupoServicio.cragarGrupos();
     }
 
     public String getNombre() {

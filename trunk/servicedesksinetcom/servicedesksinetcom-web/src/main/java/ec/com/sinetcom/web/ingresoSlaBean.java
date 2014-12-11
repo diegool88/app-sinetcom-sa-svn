@@ -58,6 +58,12 @@ public class ingresoSlaBean {
         sla.setTiempoDeSolucion(tiempoSolucion);
         
         slaServicio.crearSLA(sla);
+        this.slas = slaServicio.cragarSlas();
+    }
+    
+    public void eliminarSla() {
+        slaServicio.eliminarSLA(slaSeleccionado.getId());
+        this.slas = slaServicio.cragarSlas();
     }
 
     public Integer getNumSla() {

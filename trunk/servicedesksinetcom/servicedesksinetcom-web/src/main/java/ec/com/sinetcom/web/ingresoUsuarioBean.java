@@ -64,12 +64,14 @@ public class ingresoUsuarioBean implements Serializable {
         usuario.setActivo(estado);
 
         usuarioServicio.crearUsuario(usuario);
+        this.usuarios = usuarioServicio.cragarUsuarios();
     }
     
     public void eliminarUsuario() {
-        usuarioServicio.eliminarUsuario(usuarioSeleccionado);
-    }        
-
+        usuarioServicio.eliminarUsuario(usuarioSeleccionado.getId());
+        this.usuarios = usuarioServicio.cragarUsuarios();
+    }
+               
     public Integer getNumGrupo() {
         return numGrupo;
     }
