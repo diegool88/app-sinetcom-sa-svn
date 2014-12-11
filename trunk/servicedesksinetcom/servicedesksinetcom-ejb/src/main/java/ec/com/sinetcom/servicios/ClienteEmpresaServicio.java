@@ -58,4 +58,15 @@ public class ClienteEmpresaServicio {
     public TipoEmpresa recuperarTipoEmpresa(Integer id) {
         return tipoEmpresaFacade.find(id);
     }
+    
+     public void eliminarClienteEmpresa(String clienteEmpresa) {
+        try {
+            ClienteEmpresa aEliminar = clienteEmpresaFacade.find(clienteEmpresa);
+            if (aEliminar != null) {
+                clienteEmpresaFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }

@@ -34,4 +34,15 @@ public class TipoContratoServicio {
     public void crearTipoContrato(TipoContrato tipoContrato) {
         tipoContratoFacade.create(tipoContrato);
     } 
+    
+    public void eliminarTipoContrato(Integer tipoContrato) {
+        try {
+            TipoContrato aEliminar = tipoContratoFacade.find(tipoContrato);
+            if (aEliminar != null) {
+                tipoContratoFacade.remove(aEliminar);
+            }                         
+        } catch (Exception e) {
+        }
+               
+    }
 }
