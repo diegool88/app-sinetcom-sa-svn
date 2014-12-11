@@ -12,8 +12,8 @@
 
             <h:body>
 
-                <h:form>
-                    <p:dataTable rowKey="#{tipos.id}" var="tipos" value="#{ingresoTipoContratoBean.tiposContrato}" paginator="true" rows="15"
+                <h:form id="tipoContratoForm">
+                    <p:dataTable id="dtTiposContrato" rowKey="#{tipos.id}" var="tipos" value="#{ingresoTipoContratoBean.tiposContrato}" paginator="true" rows="15"
                                  selection="#{ingresoTipoContratoBean.tipoContratoSeleccionado}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -30,32 +30,31 @@
                         </p:column>
 
                         <f:facet name="footer">
-                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" value="Eliminar" type="button" update=":form:dataTable" immediate="true"/>                       
+                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();" update=":form:pnlgrdIngreso"/>       
+                            <p:commandButton id="btnEliminar" process="dtTiposContrato" value="Eliminar" action="#{ingresoTipoContratoBean.eliminarTipo()}" update=":tipoContratoForm:dtTiposContrato"/>                       
                         </f:facet>
-                    </p:dataTable>    
+                    </p:dataTable>                    
                 </h:form>
+                    <p:dialog header="Insertar Tipo de Contrato" widgetVar="ingreso" modal="true">
+                        <h:form>
+                            <h:panelGrid id="pnlgrdIngreso" columns="2" columnClasses="colum" cellpadding="5">
 
-                <p:dialog header="Insertar Tipo de Contrato" widgetVar="ingreso" modal="true">
-                    <h:form id="TiposContratoForm">
-                        <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+                                <p:outputLabel for="tipoContratoTipo" value="Tipo:"/>
+                                <p:inputText id="tipoContratoTipo" value="#{ingresoTipoContratoBean.tipo}" required="true"/>
 
-                            <p:outputLabel for="tipoContratoTipo" value="Tipo:"/>
-                            <p:inputText id="tipoContratoTipo" value="#{ingresoTipoContratoBean.tipo}" required="true"/>
+                                <p:outputLabel for="tipoContratoValides" value="Tipo:"/>
+                                <p:selectOneRadio id="tipoContratoValides" value="#{ingresoTipoContratoBean.valides}" required="true">
+                                    <f:selectItem itemLabel="Si" itemValue="true"/>                    
+                                    <f:selectItem itemLabel="No" itemValue="false"/>
+                                </p:selectOneRadio>
 
-                            <p:outputLabel for="tipoContratoValides" value="Tipo:"/>
-                            <p:selectOneRadio id="tipoContratoValides" value="#{ingresoTipoContratoBean.valides}" required="true">
-                                <f:selectItem itemLabel="Si" itemValue="true"/>                    
-                                <f:selectItem itemLabel="No" itemValue="false"/>
-                            </p:selectOneRadio>
+                                <p:commandButton id="btnGrabar" process="@form" value="Grabar" action="#{ingresoTipoContratoBean.crearTipoContrato()}" onclick="PF('ingreso').hide();" update=":tipoContratoForm:dtTiposContrato">
+                                    <f:ajax execute="@all" render="@form"/>
+                                </p:commandButton>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoContratoBean.crearTipoContrato()}">
-                                <f:ajax execute="@all" render="@form"/>
-                            </p:commandButton>
-
-                        </h:panelGrid>
-                    </h:form>
-                </p:dialog>    
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>                    
             </h:body>
         </f:view>
     </ui:define>
