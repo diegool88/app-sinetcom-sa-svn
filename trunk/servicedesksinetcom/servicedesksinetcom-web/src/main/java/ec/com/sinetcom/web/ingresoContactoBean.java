@@ -56,6 +56,12 @@ public class ingresoContactoBean {
         contacto.setCorreoElectronico(mail);
         
         contactoServicio.crearContacto(contacto);
+        this.contactos = contactoServicio.cragarContactos();
+    }
+    
+    public void eliminarContacto() {
+        contactoServicio.eliminarTipoContrato(contactoSeleccionado.getId());
+        this.contactos = contactoServicio.cragarContactos();
     }
 
     public String getRuc() {

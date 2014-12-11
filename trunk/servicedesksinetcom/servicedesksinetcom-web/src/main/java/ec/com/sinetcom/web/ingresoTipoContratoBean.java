@@ -43,6 +43,13 @@ public class ingresoTipoContratoBean {
         tipocontrato.setValido(valides);
         
         tipoContratoServicio.crearTipoContrato(tipocontrato);
+        this.tiposContrato = tipoContratoServicio.cragarTiposContactos();
+                
+    }
+    
+    public void eliminarTipo() {        
+        tipoContratoServicio.eliminarTipoContrato(tipoContratoSeleccionado.getId());  
+        this.tiposContrato = tipoContratoServicio.cragarTiposContactos();
     }
 
     public String getTipo() {
