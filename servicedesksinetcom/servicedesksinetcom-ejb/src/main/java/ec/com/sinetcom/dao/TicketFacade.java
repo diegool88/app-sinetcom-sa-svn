@@ -5,7 +5,7 @@
 package ec.com.sinetcom.dao;
 
 import ec.com.sinetcom.orm.ClienteEmpresa;
-import ec.com.sinetcom.orm.Cola;
+import ec.com.sinetcom.orm.ColaTicket;
 import ec.com.sinetcom.orm.EstadoTicket;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.ServicioTicket;
@@ -186,7 +186,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @param cola
      * @return
      */
-    public List<Ticket> obtenerTicketsPorColaDePropietario(Usuario usuario, Cola cola) {
+    public List<Ticket> obtenerTicketsPorColaDePropietario(Usuario usuario, ColaTicket cola) {
         ClienteEmpresa empresa = this.clienteEmpresaFacade.obtenerClienteEmpresaPorUsuario(usuario);
         String sql;
 
@@ -251,7 +251,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
      * @param cola
      * @return
      */
-    public List<Ticket> obtenerTodosLosTicketsPorCola(Cola cola) {
+    public List<Ticket> obtenerTodosLosTicketsPorCola(ColaTicket cola) {
         String sql = "SELECT t FROM Ticket t WHERE t.colaid = ?1";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, cola);

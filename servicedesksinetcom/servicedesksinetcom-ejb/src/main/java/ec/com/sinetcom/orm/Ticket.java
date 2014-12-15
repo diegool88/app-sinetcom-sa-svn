@@ -41,8 +41,8 @@ public class Ticket implements Serializable {
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
-    private List<VisitasTecnicas> visitasTecnicasList;
+    @OneToMany(mappedBy = "ticketticketNumber")
+    private List<VisitaTecnica> visitaTecnicaList;
     @Column(name = "fechaDePrimerContacto")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaDePrimerContacto;
@@ -113,9 +113,9 @@ public class Ticket implements Serializable {
     @JoinColumn(name = "EstadoTicket_codigo", referencedColumnName = "codigo")
     @ManyToOne(optional = false)
     private EstadoTicket estadoTicketcodigo;
-    @JoinColumn(name = "Cola_id", referencedColumnName = "id")
+    @JoinColumn(name = "ColaTicket_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Cola colaid;
+    private ColaTicket colaid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
     private List<HistorialDeTicket> historialDeTicketList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketticketNumber")
@@ -215,11 +215,11 @@ public class Ticket implements Serializable {
         this.estadoTicketcodigo = estadoTicketcodigo;
     }
 
-    public Cola getColaid() {
+    public ColaTicket getColaid() {
         return colaid;
     }
 
-    public void setColaid(Cola colaid) {
+    public void setColaid(ColaTicket colaid) {
         this.colaid = colaid;
     }
 
@@ -356,12 +356,12 @@ public class Ticket implements Serializable {
     }
 
     @XmlTransient
-    public List<VisitasTecnicas> getVisitasTecnicasList() {
-        return visitasTecnicasList;
+    public List<VisitaTecnica> getVisitaTecnicaList() {
+        return visitaTecnicaList;
     }
 
-    public void setVisitasTecnicasList(List<VisitasTecnicas> visitasTecnicasList) {
-        this.visitasTecnicasList = visitasTecnicasList;
+    public void setVisitaTecnicaList(List<VisitaTecnica> visitaTecnicaList) {
+        this.visitaTecnicaList = visitaTecnicaList;
     }
     
 }

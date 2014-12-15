@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.HistorialDeMovimientoDeProducto;
+import ec.com.sinetcom.orm.DetalleDeMovimientoDeProducto;
 import ec.com.sinetcom.orm.RegistroDeMovimientoDeInventario;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author diegoflores
  */
 @Stateless
-public class HistorialDeMovimientoDeProductoFacade extends AbstractFacade<HistorialDeMovimientoDeProducto> {
+public class DetalleDeMovimientoDeProductoFacade extends AbstractFacade<DetalleDeMovimientoDeProducto> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -26,8 +26,8 @@ public class HistorialDeMovimientoDeProductoFacade extends AbstractFacade<Histor
         return em;
     }
 
-    public HistorialDeMovimientoDeProductoFacade() {
-        super(HistorialDeMovimientoDeProducto.class);
+    public DetalleDeMovimientoDeProductoFacade() {
+        super(DetalleDeMovimientoDeProducto.class);
     }
     
     /**
@@ -35,7 +35,7 @@ public class HistorialDeMovimientoDeProductoFacade extends AbstractFacade<Histor
      * @param registro
      * @return 
      */
-    public List<HistorialDeMovimientoDeProducto> forzarCargaDeHistorialDeMovimientoPorRegistro(RegistroDeMovimientoDeInventario registro){
+    public List<DetalleDeMovimientoDeProducto> forzarCargaDeHistorialDeMovimientoPorRegistro(RegistroDeMovimientoDeInventario registro){
         String sql = "SELECT h FROM HistorialDeMovimientoDeProducto h WHERE h.registroDeMovimientoDeInventariocodigo = ?1";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, registro);

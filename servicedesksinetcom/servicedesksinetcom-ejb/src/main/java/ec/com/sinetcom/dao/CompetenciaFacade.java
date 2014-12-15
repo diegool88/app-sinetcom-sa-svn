@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.ParametrosDeProducto;
+import ec.com.sinetcom.orm.Competencia;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author diegoflores
  */
 @Stateless
-public class ParametrosDeProductoFacade extends AbstractFacade<ParametrosDeProducto> {
+public class CompetenciaFacade extends AbstractFacade<Competencia> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -23,8 +23,8 @@ public class ParametrosDeProductoFacade extends AbstractFacade<ParametrosDeProdu
         return em;
     }
 
-    public ParametrosDeProductoFacade() {
-        super(ParametrosDeProducto.class);
+    public CompetenciaFacade() {
+        super(Competencia.class);
     }
     
 }

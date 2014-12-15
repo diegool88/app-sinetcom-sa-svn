@@ -32,11 +32,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author diegoflores
  */
 @Entity
-@Table(name = "Cola", catalog = "dbsinetcom", schema = "")
+@Table(name = "ColaTicket", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cola.findAll", query = "SELECT c FROM Cola c")})
-public class Cola implements Serializable {
+    @NamedQuery(name = "ColaTicket.findAll", query = "SELECT c FROM ColaTicket c")})
+public class ColaTicket implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,18 +59,18 @@ public class Cola implements Serializable {
     private Date fechaDeCreacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "colaid")
     private List<Ticket> ticketList;
-    @JoinColumn(name = "Competencias_id", referencedColumnName = "id")
+    @JoinColumn(name = "Competencia_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Competencias competenciasid;
+    private Competencia competenciaid;
 
-    public Cola() {
+    public ColaTicket() {
     }
 
-    public Cola(Integer id) {
+    public ColaTicket(Integer id) {
         this.id = id;
     }
 
-    public Cola(Integer id, String nombre, boolean valido, Date fechaDeCreacion) {
+    public ColaTicket(Integer id, String nombre, boolean valido, Date fechaDeCreacion) {
         this.id = id;
         this.nombre = nombre;
         this.valido = valido;
@@ -118,12 +118,12 @@ public class Cola implements Serializable {
         this.ticketList = ticketList;
     }
 
-    public Competencias getCompetenciasid() {
-        return competenciasid;
+    public Competencia getCompetenciaid() {
+        return competenciaid;
     }
 
-    public void setCompetenciasid(Competencias competenciasid) {
-        this.competenciasid = competenciasid;
+    public void setCompetenciaid(Competencia competenciaid) {
+        this.competenciaid = competenciaid;
     }
 
     @Override
@@ -136,10 +136,10 @@ public class Cola implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cola)) {
+        if (!(object instanceof ColaTicket)) {
             return false;
         }
-        Cola other = (Cola) object;
+        ColaTicket other = (ColaTicket) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

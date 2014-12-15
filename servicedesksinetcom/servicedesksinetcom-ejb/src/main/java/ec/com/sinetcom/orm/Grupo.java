@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Grupo.findAll", query = "SELECT g FROM Grupo g")})
 public class Grupo implements Serializable {
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "grupo")
+    private Permiso permiso;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +49,7 @@ public class Grupo implements Serializable {
     @Size(max = 150)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "grupo")
-    private Permisos permisos;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupoid")
     private List<AtributoGrupo> atributoGrupoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupoid")
@@ -88,14 +89,6 @@ public class Grupo implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Permisos getPermisos() {
-        return permisos;
-    }
-
-    public void setPermisos(Permisos permisos) {
-        this.permisos = permisos;
     }
 
     @XmlTransient
@@ -139,6 +132,14 @@ public class Grupo implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Grupo[ id=" + id + " ]";
+    }
+
+    public Permiso getPermiso() {
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
     }
     
 }

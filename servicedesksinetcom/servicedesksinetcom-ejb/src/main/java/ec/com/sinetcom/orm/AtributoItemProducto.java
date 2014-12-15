@@ -36,9 +36,9 @@ public class AtributoItemProducto implements Serializable,  Cloneable {
     @Size(min = 1, max = 45)
     @Column(name = "valor")
     private String valor;
-    @JoinColumn(name = "ParametrosDeProducto_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "ParametroDeProducto_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private ParametrosDeProducto parametrosDeProducto;
+    private ParametroDeProducto parametroDeProducto;
     @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private ItemProducto itemProducto;
@@ -75,12 +75,12 @@ public class AtributoItemProducto implements Serializable,  Cloneable {
         this.valor = valor;
     }
 
-    public ParametrosDeProducto getParametrosDeProducto() {
-        return parametrosDeProducto;
+    public ParametroDeProducto getParametroDeProducto() {
+        return parametroDeProducto;
     }
 
-    public void setParametrosDeProducto(ParametrosDeProducto parametrosDeProducto) {
-        this.parametrosDeProducto = parametrosDeProducto;
+    public void setParametroDeProducto(ParametroDeProducto parametrosDeProducto) {
+        this.parametroDeProducto = parametrosDeProducto;
     }
 
     public ItemProducto getItemProducto() {

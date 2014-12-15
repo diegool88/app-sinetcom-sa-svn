@@ -47,9 +47,9 @@ public class ComponenteElectronicoAtomico implements Serializable {
     private String nombre;
     @JoinTable(name = "AtributoComponenteElectronicoAtomico", joinColumns = {
         @JoinColumn(name = "ComponenteElectronicoAtomico_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "ParametrosDeProducto_id", referencedColumnName = "id")})
+        @JoinColumn(name = "ParametroDeProducto_id", referencedColumnName = "id")})
     @ManyToMany
-    private List<ParametrosDeProducto> parametrosDeProductoList;
+    private List<ParametroDeProducto> parametroDeProductoList;
     @OneToMany(mappedBy = "componenteElectronicoAtomicoid")
     private List<ItemProducto> itemProductoList;
 
@@ -82,12 +82,12 @@ public class ComponenteElectronicoAtomico implements Serializable {
     }
 
     @XmlTransient
-    public List<ParametrosDeProducto> getParametrosDeProductoList() {
-        return parametrosDeProductoList;
+    public List<ParametroDeProducto> getParametroDeProductoList() {
+        return parametroDeProductoList;
     }
 
-    public void setParametrosDeProductoList(List<ParametrosDeProducto> parametrosDeProductoList) {
-        this.parametrosDeProductoList = parametrosDeProductoList;
+    public void setParametroDeProductoList(List<ParametroDeProducto> parametroDeProductoList) {
+        this.parametroDeProductoList = parametroDeProductoList;
     }
 
     @XmlTransient

@@ -74,8 +74,8 @@ public class ItemProducto implements Serializable, Cloneable {
 //        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")}, inverseJoinColumns = {
 //        @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")})
 //    @ManyToMany
-    @ManyToMany(mappedBy = "itemProductoList")
-    private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;
+//    @ManyToMany(mappedBy = "itemProductoList")
+//    private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProducto")
     private List<AtributoItemProducto> atributoItemProductoList;
     @JoinColumn(name = "ModeloProducto_id", referencedColumnName = "id")
@@ -99,9 +99,9 @@ public class ItemProducto implements Serializable, Cloneable {
     @ManyToOne
     private Bodega bodegaid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerialentra")
-    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoEntraList;
+    private List<DetalleDeMovimientoDeProducto> DetalleDeMovimientoDeProductoEntraList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerialsale")
-    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoSaleList;
+    private List<DetalleDeMovimientoDeProducto> DetalleDeMovimientoDeProductoSaleList;
 
     public ItemProducto() {
     }
@@ -172,14 +172,14 @@ public class ItemProducto implements Serializable, Cloneable {
         this.modeloProductoList = modeloProductoList;
     }
 
-    @XmlTransient
-    public List<RegistroDeMovimientoDeInventario> getRegistroDeMovimientoDeInventarioList() {
-        return registroDeMovimientoDeInventarioList;
-    }
-
-    public void setRegistroDeMovimientoDeInventarioList(List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList) {
-        this.registroDeMovimientoDeInventarioList = registroDeMovimientoDeInventarioList;
-    }
+//    @XmlTransient
+//    public List<RegistroDeMovimientoDeInventario> getRegistroDeMovimientoDeInventarioList() {
+//        return registroDeMovimientoDeInventarioList;
+//    }
+//
+//    public void setRegistroDeMovimientoDeInventarioList(List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList) {
+//        this.registroDeMovimientoDeInventarioList = registroDeMovimientoDeInventarioList;
+//    }
 
     @XmlTransient
     public List<AtributoItemProducto> getAtributoItemProductoList() {
@@ -248,21 +248,21 @@ public class ItemProducto implements Serializable, Cloneable {
     }
 
     @XmlTransient
-    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoEntraList() {
-        return historialDeMovimientoDeProductoEntraList;
+    public List<DetalleDeMovimientoDeProducto> getDetalleDeMovimientoDeProductoEntraList() {
+        return DetalleDeMovimientoDeProductoEntraList;
     }
 
-    public void setHistorialDeMovimientoDeProductoEntraList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoEntraList) {
-        this.historialDeMovimientoDeProductoEntraList = historialDeMovimientoDeProductoEntraList;
+    public void setDetalleDeMovimientoDeProductoEntraList(List<DetalleDeMovimientoDeProducto> DetalleDeMovimientoDeProductoEntraList) {
+        this.DetalleDeMovimientoDeProductoEntraList = DetalleDeMovimientoDeProductoEntraList;
     }
     
     @XmlTransient
-    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoSaleList() {
-        return historialDeMovimientoDeProductoSaleList;
+    public List<DetalleDeMovimientoDeProducto> getDetalleDeMovimientoDeProductoSaleList() {
+        return DetalleDeMovimientoDeProductoSaleList;
     }
 
-    public void setHistorialDeMovimientoDeProductoSaleList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoSaleList) {
-        this.historialDeMovimientoDeProductoSaleList = historialDeMovimientoDeProductoSaleList;
+    public void setDetalleDeMovimientoDeProductoSaleList(List<DetalleDeMovimientoDeProducto> DetalleDeMovimientoDeProductoSaleList) {
+        this.DetalleDeMovimientoDeProductoSaleList = DetalleDeMovimientoDeProductoSaleList;
     }
     
     
@@ -320,7 +320,7 @@ public class ItemProducto implements Serializable, Cloneable {
         if(this.componenteElectronicoAtomicoid != null){
             resultado.append(this.componenteElectronicoAtomicoid.getNombre()).append(" de");
             for(AtributoItemProducto atributo : this.atributoItemProductoList){
-                resultado.append(" ").append(atributo.getParametrosDeProducto().getNombre()).append(": ").append(atributo.getValor()).append(" ").append(atributo.getParametrosDeProducto().getUnidadMedidaid().getNombre());
+                resultado.append(" ").append(atributo.getParametroDeProducto().getNombre()).append(": ").append(atributo.getValor()).append(" ").append(atributo.getParametroDeProducto().getUnidadMedidaid().getNombre());
                 if(this.atributoItemProductoList.indexOf(atributo) < this.atributoItemProductoList.size() -1){
                     resultado.append(",");
                 }

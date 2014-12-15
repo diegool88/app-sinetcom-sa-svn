@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.Permiso;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author diegoflores
  */
 @Stateless
-public class CompetenciasFacade extends AbstractFacade<Competencias> {
+public class PermisoFacade extends AbstractFacade<Permiso> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -23,8 +23,8 @@ public class CompetenciasFacade extends AbstractFacade<Competencias> {
         return em;
     }
 
-    public CompetenciasFacade() {
-        super(Competencias.class);
+    public PermisoFacade() {
+        super(Permiso.class);
     }
     
 }

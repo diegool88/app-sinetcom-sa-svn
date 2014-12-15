@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ec.com.sinetcom.orm;
@@ -22,18 +23,40 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author diegoflores
  */
 @Entity
-@Table(name = "Permisos", catalog = "dbsinetcom", schema = "")
+@Table(name = "Permiso", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Permisos.findAll", query = "SELECT p FROM Permisos p")})
-public class Permisos implements Serializable {
-    @Column(name = "consultaTicketsPropietarios")
-    private Boolean consultaTicketsPropietarios;
+    @NamedQuery(name = "Permiso.findAll", query = "SELECT p FROM Permiso p"),
+    @NamedQuery(name = "Permiso.findByGrupoid", query = "SELECT p FROM Permiso p WHERE p.grupoid = :grupoid"),
+    @NamedQuery(name = "Permiso.findByAdministra", query = "SELECT p FROM Permiso p WHERE p.administra = :administra"),
+    @NamedQuery(name = "Permiso.findByRegistraContratos", query = "SELECT p FROM Permiso p WHERE p.registraContratos = :registraContratos"),
+    @NamedQuery(name = "Permiso.findByConsultaContratos", query = "SELECT p FROM Permiso p WHERE p.consultaContratos = :consultaContratos"),
+    @NamedQuery(name = "Permiso.findByGeneraReportesDeContratos", query = "SELECT p FROM Permiso p WHERE p.generaReportesDeContratos = :generaReportesDeContratos"),
+    @NamedQuery(name = "Permiso.findByCreaTicketDeSoporte", query = "SELECT p FROM Permiso p WHERE p.creaTicketDeSoporte = :creaTicketDeSoporte"),
+    @NamedQuery(name = "Permiso.findByBloqueaDesbloqueaDeCliente", query = "SELECT p FROM Permiso p WHERE p.bloqueaDesbloqueaDeCliente = :bloqueaDesbloqueaDeCliente"),
+    @NamedQuery(name = "Permiso.findByAsignaTickets", query = "SELECT p FROM Permiso p WHERE p.asignaTickets = :asignaTickets"),
+    @NamedQuery(name = "Permiso.findByAdministraTicketsPropietarios", query = "SELECT p FROM Permiso p WHERE p.administraTicketsPropietarios = :administraTicketsPropietarios"),
+    @NamedQuery(name = "Permiso.findByConsultaTodosLosTickets", query = "SELECT p FROM Permiso p WHERE p.consultaTodosLosTickets = :consultaTodosLosTickets"),
+    @NamedQuery(name = "Permiso.findByConsultaTicketsPropietarios", query = "SELECT p FROM Permiso p WHERE p.consultaTicketsPropietarios = :consultaTicketsPropietarios"),
+    @NamedQuery(name = "Permiso.findByGeneraReportesDeTicketsDeSoporte", query = "SELECT p FROM Permiso p WHERE p.generaReportesDeTicketsDeSoporte = :generaReportesDeTicketsDeSoporte"),
+    @NamedQuery(name = "Permiso.findByIngresaInventarioAlSistema", query = "SELECT p FROM Permiso p WHERE p.ingresaInventarioAlSistema = :ingresaInventarioAlSistema"),
+    @NamedQuery(name = "Permiso.findByAdministraRegistroDeMovimientoDeInventario", query = "SELECT p FROM Permiso p WHERE p.administraRegistroDeMovimientoDeInventario = :administraRegistroDeMovimientoDeInventario"),
+    @NamedQuery(name = "Permiso.findByBuscaInventario", query = "SELECT p FROM Permiso p WHERE p.buscaInventario = :buscaInventario"),
+    @NamedQuery(name = "Permiso.findByGeneraActaDeEntregaRecepcion", query = "SELECT p FROM Permiso p WHERE p.generaActaDeEntregaRecepcion = :generaActaDeEntregaRecepcion"),
+    @NamedQuery(name = "Permiso.findByGeneraReportesDeInventarios", query = "SELECT p FROM Permiso p WHERE p.generaReportesDeInventarios = :generaReportesDeInventarios"),
+    @NamedQuery(name = "Permiso.findByAdministraProductos", query = "SELECT p FROM Permiso p WHERE p.administraProductos = :administraProductos"),
+    @NamedQuery(name = "Permiso.findByAdministraPerfilesDeUsuario", query = "SELECT p FROM Permiso p WHERE p.administraPerfilesDeUsuario = :administraPerfilesDeUsuario"),
+    @NamedQuery(name = "Permiso.findByAdministraMarcasFabricantes", query = "SELECT p FROM Permiso p WHERE p.administraMarcasFabricantes = :administraMarcasFabricantes"),
+    @NamedQuery(name = "Permiso.findByAdministraCategoriasDeProductoPorFabricante", query = "SELECT p FROM Permiso p WHERE p.administraCategoriasDeProductoPorFabricante = :administraCategoriasDeProductoPorFabricante"),
+    @NamedQuery(name = "Permiso.findByAdministraCategoriasDeProducto", query = "SELECT p FROM Permiso p WHERE p.administraCategoriasDeProducto = :administraCategoriasDeProducto"),
+    @NamedQuery(name = "Permiso.findByAdministraModelosRevisiones", query = "SELECT p FROM Permiso p WHERE p.administraModelosRevisiones = :administraModelosRevisiones"),
+    @NamedQuery(name = "Permiso.findByAdministraClientes", query = "SELECT p FROM Permiso p WHERE p.administraClientes = :administraClientes")})
+public class Permiso implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Grupo_id")
+    @Column(name = "Grupo_id", nullable = false)
     private Integer grupoid;
     @Column(name = "administra")
     private Boolean administra;
@@ -53,6 +76,8 @@ public class Permisos implements Serializable {
     private Boolean administraTicketsPropietarios;
     @Column(name = "consultaTodosLosTickets")
     private Boolean consultaTodosLosTickets;
+    @Column(name = "consultaTicketsPropietarios")
+    private Boolean consultaTicketsPropietarios;
     @Column(name = "generaReportesDeTicketsDeSoporte")
     private Boolean generaReportesDeTicketsDeSoporte;
     @Column(name = "ingresaInventarioAlSistema")
@@ -79,14 +104,14 @@ public class Permisos implements Serializable {
     private Boolean administraModelosRevisiones;
     @Column(name = "administraClientes")
     private Boolean administraClientes;
-    @JoinColumn(name = "Grupo_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "Grupo_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Grupo grupo;
 
-    public Permisos() {
+    public Permiso() {
     }
 
-    public Permisos(Integer grupoid) {
+    public Permiso(Integer grupoid) {
         this.grupoid = grupoid;
     }
 
@@ -168,6 +193,14 @@ public class Permisos implements Serializable {
 
     public void setConsultaTodosLosTickets(Boolean consultaTodosLosTickets) {
         this.consultaTodosLosTickets = consultaTodosLosTickets;
+    }
+
+    public Boolean getConsultaTicketsPropietarios() {
+        return consultaTicketsPropietarios;
+    }
+
+    public void setConsultaTicketsPropietarios(Boolean consultaTicketsPropietarios) {
+        this.consultaTicketsPropietarios = consultaTicketsPropietarios;
     }
 
     public Boolean getGeneraReportesDeTicketsDeSoporte() {
@@ -292,10 +325,10 @@ public class Permisos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Permisos)) {
+        if (!(object instanceof Permiso)) {
             return false;
         }
-        Permisos other = (Permisos) object;
+        Permiso other = (Permiso) object;
         if ((this.grupoid == null && other.grupoid != null) || (this.grupoid != null && !this.grupoid.equals(other.grupoid))) {
             return false;
         }
@@ -304,15 +337,7 @@ public class Permisos implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.Permisos[ grupoid=" + grupoid + " ]";
-    }
-
-    public Boolean getConsultaTicketsPropietarios() {
-        return consultaTicketsPropietarios;
-    }
-
-    public void setConsultaTicketsPropietarios(Boolean consultaTicketsPropietarios) {
-        this.consultaTicketsPropietarios = consultaTicketsPropietarios;
+        return "ec.com.sinetcom.orm.Permiso[ grupoid=" + grupoid + " ]";
     }
     
 }

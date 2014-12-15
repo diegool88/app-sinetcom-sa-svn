@@ -23,11 +23,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author diegoflores
  */
 @Entity
-@Table(name = "UsuarioCompetencias", catalog = "dbsinetcom", schema = "")
+@Table(name = "UsuarioCompetencia", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UsuarioCompetencias.findAll", query = "SELECT u FROM UsuarioCompetencias u")})
-public class UsuarioCompetencias implements Serializable {
+    @NamedQuery(name = "UsuarioCompetencia.findAll", query = "SELECT u FROM UsuarioCompetencia u")})
+public class UsuarioCompetencia implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -37,14 +37,14 @@ public class UsuarioCompetencias implements Serializable {
     @JoinColumn(name = "Usuario_id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Usuario usuario;
-    @JoinColumn(name = "Competencias_id", referencedColumnName = "id")
+    @JoinColumn(name = "Competencia_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Competencias competenciasid;
+    private Competencia competenciaid;
 
-    public UsuarioCompetencias() {
+    public UsuarioCompetencia() {
     }
 
-    public UsuarioCompetencias(Integer usuarioid) {
+    public UsuarioCompetencia(Integer usuarioid) {
         this.usuarioid = usuarioid;
     }
 
@@ -64,12 +64,12 @@ public class UsuarioCompetencias implements Serializable {
         this.usuario = usuario;
     }
 
-    public Competencias getCompetenciasid() {
-        return competenciasid;
+    public Competencia getCompetenciaid() {
+        return competenciaid;
     }
 
-    public void setCompetenciasid(Competencias competenciasid) {
-        this.competenciasid = competenciasid;
+    public void setCompetenciaid(Competencia competenciasid) {
+        this.competenciaid = competenciasid;
     }
 
     @Override
@@ -82,10 +82,10 @@ public class UsuarioCompetencias implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UsuarioCompetencias)) {
+        if (!(object instanceof UsuarioCompetencia)) {
             return false;
         }
-        UsuarioCompetencias other = (UsuarioCompetencias) object;
+        UsuarioCompetencia other = (UsuarioCompetencia) object;
         if ((this.usuarioid == null && other.usuarioid != null) || (this.usuarioid != null && !this.usuarioid.equals(other.usuarioid))) {
             return false;
         }

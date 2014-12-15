@@ -5,7 +5,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.VisitasTecnicas;
+import ec.com.sinetcom.orm.VisitaTecnica;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author diegoflores
  */
 @Stateless
-public class VisitasTecnicasFacade extends AbstractFacade<VisitasTecnicas> {
+public class VisitaTecnicaFacade extends AbstractFacade<VisitaTecnica> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -24,8 +24,8 @@ public class VisitasTecnicasFacade extends AbstractFacade<VisitasTecnicas> {
         return em;
     }
 
-    public VisitasTecnicasFacade() {
-        super(VisitasTecnicas.class);
+    public VisitaTecnicaFacade() {
+        super(VisitaTecnica.class);
     }
     
 }

@@ -26,8 +26,8 @@ import ec.com.sinetcom.dao.UsuarioFacade;
 import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.ClienteEmpresa;
-import ec.com.sinetcom.orm.Cola;
-import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.ColaTicket;
+import ec.com.sinetcom.orm.Competencia;
 import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.EstadoTicket;
@@ -106,7 +106,7 @@ public class TicketServicio {
      *
      * @return
      */
-    public List<Cola> obtenerTodasLasColas() {
+    public List<ColaTicket> obtenerTodasLasColas() {
         return this.colaFacade.findAll();
     }
 
@@ -153,7 +153,7 @@ public class TicketServicio {
      * @param id
      * @return
      */
-    public Cola obtenerColaTicket(int id) {
+    public ColaTicket obtenerColaTicket(int id) {
         return this.colaFacade.find(id);
     }
 
@@ -240,7 +240,7 @@ public class TicketServicio {
      * @return
      */
     public List<Ticket> obtenerTodosLosTicketsPorUnaCola(Usuario usuario, int cola) {
-        Cola colaTicket = this.colaFacade.find(cola);
+        ColaTicket colaTicket = this.colaFacade.find(cola);
         if (colaTicket != null) {
             return usuario != null ? this.ticketFacade.obtenerTicketsPorColaDePropietario(usuario, colaTicket) : this.ticketFacade.obtenerTodosLosTicketsPorCola(colaTicket);
         } else {
@@ -651,7 +651,7 @@ public class TicketServicio {
      * @param usuario
      * @return
      */
-    public boolean cambiarColaDeTicket(Ticket ticket, Cola cola, Usuario usuario) {
+    public boolean cambiarColaDeTicket(Ticket ticket, ColaTicket cola, Usuario usuario) {
         try {
             ticket.setColaid(cola);
             ticket.setFechaDeModificacion(new Date());
@@ -930,7 +930,7 @@ public class TicketServicio {
         //Se inicializa el arreglo total
         List<String> ccTodos = new ArrayList<String>();
         //Se envía un correo a todos los que tienen la competencia respectiva al caso
-        Competencias competencias = ticket.getColaid().getCompetenciasid();
+        Competencia competencias = ticket.getColaid().getCompetenciaid();
         List<Usuario> usuarios = this.usuarioFacade.obtenerUsuariosPorCompetencias(competencias);
 
         //String[] correosCC1 = new String[usuarios == null ? 0 : usuarios.size()];

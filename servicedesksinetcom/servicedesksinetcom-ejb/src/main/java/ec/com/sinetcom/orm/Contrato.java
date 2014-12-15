@@ -45,7 +45,7 @@ public class Contrato implements Serializable {
     @Column(name = "contratoDigital")
     private byte[] contratoDigital;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
-    private List<VisitasTecnicas> visitasTecnicasList;
+    private List<VisitaTecnica> visitaTecnicaList;
     @JoinTable(name = "HistorialDeContratosYEquipos", joinColumns = {
         @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")}, inverseJoinColumns = {
         @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")})
@@ -460,12 +460,12 @@ public class Contrato implements Serializable {
     }
 
     @XmlTransient
-    public List<VisitasTecnicas> getVisitasTecnicasList() {
-        return visitasTecnicasList;
+    public List<VisitaTecnica> getVisitaTecnicaList() {
+        return visitaTecnicaList;
     }
 
-    public void setVisitasTecnicasList(List<VisitasTecnicas> visitasTecnicasList) {
-        this.visitasTecnicasList = visitasTecnicasList;
+    public void setVisitaTecnicaList(List<VisitaTecnica> visitaTecnicaList) {
+        this.visitaTecnicaList = visitaTecnicaList;
     }
     
 }

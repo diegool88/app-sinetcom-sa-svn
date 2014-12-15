@@ -5,7 +5,7 @@
  */
 package ec.com.sinetcom.configuracion;
 
-import ec.com.sinetcom.orm.VisitasTecnicas;
+import ec.com.sinetcom.orm.VisitaTecnica;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +34,7 @@ public class TareaVisitaTecnicaInfo implements Serializable{
     private String year;
     
     private Date nextTimeout;
-    private VisitasTecnicas visitaTecnica;
+    private VisitaTecnica visitaTecnica;
     
     
     public TareaVisitaTecnicaInfo()
@@ -42,7 +42,7 @@ public class TareaVisitaTecnicaInfo implements Serializable{
         this("<Job ID>", "<Job Name>", "java:global/servicedesksinetcom-ear/servicedesksinetcom-ejb-1/", null);
     }
 
-    public TareaVisitaTecnicaInfo(String jobId, String jobName, String jobClassName, VisitasTecnicas visitaTecnica)
+    public TareaVisitaTecnicaInfo(String jobId, String jobName, String jobClassName, VisitaTecnica visitaTecnica)
     {
         this.jobId = jobId;
         this.jobName = jobName;
@@ -217,11 +217,11 @@ public class TareaVisitaTecnicaInfo implements Serializable{
         this.nextTimeout = nextTimeout;
     }
 
-    public VisitasTecnicas getVisitaTecnica() {
+    public VisitaTecnica getVisitaTecnica() {
         return visitaTecnica;
     }
 
-    public void setVisitaTecnica(VisitasTecnicas visitaTecnica) {
+    public void setVisitaTecnica(VisitaTecnica visitaTecnica) {
         this.visitaTecnica = visitaTecnica;
     }
     

@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.Competencia;
 import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.ArrayList;
@@ -41,8 +41,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
      * @param competencias
      * @return 
      */
-    public List<Usuario> obtenerUsuariosPorCompetencias(Competencias competencias){
-        String sql = "SELECT u FROM Usuario u INNER JOIN u.competenciasList c WHERE c.id = ?1";
+    public List<Usuario> obtenerUsuariosPorCompetencias(Competencia competencias){
+        String sql = "SELECT u FROM Usuario u INNER JOIN u.competenciaList c WHERE c.id = ?1";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, competencias.getId());
         return qry.getResultList().isEmpty() ? null : qry.getResultList();
@@ -97,4 +97,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return qry.getResultList();
     }
     
+    /**
+     * Obtiene todos los account manager
+     * @return 
+     */
+    public List<Usuario> obtenerTodosLosAccountManager(){
+        String sql = "SELECT u FROM Usuario u JOIN u.grupoid g WHERE g.id = :grupo";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter("grupo", 1);
+        return qry.getResultList();
+    }
 }
