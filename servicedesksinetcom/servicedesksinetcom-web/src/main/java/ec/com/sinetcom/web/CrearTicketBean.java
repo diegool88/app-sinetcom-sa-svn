@@ -12,7 +12,7 @@ import ec.com.sinetcom.dao.ServicioTicketFacade;
 import ec.com.sinetcom.dao.TicketFacade;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.ClienteEmpresa;
-import ec.com.sinetcom.orm.Cola;
+import ec.com.sinetcom.orm.ColaTicket;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.ServicioTicket;
@@ -66,7 +66,7 @@ public class CrearTicketBean implements Serializable {
         this.administracionUsuarioBean = administracionUsuarioBean;
     }
     //Las variables tipo lista
-    private List<Cola> colas;
+    private List<ColaTicket> colas;
     private List<PrioridadTicket> prioridadTickets;
     private List<ServicioTicket> servicioTickets;
     private List<ClienteEmpresa> clienteEmpresas;
@@ -133,11 +133,11 @@ public class CrearTicketBean implements Serializable {
 
     }
 
-    public List<Cola> getColas() {
+    public List<ColaTicket> getColas() {
         return colas;
     }
 
-    public void setColas(List<Cola> colas) {
+    public void setColas(List<ColaTicket> colas) {
         this.colas = colas;
     }
 

@@ -10,7 +10,6 @@
         <f:view contentType="text/html">
             <h:head/>       
             <h:body>
-
                 <h:form id="verClientesForm">
                     <p:dataTable id="dtlClientes" rowKey="#{empresas.ruc}" var="empresas" value="#{ingresoClienteEmpresaBean.clientesEnpresa}" paginator="true" rows="15"
                                  selection="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado}" selectionMode="single" paginatorPosition="bottom"
@@ -19,7 +18,9 @@
                         <f:facet name="header">
                             <h:outputText value="Clientes / Empresas"/>
                         </f:facet>
-
+                        <p:column exportable="false" width="10">
+                            <p:rowToggler></p:rowToggler>
+                        </p:column>
                         <p:column headerText="RUC" sortBy="#{empresas.ruc}" filterBy="#{empresas.ruc}">
                             <h:outputText value="#{empresas.ruc}"/>
                         </p:column>
@@ -36,14 +37,54 @@
                             <h:outputText value="#{empresas.telefonoPBX}"/>
                         </p:column>
 
+                        <p:rowExpansion>
+                            <p:panelGrid style="width: 700px;" columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Empresa: #{empresas.nombreComercial}"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="contactos" value="Contactos: "></p:outputLabel>
+                                <ui:repeat id="contactos" value="#{empresas.contactoList}" varStatus="index" var="contacto">
+                                    <p:panelGrid columns="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="Contacto ##{index.index + 1}"></h:outputText>
+                                        </f:facet>
+                                        <p:outputLabel for="nombre" value="Nombre: "></p:outputLabel>
+                                        <h:outputText id="nombre" value="#{contacto.nombre}"></h:outputText>
+                                        <p:outputLabel for="cargo" value="Cargo: "></p:outputLabel>
+                                        <h:outputText id="cargo" value="#{contacto.cargo}"></h:outputText>
+                                        <p:outputLabel for="telfijo" value="Teléfono Fijo: "></p:outputLabel>
+                                        <h:outputText id="telfijo" value="#{contacto.telefonoFijo != null ? contacto.telefonoFijo : 'No disponible'}"></h:outputText>
+                                        <p:outputLabel for="telmovil" value="Teléfono Móvil: "></p:outputLabel>
+                                        <h:outputText id="telmovil" value="#{contacto.telefonoMovil != null ? contacto.telefonoMovil : 'No disponible'}"></h:outputText>
+                                        <p:outputLabel for="email" value="E-mail: "></p:outputLabel>
+                                        <h:outputText id="email" value="#{contacto.correoElectronico != null ? contacto.correoElectronico : 'No disponible'}"></h:outputText>
+                                    </p:panelGrid>
+                                </ui:repeat>
+                                <p:outputLabel for="direcciones" value="Direcciones: "></p:outputLabel>
+                                <ui:repeat id="direcciones" value="#{empresas.clienteDireccionList}" varStatus="index" var="direccion">
+                                    <p:panelGrid columns="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="Dirección ##{index.index + 1}"></h:outputText>
+                                        </f:facet>
+                                        <p:outputLabel for="direccion1" value="Direccion 1: "></p:outputLabel>
+                                        <h:outputText id="direccion1" value="#{direccion.direccion1 != null ? direccion.direccion1 : 'No disponible'}"></h:outputText>
+                                        <p:outputLabel for="direccion2" value="Direccion 2: "></p:outputLabel>
+                                        <h:outputText id="direccion2" value="#{direccion.direccion2 != null ? direccion.direccion2 : 'No disponible'}"></h:outputText>
+                                        <p:outputLabel for="ciudad" value="Ciudad: "></p:outputLabel>
+                                        <h:outputText id="ciudad" value="#{direccion.ciudad.nombre }"></h:outputText>
+                                    </p:panelGrid>
+                                </ui:repeat>
+                            </p:panelGrid>
+                        </p:rowExpansion>
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
                             <p:commandButton id="btnEliminar" process="dtlClientes" value="Eliminar" action="#{ingresoClienteEmpresaBean.eliminarEmpresa()}" update=":verClientesForm:dtlClientes"/>                       
                         </f:facet>
-                    </p:dataTable>    
+                    </p:dataTable>
+
                 </h:form>
 
-                <p:dialog header="Insertar Cliente /Empresa" widgetVar="ingreso" modal="true">
+                <p:dialog header="Insertar Cliente / Empresa" widgetVar="ingreso" modal="true">
                     <h:form id="clienteEmpresaForm">
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
@@ -52,14 +93,14 @@
 
                             <p:outputLabel for="clienteUsuarios" value="Usuario:"/>
                             <p:selectOneMenu id="clienteUsuarios" value="#{ingresoClienteEmpresaBean.numUsuario}" required="true">
-                               <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                               <f:selectItems value="#{ingresoClienteEmpresaBean.usuarios}" var="Usuarios" itemLabel="#{Usuarios.nombre} #{Usuarios.apellido}" itemValue="#{Usuarios.id}" />
+                                <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                                <f:selectItems value="#{ingresoClienteEmpresaBean.usuarios}" var="Usuarios" itemLabel="#{Usuarios.nombre} #{Usuarios.apellido}" itemValue="#{Usuarios.id}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="clienteTipoEmpresa" value="Tipo Empresa:"/>
                             <p:selectOneMenu id="clienteTipoEmpresa" value="#{ingresoClienteEmpresaBean.numTipoEmpresa}" required="true">
-                               <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                               <f:selectItems value="#{ingresoClienteEmpresaBean.tiposEmpresa}" var="Tipos" itemLabel="#{Tipos.tipo}" itemValue="#{Tipos.id}" />
+                                <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                                <f:selectItems value="#{ingresoClienteEmpresaBean.tiposEmpresa}" var="Tipos" itemLabel="#{Tipos.tipo}" itemValue="#{Tipos.id}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="clienteRazonSocial" value="Razon Social:"/>

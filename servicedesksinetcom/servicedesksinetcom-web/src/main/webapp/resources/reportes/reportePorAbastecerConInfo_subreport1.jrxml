@@ -10,16 +10,16 @@
 		<![CDATA[SELECT
      AtributoItemProducto.`valor` AS AtributoItemProducto_valor,
 AtributoItemProducto.`ItemProducto_numeroSerial` AS AtributoItemProducto_item,
-     ParametrosDeProducto.`nombre` AS ParametrosDeProducto_nombre,
+     ParametroDeProducto.`nombre` AS ParametroDeProducto_nombre,
      UnidadMedida.`nombre` AS UnidadMedida_nombre
 FROM
-     `AtributoItemProducto` AtributoItemProducto INNER JOIN `ParametrosDeProducto` ParametrosDeProducto ON AtributoItemProducto.`ParametrosDeProducto_id` = ParametrosDeProducto.`id`
-     INNER JOIN `UnidadMedida` UnidadMedida ON ParametrosDeProducto.`UnidadMedida_id` = UnidadMedida.`id`
+     `AtributoItemProducto` AtributoItemProducto INNER JOIN `ParametroDeProducto` ParametroDeProducto ON AtributoItemProducto.`ParametroDeProducto_id` = ParametroDeProducto.`id`
+     INNER JOIN `UnidadMedida` UnidadMedida ON ParametroDeProducto.`UnidadMedida_id` = UnidadMedida.`id`
 WHERE AtributoItemProducto.`ItemProducto_numeroSerial` =  $P{itemProducto_id}]]>
 	</queryString>
 	<field name="AtributoItemProducto_valor" class="java.lang.String"/>
 	<field name="AtributoItemProducto_item" class="java.lang.String"/>
-	<field name="ParametrosDeProducto_nombre" class="java.lang.String"/>
+	<field name="ParametroDeProducto_nombre" class="java.lang.String"/>
 	<field name="UnidadMedida_nombre" class="java.lang.String"/>
 	<group name="AtributoItemProducto_item">
 		<groupExpression><![CDATA[$F{AtributoItemProducto_item}]]></groupExpression>
@@ -43,7 +43,7 @@ WHERE AtributoItemProducto.`ItemProducto_numeroSerial` =  $P{itemProducto_id}]]>
 			</staticText>
 			<textField>
 				<reportElement x="131" y="4" width="100" height="20" uuid="c300e9b6-2f27-4efb-9aaa-c77d8a6e4643"/>
-				<textFieldExpression><![CDATA[$F{ParametrosDeProducto_nombre}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ParametroDeProducto_nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="31" y="24" width="100" height="20" uuid="ea9f5ebf-7c9f-4faf-8351-4b9b9c25febb"/>

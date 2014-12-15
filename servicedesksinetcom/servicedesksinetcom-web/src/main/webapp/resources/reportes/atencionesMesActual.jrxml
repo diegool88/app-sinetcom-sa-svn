@@ -16,7 +16,6 @@
      EstadoTicket.`nombre` AS EstadoTicket_nombre,
      ServicioTicket.`nombre` AS ServicioTicket_nombre,
      PrioridadTicket.`nombre` AS PrioridadTicket_nombre,
-     Cola.`nombre` AS Cola_nombre,
      UsuarioPropietario.`nombre` AS UsuarioP_nombre,
      UsuarioPropietario.`apellido` AS UsuarioP_apellido,
      UsuarioCreador.`nombre` AS UsuarioC_nombre,
@@ -24,7 +23,8 @@
      ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
      ItemProducto.`descripcion` AS ItemProducto_descripcion,
      ClienteEmpresa.`ruc` AS ClienteEmpresa_ruc,
-     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial
+     ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
+     ColaTicket.`nombre` AS ColaTicket_nombre
 FROM
      `Usuario` UsuarioPropietario INNER JOIN `Ticket` Ticket ON UsuarioPropietario.`id` = Ticket.`Usuario_id_propietario`
      INNER JOIN `Usuario` UsuarioCreador ON Ticket.`Usuario_id_creador` = UsuarioCreador.`id`
@@ -32,9 +32,11 @@ FROM
      INNER JOIN `EstadoTicket` EstadoTicket ON Ticket.`EstadoTicket_codigo` = EstadoTicket.`codigo`
      INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
      INNER JOIN `PrioridadTicket` PrioridadTicket ON Ticket.`PrioridadTicket_codigo` = PrioridadTicket.`codigo`
-     INNER JOIN `Cola` Cola ON Ticket.`Cola_id` = Cola.`id`
      INNER JOIN `ItemProducto` ItemProducto ON Ticket.`ItemProducto_numeroSerial` = ItemProducto.`numeroSerial`
-WHERE MONTH(Ticket.`fechaDeCreacion`) = MONTH(CURRENT_DATE) AND YEAR(Ticket.`fechaDeCreacion`) = YEAR(CURRENT_DATE)]]>
+     INNER JOIN `ColaTicket` ColaTicket ON Ticket.`ColaTicket_id` = ColaTicket.`id`
+WHERE
+     MONTH(Ticket.`fechaDeCreacion`) = MONTH(CURRENT_DATE)
+ AND YEAR(Ticket.`fechaDeCreacion`) = YEAR(CURRENT_DATE)]]>
 	</queryString>
 	<field name="Ticket_ticketNumber" class="java.lang.Integer"/>
 	<field name="Ticket_titulo" class="java.lang.String"/>
@@ -44,7 +46,6 @@ WHERE MONTH(Ticket.`fechaDeCreacion`) = MONTH(CURRENT_DATE) AND YEAR(Ticket.`fec
 	<field name="EstadoTicket_nombre" class="java.lang.String"/>
 	<field name="ServicioTicket_nombre" class="java.lang.String"/>
 	<field name="PrioridadTicket_nombre" class="java.lang.String"/>
-	<field name="Cola_nombre" class="java.lang.String"/>
 	<field name="UsuarioP_nombre" class="java.lang.String"/>
 	<field name="UsuarioP_apellido" class="java.lang.String"/>
 	<field name="UsuarioC_nombre" class="java.lang.String"/>
@@ -53,6 +54,7 @@ WHERE MONTH(Ticket.`fechaDeCreacion`) = MONTH(CURRENT_DATE) AND YEAR(Ticket.`fec
 	<field name="ItemProducto_descripcion" class="java.lang.String"/>
 	<field name="ClienteEmpresa_ruc" class="java.lang.String"/>
 	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
+	<field name="ColaTicket_nombre" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -158,7 +160,7 @@ WHERE MONTH(Ticket.`fechaDeCreacion`) = MONTH(CURRENT_DATE) AND YEAR(Ticket.`fec
 			</staticText>
 			<textField>
 				<reportElement x="29" y="90" width="139" height="14" uuid="52a094b3-7096-4c82-a197-1bffaf4a5814"/>
-				<textFieldExpression><![CDATA[$F{Cola_nombre}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ColaTicket_nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="90" width="29" height="14" uuid="c23d9229-fd90-42a1-8568-1fbb1e51252f"/>
@@ -170,7 +172,7 @@ WHERE MONTH(Ticket.`fechaDeCreacion`) = MONTH(CURRENT_DATE) AND YEAR(Ticket.`fec
 			</textField>
 			<textField>
 				<reportElement x="61" y="104" width="173" height="14" uuid="6beba9e0-259a-42ce-ba0c-509977f0e3b6"/>
-				<textFieldExpression><![CDATA[$F{UsuarioP_nombre} + " " + $F{UsuarioP_apellido} ]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{UsuarioP_nombre} + " " + $F{UsuarioP_apellido}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="-1" y="104" width="62" height="14" uuid="e6241a7e-f68e-419d-840d-abec198f7b65"/>

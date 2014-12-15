@@ -10,14 +10,17 @@
     <ui:define name="content">
         <f:view contentType="text/html">
             <h:head/>        
-            <h:body>
-                <h:form>
-
-                </h:form>                                       
+            <h:body>                                    
                 <h:form id="nuevoContrato" enctype="multipart/form-data">
-                    <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:panelGrid id="contrato" columns="2">
+                        <f:facet name="header">
+                            <h:outputText value="Ingreso de nuevo contrato"></h:outputText>
+                        </f:facet>
 
-                        <p:outputLabel for="contratoNumero" value="Numero Contrato:"/>
+                        <p:outputLabel for="contratoNumero" value="Número de Contrato:"/>
                         <p:inputText id="contratoNumero" value="#{ingresoContratoBean.numeroContrato}" required="true"/>
 
                         <p:outputLabel for="contratoTipo" value="Tipo de Contrato:"/>
@@ -27,9 +30,10 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel for="clienteEmpresa" value="Cliente:"/>
-                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoContratoBean.rucClinete}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" required="true">
+                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoContratoBean.rucCliente}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" required="true">
                             <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                             <f:selectItems value="#{ingresoContratoBean.clientesRuc}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                            <p:ajax listener="#{ingresoContratoBean.cargarContactosDeCliente()}" update="contratoAdministrador" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>               
 
                         <p:outputLabel for="contratoSla" value="SLA:"/>
@@ -50,31 +54,31 @@
                             <f:selectItems value="#{ingresoContratoBean.contactos}" var="AdminC" itemLabel="#{AdminC.nombre}" itemValue="#{AdminC.id}" />
                         </p:selectOneMenu>
 
-                        <p:outputLabel for="contratoFechaSuscripcion" value="Fecha de Suscripcion:"/>
+                        <p:outputLabel for="contratoFechaSuscripcion" value="Fecha de Suscripción:"/>
                         <p:calendar id="contratoFechaSuscripcion" value="#{ingresoContratoBean.fechaSuscripcion}" showOn="button" required="true"/>
 
                         <p:outputLabel for="contratoObjeto" value="Objeto:"/>
                         <p:inputText id="contratoObjeto" value="#{ingresoContratoBean.objeto}" required="true"/>
 
-                        <p:outputLabel for="contratoPrecio" value="Precio:"/>
+                        <p:outputLabel for="contratoPrecio" value="Precio ($):"/>
                         <p:inputText id="contratoPrecio" type="number" value="#{ingresoContratoBean.precio}" required="true"/>
 
-                        <p:outputLabel for="contratoValidez" value="Tiempo de Validez:"/>
+                        <p:outputLabel for="contratoValidez" value="Tiempo de Validez (años):"/>
                         <p:inputText id="contratoValidez" type="number" value="#{ingresoContratoBean.tiempoValidez}" required="true"/>
 
-                        <p:outputLabel for="contratoGarantiaTecnica" value="Garantia Tecnica:"/>
+                        <p:outputLabel for="contratoGarantiaTecnica" value="Garantía Técnica (años):"/>
                         <p:inputText id="contratoGarantiaTecnica" type="number" value="#{ingresoContratoBean.garantiatecnica}"/>
 
-                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Grarantia Tecnica:"/>
+                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Garantía Técnica:"/>
                         <p:calendar id="contratoFechaInicioGarantiaTecnica" value="#{ingresoContratoBean.fechaInicioGTecnica}" showOn="button"/>
 
-                        <p:outputLabel for="contratoDigital" value="Contrato Digitalizado:"/>
-                        <p:fileUpload id="contratoDigital" value="#{ingresoContratoBean.contratoDigital}" mode="simple"/>
+                        <p:outputLabel for="contratoDigital" value="Contrato Digitalizado (PDF):"/>
+                        <p:fileUpload id="contratoDigital" required="true" mode="advanced" auto="true" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarContratoDigital}"/>
 
-                        <p:outputLabel for="srvSoporteMantenimiento" value="Servicio Soporte Mantenimineto:"/>
+                        <p:outputLabel for="srvSoporteMantenimiento" value="Servicio Soporte Mantenimiento (años):"/>
                         <p:inputText id="srvSoporteMantenimiento" type="number" value="#{ingresoContratoBean.srvSoportemantenimiento}" required="true"/>
 
-                        <p:outputLabel for="contratoRepuestos" value="Incluye Repuestos?:"/>
+                        <p:outputLabel for="contratoRepuestos" value="¿Incluye Repuestos?:"/>
                         <p:selectOneRadio id="contratoRepuestos" value="#{ingresoContratoBean.repuestos}" required="true">
                             <f:selectItem itemLabel="Si" itemValue="true"/>
                             <f:selectItem itemLabel="No" itemValue="false"/>
@@ -86,41 +90,39 @@
                         <p:outputLabel for="contratoHorasSoporteUtilizadas" value="Horas de Soporte Utilizadas:"/>
                         <p:inputText id="contratoHorasSoporteUtilizadas" type="number" value="#{ingresoContratoBean.soporteutilizado}" required="true"/>
 
-                        <p:outputLabel for="contratoFechaFacturacion" value="Fecha Facturacion Contrato:"/>
+                        <p:outputLabel for="contratoFechaFacturacion" value="Fecha Facturación de Contrato:"/>
                         <p:calendar id="contratoFechaFacturacion" value="#{ingresoContratoBean.fechaFacturacion}" showOn="button"/>
 
-                        <p:outputLabel for="contratoFacturaNumero" value="Factura Numero:"/>
+                        <p:outputLabel for="contratoFacturaNumero" value="Factura Número:"/>
                         <p:inputText id="contratoFacturaNumero" value="#{ingresoContratoBean.numeroFactura}"/>
 
-                        <p:outputLabel for="contratoPagos" value="Gestionar Pagos:"/>
-                        <p:commandButton id="contratoPagos" value="Ver Pagos" process="contratoFechaSuscripcion, contratoPrecio, contratoValidez" onclick="PF('fechas').show();" />
-                        <!--                        <h:panelGrid>
-                                                    <p:inputText id="contratoPagos" value="#{ingresoContratoBean.cantidadPagos}" required="true"/>
-                                                    <p:commandButton value="Generar Pagos" update="prueba" partialSubmit="true" process="contratoPagos" oncomplete="PF('fechas').show();" />
-                                                </h:panelGrid>-->
-
-
-                        <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepcion:"/>
+                        <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepción:"/>
                         <p:calendar id="contratoFechaEntregaRecepcion" value="#{ingresoContratoBean.fechaEntregaRecepcion}" showOn="button"/>                
 
-                        <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContratoBean.grabarContrato()}">
-                            <f:ajax execute="@all" render="@form"/>
-                        </p:commandButton>
-                    </h:panelGrid> 
+                        <p:outputLabel for="contratoPagos" value="Pagos:"/>
+                        <p:commandButton id="contratoPagos" value="Ver Pagos" process="contratoFechaSuscripcion, contratoPrecio, contratoValidez" onclick="PF('fechas').show();" />
 
-                    <p:dialog header="Insertar Fechas de Pago" widgetVar="fechas" modal="true">                   
+                        <p:outputLabel for="contratoGarantias" value="Garantías Económicas:"/>
+                        <p:commandButton id="contratoGarantias" value="Ver Garantías E." process="contratoPrecio" onclick="PF('garantias').show();"/>
+
+                        <p:outputLabel for="contratoVisitasTecnicas" value="Visitas Técnicas:"/>
+                        <p:commandButton id="contratoVisitasTecnicas" value="Ver Visitas Técnicas" process="contratoFechaSuscripcion, contratoValidez" onclick="PF('visitasT').show();"></p:commandButton>
+
+                        <p:outputLabel for="contratoCursos" value="Cursos:"/>
+                        <p:commandButton id="contratoCursos" value="Ver Cursos" onclick="PF('cursos').show();"></p:commandButton>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoContrato:contrato" update="@form" actionListener="#{ingresoContratoBean.grabarContrato}" onstart="statusDialog.show()" onsuccess="statusDialog.show()">
+                            </p:commandButton>
+                        </f:facet>
+                    </p:panelGrid> 
+
+                    <p:dialog header="Insertar Fechas de Pago" widgetVar="fechas" showEffect="fade" hideEffect="fade" modal="true">                   
                         <h:panelGrid id="prueba" columns="2" columnClasses="colum" cellpadding="5">    
-
                             <p:outputLabel for="cantidadPagos" value="Cantidad de Pagos"/>
                             <p:inputText id="cantidadPagos" value="#{ingresoContratoBean.cantidadPagos}">
-                                <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularFechas()}" update="pagos"></p:ajax>
+                                <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularFechasPagos()}" update="pagos"></p:ajax>
                             </p:inputText>
-
-
-<!--                            <ui:repeat value="#{ingresoContratoBean.fechasPagos}" var="fechas" varStatus="status" size="#{ingresoContratoBean.cantidadPagos}">
-    <p:inputText value="fechas" id="fechas#{status.index}"/>
-</ui:repeat>-->
-
                         </h:panelGrid>  
                         <p:dataTable id="pagos" value="#{ingresoContratoBean.pagos}" var="pago" editable="true">
                             <f:facet name="header">
@@ -137,8 +139,8 @@
                             </p:column>
                             <p:column headerText="Fecha">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{pago.plazo}"></h:outputText></f:facet>
-                                    <f:facet name="input"><p:calendar value="#{pago.plazo}"></p:calendar></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{ingresoContratoBean.formatoCortoDeFecha(pago.plazo)}"></h:outputText></f:facet>
+                                    <f:facet name="input"><p:calendar value="#{pago.plazo}" pattern="dd/MM/yyyy"></p:calendar></f:facet>
                                 </p:cellEditor>
                             </p:column>
                             <p:column style="width:32px">
@@ -146,6 +148,191 @@
                             </p:column>
                         </p:dataTable>
                     </p:dialog>
+                    <p:dialog header="Garantías Económicas" widgetVar="garantias" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="garantiasEcomicas">
+                            <p:panelGrid columns="2" >
+                                <f:facet name="header">
+                                    <h:outputText value="Ingreso de Garantía Económica"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="tipoGarantia" value="Tipo de Garantía:"/>
+                                <p:selectOneMenu id="tipoGarantia" value="#{ingresoContratoBean.tipoGarantia}" required="true" requiredMessage="* Requerido">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems var="tipoGarantia" value="#{ingresoContratoBean.tipoGarantias}" itemLabel="#{tipoGarantia.tipo}" itemValue="#{tipoGarantia.id}"></f:selectItems>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="porcentaje" value="Porcentaje:"/>
+                                <p:inputText id="porcentaje" value="#{ingresoContratoBean.nuevaGarantiaEconomica.porcentaje}" maxlength="3" required="true" requiredMessage="* Requerido" validatorMessage="Porcentaje max. 100%">
+                                    <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularValorDeGarantiaE()}" update="valor" process="contratoPrecio, porcentaje"></p:ajax>
+                                    <f:validateDoubleRange for="porcentaje" maximum="100" minimum="1" ></f:validateDoubleRange>
+                                </p:inputText>
+                                <p:outputLabel for="valor" value="Valor:"/>
+                                <p:inputText id="valor" value="#{ingresoContratoBean.nuevaGarantiaEconomica.valor}" required="true" requiredMessage="* Requerido" readonly="true"></p:inputText>
+                                <p:outputLabel for="fechaInicio" value="Fecha de Inicio:"/>
+                                <p:calendar id="fechaInicio" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaInicio}" pattern="dd/MM/yyyy" required="true" requiredMessage="* Requerido" showOn="button"></p:calendar>
+                                <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
+                                <p:calendar id="fechaFin" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaFin}" pattern="dd/MM/yyyy" required="true" requiredMessage="* Requerido" showOn="button"></p:calendar>
+                                <p:outputLabel for="renovable" value="¿Renovable?:"/>
+                                <p:selectOneRadio id="renovable" value="#{ingresoContratoBean.nuevaGarantiaEconomica.renovable}" required="true" requiredMessage="* Requerido">
+                                    <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                    <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                                </p:selectOneRadio>
+                                <p:outputLabel for="adendum" value="Adendum:"/>
+                                <p:fileUpload id="adendum" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarAdendum}" ></p:fileUpload>
+                                <f:facet name="footer">
+                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoContrato:garantiasEcomicas" update=":nuevoContrato:garantiasEcomicas" actionListener="#{ingresoContratoBean.agregarGarantia}"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                            <br/>
+                            <br/>
+                            <p:dataTable id="garantias" value="#{ingresoContratoBean.garantiasE}" rowIndexVar="rowId" var="garantia">
+                                <f:facet name="header">
+                                    <h:outputText value="Grantías Económicas Ingresadas"></h:outputText>
+                                </f:facet>
+                                <p:column headerText="Tipo de Garantía">
+                                    <h:outputText value="#{garantia.tipoGarantiaid.tipo}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Porcentaje">
+                                    <h:outputText value="#{garantia.porcentaje}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Valor">
+                                    <h:outputText value="#{garantia.valor}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha Inicio">
+                                    <h:outputText value="#{ingresoContratoBean.formatoCortoDeFecha(garantia.fechaInicio)}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha Fin">
+                                    <h:outputText value="#{ingresoContratoBean.formatoCortoDeFecha(garantia.fechaFin)}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandButton icon="ui-icon-trash" update=":nuevoContrato:garantias" process="@this" actionListener="#{ingresoContratoBean.eliminarGarantia}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                        <f:attribute name="garantiaIndex" value="#{rowId}"></f:attribute>
+                                        <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta garantía?" icon="ui-icon-alert"></p:confirm>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:dialog>
+                    <p:dialog header="Visitas Técnicas" widgetVar="visitasT" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="visitasTecnicas">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel for="visitasPorAnio" value="Visitas por año:"></p:outputLabel>
+                                <p:inputText id="visitasPorAnio" value="#{ingresoContratoBean.cantidadDeVisitasPorA}" required="true"></p:inputText>
+                                <p:outputLabel for="tipoDeVisita" value="Tipo de Visita:"></p:outputLabel>
+                                <p:selectOneMenu id="tipoDeVisita" value="#{ingresoContratoBean.tipoDeVisita}" required="true">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems value="#{ingresoContratoBean.tipoDeVisitas}" var="tipoVisita" itemLabel="#{tipoVisita.nombre}" itemValue="#{tipoVisita.id}"></f:selectItems>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="descripcionVT" value="Descripción Visitas Técnica:"></p:outputLabel>
+                                <p:inputText id="descripcionVT" value="#{ingresoContratoBean.descripcionVisitaT}"></p:inputText>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar Visitas Técnicas" actionListener="#{ingresoContratoBean.calcularFechasVisitasTecnicas}" process=":nuevoContrato:visitasTecnicas" update=":nuevoContrato:visitasTecnicas"></p:commandButton>
+                                    <p:commandButton value="Limpiar Visitas Técnicas" actionListener="#{ingresoContratoBean.limpiarVisitasTecnicas}" process="@this" update=":nuevoContrato:visitasTecnicas"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                            <br/>
+                            <p:dataTable id="visitasT" value="#{ingresoContratoBean.visitasTecnicas}" rowIndexVar="rowId" editable="true" var="visitaT">
+                                <f:facet name="header">
+                                    <h:outputText value="Visitas Técnicas"></h:outputText>
+                                </f:facet>
+                                <p:column headerText="Tipo de Visita">
+                                    <h:outputText value="#{visitaT.tipoDeVisitaid.nombre}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{ingresoContratoBean.formatoCortoDeFecha(visitaT.fecha)}"></h:outputText></f:facet>
+                                        <f:facet name="input"><p:calendar value="#{visitaT.fecha}" pattern="dd/MM/yyyy"></p:calendar></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Descripción">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{visitaT.descripcion}"></h:outputText></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{visitaT.descripcion}"></p:inputText></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:32px">
+                                    <p:rowEditor />
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandButton icon="ui-icon-trash" update=":nuevoContrato:visitasT" process="@this" actionListener="#{ingresoContratoBean.eliminarVisitaTecnica}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                        <f:attribute name="visitaIndex" value="#{rowId}"></f:attribute>
+                                        <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta visita técnica?" icon="ui-icon-alert"></p:confirm>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:dialog>
+                    <p:dialog header="Cursos" widgetVar="cursos" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="cursosProgramados">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Ingreso de Curso"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="temaATratar" value="Tema a tratar:"></p:outputLabel>
+                                <p:inputText id="temaATratar" value="#{ingresoContratoBean.nuevoCurso.temaATratar}"></p:inputText>
+                                <p:outputLabel for="numParticipantes" value="Número de Participantes:"></p:outputLabel>
+                                <p:inputText id="numParticipantes" value="#{ingresoContratoBean.nuevoCurso.numeroDeParticipantes}"></p:inputText>
+                                <p:outputLabel for="numHorasTotales" value="Horas Totales del Curso:"></p:outputLabel>
+                                <p:inputText id="numHorasTotales" value="#{ingresoContratoBean.nuevoCurso.numeroDeHorasTotales}"></p:inputText>
+                                <p:outputLabel for="oficial" value="¿Es curso oficial?:"></p:outputLabel>
+                                <p:selectOneRadio id="oficial" value="#{ingresoContratoBean.nuevoCurso.oficial}">
+                                    <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                    <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                                    <p:ajax listener="#{ingresoContratoBean.limpiarNombreDeInstructor()}" update="instructorSinetcom, nombreInstructor"></p:ajax>
+                                </p:selectOneRadio>
+                                <p:outputLabel for="instructorSinetcom" value="Instructor de Sinetcom:"></p:outputLabel>
+                                <p:selectOneMenu id="instructorSinetcom" value="#{ingresoContratoBean.instructorSinetcom}" disabled="#{ingresoContratoBean.nuevoCurso.oficial}">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems value="#{ingresoContratoBean.tecnicos}" var="instructor" itemLabel="#{instructor.nombreCompleto}" itemValue="#{instructor.id}"></f:selectItems>
+                                    <p:ajax listener="#{ingresoContratoBean.actualizarNombreDeInstructor()}" update="nombreInstructor"></p:ajax>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="nombreInstructor" value="Nombre del Instructor:"></p:outputLabel>
+                                <p:inputText id="nombreInstructor" value="#{ingresoContratoBean.nuevoCurso.nombreInstructor}" readonly="#{not ingresoContratoBean.nuevoCurso.oficial}"></p:inputText>
+                                <p:outputLabel for="centroCapacitacion" value="Centro de Capacitación:"></p:outputLabel>
+                                <p:inputTextarea id="centroCapacitacion" value="#{ingresoContratoBean.nuevoCurso.centroDeCapacitacion}" cols="20" rows="8"></p:inputTextarea>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar Curso" actionListener="#{ingresoContratoBean.agregarCurso}" process=":nuevoContrato:cursosProgramados" update=":nuevoContrato:cursosProgramados"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                            <br/>
+                            <p:dataTable id="cursos" value="#{ingresoContratoBean.cursos}" var="curso" rowIndexVar="rowId">
+                                <f:facet name="header">
+                                    <h:outputText value="Cursos Programados"></h:outputText>
+                                </f:facet>
+                                <p:column headerText="Tema" width="30">
+                                    <h:outputText value="#{curso.temaATratar}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Instructor">
+                                    <h:outputText value="#{curso.nombreInstructor}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Num. Part.">
+                                    <h:outputText value="#{curso.numeroDeParticipantes}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Num. Horas">
+                                    <h:outputText value="#{curso.numeroDeHorasTotales}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Oficial">
+                                    <h:outputText value="#{curso.oficial ? 'Si' : 'No'}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandButton icon="ui-icon-trash" update=":nuevoContrato:cursos" process="@this" actionListener="#{ingresoContratoBean.eliminarCurso}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                        <f:attribute name="cursoIndex" value="#{rowId}"></f:attribute>
+                                        <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar este curso?" icon="ui-icon-alert"></p:confirm>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:dialog>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                    <script type="text/javascript">
+                        function start() {
+                            statusDialog.show();
+                        }
+                        function stop() {
+                            statusDialog.hide();
+                        }
+                    </script>
                 </h:form>                                      
             </h:body>
         </f:view>

@@ -37,11 +37,11 @@
 FROM
      `ItemProducto` ItemProducto INNER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
      INNER JOIN `ModeloProducto` ModeloProducto ON ItemProducto.`ModeloProducto_id` = ModeloProducto.`id`
-     INNER JOIN `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto ON ItemProducto.`numeroSerial` = HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale`
+     INNER JOIN `DetalleDeMovimientoDeProducto` DetalleDeMovimientoDeProducto ON ItemProducto.`numeroSerial` = DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale`
      INNER JOIN `LineaDeProducto` LineaDeProducto ON ModeloProducto.`LineaDeProducto_id` = LineaDeProducto.`id`
      INNER JOIN `Fabricante` Fabricante ON LineaDeProducto.`Fabricante_id` = Fabricante.`id`
 WHERE
-     HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
+     DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
 	</queryString>
 	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>

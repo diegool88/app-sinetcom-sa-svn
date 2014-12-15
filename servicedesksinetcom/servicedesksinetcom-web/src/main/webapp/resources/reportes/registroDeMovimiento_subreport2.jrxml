@@ -10,20 +10,34 @@
      ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
      ItemProducto.`descripcion` AS ItemProducto_descripcion,
      ComponenteElectronicoAtomico.`nombre` AS ComponenteElectronicoAtomico_nombre,
-     Fabricante.`nombre` AS Fabricante_nombre
+     Fabricante.`nombre` AS Fabricante_nombre,
+     DetalleDeMovimientoDeProducto.`id` AS DetalleDeMovimientoDeProducto_id,
+     DetalleDeMovimientoDeProducto.`fechaEvento` AS DetalleDeMovimientoDeProducto_fechaEvento,
+     DetalleDeMovimientoDeProducto.`Usuario_id` AS DetalleDeMovimientoDeProducto_Usuario_id,
+     DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale` AS DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_sale,
+     DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` AS DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_entra,
+     DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS DetalleDeMovimientoDeProducto_RegistroDeMovimientoDeInventario_c
 FROM
      `ItemProducto` ItemProducto INNER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
      INNER JOIN `ModeloProducto` ModeloProducto ON ItemProducto.`ModeloProducto_id` = ModeloProducto.`id`
-     INNER JOIN `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto ON ItemProducto.`numeroSerial` = HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra`
+     INNER JOIN `DetalleDeMovimientoDeProducto` DetalleDeMovimientoDeProducto 
+     ON ItemProducto.`numeroSerial` = DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra`
      INNER JOIN `LineaDeProducto` LineaDeProducto ON ModeloProducto.`LineaDeProducto_id` = LineaDeProducto.`id`
      INNER JOIN `Fabricante` Fabricante ON LineaDeProducto.`Fabricante_id` = Fabricante.`id`
-WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
+WHERE
+     DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
 	</queryString>
 	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
 	<field name="ItemProducto_descripcion" class="java.lang.String"/>
 	<field name="ComponenteElectronicoAtomico_nombre" class="java.lang.String"/>
 	<field name="Fabricante_nombre" class="java.lang.String"/>
+	<field name="DetalleDeMovimientoDeProducto_id" class="java.lang.Integer"/>
+	<field name="DetalleDeMovimientoDeProducto_fechaEvento" class="java.sql.Timestamp"/>
+	<field name="DetalleDeMovimientoDeProducto_Usuario_id" class="java.lang.Integer"/>
+	<field name="DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_sale" class="java.lang.String"/>
+	<field name="DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_entra" class="java.lang.String"/>
+	<field name="DetalleDeMovimientoDeProducto_RegistroDeMovimientoDeInventario_c" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

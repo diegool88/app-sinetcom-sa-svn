@@ -46,7 +46,7 @@
                         </p:selectOneMenu>
                         <p:message for="clienteEmpresaruc" ></p:message>
                         <p:outputLabel for="inventario" value="Inventario Saliente: "></p:outputLabel>
-                        <p:dataTable id="inventario" widgetVar="inventarioT" filteredValue="#{crearRegistroDeMovInventarioBean.inventarioFiltrado}" selection="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.itemProductoList}" value="#{crearRegistroDeMovInventarioBean.inventarioDisponible}" var="item" rowKey="#{item.numeroSerial}" rows="5" paginator="true">
+                        <p:dataTable id="inventario" widgetVar="inventarioT" filteredValue="#{crearRegistroDeMovInventarioBean.inventarioFiltrado}" selection="#{crearRegistroDeMovInventarioBean.listaDeItems}" value="#{crearRegistroDeMovInventarioBean.inventarioDisponible}" var="item" rowKey="#{item.numeroSerial}" rows="5" paginator="true">
                             <f:facet name="header">
                                 <p:outputPanel>
                                     <h:outputText value="Buscar en todos los campos:" />

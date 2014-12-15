@@ -15,11 +15,13 @@
      GarantiaEconomica.`fechaFin` AS GarantiaEconomica_fechaFin
 FROM
      `GarantiaEconomica` GarantiaEconomica INNER JOIN `TipoGarantia` TipoGarantia ON GarantiaEconomica.`TipoGarantia_id` = TipoGarantia.`id`
-WHERE GarantiaEconomica.`Contrato_numero` = $P{contrato_id}]]>
+WHERE GarantiaEconomica.`Contrato_numero` = $P{contrato_id}
+AND TIMESTAMPDIFF(DAY, NOW(),`GarantiaEconomica`.`fechaFin`) >= 0
+AND TIMESTAMPDIFF(DAY, NOW(),`GarantiaEconomica`.`fechaFin`) <= 15]]>
 	</queryString>
 	<field name="GarantiaEconomica_Contrato_numero" class="java.lang.String"/>
 	<field name="TipoGarantia_tipo" class="java.lang.String"/>
-	<field name="GarantiaEconomica_porcentaje" class="java.math.BigDecimal"/>
+	<field name="GarantiaEconomica_porcentaje" class="java.lang.Integer"/>
 	<field name="GarantiaEconomica_valor" class="java.math.BigDecimal"/>
 	<field name="GarantiaEconomica_fechaInicio" class="java.sql.Timestamp"/>
 	<field name="GarantiaEconomica_renovable" class="java.lang.Boolean"/>
