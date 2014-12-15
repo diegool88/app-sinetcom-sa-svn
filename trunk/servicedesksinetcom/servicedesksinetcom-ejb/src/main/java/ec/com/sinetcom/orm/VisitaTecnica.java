@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,16 +29,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author diegoflores
  */
 @Entity
-@Table(name = "VisitasTecnicas", catalog = "dbsinetcom", schema = "")
+@Table(name = "VisitaTecnica", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "VisitasTecnicas.findAll", query = "SELECT v FROM VisitasTecnicas v"),
-    @NamedQuery(name = "VisitasTecnicas.findById", query = "SELECT v FROM VisitasTecnicas v WHERE v.id = :id"),
-    @NamedQuery(name = "VisitasTecnicas.findByFecha", query = "SELECT v FROM VisitasTecnicas v WHERE v.fecha = :fecha"),
-    @NamedQuery(name = "VisitasTecnicas.findByHora", query = "SELECT v FROM VisitasTecnicas v WHERE v.hora = :hora"),
-    @NamedQuery(name = "VisitasTecnicas.findByDescripcion", query = "SELECT v FROM VisitasTecnicas v WHERE v.descripcion = :descripcion"),
-    @NamedQuery(name = "VisitasTecnicas.findByIdNotificador", query = "SELECT v FROM VisitasTecnicas v WHERE v.idNotificador = :idNotificador")})
-public class VisitasTecnicas implements Serializable {
+    @NamedQuery(name = "VisitaTecnica.findAll", query = "SELECT v FROM VisitaTecnica v"),
+    @NamedQuery(name = "VisitaTecnica.findById", query = "SELECT v FROM VisitaTecnica v WHERE v.id = :id"),
+    @NamedQuery(name = "VisitaTecnica.findByFecha", query = "SELECT v FROM VisitaTecnica v WHERE v.fecha = :fecha"),
+    @NamedQuery(name = "VisitaTecnica.findByDescripcion", query = "SELECT v FROM VisitaTecnica v WHERE v.descripcion = :descripcion"),
+    @NamedQuery(name = "VisitaTecnica.findByIdNotificador", query = "SELECT v FROM VisitaTecnica v WHERE v.idNotificador = :idNotificador")})
+public class VisitaTecnica implements Serializable {
+    @JoinColumn(name = "TipoDeVisita_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TipoDeVisita tipoDeVisitaid;
+    @JoinColumn(name = "Ticket_ticketNumber", referencedColumnName = "ticketNumber")
+    @ManyToOne
+    private Ticket ticketticketNumber;
+    @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")
+    @ManyToOne(optional = false)
+    private Contrato contratonumero;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,41 +58,29 @@ public class VisitasTecnicas implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "hora")
-    @Temporal(TemporalType.TIME)
-    private Date hora;
-    @Lob
-    @Column(name = "hojaDeServicio")
-    private byte[] hojaDeServicio;
     @Size(max = 254)
     @Column(name = "descripcion")
     private String descripcion;
     @Size(max = 45)
     @Column(name = "idNotificador")
     private String idNotificador;
-    @JoinColumn(name = "TipoDeVisita_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private TipoDeVisita tipoDeVisitaid;
-    @JoinColumn(name = "Ticket_ticketNumber", referencedColumnName = "ticketNumber")
-    @ManyToOne(optional = false)
-    private Ticket ticketticketNumber;
-    @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")
-    @ManyToOne(optional = false)
-    private Contrato contratonumero;
 
-    public VisitasTecnicas() {
+    public VisitaTecnica() {
     }
 
-    public VisitasTecnicas(Integer id) {
+    public VisitaTecnica(Integer id) {
         this.id = id;
     }
 
-    public VisitasTecnicas(Integer id, Date fecha, Date hora) {
+    public VisitaTecnica(Integer id, Date fecha) {
         this.id = id;
         this.fecha = fecha;
-        this.hora = hora;
+    }
+    
+    public VisitaTecnica(Date fecha, TipoDeVisita tipoDeVisita, String descripcion){
+        this.fecha = fecha;
+        this.tipoDeVisitaid = tipoDeVisita;
+        this.descripcion = descripcion;
     }
 
     public Integer getId() {
@@ -104,22 +99,6 @@ public class VisitasTecnicas implements Serializable {
         this.fecha = fecha;
     }
 
-    public Date getHora() {
-        return hora;
-    }
-
-    public void setHora(Date hora) {
-        this.hora = hora;
-    }
-
-    public byte[] getHojaDeServicio() {
-        return hojaDeServicio;
-    }
-
-    public void setHojaDeServicio(byte[] hojaDeServicio) {
-        this.hojaDeServicio = hojaDeServicio;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
@@ -134,6 +113,31 @@ public class VisitasTecnicas implements Serializable {
 
     public void setIdNotificador(String idNotificador) {
         this.idNotificador = idNotificador;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof VisitaTecnica)) {
+            return false;
+        }
+        VisitaTecnica other = (VisitaTecnica) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ec.com.sinetcom.orm.VisitaTecnica[ id=" + id + " ]";
     }
 
     public TipoDeVisita getTipoDeVisitaid() {
@@ -158,31 +162,6 @@ public class VisitasTecnicas implements Serializable {
 
     public void setContratonumero(Contrato contratonumero) {
         this.contratonumero = contratonumero;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VisitasTecnicas)) {
-            return false;
-        }
-        VisitasTecnicas other = (VisitasTecnicas) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ec.com.sinetcom.orm.VisitasTecnicas[ id=" + id + " ]";
     }
     
 }

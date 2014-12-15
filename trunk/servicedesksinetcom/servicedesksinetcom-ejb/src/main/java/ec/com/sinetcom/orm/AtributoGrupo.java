@@ -54,7 +54,7 @@ public class AtributoGrupo implements Serializable {
     @ManyToOne(optional = false)
     private Grupo grupoid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoGrupo")
-    private List<CamposUsuario> camposUsuarioList;
+    private List<CampoUsuario> campoUsuarioList;
 
     public AtributoGrupo() {
     }
@@ -102,12 +102,12 @@ public class AtributoGrupo implements Serializable {
     }
 
     @XmlTransient
-    public List<CamposUsuario> getCamposUsuarioList() {
-        return camposUsuarioList;
+    public List<CampoUsuario> getCamposUsuarioList() {
+        return campoUsuarioList;
     }
 
-    public void setCamposUsuarioList(List<CamposUsuario> camposUsuarioList) {
-        this.camposUsuarioList = camposUsuarioList;
+    public void setCamposUsuarioList(List<CampoUsuario> campoUsuarioList) {
+        this.campoUsuarioList = campoUsuarioList;
     }
 
     @Override

@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.Cola;
+import ec.com.sinetcom.orm.ColaTicket;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author diegoflores
  */
 @Stateless
-public class ColaFacade extends AbstractFacade<Cola> {
+public class ColaFacade extends AbstractFacade<ColaTicket> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -24,7 +24,7 @@ public class ColaFacade extends AbstractFacade<Cola> {
     }
 
     public ColaFacade() {
-        super(Cola.class);
+        super(ColaTicket.class);
     }
     
 }

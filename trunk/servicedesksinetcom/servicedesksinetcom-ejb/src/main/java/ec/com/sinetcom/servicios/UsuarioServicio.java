@@ -4,13 +4,13 @@
  */
 package ec.com.sinetcom.servicios;
 
-import ec.com.sinetcom.dao.CompetenciasFacade;
+import ec.com.sinetcom.dao.CompetenciaFacade;
 import ec.com.sinetcom.dao.GrupoFacade;
-import ec.com.sinetcom.dao.PermisosFacade;
+import ec.com.sinetcom.dao.PermisoFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
-import ec.com.sinetcom.orm.Competencias;
+import ec.com.sinetcom.orm.Competencia;
 import ec.com.sinetcom.orm.Grupo;
-import ec.com.sinetcom.orm.Permisos;
+import ec.com.sinetcom.orm.Permiso;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.List;
 import javax.ejb.EJB;
@@ -30,11 +30,11 @@ public class UsuarioServicio {
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
-    private CompetenciasFacade competenciasFacade;
+    private CompetenciaFacade competenciasFacade;
     @EJB
     private GrupoFacade grupoFacade;
     @EJB
-    private PermisosFacade permisosFacade;
+    private PermisoFacade permisoFacade;
     
     
     /**
@@ -101,7 +101,7 @@ public class UsuarioServicio {
      * @param id
      * @return 
      */
-    public Competencias obtenerCompetencia(int id){
+    public Competencia obtenerCompetencia(int id){
         return this.competenciasFacade.find(id);
     }
     
@@ -109,7 +109,7 @@ public class UsuarioServicio {
      * Obtiene todas las competencias
      * @return 
      */
-    public List<Competencias> obtenerTodasLasCompetencias(){
+    public List<Competencia> obtenerTodasLasCompetencias(){
         return this.competenciasFacade.findAll();
     }
     
@@ -135,8 +135,8 @@ public class UsuarioServicio {
      * @param id
      * @return 
      */
-    public Permisos obtenerPermisosPorId(int id){
-        return this.permisosFacade.find(id);
+    public Permiso obtenerPermisosPorId(int id){
+        return this.permisoFacade.find(id);
     }
     
     /**

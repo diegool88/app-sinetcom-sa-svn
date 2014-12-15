@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 //    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
     @ManyToMany(mappedBy = "usuarioList")
-    private List<Competencias> competenciasList;
+    private List<Competencia> competenciaList;
     @Basic(optional = false)
     @NotNull
     @Column(name = "activo")
@@ -90,7 +90,7 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "intructorSinetcom")
     private List<Curso> cursoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<CamposUsuario> camposUsuarioList;
+    private List<CampoUsuario> campoUsuarioList;
     @OneToMany(mappedBy = "usuarioidmodificacion")
     private List<Faq> faqList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioidcreacion")
@@ -103,7 +103,7 @@ public class Usuario implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioid")
     private List<ClienteEmpresa> clienteEmpresaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioid")
-    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList;
+    private List<DetalleDeMovimientoDeProducto> detalleDeMovimientoDeProductoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "para")
     private List<Articulo> articuloList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "de")
@@ -218,12 +218,12 @@ public class Usuario implements Serializable {
     
     
     @XmlTransient
-    public List<CamposUsuario> getCamposUsuarioList() {
-        return camposUsuarioList;
+    public List<CampoUsuario> getCampoUsuarioList() {
+        return campoUsuarioList;
     }
 
-    public void setCamposUsuarioList(List<CamposUsuario> camposUsuarioList) {
-        this.camposUsuarioList = camposUsuarioList;
+    public void setCampoUsuarioList(List<CampoUsuario> campoUsuarioList) {
+        this.campoUsuarioList = campoUsuarioList;
     }
 
     @XmlTransient
@@ -271,12 +271,12 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoList() {
-        return historialDeMovimientoDeProductoList;
+    public List<DetalleDeMovimientoDeProducto> getDetalleDeMovimientoDeProductoList() {
+        return detalleDeMovimientoDeProductoList;
     }
 
-    public void setHistorialDeMovimientoDeProductoList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList) {
-        this.historialDeMovimientoDeProductoList = historialDeMovimientoDeProductoList;
+    public void setDetalleDeMovimientoDeProductoList(List<DetalleDeMovimientoDeProducto> detalleDeMovimientoDeProductoList) {
+        this.detalleDeMovimientoDeProductoList = detalleDeMovimientoDeProductoList;
     }
 
     @XmlTransient
@@ -349,12 +349,12 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Competencias> getCompetenciasList() {
-        return competenciasList;
+    public List<Competencia> getCompetenciasList() {
+        return competenciaList;
     }
 
-    public void setCompetenciasList(List<Competencias> competenciasList) {
-        this.competenciasList = competenciasList;
+    public void setCompetenciasList(List<Competencia> competenciasList) {
+        this.competenciaList = competenciasList;
     }
 
     public String getNombreCompleto() {

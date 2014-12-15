@@ -19,8 +19,8 @@ import javax.validation.constraints.Size;
 public class AtributoItemProductoPK implements Serializable {
     @Basic(optional = false)
     @NotNull
-    @Column(name = "ParametrosDeProducto_id")
-    private int parametrosDeProductoid;
+    @Column(name = "ParametroDeProducto_id")
+    private int parametroDeProductoid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -31,16 +31,16 @@ public class AtributoItemProductoPK implements Serializable {
     }
 
     public AtributoItemProductoPK(int parametrosDeProductoid, String itemProductonumeroSerial) {
-        this.parametrosDeProductoid = parametrosDeProductoid;
+        this.parametroDeProductoid = parametrosDeProductoid;
         this.itemProductonumeroSerial = itemProductonumeroSerial;
     }
 
-    public int getParametrosDeProductoid() {
-        return parametrosDeProductoid;
+    public int getParametroDeProductoid() {
+        return parametroDeProductoid;
     }
 
-    public void setParametrosDeProductoid(int parametrosDeProductoid) {
-        this.parametrosDeProductoid = parametrosDeProductoid;
+    public void setParametroDeProductoid(int parametrosDeProductoid) {
+        this.parametroDeProductoid = parametrosDeProductoid;
     }
 
     public String getItemProductonumeroSerial() {
@@ -54,7 +54,7 @@ public class AtributoItemProductoPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) parametrosDeProductoid;
+        hash += (int) parametroDeProductoid;
         hash += (itemProductonumeroSerial != null ? itemProductonumeroSerial.hashCode() : 0);
         return hash;
     }
@@ -66,7 +66,7 @@ public class AtributoItemProductoPK implements Serializable {
             return false;
         }
         AtributoItemProductoPK other = (AtributoItemProductoPK) object;
-        if (this.parametrosDeProductoid != other.parametrosDeProductoid) {
+        if (this.parametroDeProductoid != other.parametroDeProductoid) {
             return false;
         }
         if ((this.itemProductonumeroSerial == null && other.itemProductonumeroSerial != null) || (this.itemProductonumeroSerial != null && !this.itemProductonumeroSerial.equals(other.itemProductonumeroSerial))) {
@@ -77,7 +77,7 @@ public class AtributoItemProductoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.AtributoItemProductoPK[ parametrosDeProductoid=" + parametrosDeProductoid + ", itemProductonumeroSerial=" + itemProductonumeroSerial + " ]";
+        return "ec.com.sinetcom.orm.AtributoItemProductoPK[ parametrosDeProductoid=" + parametroDeProductoid + ", itemProductonumeroSerial=" + itemProductonumeroSerial + " ]";
     }
     
 }

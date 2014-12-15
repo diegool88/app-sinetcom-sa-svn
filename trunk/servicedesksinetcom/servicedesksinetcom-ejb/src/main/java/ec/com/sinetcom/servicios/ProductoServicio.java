@@ -12,11 +12,11 @@ import ec.com.sinetcom.dao.ComponenteElectronicoAtomicoFacade;
 import ec.com.sinetcom.dao.CondicionFisicaFacade;
 import ec.com.sinetcom.dao.ContratoFacade;
 import ec.com.sinetcom.dao.FabricanteFacade;
-import ec.com.sinetcom.dao.HistorialDeMovimientoDeProductoFacade;
+import ec.com.sinetcom.dao.DetalleDeMovimientoDeProductoFacade;
 import ec.com.sinetcom.dao.ItemProductoFacade;
 import ec.com.sinetcom.dao.LineaDeProductoFacade;
 import ec.com.sinetcom.dao.ModeloProductoFacade;
-import ec.com.sinetcom.dao.ParametrosDeProductoFacade;
+import ec.com.sinetcom.dao.ParametroDeProductoFacade;
 import ec.com.sinetcom.dao.RegistroDeMovimientoDeInventarioFacade;
 import ec.com.sinetcom.dao.TipoDeMovimientoFacade;
 import ec.com.sinetcom.dao.UnidadMedidaFacade;
@@ -29,11 +29,11 @@ import ec.com.sinetcom.orm.ComponenteElectronicoAtomico;
 import ec.com.sinetcom.orm.CondicionFisica;
 import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.Fabricante;
-import ec.com.sinetcom.orm.HistorialDeMovimientoDeProducto;
+import ec.com.sinetcom.orm.DetalleDeMovimientoDeProducto;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.LineaDeProducto;
 import ec.com.sinetcom.orm.ModeloProducto;
-import ec.com.sinetcom.orm.ParametrosDeProducto;
+import ec.com.sinetcom.orm.ParametroDeProducto;
 import ec.com.sinetcom.orm.RegistroDeMovimientoDeInventario;
 import ec.com.sinetcom.orm.TipoDeMovimiento;
 import ec.com.sinetcom.orm.UnidadMedida;
@@ -72,7 +72,7 @@ public class ProductoServicio {
     @EJB
     private CondicionFisicaFacade condicionFisicaFacade;
     @EJB
-    private ParametrosDeProductoFacade parametrosDeProductoFacade;
+    private ParametroDeProductoFacade parametrosDeProductoFacade;
     @EJB
     private UnidadMedidaFacade unidadMedidaFacade;
     @EJB
@@ -82,7 +82,7 @@ public class ProductoServicio {
     @EJB
     private RegistroDeMovimientoDeInventarioFacade movimientoDeInventarioFacade;
     @EJB
-    private HistorialDeMovimientoDeProductoFacade historialDeMovimientoDeProductoFacade;
+    private DetalleDeMovimientoDeProductoFacade historialDeMovimientoDeProductoFacade;
     /**
      * Servicio que permite crear un nuevo componente electrónico
      * @param atomico 
@@ -95,7 +95,7 @@ public class ProductoServicio {
      * Servicio que obtiene todos los parametros declarados
      * @return 
      */
-    public List<ParametrosDeProducto> obtenerTodosLosParametrosDeProducto(){
+    public List<ParametroDeProducto> obtenerTodosLosParametrosDeProducto(){
         return this.parametrosDeProductoFacade.findAll();
     }
     
@@ -112,7 +112,7 @@ public class ProductoServicio {
      * @param id
      * @return 
      */
-    public ParametrosDeProducto obtenerParametroProducto(int id){
+    public ParametroDeProducto obtenerParametroProducto(int id){
         return this.parametrosDeProductoFacade.find(id);
     }
     
@@ -129,7 +129,7 @@ public class ProductoServicio {
      * Crea un parámetro producto
      * @param parametrosDeProducto 
      */
-    public void crearParametroProducto(ParametrosDeProducto parametrosDeProducto){
+    public void crearParametroProducto(ParametroDeProducto parametrosDeProducto){
         this.parametrosDeProductoFacade.create(parametrosDeProducto);
     }
     
@@ -146,7 +146,7 @@ public class ProductoServicio {
      * @param registro
      * @return 
      */
-    public List<HistorialDeMovimientoDeProducto> forzarCargaDeHistorialDeMovimientoPorRegistro(RegistroDeMovimientoDeInventario registro){
+    public List<DetalleDeMovimientoDeProducto> forzarCargaDeHistorialDeMovimientoPorRegistro(RegistroDeMovimientoDeInventario registro){
         return this.historialDeMovimientoDeProductoFacade.forzarCargaDeHistorialDeMovimientoPorRegistro(registro);
     }
     
@@ -449,7 +449,7 @@ public class ProductoServicio {
             }
             for(AtributoItemProducto atributo : clon){
                 
-                AtributoItemProductoPK itemProductoPK = new AtributoItemProductoPK(atributo.getParametrosDeProducto().getId(), itemProducto.getNumeroSerial());
+                AtributoItemProductoPK itemProductoPK = new AtributoItemProductoPK(atributo.getParametroDeProducto().getId(), itemProducto.getNumeroSerial());
                 atributo.setAtributoItemProductoPK(itemProductoPK);
             }
             itemProducto.setAtributoItemProductoList(clon);
@@ -599,7 +599,7 @@ public class ProductoServicio {
      */
     public boolean crearHistorialDeMovimientoDeInventario(ItemProducto itemProducto, RegistroDeMovimientoDeInventario registroDeMovimientoDeInventario, Usuario usuario){
         try{
-            HistorialDeMovimientoDeProducto historialDeMovimientoDeProducto = new HistorialDeMovimientoDeProducto();
+            DetalleDeMovimientoDeProducto historialDeMovimientoDeProducto = new DetalleDeMovimientoDeProducto();
             historialDeMovimientoDeProducto.setFechaEvento(Calendar.getInstance().getTime());
             historialDeMovimientoDeProducto.setItemProductonumeroSerialsale(itemProducto);
             historialDeMovimientoDeProducto.setUsuarioid(usuario);

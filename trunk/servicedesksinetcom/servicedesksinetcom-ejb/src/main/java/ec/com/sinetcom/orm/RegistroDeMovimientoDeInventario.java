@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "RegistroDeMovimientoDeInventario.findAll", query = "SELECT r FROM RegistroDeMovimientoDeInventario r")})
 public class RegistroDeMovimientoDeInventario implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "registroDeMovimientoDeInventariocodigo", fetch = FetchType.EAGER)
-    private List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList;
+    private List<DetalleDeMovimientoDeProducto> detalleDeMovimientoDeProductoList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,11 +68,11 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
     @Column(name = "numeroDeFactura")
     private String numeroDeFactura;
 //    @ManyToMany(mappedBy = "registroDeMovimientoDeInventarioList")
-    @JoinTable(name = "ItemProductosRegistroMovimiento", joinColumns = {
-        @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")}, inverseJoinColumns = {
-        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")})
-    @ManyToMany
-    private List<ItemProducto> itemProductoList;
+//    @JoinTable(name = "ItemProductosRegistroMovimiento", joinColumns = {
+//        @JoinColumn(name = "RegistroDeMovimientoDeInventario_codigo", referencedColumnName = "codigo")}, inverseJoinColumns = {
+//        @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")})
+//    @ManyToMany
+//    private List<ItemProducto> itemProductoList;
     @JoinColumn(name = "TipoDeMovimiento_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TipoDeMovimiento tipoDeMovimientoid;
@@ -144,14 +144,14 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
         this.numeroDeFactura = numeroDeFactura;
     }
 
-    @XmlTransient
-    public List<ItemProducto> getItemProductoList() {
-        return itemProductoList;
-    }
-
-    public void setItemProductoList(List<ItemProducto> itemProductoList) {
-        this.itemProductoList = itemProductoList;
-    }
+//    @XmlTransient
+//    public List<ItemProducto> getItemProductoList() {
+//        return itemProductoList;
+//    }
+//
+//    public void setItemProductoList(List<ItemProducto> itemProductoList) {
+//        this.itemProductoList = itemProductoList;
+//    }
 
     public TipoDeMovimiento getTipoDeMovimientoid() {
         return tipoDeMovimientoid;
@@ -203,12 +203,12 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
     }
 
     @XmlTransient
-    public List<HistorialDeMovimientoDeProducto> getHistorialDeMovimientoDeProductoList() {
-        return historialDeMovimientoDeProductoList;
+    public List<DetalleDeMovimientoDeProducto> getDetalleDeMovimientoDeProductoList() {
+        return detalleDeMovimientoDeProductoList;
     }
 
-    public void setHistorialDeMovimientoDeProductoList(List<HistorialDeMovimientoDeProducto> historialDeMovimientoDeProductoList) {
-        this.historialDeMovimientoDeProductoList = historialDeMovimientoDeProductoList;
+    public void setDetalleDeMovimientoDeProductoList(List<DetalleDeMovimientoDeProducto> detalleDeMovimientoDeProductoList) {
+        this.detalleDeMovimientoDeProductoList = detalleDeMovimientoDeProductoList;
     }
     
 }

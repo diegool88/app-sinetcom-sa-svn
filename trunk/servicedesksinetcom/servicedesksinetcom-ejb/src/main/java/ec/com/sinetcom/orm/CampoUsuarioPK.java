@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ec.com.sinetcom.orm;
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * @author diegoflores
  */
 @Embeddable
-public class CamposUsuarioPK implements Serializable {
+public class CampoUsuarioPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "AtributoGrupo_id")
@@ -25,10 +26,10 @@ public class CamposUsuarioPK implements Serializable {
     @Column(name = "Usuario_id")
     private int usuarioid;
 
-    public CamposUsuarioPK() {
+    public CampoUsuarioPK() {
     }
 
-    public CamposUsuarioPK(int atributoGrupoid, int usuarioid) {
+    public CampoUsuarioPK(int atributoGrupoid, int usuarioid) {
         this.atributoGrupoid = atributoGrupoid;
         this.usuarioid = usuarioid;
     }
@@ -60,10 +61,10 @@ public class CamposUsuarioPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CamposUsuarioPK)) {
+        if (!(object instanceof CampoUsuarioPK)) {
             return false;
         }
-        CamposUsuarioPK other = (CamposUsuarioPK) object;
+        CampoUsuarioPK other = (CampoUsuarioPK) object;
         if (this.atributoGrupoid != other.atributoGrupoid) {
             return false;
         }
@@ -75,7 +76,7 @@ public class CamposUsuarioPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.CamposUsuarioPK[ atributoGrupoid=" + atributoGrupoid + ", usuarioid=" + usuarioid + " ]";
+        return "ec.com.sinetcom.orm.CampoUsuarioPK[ atributoGrupoid=" + atributoGrupoid + ", usuarioid=" + usuarioid + " ]";
     }
     
 }

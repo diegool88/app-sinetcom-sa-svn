@@ -31,11 +31,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author diegoflores
  */
 @Entity
-@Table(name = "ParametrosDeProducto", catalog = "dbsinetcom", schema = "")
+@Table(name = "ParametroDeProducto", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ParametrosDeProducto.findAll", query = "SELECT p FROM ParametrosDeProducto p")})
-public class ParametrosDeProducto implements Serializable {
+    @NamedQuery(name = "ParametroDeProducto.findAll", query = "SELECT p FROM ParametroDeProducto p")})
+public class ParametroDeProducto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,22 +55,22 @@ public class ParametrosDeProducto implements Serializable {
     @Size(max = 254)
     @Column(name = "descripcion")
     private String descripcion;
-    @ManyToMany(mappedBy = "parametrosDeProductoList")
+    @ManyToMany(mappedBy = "parametroDeProductoList")
     private List<ComponenteElectronicoAtomico> componenteElectronicoAtomicoList;
     @JoinColumn(name = "UnidadMedida_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private UnidadMedida unidadMedidaid;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parametrosDeProducto")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parametroDeProducto")
     private List<AtributoItemProducto> atributoItemProductoList;
 
-    public ParametrosDeProducto() {
+    public ParametroDeProducto() {
     }
 
-    public ParametrosDeProducto(Integer id) {
+    public ParametroDeProducto(Integer id) {
         this.id = id;
     }
 
-    public ParametrosDeProducto(Integer id, String nombre, String tipoDeDato) {
+    public ParametroDeProducto(Integer id, String nombre, String tipoDeDato) {
         this.id = id;
         this.nombre = nombre;
         this.tipoDeDato = tipoDeDato;
@@ -144,10 +144,10 @@ public class ParametrosDeProducto implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ParametrosDeProducto)) {
+        if (!(object instanceof ParametroDeProducto)) {
             return false;
         }
-        ParametrosDeProducto other = (ParametrosDeProducto) object;
+        ParametroDeProducto other = (ParametroDeProducto) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

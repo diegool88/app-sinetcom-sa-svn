@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.UsuarioCompetencias;
+import ec.com.sinetcom.orm.CampoUsuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author diegoflores
  */
 @Stateless
-public class UsuarioCompetenciasFacade extends AbstractFacade<UsuarioCompetencias> {
+public class CampoUsuarioFacade extends AbstractFacade<CampoUsuario> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -23,8 +23,8 @@ public class UsuarioCompetenciasFacade extends AbstractFacade<UsuarioCompetencia
         return em;
     }
 
-    public UsuarioCompetenciasFacade() {
-        super(UsuarioCompetencias.class);
+    public CampoUsuarioFacade() {
+        super(CampoUsuario.class);
     }
     
 }

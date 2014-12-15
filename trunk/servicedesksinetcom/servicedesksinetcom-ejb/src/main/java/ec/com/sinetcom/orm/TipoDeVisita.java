@@ -35,6 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TipoDeVisita.findById", query = "SELECT t FROM TipoDeVisita t WHERE t.id = :id"),
     @NamedQuery(name = "TipoDeVisita.findByNombre", query = "SELECT t FROM TipoDeVisita t WHERE t.nombre = :nombre")})
 public class TipoDeVisita implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoDeVisitaid")
+    private List<VisitaTecnica> visitaTecnicaList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +48,7 @@ public class TipoDeVisita implements Serializable {
     @Size(min = 1, max = 120)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoDeVisitaid")
-    private List<VisitasTecnicas> visitasTecnicasList;
+    
 
     public TipoDeVisita() {
     }
@@ -77,15 +78,6 @@ public class TipoDeVisita implements Serializable {
         this.nombre = nombre;
     }
 
-    @XmlTransient
-    public List<VisitasTecnicas> getVisitasTecnicasList() {
-        return visitasTecnicasList;
-    }
-
-    public void setVisitasTecnicasList(List<VisitasTecnicas> visitasTecnicasList) {
-        this.visitasTecnicasList = visitasTecnicasList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -109,6 +101,15 @@ public class TipoDeVisita implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.TipoDeVisita[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public List<VisitaTecnica> getVisitaTecnicaList() {
+        return visitaTecnicaList;
+    }
+
+    public void setVisitaTecnicaList(List<VisitaTecnica> visitaTecnicaList) {
+        this.visitaTecnicaList = visitaTecnicaList;
     }
     
 }

@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ec.com.sinetcom.orm;
@@ -7,7 +8,6 @@ package ec.com.sinetcom.orm;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,25 +18,26 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author diegoflores
  */
 @Entity
-@Table(name = "Competencias", catalog = "dbsinetcom", schema = "")
+@Table(name = "Competencia", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Competencias.findAll", query = "SELECT c FROM Competencias c")})
-public class Competencias implements Serializable {
-    @JoinTable(name = "UsuarioCompetencias", joinColumns = {
-        @JoinColumn(name = "Competencias_id", referencedColumnName = "id")}, inverseJoinColumns = {
+    @NamedQuery(name = "Competencia.findAll", query = "SELECT c FROM Competencia c"),
+    @NamedQuery(name = "Competencia.findById", query = "SELECT c FROM Competencia c WHERE c.id = :id"),
+    @NamedQuery(name = "Competencia.findByNombre", query = "SELECT c FROM Competencia c WHERE c.nombre = :nombre"),
+    @NamedQuery(name = "Competencia.findByDescripcion", query = "SELECT c FROM Competencia c WHERE c.descripcion = :descripcion")})
+public class Competencia implements Serializable {
+    @JoinTable(name = "UsuarioCompetencia", joinColumns = {
+        @JoinColumn(name = "Competencia_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "Usuario_id", referencedColumnName = "id")})
     @ManyToMany
     private List<Usuario> usuarioList;
@@ -54,19 +55,15 @@ public class Competencias implements Serializable {
     @Size(max = 254)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "competenciasid")
-    private List<UsuarioCompetencias> usuarioCompetenciasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "competenciasid")
-    private List<Cola> colaList;
 
-    public Competencias() {
+    public Competencia() {
     }
 
-    public Competencias(Integer id) {
+    public Competencia(Integer id) {
         this.id = id;
     }
 
-    public Competencias(Integer id, String nombre) {
+    public Competencia(Integer id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
@@ -95,23 +92,15 @@ public class Competencias implements Serializable {
         this.descripcion = descripcion;
     }
 
-    @XmlTransient
-    public List<UsuarioCompetencias> getUsuarioCompetenciasList() {
-        return usuarioCompetenciasList;
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
     }
 
-    public void setUsuarioCompetenciasList(List<UsuarioCompetencias> usuarioCompetenciasList) {
-        this.usuarioCompetenciasList = usuarioCompetenciasList;
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
-
-    @XmlTransient
-    public List<Cola> getColaList() {
-        return colaList;
-    }
-
-    public void setColaList(List<Cola> colaList) {
-        this.colaList = colaList;
-    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -123,10 +112,10 @@ public class Competencias implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Competencias)) {
+        if (!(object instanceof Competencia)) {
             return false;
         }
-        Competencias other = (Competencias) object;
+        Competencia other = (Competencia) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -135,16 +124,7 @@ public class Competencias implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.Competencias[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
-    }
-
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
+        return "ec.com.sinetcom.orm.Competencia[ id=" + id + " ]";
     }
     
 }

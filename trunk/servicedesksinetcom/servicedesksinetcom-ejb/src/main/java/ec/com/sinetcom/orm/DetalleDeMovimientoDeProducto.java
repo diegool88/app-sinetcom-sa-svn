@@ -28,11 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author diegoflores
  */
 @Entity
-@Table(name = "HistorialDeMovimientoDeProducto", catalog = "dbsinetcom", schema = "")
+@Table(name = "DetalleDeMovimientoDeProducto", catalog = "dbsinetcom", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "HistorialDeMovimientoDeProducto.findAll", query = "SELECT h FROM HistorialDeMovimientoDeProducto h")})
-public class HistorialDeMovimientoDeProducto implements Serializable {
+    @NamedQuery(name = "DetalleDeMovimientoDeProducto.findAll", query = "SELECT h FROM DetalleDeMovimientoDeProducto h")})
+public class DetalleDeMovimientoDeProducto implements Serializable {
     @JoinColumn(name = "ItemProducto_numeroSerial_entra", referencedColumnName = "numeroSerial")
     @ManyToOne
     private ItemProducto itemProductonumeroSerialentra;
@@ -57,14 +57,14 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
     @ManyToOne(optional = false)
     private Usuario usuarioid;
 
-    public HistorialDeMovimientoDeProducto() {
+    public DetalleDeMovimientoDeProducto() {
     }
 
-    public HistorialDeMovimientoDeProducto(Integer id) {
+    public DetalleDeMovimientoDeProducto(Integer id) {
         this.id = id;
     }
 
-    public HistorialDeMovimientoDeProducto(Integer id, Date fechaEvento) {
+    public DetalleDeMovimientoDeProducto(Integer id, Date fechaEvento) {
         this.id = id;
         this.fechaEvento = fechaEvento;
     }
@@ -103,10 +103,10 @@ public class HistorialDeMovimientoDeProducto implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof HistorialDeMovimientoDeProducto)) {
+        if (!(object instanceof DetalleDeMovimientoDeProducto)) {
             return false;
         }
-        HistorialDeMovimientoDeProducto other = (HistorialDeMovimientoDeProducto) object;
+        DetalleDeMovimientoDeProducto other = (DetalleDeMovimientoDeProducto) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

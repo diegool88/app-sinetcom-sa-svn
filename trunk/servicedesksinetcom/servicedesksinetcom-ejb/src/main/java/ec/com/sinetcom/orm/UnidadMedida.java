@@ -44,7 +44,7 @@ public class UnidadMedida implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "unidadMedidaid")
-    private List<ParametrosDeProducto> parametrosDeProductoList;
+    private List<ParametroDeProducto> parametrosDeProductoList;
 
     public UnidadMedida() {
     }
@@ -75,11 +75,11 @@ public class UnidadMedida implements Serializable {
     }
 
     @XmlTransient
-    public List<ParametrosDeProducto> getParametrosDeProductoList() {
+    public List<ParametroDeProducto> getParametrosDeProductoList() {
         return parametrosDeProductoList;
     }
 
-    public void setParametrosDeProductoList(List<ParametrosDeProducto> parametrosDeProductoList) {
+    public void setParametrosDeProductoList(List<ParametroDeProducto> parametrosDeProductoList) {
         this.parametrosDeProductoList = parametrosDeProductoList;
     }
 
