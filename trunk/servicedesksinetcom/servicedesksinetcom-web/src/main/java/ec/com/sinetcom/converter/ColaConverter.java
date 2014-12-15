@@ -4,7 +4,7 @@
  */
 package ec.com.sinetcom.converter;
 
-import ec.com.sinetcom.orm.Cola;
+import ec.com.sinetcom.orm.ColaTicket;
 import ec.com.sinetcom.servicios.TicketServicio;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;

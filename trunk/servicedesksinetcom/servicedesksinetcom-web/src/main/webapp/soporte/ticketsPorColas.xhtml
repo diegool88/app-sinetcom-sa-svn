@@ -60,7 +60,7 @@
                         <p:column headerText="Propietario" width="280">
                             <h:outputText value="Ing. #{ticket.usuarioidpropietario.nombreCompleto}"></h:outputText>
                         </p:column>
-                        <f:facet name="footer" rendered="#{login.usuarioActual.grupoid.permisos.administra or login.usuarioActual.grupoid.permisos.administraTicketsPropietarios}">
+                        <f:facet name="footer" rendered="#{login.usuarioActual.grupoid.permiso.administra or login.usuarioActual.grupoid.permiso.administraTicketsPropietarios}">
                             <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" disabled="#{ticketsPorCola.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
                             <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" disabled="#{ticketsPorCola.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{ticketsPorCola.ponerEnPendiente}" ></p:commandButton>
                             <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" disabled="#{ticketsPorCola.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{ticketsPorCola.reAbrirCaso}"></p:commandButton>

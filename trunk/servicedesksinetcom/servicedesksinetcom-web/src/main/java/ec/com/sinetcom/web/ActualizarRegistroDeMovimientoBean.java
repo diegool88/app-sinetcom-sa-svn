@@ -7,7 +7,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.Bodega;
 import ec.com.sinetcom.orm.Contrato;
-import ec.com.sinetcom.orm.HistorialDeMovimientoDeProducto;
+import ec.com.sinetcom.orm.DetalleDeMovimientoDeProducto;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.RegistroDeMovimientoDeInventario;
 import ec.com.sinetcom.servicios.ProductoServicio;
@@ -64,8 +64,8 @@ public class ActualizarRegistroDeMovimientoBean implements Serializable {
 
     public void registroSeleccionado(SelectEvent event) {
         this.seleccion = (RegistroDeMovimientoDeInventario) event.getObject();
-        if (this.seleccion.getHistorialDeMovimientoDeProductoList().isEmpty()) { 
-            this.seleccion.setHistorialDeMovimientoDeProductoList(this.productoServicio.forzarCargaDeHistorialDeMovimientoPorRegistro(this.seleccion));
+        if (this.seleccion.getDetalleDeMovimientoDeProductoList().isEmpty()) { 
+            this.seleccion.setDetalleDeMovimientoDeProductoList(this.productoServicio.forzarCargaDeHistorialDeMovimientoPorRegistro(this.seleccion));
         }
         if (this.seleccion.getTipoDeMovimientoid().getId() == 3 || this.seleccion.getTipoDeMovimientoid().getId() == 4) {
             this.inventarioEntranteDisponible = this.productoServicio.obtenerTodasLasPartesYPiezasDeContrato(this.seleccion.getContratonumero());
@@ -82,7 +82,7 @@ public class ActualizarRegistroDeMovimientoBean implements Serializable {
         int tipoDeMov = this.seleccion.getTipoDeMovimientoid().getId();
 
         if (tipoDeMov != 1 && tipoDeMov != 2) {
-            for (HistorialDeMovimientoDeProducto movimiento : this.seleccion.getHistorialDeMovimientoDeProductoList()) {
+            for (DetalleDeMovimientoDeProducto movimiento : this.seleccion.getDetalleDeMovimientoDeProductoList()) {
                 ItemProducto productoPadre = movimiento.getItemProductonumeroSerialentra().getItemProductonumeroSerialpadre();
                 Contrato contrato = movimiento.getItemProductonumeroSerialentra().getContratonumero();
                 //Se indica el nuevo padre del componente que se reemplazo de existir uno y se encera el que entra
@@ -99,10 +99,10 @@ public class ActualizarRegistroDeMovimientoBean implements Serializable {
                 this.productoServicio.colocarItemProductoComoDanado(movimiento.getItemProductonumeroSerialentra());
                 //Se guardan los cambios en el que sale
                 this.productoServicio.actualizarItemProducto(movimiento.getItemProductonumeroSerialsale());
-                this.seleccion.getItemProductoList().add(movimiento.getItemProductonumeroSerialentra());
+                //this.seleccion.getItemProductoList().add(movimiento.getItemProductonumeroSerialentra());
             }
         }else{
-            for (HistorialDeMovimientoDeProducto movimiento : this.seleccion.getHistorialDeMovimientoDeProductoList()) {
+            for (DetalleDeMovimientoDeProducto movimiento : this.seleccion.getDetalleDeMovimientoDeProductoList()) {
                 //Se coloca en el registro como que nuevamente se ingreso el item en préstamo
                 movimiento.setItemProductonumeroSerialentra(movimiento.getItemProductonumeroSerialsale());
                 this.productoServicio.actualizarItemProducto(movimiento.getItemProductonumeroSerialentra());

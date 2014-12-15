@@ -87,12 +87,12 @@
                         <p:panelGrid rendered="#{ingresarComponenteAPBean.modeloProductoSeleccionado != null}" columns="2" id="atributos">
                             <ui:repeat id="loop" value="#{ingresarComponenteAPBean.atributosCA}" var="parametro">
                                 <p:panelGrid columns="4">
-                                    <p:outputLabel for="param" value="#{parametro.parametrosDeProducto.nombre}:  "></p:outputLabel>
-                                    <p:inputText id="param" required="true" value="#{parametro.valor}" validatorMessage="#{parametro.parametrosDeProducto.tipoDeDato == '1' ? 'Ingrese solo enteros' : parametro.parametrosDeProducto.tipoDeDato == '2' ? 'Ingrese solo decimales' : '' }" requiredMessage="* Requerido">
-                                        <o:validator validatorId="enterosValidator" disabled="#{parametro.parametrosDeProducto.tipoDeDato != '1'}"></o:validator>
-                                        <o:validator validatorId="decimalesValidator" disabled="#{parametro.parametrosDeProducto.tipoDeDato != '2'}"></o:validator>
+                                    <p:outputLabel for="param" value="#{parametro.parametroDeProducto.nombre}:  "></p:outputLabel>
+                                    <p:inputText id="param" required="true" value="#{parametro.valor}" validatorMessage="#{parametro.parametroDeProducto.tipoDeDato == '1' ? 'Ingrese solo enteros' : parametro.parametroDeProducto.tipoDeDato == '2' ? 'Ingrese solo decimales' : '' }" requiredMessage="* Requerido">
+                                        <o:validator validatorId="enterosValidator" disabled="#{parametro.parametroDeProducto.tipoDeDato != '1'}"></o:validator>
+                                        <o:validator validatorId="decimalesValidator" disabled="#{parametro.parametroDeProducto.tipoDeDato != '2'}"></o:validator>
                                     </p:inputText>
-                                    <p:watermark for="param" value="#{parametro.parametrosDeProducto.unidadMedidaid.nombre}"></p:watermark>
+                                    <p:watermark for="param" value="#{parametro.parametroDeProducto.unidadMedidaid.nombre}"></p:watermark>
                                     <p:message for="param"></p:message>
                                 </p:panelGrid>
                             </ui:repeat>

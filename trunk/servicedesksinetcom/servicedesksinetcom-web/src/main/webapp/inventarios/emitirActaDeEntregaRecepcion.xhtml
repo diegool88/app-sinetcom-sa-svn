@@ -8,12 +8,52 @@
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
-           <h:head />
-           <h:body>
-               <h:form>
-                   
-               </h:form>
-           </h:body>
-       </f:view>
+            <h:head />
+            <h:body>
+                <h:form>
+                    <p:panel menuTitle="Emisión de Acta Recepción">
+                        <p:dataTable id="contratos" value="#{emitirActaDeERBean.contratos}" selectionMode="single" selection="#{emitirActaDeERBean.contratoSeleccionado}" var="contrato" rowKey="#{contrato.numero}">
+                            <p:ajax event="rowSelect" update="contratos" listener="#{emitirActaDeERBean.seleccion}"></p:ajax>
+                            <p:ajax event="rowUnselect" update="contratos"></p:ajax>
+                            <f:facet name="header">
+                                <h:outputText value="Lista de Contratos"></h:outputText>
+                            </f:facet>
+                            <p:column headerText="Número">
+                                <h:outputText value="#{contrato.numero}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Cliente">
+                                <h:outputText value="#{contrato.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha Suscripción">
+                                <h:outputText value="#{emitirActaDeERBean.formatoCortoDeFecha(contrato.fechaDeSuscripcion)}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Validez">
+                                <h:outputText value="#{contrato.tiempoDeValidez} años"></h:outputText>
+                            </p:column>
+                            <f:facet name="footer">
+                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
+                                    <p:graphicImage library="images" height="40px" width="40px"  name="pdf.png"></p:graphicImage>
+                                    <f:attribute name="tipo" value="g"></f:attribute>
+                                    <f:attribute name="archivo" value="pdf"></f:attribute>
+                                </h:commandLink>
+                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
+                                    <p:graphicImage library="images" height="40px" width="40px" name="pdf2.png"></p:graphicImage>
+                                    <f:attribute name="tipo" value="d"></f:attribute>
+                                    <f:attribute name="archivo" value="pdf"></f:attribute>
+                                </h:commandLink>
+                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
+                                    <p:graphicImage library="images" height="40px" width="40px" name="word.png"></p:graphicImage>
+                                    <f:attribute name="archivo" value="word"></f:attribute>
+                                </h:commandLink>
+                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
+                                    <p:graphicImage library="images" height="40px" width="40px" name="excel.png"></p:graphicImage>
+                                    <f:attribute name="archivo" value="excel"></f:attribute>
+                                </h:commandLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </h:body>
+        </f:view>
     </ui:define>
 </ui:composition>

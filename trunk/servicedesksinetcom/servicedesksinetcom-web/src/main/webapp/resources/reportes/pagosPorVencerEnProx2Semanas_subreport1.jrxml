@@ -15,7 +15,9 @@
      Pago.`idNotificador` AS Pago_idNotificador
 FROM
      `Pago` Pago
-WHERE Pago.`Contrato_numero` = $P{contrato_id}]]>
+WHERE Pago.`Contrato_numero` = $P{contrato_id}
+AND TIMESTAMPDIFF(DAY, NOW(),`Pago`.`plazo`) >= 0
+AND TIMESTAMPDIFF(DAY, NOW(),`Pago`.`plazo`) <= 15]]>
 	</queryString>
 	<field name="Pago_id" class="java.lang.Integer"/>
 	<field name="Pago_Contrato_numero" class="java.lang.String"/>

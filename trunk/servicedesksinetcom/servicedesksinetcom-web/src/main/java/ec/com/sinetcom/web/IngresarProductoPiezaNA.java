@@ -215,6 +215,7 @@ public class IngresarProductoPiezaNA implements Serializable{
         nuevoItemProducto.setFechaDeCompra(itemProducto.getFechaDeCompra());
         nuevoItemProducto.setNumeroDeFactura(itemProducto.getNumeroDeFactura());
         nuevoItemProducto.setNumeroDePedido(itemProducto.getNumeroDePedido());
+        nuevoItemProducto.setDescripcion(itemProducto.getDescripcion());
         return nuevoItemProducto;
     }
 

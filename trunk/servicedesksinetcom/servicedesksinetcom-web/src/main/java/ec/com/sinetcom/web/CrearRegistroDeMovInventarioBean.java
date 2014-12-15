@@ -58,6 +58,8 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
     private List<SelectItem> estadosFisicos;
     //Toda las condiciones físicas
     private List<CondicionFisica> condicionesFisicas;
+    //La lista de inventario que sale
+    private List<ItemProducto> listaDeItems;
 
     @PostConstruct
     public void doInit() {
@@ -69,6 +71,7 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
             this.movimientoDeInventario = new RegistroDeMovimientoDeInventario();
             this.condicionesFisicas = this.productoServicio.obtenerTodasLasCondicionesFisicas();
             this.estadosFisicos = new ArrayList<SelectItem>();
+            this.listaDeItems = new ArrayList<ItemProducto>();
             for (CondicionFisica condicion : condicionesFisicas) {
                 this.estadosFisicos.add(new SelectItem(condicion.getNombre()));
             }
@@ -96,7 +99,7 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
     }
 
     public void generarRegistroDeMovimiento(ActionEvent event) throws IOException, JRException {
-        for (ItemProducto item : this.movimientoDeInventario.getItemProductoList()) {
+        for (ItemProducto item : this.listaDeItems) {
             if (this.movimientoDeInventario.getContratonumero() != null) {
                 item.setContratonumero(this.movimientoDeInventario.getContratonumero());
             }
@@ -114,7 +117,7 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
         this.movimientoDeInventario.setFechaDeSalida(Calendar.getInstance().getTime());
         if (this.productoServicio.crearRegistroDeMovimientoDeInventario(this.movimientoDeInventario)) {
             Mensajes.mostrarMensajeInformativo("Registro de Movimiento de Inventario creado satisfactoriamente!");
-            for (ItemProducto itemProducto : this.movimientoDeInventario.getItemProductoList()) {
+            for (ItemProducto itemProducto : this.listaDeItems) {
                 this.productoServicio.crearHistorialDeMovimientoDeInventario(itemProducto, this.movimientoDeInventario, this.administracionUsuarioBean.getUsuarioActual());
                 Mensajes.mostrarMensajeInformativo("Movimiento de salida para el item: " + itemProducto.getNumeroSerial());
             }
@@ -196,6 +199,14 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
 
     public void setReportesBean(ReportesBean reportesBean) {
         this.reportesBean = reportesBean;
+    }
+
+    public List<ItemProducto> getListaDeItems() {
+        return listaDeItems;
+    }
+
+    public void setListaDeItems(List<ItemProducto> listaDeItems) {
+        this.listaDeItems = listaDeItems;
     }
 
 }

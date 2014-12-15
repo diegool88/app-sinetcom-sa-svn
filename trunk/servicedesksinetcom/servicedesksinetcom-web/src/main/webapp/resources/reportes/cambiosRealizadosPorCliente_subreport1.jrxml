@@ -6,20 +6,21 @@
 	<parameter name="registro_id" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT
-     HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale` AS HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_sale,
      ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
      ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
      ItemProducto.`descripcion` AS ItemProducto_descripcion,
-     HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario
+     DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale` AS DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_sale,
+     DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS DetalleDeMovimientoDeProducto_RegistroDeMovimientoDeInventario_c
 FROM
-     `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale` = ItemProducto.`numeroSerial`
-WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
+     `DetalleDeMovimientoDeProducto` DetalleDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_sale`= ItemProducto.`numeroSerial`
+WHERE
+     DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
 	</queryString>
-	<field name="HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_sale" class="java.lang.String"/>
 	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
 	<field name="ItemProducto_descripcion" class="java.lang.String"/>
-	<field name="HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario" class="java.lang.Integer"/>
+	<field name="DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_sale" class="java.lang.String"/>
+	<field name="DetalleDeMovimientoDeProducto_RegistroDeMovimientoDeInventario_c" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -50,7 +51,7 @@ WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` 
 		<band height="26" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="140" height="20" uuid="6e524791-ca3e-4cab-a2a4-035bc44def54"/>
-				<textFieldExpression><![CDATA[$F{HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_sale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_sale}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="140" y="0" width="125" height="20" uuid="d8823365-fc5a-43d0-bf73-af9fa5d1194b"/>

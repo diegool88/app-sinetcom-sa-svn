@@ -9,17 +9,17 @@
      ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
      ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
      ItemProducto.`descripcion` AS ItemProducto_descripcion,
-     HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario,
-     HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` AS HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_entra
+     DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` AS DetalleDeMovimientoDeProducto_RegistroDeMovimientoDeInventario,
+     DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` AS DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_entra
 FROM
-     `HistorialDeMovimientoDeProducto` HistorialDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON HistorialDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` = ItemProducto.`numeroSerial`
-WHERE HistorialDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
+     `DetalleDeMovimientoDeProducto` DetalleDeMovimientoDeProducto INNER JOIN `ItemProducto` ItemProducto ON DetalleDeMovimientoDeProducto.`ItemProducto_numeroSerial_entra` = ItemProducto.`numeroSerial`
+WHERE DetalleDeMovimientoDeProducto.`RegistroDeMovimientoDeInventario_codigo` = $P{registro_id}]]>
 	</queryString>
 	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
 	<field name="ItemProducto_descripcion" class="java.lang.String"/>
-	<field name="HistorialDeMovimientoDeProducto_RegistroDeMovimientoDeInventario" class="java.lang.Integer"/>
-	<field name="HistorialDeMovimientoDeProducto_ItemProducto_numeroSerial_entra" class="java.lang.String"/>
+	<field name="DetalleDeMovimientoDeProducto_RegistroDeMovimientoDeInventario" class="java.lang.Integer"/>
+	<field name="DetalleDeMovimientoDeProducto_ItemProducto_numeroSerial_entra" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

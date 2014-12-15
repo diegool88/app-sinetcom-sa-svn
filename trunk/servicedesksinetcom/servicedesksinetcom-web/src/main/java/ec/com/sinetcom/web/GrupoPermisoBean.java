@@ -6,7 +6,7 @@
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.Grupo;
-import ec.com.sinetcom.orm.Permisos;
+import ec.com.sinetcom.orm.Permiso;
 import ec.com.sinetcom.servicios.UsuarioServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class GrupoPermisoBean implements Serializable {
     //Grupo seleccionado
     private Grupo grupoSeleccionado;
     //Nuevo Permisos para Grupo
-    private Permisos nuevoPermisos;
+    private Permiso nuevoPermisos;
     //Seleccion
     private Boolean existeSeleccion;
 
@@ -45,21 +45,21 @@ public class GrupoPermisoBean implements Serializable {
         this.existeSeleccion = false;
     }
 
-    public Permisos obtenerPermisosDeGrupo() {
-        if (this.grupoSeleccionado != null && this.grupoSeleccionado.getPermisos() != null) {
-            this.nuevoPermisos = this.grupoSeleccionado.getPermisos();
+    public Permiso obtenerPermisosDeGrupo() {
+        if (this.grupoSeleccionado != null && this.grupoSeleccionado.getPermiso() != null) {
+            this.nuevoPermisos = this.grupoSeleccionado.getPermiso();
         } else {
-            this.nuevoPermisos = new Permisos();
+            this.nuevoPermisos = new Permiso();
         }
         return this.nuevoPermisos;
     }
 
     public void registroSeleccionado(SelectEvent event) {
         this.grupoSeleccionado = (Grupo) event.getObject();
-        if(this.grupoSeleccionado.getPermisos()==null){
-            this.grupoSeleccionado.setPermisos(new Permisos());
-            this.grupoSeleccionado.getPermisos().setGrupo(this.grupoSeleccionado);
-            this.grupoSeleccionado.getPermisos().setGrupoid(this.grupoSeleccionado.getId());
+        if(this.grupoSeleccionado.getPermiso()==null){
+            this.grupoSeleccionado.setPermiso(new Permiso());
+            this.grupoSeleccionado.getPermiso().setGrupo(this.grupoSeleccionado);
+            this.grupoSeleccionado.getPermiso().setGrupoid(this.grupoSeleccionado.getId());
         }
         this.existeSeleccion = Boolean.TRUE;
         //this.nuevoPermisos = this.grupoSeleccionado.getPermisos() != null ? this.grupoSeleccionado.getPermisos() : new Permisos();
@@ -90,11 +90,11 @@ public class GrupoPermisoBean implements Serializable {
         this.grupoSeleccionado = grupoSeleccionado;
     }
 
-    public Permisos getNuevoPermisos() {
+    public Permiso getNuevoPermisos() {
         return nuevoPermisos;
     }
 
-    public void setNuevoPermisos(Permisos nuevoPermisos) {
+    public void setNuevoPermisos(Permiso nuevoPermisos) {
         this.nuevoPermisos = nuevoPermisos;
     }
 

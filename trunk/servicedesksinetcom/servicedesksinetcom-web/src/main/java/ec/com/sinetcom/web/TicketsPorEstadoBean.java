@@ -6,7 +6,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
-import ec.com.sinetcom.orm.Cola;
+import ec.com.sinetcom.orm.ColaTicket;
 import ec.com.sinetcom.orm.EstadoTicket;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;

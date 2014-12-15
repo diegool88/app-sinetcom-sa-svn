@@ -23,7 +23,7 @@
                             <p:inputText id="nombre"  required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.componenteElectronicoAtomico.nombre}"></p:inputText>
                             <p:message for="nombre"></p:message>
                             <p:outputLabel for="parametros" value="Parámetros: "></p:outputLabel>
-                            <p:selectManyMenu style="width: 100%;" id="parametros" value="#{crearComponenteABean.componenteElectronicoAtomico.parametrosDeProductoList}" converter="#{parametroProductoConverter}"  showCheckbox="true">
+                            <p:selectManyMenu style="width: 100%;" id="parametros" value="#{crearComponenteABean.componenteElectronicoAtomico.parametroDeProductoList}" converter="#{parametroProductoConverter}"  showCheckbox="true">
                                 <f:selectItems value="#{crearComponenteABean.parametrosDeProductos}" var="parametro" itemLabel="#{parametro.nombre}" itemValue="#{parametro.id.toString()}"></f:selectItems>
                             </p:selectManyMenu>
                             <p:message for="parametros"></p:message>

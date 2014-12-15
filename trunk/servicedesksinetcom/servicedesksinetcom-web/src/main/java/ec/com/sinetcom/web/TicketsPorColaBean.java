@@ -6,7 +6,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
-import ec.com.sinetcom.orm.Cola;
+import ec.com.sinetcom.orm.ColaTicket;
 import ec.com.sinetcom.orm.EstadoTicket;
 import ec.com.sinetcom.orm.PrioridadTicket;
 import ec.com.sinetcom.orm.Ticket;
@@ -59,7 +59,7 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
     }
 
     //Se escogen todos las colas de un ticket
-    private List<Cola> colasTickets;
+    private List<ColaTicket> colasTickets;
     //Se escogen todos los ingeniero disponibles con las competencias de la cola
     private List<Usuario> ingenieros;
     //Se define el arreglo de ticket
@@ -317,11 +317,11 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
         this.articuloNuevo = articuloNuevo;
     }
 
-    public List<Cola> getColasTickets() {
+    public List<ColaTicket> getColasTickets() {
         return colasTickets;
     }
 
-    public void setColasTickets(List<Cola> colasTickets) {
+    public void setColasTickets(List<ColaTicket> colasTickets) {
         this.colasTickets = colasTickets;
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InclumplimientoSLA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b59f3c66-61a9-4621-ae14-fb0ff89e4567">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InclumplimientoSLA" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b59f3c66-61a9-4621-ae14-fb0ff89e4567">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="160"/>
+	<property name="ireport.y" value="172"/>
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
 	</style>
@@ -43,7 +43,9 @@ FROM
      INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
      INNER JOIN `Usuario` Usuario ON Ticket.`Usuario_id_propietario` = Usuario.`id`
 WHERE
-     Ticket.`fechaDeCierre` IS NOT NULL]]>
+     Ticket.`fechaDeCierre` IS NOT NULL
+AND
+     (Ticket.`EstadoTicket_codigo` = 3 OR Ticket.`EstadoTicket_codigo` = 4)]]>
 	</queryString>
 	<field name="Ticket_ticketNumber" class="java.lang.Integer"/>
 	<field name="Ticket_ItemProducto_numeroSerial" class="java.lang.String"/>
@@ -159,12 +161,11 @@ WHERE
 			</staticText>
 			<textField>
 				<reportElement x="182" y="140" width="100" height="20" uuid="886cca0f-5d7d-4240-a869-f79f79031fea"/>
-				<textFieldExpression><![CDATA[(($F{Ticket_fechaDeCreacion} - $F{Ticket_fechaDePrimerContacto}) / (60 * 60 * 1000) % 24) 
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($F{Ticket_fechaDeCreacion}.getTime() - $F{Ticket_fechaDePrimerContacto}.getTime()) / (60 * 60 * 1000) % 24) + "h"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="169" y="160" width="100" height="20" uuid="c012f3c1-e9c1-4ce6-8f2c-d05d12dc5b48"/>
-				<textFieldExpression><![CDATA[$F{field}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($F{Ticket_fechaDeCreacion}.getTime() - $F{Ticket_fechaDeCierre}.getTime()) / (60 * 60 * 1000) % 24) + "h"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="116" y="180" width="294" height="20" uuid="5335f7e2-0d0b-4c8c-ba47-5b773bbeae3c"/>

@@ -15,7 +15,7 @@ import ec.com.sinetcom.orm.Fabricante;
 import ec.com.sinetcom.orm.ItemProducto;
 import ec.com.sinetcom.orm.LineaDeProducto;
 import ec.com.sinetcom.orm.ModeloProducto;
-import ec.com.sinetcom.orm.ParametrosDeProducto;
+import ec.com.sinetcom.orm.ParametroDeProducto;
 import ec.com.sinetcom.servicios.ProductoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
@@ -40,7 +40,7 @@ public class IngresarComponenteAPBean implements Serializable {
     @EJB
     private ProductoServicio productoServicio;
     //Todos los Atributos ya existentes
-    private List<ParametrosDeProducto> parametrosDeProductos;
+    private List<ParametroDeProducto> parametrosDeProductos;
     //Todas los componentes
     private List<ComponenteElectronicoAtomico> componentesEA;
     //Nuevo Componente Atómico
@@ -182,9 +182,9 @@ public class IngresarComponenteAPBean implements Serializable {
     public void crearArregloDeEntradas() {
         //this.seriales = new String[this.componenteEASeleccionado.getParametrosDeProductoList().size()];
         this.atributosCA = new ArrayList<AtributoItemProducto>();
-        for (ParametrosDeProducto parametro : this.componenteEASeleccionado.getParametrosDeProductoList()) {
+        for (ParametroDeProducto parametro : this.componenteEASeleccionado.getParametroDeProductoList()) {
             AtributoItemProducto atributoItemProducto = new AtributoItemProducto();
-            atributoItemProducto.setParametrosDeProducto(parametro);
+            atributoItemProducto.setParametroDeProducto(parametro);
             this.atributosCA.add(atributoItemProducto);
         }
     }
@@ -235,6 +235,7 @@ public class IngresarComponenteAPBean implements Serializable {
         nuevoItemProducto.setNumeroDeFactura(itemProducto.getNumeroDeFactura());
         nuevoItemProducto.setNumeroDePedido(itemProducto.getNumeroDePedido());
         nuevoItemProducto.setModeloProductoList(itemProducto.getModeloProductoList());
+        nuevoItemProducto.setDescripcion(itemProducto.getDescripcion());
         return nuevoItemProducto;
     }
 
@@ -279,11 +280,11 @@ public class IngresarComponenteAPBean implements Serializable {
         this.atributosCA = null;
     }
 
-    public List<ParametrosDeProducto> getParametrosDeProductos() {
+    public List<ParametroDeProducto> getParametrosDeProductos() {
         return parametrosDeProductos;
     }
 
-    public void setParametrosDeProductos(List<ParametrosDeProducto> parametrosDeProductos) {
+    public void setParametrosDeProductos(List<ParametroDeProducto> parametrosDeProductos) {
         this.parametrosDeProductos = parametrosDeProductos;
     }
 

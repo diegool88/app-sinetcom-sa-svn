@@ -6,7 +6,7 @@
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.ComponenteElectronicoAtomico;
-import ec.com.sinetcom.orm.ParametrosDeProducto;
+import ec.com.sinetcom.orm.ParametroDeProducto;
 import ec.com.sinetcom.orm.UnidadMedida;
 import ec.com.sinetcom.servicios.ProductoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
@@ -30,7 +30,7 @@ public class CrearComponenteABean implements Serializable {
     @EJB
     private ProductoServicio productoServicio;
     //Todos los Atributos ya existentes
-    private List<ParametrosDeProducto> parametrosDeProductos;
+    private List<ParametroDeProducto> parametrosDeProductos;
     //Todas las unidades de medida
     private List<UnidadMedida> medidas;
     //Todas los componentes
@@ -38,26 +38,26 @@ public class CrearComponenteABean implements Serializable {
     //Nuevo Componente Atómico
     private ComponenteElectronicoAtomico componenteElectronicoAtomico;
     //Nuevo Parametro
-    private ParametrosDeProducto nuevoParametro;
+    private ParametroDeProducto nuevoParametro;
 
     @PostConstruct
     public void doInit() {
         this.medidas = this.productoServicio.obtenerTodasLasUnidadesDeMedida();
         this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
         this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
-        this.nuevoParametro = new ParametrosDeProducto();
+        this.nuevoParametro = new ParametroDeProducto();
         this.componenteElectronicoAtomico = new ComponenteElectronicoAtomico();
     }
 
     public void ingresarParametro(ActionEvent event) {
         this.productoServicio.crearParametroProducto(this.nuevoParametro);
         this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
-        this.nuevoParametro = new ParametrosDeProducto();
+        this.nuevoParametro = new ParametroDeProducto();
         Mensajes.mostrarMensajeInformativo("Se ha creado un nuevo parámetro de producto");
     }
 
     public void enserarPantallaParametro(ActionEvent event) {
-        this.nuevoParametro = new ParametrosDeProducto();
+        this.nuevoParametro = new ParametroDeProducto();
     }
     
     public void crearComponenteElectronico(ActionEvent event){
@@ -76,11 +76,11 @@ public class CrearComponenteABean implements Serializable {
         }
     }
 
-    public List<ParametrosDeProducto> getParametrosDeProductos() {
+    public List<ParametroDeProducto> getParametrosDeProductos() {
         return parametrosDeProductos;
     }
 
-    public void setParametrosDeProductos(List<ParametrosDeProducto> parametrosDeProductos) {
+    public void setParametrosDeProductos(List<ParametroDeProducto> parametrosDeProductos) {
         this.parametrosDeProductos = parametrosDeProductos;
     }
 
@@ -100,11 +100,11 @@ public class CrearComponenteABean implements Serializable {
         this.componenteElectronicoAtomico = componenteElectronicoAtomico;
     }
 
-    public ParametrosDeProducto getNuevoParametro() {
+    public ParametroDeProducto getNuevoParametro() {
         return nuevoParametro;
     }
 
-    public void setNuevoParametro(ParametrosDeProducto nuevoParametro) {
+    public void setNuevoParametro(ParametroDeProducto nuevoParametro) {
         this.nuevoParametro = nuevoParametro;
     }
 

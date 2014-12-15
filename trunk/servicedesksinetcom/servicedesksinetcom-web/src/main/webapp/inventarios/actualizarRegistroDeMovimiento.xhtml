@@ -104,7 +104,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Selección de Ingresos"></h:outputText>
                                 </f:facet>
-                                <ui:repeat id="loop" rendered="#{actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 3 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 4 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 5}" value="#{actualizarRegistroDeMovBean.seleccion.historialDeMovimientoDeProductoList}" var="productoS">
+                                <ui:repeat id="loop" rendered="#{actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 3 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 4 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 5}" value="#{actualizarRegistroDeMovBean.seleccion.detalleDeMovimientoDeProductoList}" var="productoS">
                                     <p:panelGrid columns="3">
                                         <p:outputLabel for="ingreso" value="Producto Entrante para '#{productoS.itemProductonumeroSerialsale.numeroSerial}': "></p:outputLabel>
                                         <p:selectOneMenu id="ingreso" value="#{productoS.itemProductonumeroSerialentra}" filter="true" filterMatchMode="contains" required="true" requiredMessage="* Requerido" converter="#{itemProductoConverter}">
@@ -114,7 +114,7 @@
                                         <p:message for="ingreso"></p:message>
                                     </p:panelGrid>
                                 </ui:repeat>
-                                <ui:repeat id="loop1" rendered="#{actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 1 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 2}" value="#{actualizarRegistroDeMovBean.seleccion.historialDeMovimientoDeProductoList}" var="producto">
+                                <ui:repeat id="loop1" rendered="#{actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 1 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 2}" value="#{actualizarRegistroDeMovBean.seleccion.detalleDeMovimientoDeProductoList}" var="producto">
                                     <p:panelGrid columns="3">
                                         <p:outputLabel for="bodega" value="Ingrese la bodega para '#{producto.itemProductonumeroSerialsale.numeroSerial}': "></p:outputLabel>
                                         <p:selectOneMenu id="bodega" value="#{producto.itemProductonumeroSerialsale.bodegaid}" converter="#{bodegaConverter}" required="true" requiredMessage="* Requerido">
