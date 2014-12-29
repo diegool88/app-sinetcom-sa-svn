@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Direcciones de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>
+
+            <h:body>
+
+                <h:form id="verDireccionesForm">
+                    <p:dataTable id="dtDirecciones" var="direccion" value="#{ingresoDireccionesBean.direcciones}" paginator="true" rows="15"
+                                 selection="#{ingresoContactoBean.contactoSeleccionado}" selectionMode="single" rowKey="#{direccion.clienteDireccionPK}" paginatorPosition="bottom"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+                        <f:facet name="header">
+                            <h:outputText value="Direcciones Clientes"/>
+                        </f:facet>
+                        
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
+
+                        <p:column headerText="Cliente" sortBy="#{direccion.clienteEmpresa.nombreComercial}" filterBy="#{direccion.clienteEmpresa.nombreComercial}" filterMatchMode="exact" filterOptions="#{ingresoDireccionesBean.clientesFiltro}" >
+                            <h:outputText value="#{direccion.clienteEmpresa.nombreComercial}"/>
+                        </p:column>
+
+                        <p:column headerText="Ciudad" sortBy="#{direccion.ciudad.nombre}" filterBy="#{direccion.ciudad.nombre}">
+                            <h:outputText value="#{direccion.ciudad.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Dirección 1" sortBy="#{direccion.direccion1}" filterBy="#{direccion.direccion1}">
+                            <h:outputText value="#{direccion.direccion1}"/>
+                        </p:column>
+
+                        <p:column headerText="Dirección 2" sortBy="#{direccion.direccion2}" filterBy="#{direccion.direccion2}">
+                            <h:outputText value="#{direccion.direccion2}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnEliminar" process="dtDirecciones" value="Eliminar" action="#{ingresoDireccionesBean.eliminarDireccion()}" disabled="#{not(ingresoDireccionesBean.direccionSeleccionada != null)}" update=":verDireccionesForm:dtDirecciones"/>                       
+                        </f:facet>
+                    </p:dataTable>    
+                </h:form>
+
+                <p:dialog header="Insertar Dirección" widgetVar="ingreso" modal="true">
+                    <h:form id="contactosForm">
+                        <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
+
+                            <p:outputLabel for="direccionCliente" value="Ruc Cliente"/>
+                            <p:selectOneMenu id="contactoRuc" value="#{ingresoDireccionesBean.nuevaDireccion.clienteEmpresa}" converter="#{clienteEmpresaConverter}" required="true">                    
+                                <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                                <f:selectItems value="#{ingresoDireccionesBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}-#{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
+                             </p:selectOneMenu>
+
+                            <p:outputLabel for="direccionCiudad" value="Ciudad:"/>
+                            <p:selectOneMenu id="direccionCiudad" value="#{ingresoDireccionesBean.nuevaDireccion.ciudad}" converter="#{ciudadConverter}" required="true">
+                                <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
+                                <f:selectItems value="#{ingresoDireccionesBean.ciudades}" var="Ciudad" itemLabel="#{Ciudad.nombre}" itemValue="#{Ciudad.id}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="direccion1" value="Dirección 1:"/>
+                            <p:inputText id="direccion1" value="#{ingresoDireccionesBean.nuevaDireccion.direccion1}" required="true"/>
+
+                            <p:outputLabel for="direccion2" value="Dirección 2:"/>
+                            <p:inputText id="direccion2" value="#{ingresoDireccionesBean.nuevaDireccion.direccion2}" />
+
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoDireccionesBean.crearDireccion()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verDireccionesForm:dtDirecciones">
+                                <f:ajax execute="@all" render="@form"/>
+                            </p:commandButton>
+
+                        </h:panelGrid>
+                        
+                    </h:form>
+                </p:dialog>    
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

@@ -19,18 +19,21 @@
                         <f:facet name="header">
                             <h:outputText value="Tipos de Empresas"/>
                         </f:facet>
+                        
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
 
                         <p:column headerText="Tipo" sortBy="#{tempresas.tipo}" filterBy="#{tempresas.tipo}">
                             <h:outputText value="#{tempresas.tipo}"/>
                         </p:column>
 
                         <p:column headerText="Validez" sortBy="#{tempresas.valido}" filterBy="#{tempresas.valido}">
-                            <h:outputText value="#{tempresas.valido}"/>
+                            <h:outputText value="#{tempresas.valido ? 'Si' : 'No'}"/>
                         </p:column>
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" process="dtTiposEmpresa" value="Eliminar" action="#{ingresoTipoEmpresaBean.eliminarTipoEmpresa()}" update=":verTipoEmpresaForm:dtTiposEmpresa"/>                
+                            <p:commandButton id="btnEliminar" process="dtTiposEmpresa" value="Eliminar" action="#{ingresoTipoEmpresaBean.eliminarTipoEmpresa()}" disabled="#{not(ingresoTipoEmpresaBean.tipoEmpresaSeleccionada != null)}" update=":verTipoEmpresaForm:dtTiposEmpresa"/>                
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -48,7 +51,7 @@
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoEmpresaBean.crearTipoEmpresa()}" onclick="PF('ingreso').hide();"  update=":verTipoEmpresaForm:dtTiposEmpresa">
+                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoEmpresaBean.crearTipoEmpresa()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();"  update=":verTipoEmpresaForm:dtTiposEmpresa">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

@@ -8,6 +8,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.servicios.GrupoServicio;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,7 +21,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "ingresoGrupoBean")
 @ViewScoped
-public class ingresoGrupoBean {
+public class ingresoGrupoBean implements Serializable{
     
     @EJB
     private GrupoServicio grupoServicio;

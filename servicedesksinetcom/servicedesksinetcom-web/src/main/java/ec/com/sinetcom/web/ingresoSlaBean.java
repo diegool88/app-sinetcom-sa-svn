@@ -9,6 +9,7 @@ package ec.com.sinetcom.web;
 import ec.com.sinetcom.orm.Sla;
 import ec.com.sinetcom.orm.TipoDisponibilidad;
 import ec.com.sinetcom.servicios.SlaServicio;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -21,7 +22,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "ingresoSlaBean")
 @ViewScoped
-public class ingresoSlaBean {
+public class ingresoSlaBean implements Serializable{
     
     @EJB
     private SlaServicio slaServicio;

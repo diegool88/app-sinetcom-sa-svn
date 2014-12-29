@@ -6,6 +6,7 @@
 
 package ec.com.sinetcom.web;
 
+import ec.com.sinetcom.configuracion.UtilidadDeEncriptacion;
 import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.Usuario;
 import ec.com.sinetcom.servicios.UsuarioServicio;
@@ -45,17 +46,17 @@ public class ingresoUsuarioBean implements Serializable {
     
     @PostConstruct
     public void init() {
-        this.grupos = usuarioServicio.cragarGrupos();
-        this.usuarios = usuarioServicio.cragarUsuarios();        
+        this.grupos = usuarioServicio.cargarGrupos();
+        this.usuarios = usuarioServicio.cargarUsuarios();        
     }
     
     public void crearUsuario() {
         Usuario usuario = new Usuario();
-        
+        UtilidadDeEncriptacion utilidadDeEncriptacion = new UtilidadDeEncriptacion();
         usuario.setGrupoid(usuarioServicio.recuperarGrupo(numGrupo));
         usuario.setCedulaDeCuidadania(numCedula);
         usuario.setCorreoElectronico(mail);
-        usuario.setPassword(password);
+        usuario.setPassword(utilidadDeEncriptacion.encriptar(password));
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
         usuario.setTelefonoMovil(celular);
@@ -64,12 +65,12 @@ public class ingresoUsuarioBean implements Serializable {
         usuario.setActivo(estado);
 
         usuarioServicio.crearUsuario(usuario);
-        this.usuarios = usuarioServicio.cragarUsuarios();
+        this.usuarios = usuarioServicio.cargarUsuarios();
     }
     
     public void eliminarUsuario() {
         usuarioServicio.eliminarUsuario(usuarioSeleccionado.getId());
-        this.usuarios = usuarioServicio.cragarUsuarios();
+        this.usuarios = usuarioServicio.cargarUsuarios();
     }
                
     public Integer getNumGrupo() {

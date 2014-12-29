@@ -18,6 +18,10 @@
                         <f:facet name="header">
                             <h:outputText value="Clientes / Empresas"/>
                         </f:facet>
+                        
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
+                        
                         <p:column exportable="false" width="10">
                             <p:rowToggler></p:rowToggler>
                         </p:column>
@@ -78,7 +82,7 @@
                         </p:rowExpansion>
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" process="dtlClientes" value="Eliminar" action="#{ingresoClienteEmpresaBean.eliminarEmpresa()}" update=":verClientesForm:dtlClientes"/>                       
+                            <p:commandButton id="btnEliminar" process="dtlClientes" value="Eliminar" action="#{ingresoClienteEmpresaBean.eliminarEmpresa()}" disabled="#{not(ingresoClienteEmpresaBean.clienteEmpresaSeleccionado != null)}" update=":verClientesForm:dtlClientes"/>                       
                         </f:facet>
                     </p:dataTable>
 
@@ -115,7 +119,7 @@
                             <p:outputLabel for="clienteRepresentante" value="Representante Legal:"/>
                             <p:inputText id="clienteRepresentante" value="#{ingresoClienteEmpresaBean.representantelegal}" required="true"/>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.crearEmpresa()}" onclick="PF('ingreso').hide();" update=":verClientesForm:dtlClientes">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.crearEmpresa()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verClientesForm:dtlClientes">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

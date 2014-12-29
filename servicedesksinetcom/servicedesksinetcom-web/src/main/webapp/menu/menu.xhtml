@@ -11,23 +11,23 @@
             <p:submenu label="Productos" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}">
                 <p:column>
                     <p:submenu label="Gestión de Productos">
-                        <p:menuitem value="Crear Componente E. Atómico" url="/inventarios/crearComponenteAtomico.xhtml"></p:menuitem>
-                        <p:menuitem value="Crear Línea de Producto" url="/inventarios/crearLineaDeProducto.xhtml"></p:menuitem>
-                        <p:menuitem value="Crear Modelos de Líneas de Producto" url="/inventarios/crearModeloDeProducto.xhtml"></p:menuitem>
-                        <p:menuitem value="Gestionar Fabricantes y Categorías" url="/inventarios/fabricantesYCategorias.xhtml"></p:menuitem>
+                        <p:menuitem value="Crear Componente E. Atómico" url="/inventarios/crearComponenteAtomico.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraProductos eq true}"></p:menuitem>
+                        <p:menuitem value="Crear Línea de Producto" url="/inventarios/crearLineaDeProducto.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraProductos eq true}"></p:menuitem>
+                        <p:menuitem value="Crear Modelos de Líneas de Producto" url="/inventarios/crearModeloDeProducto.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraModelosRevisiones eq true}"></p:menuitem>
+                        <p:menuitem value="Gestionar Fabricantes y Categorías" url="/inventarios/fabricantesYCategorias.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraCategoriasDeProductoPorFabricante eq true}"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Reportes De Inventarios">
-                        <p:menuitem value="Ver Reportes" url="/inventarios/reportesInventarios.xhtml"></p:menuitem>
-                        <p:menuitem value="Generar Acta de E/R" url="/inventarios/emitirActaDeEntregaRecepcion.xhtml"></p:menuitem>
+                        <p:menuitem value="Ver Reportes" url="/inventarios/reportesInventarios.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.generaReportesDeInventarios eq true}"></p:menuitem>
+                        <p:menuitem value="Generar Acta de E/R" url="/inventarios/emitirActaDeEntregaRecepcion.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.generaActaDeEntregaRecepcion eq true}"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
                     <p:submenu label="Gestión de Inventario">
-                        <p:menuitem value="Ingresar Inventario de Componente E. Atómico" url="/inventarios/ingresarComponenteAtomicoProducto.xhtml"></p:menuitem>
-                        <p:menuitem value="Ingresar Inventario no Atómico" url="/inventarios/ingresarProductoPiezaNA.xhtml"></p:menuitem>
-                        <p:menuitem value="Nuevo Registro de Movimiento de I." url="/inventarios/crearRegistroDeMovInventario.xhtml"></p:menuitem>
-                        <p:menuitem value="Actualizar Registro de Mov. de inventario" url="/inventarios/actualizarRegistroDeMovimiento.xhtml"></p:menuitem>
-                        <p:menuitem value="Buscar Inventario" url="/inventarios/buscarStockDeInventario.xhtml"></p:menuitem>
+                        <p:menuitem value="Ingresar Inventario de Componente E. Atómico" url="/inventarios/ingresarComponenteAtomicoProducto.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.ingresaInventarioAlSistema eq true}"></p:menuitem>
+                        <p:menuitem value="Ingresar Inventario no Atómico" url="/inventarios/ingresarProductoPiezaNA.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.ingresaInventarioAlSistema eq true}"></p:menuitem>
+                        <p:menuitem value="Nuevo Registro de Movimiento de I." url="/inventarios/crearRegistroDeMovInventario.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraRegistroDeMovimientoDeInventario eq true}"></p:menuitem>
+                        <p:menuitem value="Actualizar Registro de Mov. de inventario" url="/inventarios/actualizarRegistroDeMovimiento.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraRegistroDeMovimientoDeInventario eq true}"></p:menuitem>
+                        <p:menuitem value="Buscar Inventario" url="/inventarios/buscarStockDeInventario.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.buscaInventario eq true}"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
@@ -52,7 +52,7 @@
                     <p:submenu label="Tareas Programadas" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}">
                         <p:menuitem value="Ver Tareas" url="/soporte/listaDeTareasProgramadas.xhtml"></p:menuitem>
                     </p:submenu>
-                    <p:submenu label="Bloqueo de Clientes" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}">
+                    <p:submenu label="Bloqueo de Clientes" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.bloqueaDesbloqueaDeCliente}">
                         <p:menuitem value="Bloqueo/Desbloqueo" url="/soporte/bloquearUsuario.xhtml"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Reportes De Soporte" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.generaReportesDeInventarios eq true}">
@@ -60,36 +60,40 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
-            <p:submenu label="Contratos">
+            <p:submenu label="Contratos" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.consultaContratos eq true}">
                 <p:column>
                     <p:submenu label="Contrato">
-                        <p:menuitem value="Ingreso" url="/contratos/Contrato.xhtml"></p:menuitem>
-                        <p:menuitem value="Tipos de Contratos" url="/contratos/TiposContrato.xhtml"></p:menuitem>
+                        <p:menuitem value="Ingreso" url="/contratos/Contrato.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.registraContratos eq true or login.usuarioActual.grupoid.permiso.administra eq true}"></p:menuitem>
+                        <p:menuitem value="Tipos de Contratos" url="/contratos/TiposContrato.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}"></p:menuitem>
+                        <p:menuitem value="Consultar Contratos" url="/contratos/ConsultaContratos.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.consultaContratos eq true}"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Clientes/Empresas">
-                        <p:menuitem value="Ver Clientes/Empresas" url="/contratos/ClienteEmpresa.xhtml"></p:menuitem>
-                        <p:menuitem value="Tipos de Empresas" url="/contratos/TipoEmpresa.xhtml"></p:menuitem>
-                        <p:menuitem value="Contactos" url="/contratos/Contactos.xhtml"></p:menuitem>
+                        <p:menuitem value="Ver Clientes/Empresas" url="/contratos/ClienteEmpresa.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
+                        <p:menuitem value="Tipos de Empresas" url="/contratos/TipoEmpresa.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
+                        <p:menuitem value="Contactos" url="/contratos/Contactos.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
                     <p:submenu label="SLAs">
-                        <p:menuitem value="Ver SLAs " url="/contratos/Slas.xhtml"></p:menuitem>
-                        <p:menuitem value="Tipos de Disponibilidad" url="/contratos/TipoDisponibilidad.xhtml"></p:menuitem>
+                        <p:menuitem value="Ver SLAs " url="/contratos/Slas.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
+                        <p:menuitem value="Tipos de Disponibilidad" url="/contratos/TipoDisponibilidad.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
                     </p:submenu>
                     <p:submenu label="Reportes De Contratos">
-                        <p:menuitem value="Ver Reportes" url="/contratos/reportesContratos.xhtml"></p:menuitem>
+                        <p:menuitem value="Ver Reportes" url="/contratos/reportesContratos.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.generaReportesDeContratos eq true}"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>
             <p:submenu label="Administrar" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}">
                 <p:column>
                     <p:submenu label="Usuarios">
-                        <p:menuitem value="Administrar Usuarios" url="/Usuarios.xhtml"></p:menuitem>                        
+                        <p:menuitem value="Administrar Usuarios" url="/admin/Usuarios.xhtml"></p:menuitem>                        
                     </p:submenu>
                     <p:submenu label="Grupos">
-                        <p:menuitem value="Ver Grupos" url="/Grupos.xhtml"></p:menuitem>
-                        <p:menuitem value="Grupos-Permisos" url="/grupoPermisos.xhtml"></p:menuitem>
+                        <p:menuitem value="Ver Grupos" url="/admin/Grupos.xhtml"></p:menuitem>
+                        <p:menuitem value="Grupos-Permisos" url="/admin/GrupoPermisos.xhtml"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Información Sinetcom">
+                        <p:menuitem value="Actualizar Información de Sinetcom" url="/admin/InformacionSinetcom.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>

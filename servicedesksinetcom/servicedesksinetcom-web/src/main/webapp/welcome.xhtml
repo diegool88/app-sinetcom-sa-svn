@@ -8,15 +8,36 @@
     <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
-           <h:head />
-           <h:body>
-               <h:form>
-                   <p:panel menuTitle="Test">
-                       <p:button value="Test" outcome="/test/test"></p:button>
-                   </p:panel>
-                   <h:outputText>Nothing yet!</h:outputText>
-               </h:form>
-           </h:body>
-       </f:view>
+            <h:head />
+            <h:body>
+                <h:form>
+                    <p:galleria value="#{welcomeBean.imagenes}" var="imagen" panelWidth="920" showFilmstrip="false" panelHeight="400">
+                        <p:graphicImage height="250" width="700" library="images" name="#{imagen}"></p:graphicImage>
+                    </p:galleria>
+                    <br/>
+                    <p:accordionPanel multiple="true">
+                        <p:tab title="Acerca de Nosotros">
+                            <h:panelGrid cellpadding="10" columns="2">
+                                <p:outputLabel style="color: #456d87" value="Nosotros"></p:outputLabel>
+                                <h:outputText value="Somos una empresa enfocada a proveer soluciones integrales en el área de Tecnologías de la Información y Comunicaciones (TICs), con servicios profesionales de consultoría, asesoría, implementación, soporte y mantenimiento del más alto nivel, lo que nos ha permitido mantenernos en el mercado como una Empresa en constante innovación y crecimiento para atender los retos del negocio de nuestros clientes.
+                                              Contamos con un portafolio completo de productos para atender las necesidades del Centro de Datos Dinámico y Virtual de nuestros clientes y un equipo selecto de Ingenieros especialistas en Infraestructuras TICs, con más de 15 años de experiencia."/>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Misión">
+                            <h:panelGrid  cellpadding="10" columns="2">
+                                <p:outputLabel style="color: #456d87" value="Misión"></p:outputLabel>
+                                <h:outputText value="Ser un aliado estratégico de nuestros clientes en el área de Tecnologías de la Información y Telecomunicaciones, entregando soluciones integrales basadas en productos de alta calidad y servicios profesionales eficientes y oportunos, que crean satisfacción y confianza, gracias al trabajo ético, el mejoramiento continuo y las alianzas estratégicas con los mejores fabricantes de soluciones del mercado."/>
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:accordionPanel>
+                    <p:dock position="bottom">
+                        <p:menuitem style="color: #006666; font-family: sans-serif;" value="Ingresar Inventario Atómico" icon="/resources/images/productos.png" url="/inventarios/ingresarProductoPiezaNA.xhtml"></p:menuitem>
+                        <p:menuitem style="color: #006666; font-family: sans-serif;" value="Ingresar Contrato" icon="/resources/images/contratos.png" url="/contratos/Contrato.xhtml"></p:menuitem>
+                        <p:menuitem style="color: #006666; font-family: sans-serif;" value="Crear Ticket" icon="/resources/images/soporte.png" url="/soporte/crearTicket.xhtml"></p:menuitem>
+                        <p:menuitem style="color: #006666; font-family: sans-serif;" value="Administración" icon="/resources/images/admin.png" url="Usuarios.xhtml"></p:menuitem>
+                    </p:dock>
+                </h:form>
+            </h:body>
+        </f:view>
     </ui:define>
 </ui:composition>
