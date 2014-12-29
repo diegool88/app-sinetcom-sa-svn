@@ -19,6 +19,9 @@
                         <f:facet name="header">
                             <h:outputText value="Grupos"/>
                         </f:facet>
+                        
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
 
                         <p:column headerText="Nombre" sortBy="#{grupos.nombre}" filterBy="#{grupos.nombre}">
                             <h:outputText value="#{grupos.nombre}"/>
@@ -30,7 +33,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" process="dtGrupos" value="Eliminar" action="#{ingresoGrupoBean.eliminarGrupo()}" update=":verGrupoForm:dtGrupos"/>                       
+                            <p:commandButton id="btnEliminar" process="dtGrupos" value="Eliminar" action="#{ingresoGrupoBean.eliminarGrupo()}" disabled="#{not(ingresoGrupoBean.grupoSeleccionado != null)}" update=":verGrupoForm:dtGrupos"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -45,7 +48,7 @@
                             <p:outputLabel for="grupoDescripcion" value="Descripción:"/>
                             <p:inputTextarea id="grupoDescripcion" value="#{ingresoGrupoBean.descripcion}" />
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoGrupoBean.crearGrupo()}" onclick="PF('ingreso').hide();" update=":verGrupoForm:dtGrupos">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoGrupoBean.crearGrupo()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verGrupoForm:dtGrupos">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

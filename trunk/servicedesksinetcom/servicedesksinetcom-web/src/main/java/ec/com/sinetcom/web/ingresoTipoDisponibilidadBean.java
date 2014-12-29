@@ -8,6 +8,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.TipoDisponibilidad;
 import ec.com.sinetcom.servicios.TipoDisponibilidadServicio;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,7 +21,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "ingresoTipoDisponibilidadBean")
 @ViewScoped
-public class ingresoTipoDisponibilidadBean {
+public class ingresoTipoDisponibilidadBean implements Serializable{
     
     @EJB
     private TipoDisponibilidadServicio tipoDisponibilidadServicio;

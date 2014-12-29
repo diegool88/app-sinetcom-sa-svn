@@ -225,6 +225,7 @@ public class IngresarProductoPiezaNA implements Serializable{
         this.lineaDeProductoSeleccionada = null;
         this.modeloProductoSeleccionado = null;
         this.modeloProductosCompatibles = null;
+        this.productoPadreSeleccionado = null;
         this.seriales = null;
         this.numeroSeriales = 0;
     }

@@ -81,6 +81,32 @@ public class FiltroDeAutorizacion implements Filter {
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome"));
         }
+        
+        if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("ventas")){
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/")
+                    && !req.getRequestURI().toLowerCase().contains("login")
+                    && !req.getRequestURI().toLowerCase().contains("welcome")); 
+        }
+        
+        if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("preventa")){
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && !req.getRequestURI().startsWith("/soporte/")
+                    && !req.getRequestURI().toLowerCase().contains("login")
+                    && !req.getRequestURI().toLowerCase().contains("welcome")); 
+        }
+        
+        if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("tecnico")){
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/") && !req.getRequestURI().startsWith("/soporte/")
+                    && !req.getRequestURI().toLowerCase().contains("login")
+                    && !req.getRequestURI().toLowerCase().contains("welcome")); 
+        }
+        
+        if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("gerencia")){
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && !req.getRequestURI().startsWith("/soporte/") && !req.getRequestURI().startsWith("/inventarios/")
+                    && !req.getRequestURI().toLowerCase().contains("login")
+                    && !req.getRequestURI().toLowerCase().contains("welcome")); 
+        }
+        //if(usuario.getGrupoid().getPermiso().getRegistraContratos() && !req.getRequestURI().toLowerCase().contains("contrato")) return true;
+        //if(usuario.getGrupoid().getPermiso().getConsultaContratos() && !req.getRequestURI().toLowerCase().contains("consultacontratos")) return true;
         return true;
     }
     

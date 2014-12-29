@@ -29,7 +29,8 @@ FROM
      INNER JOIN `Contacto` Contacto ON Contrato.`administradorDeContrato` = Contacto.`id`
      INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
      INNER JOIN `Usuario` Usuario ON Contrato.`accountManagerAsignado` = Usuario.`id`
-WHERE `ItemProducto`.`Contrato_numero` = $P{numeroContrato}]]>
+WHERE `ItemProducto`.`Contrato_numero` = $P{numeroContrato}
+ORDER BY ItemProducto.`ItemProducto_numeroSerial_padre`]]>
 	</queryString>
 	<field name="ItemProducto_numeroSerial" class="java.lang.String"/>
 	<field name="ItemProducto_numeroDeParte" class="java.lang.String"/>
@@ -129,8 +130,7 @@ $F{ClienteEmpresa_nombreComercial}.toUpperCase() + ", a la empresa SINETCOM S.A.
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["El " + $F{ClienteEmpresa_nombreComercial}.toUpperCase() +  ", luego de haber efectuado la constatación física de los equipos y sus dispositivos, expresan que los mismos corresponden a lo contratado."
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA["El " + $F{ClienteEmpresa_nombreComercial}.toUpperCase() +  ", luego de haber efectuado la constatación física de los equipos y sus dispositivos, expresan que los mismos corresponden a lo contratado."]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1" y="48" width="571" height="36" uuid="5b149582-14a5-4bd9-9822-7714d89ecbb1"/>
@@ -138,8 +138,7 @@ $F{ClienteEmpresa_nombreComercial}.toUpperCase() + ", a la empresa SINETCOM S.A.
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Para Contancia firman; el Representante de " + $F{ClienteEmpresa_nombreComercial}.toUpperCase() +
-", conjuntamente con el Representante de la empresa SINETCOM S.A. \"SOLUCIONES INTEGRALES EN TECNOLOGÍA\"."
-]]></textFieldExpression>
+", conjuntamente con el Representante de la empresa SINETCOM S.A. \"SOLUCIONES INTEGRALES EN TECNOLOGÍA\"."]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

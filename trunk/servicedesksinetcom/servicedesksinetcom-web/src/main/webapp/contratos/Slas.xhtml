@@ -20,17 +20,20 @@
                         <f:facet name="header">
                             <h:outputText value="Slas"/>
                         </f:facet>
+                        
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
 
                         <p:column headerText="Tiempo de Resp. Prioridad Alta" sortBy="#{slas.tiempoRespuestaPrioridadAlta}" filterBy="#{slas.tiempoRespuestaPrioridadAlta}">
-                            <h:outputText value="#{slas.tiempoRespuestaPrioridadAlta}"/>
+                            <h:outputText value="#{slas.tiempoRespuestaPrioridadAlta} Horas"/>
                         </p:column>
 
                         <p:column headerText="Tiempo de Resp. Prioridad Media" sortBy="#{slas.tiempoRespuestaPrioridadMedia}" filterBy="#{slas.tiempoRespuestaPrioridadMedia}">
-                            <h:outputText value="#{slas.tiempoRespuestaPrioridadMedia}"/>
+                            <h:outputText value="#{slas.tiempoRespuestaPrioridadMedia} Horas"/>
                         </p:column>
 
                         <p:column headerText="Tiempo de Resp. Prioridad Baja" sortBy="#{slas.tiempoRespuestaPrioridadBaja}" filterBy="#{slas.tiempoRespuestaPrioridadBaja}">
-                            <h:outputText value="#{slas.tiempoRespuestaPrioridadBaja}"/>
+                            <h:outputText value="#{slas.tiempoRespuestaPrioridadBaja} Horas"/>
                         </p:column>
 
                         <p:column headerText="Tiempo de Solución" sortBy="#{slas.tiempoDeSolucion}" filterBy="#{slas.tiempoDeSolucion}">
@@ -39,7 +42,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" process="dtSla" value="Eliminar" action="#{ingresoSlaBean.eliminarSla()}" update=":verSlaForm:dtSla"/>                       
+                            <p:commandButton id="btnEliminar" process="dtSla" value="Eliminar" action="#{ingresoSlaBean.eliminarSla()}" disabled="#{not(ingresoSlaBean.slaSeleccionado != null)}" update=":verSlaForm:dtSla"/>                       
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
@@ -76,7 +79,7 @@
                             <p:outputLabel for="slaTiempoSolucion" value="Tiempo de Solucion:"/>
                             <p:inputText id="slaTiempoSolucion" value="#{ingresoSlaBean.tiempoSolucion}" required="true"/> 
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}" onclick="PF('ingreso').hide();" update=":verSlaForm:dtSla">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verSlaForm:dtSla">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

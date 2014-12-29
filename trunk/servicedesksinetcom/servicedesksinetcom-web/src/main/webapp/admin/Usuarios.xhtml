@@ -19,7 +19,10 @@
                         <f:facet name="header">
                             <h:outputText value="Usuarios"/>
                         </f:facet>
-
+                        
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
+                        
                         <p:column headerText="Cedula" sortBy="#{usuarios.cedulaDeCuidadania}" filterBy="#{usuarios.cedulaDeCuidadania}">
                             <h:outputText value="#{usuarios.cedulaDeCuidadania}"/>
                         </p:column>
@@ -38,7 +41,7 @@
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
-                            <p:commandButton id="btnEliminar" process="dtUsuarios" value="Eliminar" action="#{ingresoUsuarioBean.eliminarUsuario()}" update=":verUsuariosForm:dtUsuarios"/>                       
+                            <p:commandButton id="btnEliminar" process="dtUsuarios" value="Eliminar" action="#{ingresoUsuarioBean.eliminarUsuario()}" disabled="#{not(ingresoUsuarioBean.usuarioSeleccionado != null)}" update=":verUsuariosForm:dtUsuarios"/>                       
                         </f:facet>
                     </p:dataTable>              
                 </h:form>
@@ -54,13 +57,19 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel for="usuarioCedula" value="Cedula:"/>
-                            <p:inputText id="usuarioCedula" value="#{ingresoUsuarioBean.numCedula}" required="true"/>
+                            <p:inputText id="usuarioCedula" value="#{ingresoUsuarioBean.numCedula}" required="true">
+                                <f:ajax event="keyup" execute="@this" render=":growl"></f:ajax>
+                                <f:validator binding="#{cedulaCiudadaniaValidator}"></f:validator>
+                            </p:inputText>
 
                             <p:outputLabel for="usuarioMail" value="e-Mail:"/>
-                            <p:inputText id="usuarioMail" value="#{ingresoUsuarioBean.mail}" required="true"/>
+                            <p:inputText id="usuarioMail" value="#{ingresoUsuarioBean.mail}" required="true">
+                                <f:ajax event="keyup" execute="@this" render=":growl"></f:ajax>
+                                <f:validator binding="#{correoElectronicoValidator}"></f:validator>
+                            </p:inputText>
 
                             <p:outputLabel for="usuarioPassword" value="Password:"/>
-                            <p:password id="usuarioPassword" value="#{ingresoUsuarioBean.password}" required="true"/>
+                            <p:password id="usuarioPassword" value="#{ingresoUsuarioBean.password}" maxlength="15" feedback="true" promptLabel="Password (15 caracteres)" weakLabel="¿De Verdad?" goodLabel="Mejoraste.." strongLabel="Ahora nos entendemos!"  required="true"/>
 
                             <p:outputLabel for="usuarioNombre" value="Nombre:"/>
                             <p:inputText id="usuarioNombre" value="#{ingresoUsuarioBean.nombre}" required="true"/>
@@ -83,7 +92,7 @@
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.crearUsuario()}" onclick="PF('ingreso').hide();" update=":verUsuariosForm:dtUsuarios">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.crearUsuario()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verUsuariosForm:dtUsuarios">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
                         </h:panelGrid>

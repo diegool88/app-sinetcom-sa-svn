@@ -160,18 +160,18 @@
                                     <f:selectItems var="tipoGarantia" value="#{ingresoContratoBean.tipoGarantias}" itemLabel="#{tipoGarantia.tipo}" itemValue="#{tipoGarantia.id}"></f:selectItems>
                                 </p:selectOneMenu>
                                 <p:outputLabel for="porcentaje" value="Porcentaje:"/>
-                                <p:inputText id="porcentaje" value="#{ingresoContratoBean.nuevaGarantiaEconomica.porcentaje}" maxlength="3" required="true" requiredMessage="* Requerido" validatorMessage="Porcentaje max. 100%">
+                                <p:inputText id="porcentaje" value="#{ingresoContratoBean.nuevaGarantiaEconomica.porcentaje}" maxlength="3" required="true" validatorMessage="Porcentaje max. 100%">
                                     <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularValorDeGarantiaE()}" update="valor" process="contratoPrecio, porcentaje"></p:ajax>
                                     <f:validateDoubleRange for="porcentaje" maximum="100" minimum="1" ></f:validateDoubleRange>
                                 </p:inputText>
                                 <p:outputLabel for="valor" value="Valor:"/>
-                                <p:inputText id="valor" value="#{ingresoContratoBean.nuevaGarantiaEconomica.valor}" required="true" requiredMessage="* Requerido" readonly="true"></p:inputText>
+                                <p:inputText id="valor" value="#{ingresoContratoBean.nuevaGarantiaEconomica.valor}" required="true" readonly="true"></p:inputText>
                                 <p:outputLabel for="fechaInicio" value="Fecha de Inicio:"/>
-                                <p:calendar id="fechaInicio" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaInicio}" pattern="dd/MM/yyyy" required="true" requiredMessage="* Requerido" showOn="button"></p:calendar>
+                                <p:calendar id="fechaInicio" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaInicio}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
                                 <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
-                                <p:calendar id="fechaFin" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaFin}" pattern="dd/MM/yyyy" required="true" requiredMessage="* Requerido" showOn="button"></p:calendar>
+                                <p:calendar id="fechaFin" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaFin}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
                                 <p:outputLabel for="renovable" value="¿Renovable?:"/>
-                                <p:selectOneRadio id="renovable" value="#{ingresoContratoBean.nuevaGarantiaEconomica.renovable}" required="true" requiredMessage="* Requerido">
+                                <p:selectOneRadio id="renovable" value="#{ingresoContratoBean.nuevaGarantiaEconomica.renovable}" required="true">
                                     <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                 </p:selectOneRadio>
@@ -267,13 +267,13 @@
                                     <h:outputText value="Ingreso de Curso"></h:outputText>
                                 </f:facet>
                                 <p:outputLabel for="temaATratar" value="Tema a tratar:"></p:outputLabel>
-                                <p:inputText id="temaATratar" value="#{ingresoContratoBean.nuevoCurso.temaATratar}"></p:inputText>
+                                <p:inputText id="temaATratar" value="#{ingresoContratoBean.nuevoCurso.temaATratar}" required="true"></p:inputText>
                                 <p:outputLabel for="numParticipantes" value="Número de Participantes:"></p:outputLabel>
-                                <p:inputText id="numParticipantes" value="#{ingresoContratoBean.nuevoCurso.numeroDeParticipantes}"></p:inputText>
+                                <p:inputText id="numParticipantes" value="#{ingresoContratoBean.nuevoCurso.numeroDeParticipantes}" required="true"></p:inputText>
                                 <p:outputLabel for="numHorasTotales" value="Horas Totales del Curso:"></p:outputLabel>
-                                <p:inputText id="numHorasTotales" value="#{ingresoContratoBean.nuevoCurso.numeroDeHorasTotales}"></p:inputText>
+                                <p:inputText id="numHorasTotales" value="#{ingresoContratoBean.nuevoCurso.numeroDeHorasTotales}" required="true"></p:inputText>
                                 <p:outputLabel for="oficial" value="¿Es curso oficial?:"></p:outputLabel>
-                                <p:selectOneRadio id="oficial" value="#{ingresoContratoBean.nuevoCurso.oficial}">
+                                <p:selectOneRadio id="oficial" value="#{ingresoContratoBean.nuevoCurso.oficial}" required="true">
                                     <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                     <p:ajax listener="#{ingresoContratoBean.limpiarNombreDeInstructor()}" update="instructorSinetcom, nombreInstructor"></p:ajax>
@@ -285,9 +285,9 @@
                                     <p:ajax listener="#{ingresoContratoBean.actualizarNombreDeInstructor()}" update="nombreInstructor"></p:ajax>
                                 </p:selectOneMenu>
                                 <p:outputLabel for="nombreInstructor" value="Nombre del Instructor:"></p:outputLabel>
-                                <p:inputText id="nombreInstructor" value="#{ingresoContratoBean.nuevoCurso.nombreInstructor}" readonly="#{not ingresoContratoBean.nuevoCurso.oficial}"></p:inputText>
+                                <p:inputText id="nombreInstructor" value="#{ingresoContratoBean.nuevoCurso.nombreInstructor}" required="true" readonly="#{not ingresoContratoBean.nuevoCurso.oficial}"></p:inputText>
                                 <p:outputLabel for="centroCapacitacion" value="Centro de Capacitación:"></p:outputLabel>
-                                <p:inputTextarea id="centroCapacitacion" value="#{ingresoContratoBean.nuevoCurso.centroDeCapacitacion}" cols="20" rows="8"></p:inputTextarea>
+                                <p:inputTextarea id="centroCapacitacion" value="#{ingresoContratoBean.nuevoCurso.centroDeCapacitacion}" required="true" cols="20" rows="8"></p:inputTextarea>
                                 <f:facet name="footer">
                                     <p:commandButton value="Agregar Curso" actionListener="#{ingresoContratoBean.agregarCurso}" process=":nuevoContrato:cursosProgramados" update=":nuevoContrato:cursosProgramados"></p:commandButton>
                                 </f:facet>

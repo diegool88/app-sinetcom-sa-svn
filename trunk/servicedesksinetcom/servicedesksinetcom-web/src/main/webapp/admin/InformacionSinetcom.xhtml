@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>
+            <h:body>
+                <h:form id="verDatosSinetcomForm">
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            <h:outputText value="Información de Sinetcom"></h:outputText>
+                        </f:facet>
+                        <p:outputLabel value="Ruc:" for="ruc" />
+                        <p:inputText id="ruc" value="#{informacionSinetcomBean.datosSinetcom.ruc}" title="Ruc" required="true" requiredMessage="The Ruc field is required."/>
+                        <p:outputLabel value="Razón Social:" for="razonSocial" />
+                        <p:inputText id="razonSocial" value="#{informacionSinetcomBean.datosSinetcom.razonSocial}" title="Razon Social" />
+                        <p:outputLabel value="Nombre Comercial:" for="nombreComercial" />
+                        <p:inputText id="nombreComercial" value="#{informacionSinetcomBean.datosSinetcom.nombreComercial}" title="Nombre Comercial" />
+                        <p:outputLabel value="Email Presidente:" for="emailPresidente" />
+                        <p:inputText id="emailPresidente" value="#{informacionSinetcomBean.datosSinetcom.emailPresidente}" title="Email Presidente" />
+                        <p:outputLabel value="Email Gerente General:" for="emailGerenteGeneral" />
+                        <p:inputText id="emailGerenteGeneral" value="#{informacionSinetcomBean.datosSinetcom.emailGerenteGeneral}" title="Email Gerente General" />
+                        <p:outputLabel value="Email No-Responder:" for="emailNoResponder" />
+                        <p:inputText id="emailNoResponder" value="#{informacionSinetcomBean.datosSinetcom.emailNoResponder}" title="Email No-Responder" />
+                        <p:outputLabel value="Email Supervisor Contratos:" for="emailSupervisorContratos" />
+                        <p:inputText id="emailSupervisorContratos" value="#{informacionSinetcomBean.datosSinetcom.emailSupervisorContratos}" title="Email Supervisor Contratos" />
+                        <p:outputLabel value="Email Gerente Comercial:" for="emailGerenteComercial" />
+                        <p:inputText id="emailGerenteComercial" value="#{informacionSinetcomBean.datosSinetcom.emailGerenteComercial}" title="Email Gerente Comercial" />
+                        <p:outputLabel value="Email Gerente Técnico:" for="emailGerenteTecnico" />
+                        <p:inputText id="emailGerenteTecnico" value="#{informacionSinetcomBean.datosSinetcom.emailGerenteTecnico}" title="Email Gerente Tecnico" />
+                        <f:facet name="footer">
+                            <p:commandButton value="Actualizar Información" actionListener="#{informacionSinetcomBean.actualizarInformacionDeSinetcom}" update="@form"></p:commandButton>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+
+
