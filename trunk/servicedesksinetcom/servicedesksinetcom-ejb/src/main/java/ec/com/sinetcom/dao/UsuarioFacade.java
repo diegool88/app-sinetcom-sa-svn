@@ -64,13 +64,25 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     
     /**
      * Permite obtener un usuario por correo electrónico
-     * @param correoElectrocnico
+     * @param correoElectronico
      * @return 
      */
-    public Usuario obtenerUsuarioPorCorreoElectronico(String correoElectrocnico){
+    public Usuario obtenerUsuarioPorCorreoElectronico(String correoElectronico){
         String sql = "SELECT u FROM Usuario u WHERE u.correoElectronico = ?1";
         Query qry = this.em.createQuery(sql);  
-        qry.setParameter(1, correoElectrocnico);
+        qry.setParameter(1, correoElectronico);
+        return qry.getResultList().isEmpty() ? null : (Usuario)qry.getSingleResult();
+    }
+    
+    /**
+     * Permite obtener un usuario por cedula de ciudadania
+     * @param cedula
+     * @return 
+     */
+    public Usuario obtenerUsuarioPorCedulaCiudadania(String cedula){
+        String sql = "SELECT u FROM Usuario u WHERE u.cedulaDeCuidadania = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, cedula);
         return qry.getResultList().isEmpty() ? null : (Usuario)qry.getSingleResult();
     }
     
