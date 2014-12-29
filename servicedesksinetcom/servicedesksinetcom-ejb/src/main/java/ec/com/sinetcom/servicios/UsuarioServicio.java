@@ -35,142 +35,158 @@ public class UsuarioServicio {
     private GrupoFacade grupoFacade;
     @EJB
     private PermisoFacade permisoFacade;
-    
-    
+
     /**
      * Servicio para bloquear/desbloquear Usuario Registrado
+     *
      * @param usuario
      * @param bloquear
-     * @return 
+     * @return
      */
-    
-    public List<Usuario> cragarUsuarios() {
+    public List<Usuario> cargarUsuarios() {
         return usuarioFacade.findAll();
     }
-    
+
     public void crearUsuario(Usuario usuario) {
         usuarioFacade.create(usuario);
     }
-    
+
     public void eliminarUsuario(Usuario usuario) {
         usuarioFacade.remove(usuario);
     }
-    
-    public List<Grupo> cragarGrupos() {
+
+    public List<Grupo> cargarGrupos() {
         return grupoFacade.findAll();
     }
-    
+
     public Grupo recuperarGrupo(Integer id) {
         return grupoFacade.find(id);
     }
-    
-    public boolean cambiarActividadDeUsuario(Usuario usuario, boolean bloquear){
-        
-        if(bloquear){
+
+    public boolean cambiarActividadDeUsuario(Usuario usuario, boolean bloquear) {
+
+        if (bloquear) {
             usuario.setActivo(false);
-        }else{
+        } else {
             usuario.setActivo(true);
         }
-        
-        try{
+
+        try {
             this.usuarioFacade.edit(usuario);
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
         return true;
-    }       
-    
+    }
+
     /**
      * Permite modificar un usuario
-     * @param usuario 
+     *
+     * @param usuario
      */
-    public void modificarUsuario(Usuario usuario){
+    public void modificarUsuario(Usuario usuario) {
         this.usuarioFacade.edit(usuario);
     }
-    
+
     /**
      * Permite obtener todos los clientes
-     * @return 
+     *
+     * @return
      */
-    public List<Usuario> obtenerTodosLosClientes(){
+    public List<Usuario> obtenerTodosLosClientes() {
         return this.usuarioFacade.obtenerTodosLosClientes();
     }
-    
+
     /**
      * Permite obtener una competencia
+     *
      * @param id
-     * @return 
+     * @return
      */
-    public Competencia obtenerCompetencia(int id){
+    public Competencia obtenerCompetencia(int id) {
         return this.competenciasFacade.find(id);
     }
-    
+
     /**
      * Obtiene todas las competencias
-     * @return 
+     *
+     * @return
      */
-    public List<Competencia> obtenerTodasLasCompetencias(){
+    public List<Competencia> obtenerTodasLasCompetencias() {
         return this.competenciasFacade.findAll();
     }
-    
+
     /**
      * Obtiene todos los grupos
-     * @return 
+     *
+     * @return
      */
-    public List<Grupo> obtenerTodosLosGrupos(){
+    public List<Grupo> obtenerTodosLosGrupos() {
         return this.grupoFacade.findAll();
     }
-    
+
     /**
      * Obtiene un grupo por id
+     *
      * @param id
-     * @return 
+     * @return
      */
-    public Grupo obtenerGrupoPorId(int id){
+    public Grupo obtenerGrupoPorId(int id) {
         return this.grupoFacade.find(id);
     }
-    
+
     /**
      * Obtiene un Permiso
+     *
      * @param id
-     * @return 
+     * @return
      */
-    public Permiso obtenerPermisosPorId(int id){
+    public Permiso obtenerPermisosPorId(int id) {
         return this.permisoFacade.find(id);
     }
-    
+
     /**
      * Actualiza el grupo seleccionado
+     *
      * @param grupo
-     * @return 
+     * @return
      */
-    public boolean actualizarGrupo(Grupo grupo){
-        try{
+    public boolean actualizarGrupo(Grupo grupo) {
+        try {
             this.grupoFacade.edit(grupo);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
-    
+
     /**
      * Obtiene un usuario por Id
+     *
      * @param id
-     * @return 
+     * @return
      */
-    public Usuario obtenerUsuarioPorId(int id){
+    public Usuario obtenerUsuarioPorId(int id) {
         return this.usuarioFacade.find(id);
     }
-    
-     public void eliminarUsuario(Integer usuario) {
+
+    public void eliminarUsuario(Integer usuario) {
         try {
             Usuario aEliminar = usuarioFacade.find(usuario);
             if (aEliminar != null) {
                 usuarioFacade.remove(aEliminar);
-            }                         
+            }
         } catch (Exception e) {
         }
-               
+
+    }
+
+    public boolean verificarCedulaCiudadania(String cedula) {
+        return this.usuarioFacade.obtenerUsuarioPorCedulaCiudadania(cedula) != null;
+    }
+
+    public boolean verificarCorreoElectronico(String correoElectronico) {
+        return this.usuarioFacade.obtenerUsuarioPorCorreoElectronico(correoElectronico) != null;
     }
 }
