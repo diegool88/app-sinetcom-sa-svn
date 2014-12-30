@@ -117,6 +117,7 @@ public class ContratoServicio {
                 for (VisitaTecnica visitaT : contrato.getVisitaTecnicaList()) {
                     TareaVisitaTecnicaInfo tareaVisitaTecnicaInfo = new TareaVisitaTecnicaInfo("v_" + visitaT.getId(), "Notificador Visita Técnica # " + visitaT.getId(), "LoteTareaNotificadorVisitaTecnica", visitaT);
                     Calendar c = Calendar.getInstance();
+                    c.setTime(visitaT.getFecha());
                     c.add(Calendar.DAY_OF_MONTH, -15);
                     tareaVisitaTecnicaInfo.setStartDate(c.getTime());
                     c.setTime(visitaT.getFecha());
