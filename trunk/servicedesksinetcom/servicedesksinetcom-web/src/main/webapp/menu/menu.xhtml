@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:form>
-        <p:megaMenu>
+        <p:megaMenu rendered="#{login.estaUsuarioAutenticado() eq true}">
             <p:submenu label="Productos" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}">
                 <p:column>
                     <p:submenu label="Gestión de Productos">

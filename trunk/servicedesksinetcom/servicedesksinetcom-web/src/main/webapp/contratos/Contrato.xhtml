@@ -39,7 +39,7 @@
                         <p:outputLabel for="contratoSla" value="SLA:"/>
                         <p:selectOneMenu id="contratoSla" value="#{ingresoContratoBean.numSla}" required="true">
                             <f:selectItem itemLabel="Selecione..." itemValue=""/>
-                            <f:selectItems value="#{ingresoContratoBean.slas}" var="sla" itemLabel="#{sla.tiempoDeSolucion} Horas" itemValue="#{sla.id}"/>
+                            <f:selectItems value="#{ingresoContratoBean.slas}" var="sla" itemLabel="P.A: #{sla.tiempoRespuestaPrioridadAlta} h, P.M: #{sla.tiempoRespuestaPrioridadMedia} h, P.B: #{sla.tiempoRespuestaPrioridadBaja} h - Disponibilidad: #{sla.tipoDisponibilidadid.disponibilidad}" itemValue="#{sla.id}"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel for="contratoManager" value="Account Manager Asignado:"/>
@@ -109,7 +109,7 @@
                         <p:commandButton id="contratoVisitasTecnicas" value="Ver Visitas Técnicas" process="contratoFechaSuscripcion, contratoValidez" onclick="PF('visitasT').show();"></p:commandButton>
 
                         <p:outputLabel for="contratoCursos" value="Cursos:"/>
-                        <p:commandButton id="contratoCursos" value="Ver Cursos" onclick="PF('cursos').show();"></p:commandButton>
+                        <p:commandButton id="contratoCursos" value="Ver Cursos" process="@none" onclick="PF('cursos').show();"></p:commandButton>
 
                         <f:facet name="footer">
                             <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoContrato:contrato" update="@form" actionListener="#{ingresoContratoBean.grabarContrato}" onstart="statusDialog.show()" onsuccess="statusDialog.show()">
@@ -268,6 +268,8 @@
                                 </f:facet>
                                 <p:outputLabel for="temaATratar" value="Tema a tratar:"></p:outputLabel>
                                 <p:inputText id="temaATratar" value="#{ingresoContratoBean.nuevoCurso.temaATratar}" required="true"></p:inputText>
+                                <p:outputLabel for="fechaInicioCurso" value="Fecha de Inicio:"></p:outputLabel>
+                                <p:calendar id="fechaInicioCurso" value="#{ingresoContratoBean.nuevoCurso.fechaDeInicio}" pattern="dd/MM/yyyy" required="true"></p:calendar>
                                 <p:outputLabel for="numParticipantes" value="Número de Participantes:"></p:outputLabel>
                                 <p:inputText id="numParticipantes" value="#{ingresoContratoBean.nuevoCurso.numeroDeParticipantes}" required="true"></p:inputText>
                                 <p:outputLabel for="numHorasTotales" value="Horas Totales del Curso:"></p:outputLabel>
@@ -311,6 +313,9 @@
                                 </p:column>
                                 <p:column headerText="Oficial">
                                     <h:outputText value="#{curso.oficial ? 'Si' : 'No'}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <h:outputText value="#{ingresoContratoBean.formatoCortoDeFecha(curso.fechaDeInicio)}"></h:outputText>
                                 </p:column>
                                 <p:column headerText="Eliminar">
                                     <p:commandButton icon="ui-icon-trash" update=":nuevoContrato:cursos" process="@this" actionListener="#{ingresoContratoBean.eliminarCurso}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">

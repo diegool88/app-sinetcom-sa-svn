@@ -23,7 +23,7 @@ import org.primefaces.application.PrimeResourceHandler;
  * @author diegoflores
  */
 
-@WebFilter("/*")
+@WebFilter(urlPatterns = {"/admin/*","/soporte/*","/inventarios/*","/contratos/*"})
 public class FiltroDeAutorizacion implements Filter {
     
     @Override
@@ -48,16 +48,11 @@ public class FiltroDeAutorizacion implements Filter {
         //boolean aceptarRecursosDeSolicitud = req.getRequestURI().startsWith(req.getContextPath() + "/faces" + ResourceHandler.RESOURCE_IDENTIFIER);
         boolean aceptarRecursosDeSolicitud = req.getRequestURI().startsWith(req.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER) || req.getRequestURI().startsWith(req.getContextPath() + PrimeResourceHandler.RESOURCE_IDENTIFIER);
         //throw new UnsupportedOperationException("Not supported yet.");
-        if ( estaAutenticado || esPaginaDeLogin || aceptarRecursosDeSolicitud ) {
-            //Prevenir que paginas restringidas sean puestas en cache
-            if(!aceptarRecursosDeSolicitud){
-                res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-                res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-                res.setDateHeader("Expires", 0); // Proxies.
-            }
-            //Forzar a usar el Charset UTF-8
-            response.setCharacterEncoding("UTF-8");
-            request.setCharacterEncoding("UTF-8");
+        if(aceptarRecursosDeSolicitud){
+            chain.doFilter(request, response);
+        }
+        
+        if ( estaAutenticado || esPaginaDeLogin ) {
             
             if(auth != null && auth.getUsuarioActual() != null && !esPaginaDeError && !verificarPermiso(auth.getUsuarioActual(), req) && !aceptarRecursosDeSolicitud){
                 res.sendRedirect(req.getContextPath() + "/errorDePermisos.xhtml");
@@ -89,24 +84,23 @@ public class FiltroDeAutorizacion implements Filter {
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("preventa")){
-            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && !req.getRequestURI().startsWith("/soporte/")
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && !req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/")
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("tecnico")){
-            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/") && !req.getRequestURI().startsWith("/soporte/")
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/") && !req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/")
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("gerencia")){
-            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && !req.getRequestURI().startsWith("/soporte/") && !req.getRequestURI().startsWith("/inventarios/")
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && !req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/") && !req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/")
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
-        //if(usuario.getGrupoid().getPermiso().getRegistraContratos() && !req.getRequestURI().toLowerCase().contains("contrato")) return true;
-        //if(usuario.getGrupoid().getPermiso().getConsultaContratos() && !req.getRequestURI().toLowerCase().contains("consultacontratos")) return true;
+        
         return true;
     }
     
