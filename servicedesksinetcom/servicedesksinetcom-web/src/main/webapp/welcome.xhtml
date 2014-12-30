@@ -5,14 +5,16 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="template/plantilla.xhtml">
     <ui:define name="title">Sinetcom Home</ui:define>
-    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="menu"><ui:include rendered="#{login.estaUsuarioAutenticado() eq true}" src="/menu/menu.xhtml" /></ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
             <h:head />
             <h:body>
                 <h:form>
                     <p:galleria value="#{welcomeBean.imagenes}" var="imagen" panelWidth="920" showFilmstrip="false" panelHeight="400">
-                        <p:graphicImage height="250" width="700" library="images" name="#{imagen}"></p:graphicImage>
+                        <div style="height: 50%; margin: 0px auto; width: 700px; padding-top: 20px;">
+                            <p:graphicImage library="images" name="#{imagen}"></p:graphicImage>
+                        </div>
                     </p:galleria>
                     <br/>
                     <p:accordionPanel multiple="true">
@@ -34,7 +36,7 @@
                         <p:menuitem style="color: #006666; font-family: sans-serif;" value="Ingresar Inventario Atómico" icon="/resources/images/productos.png" url="/inventarios/ingresarProductoPiezaNA.xhtml"></p:menuitem>
                         <p:menuitem style="color: #006666; font-family: sans-serif;" value="Ingresar Contrato" icon="/resources/images/contratos.png" url="/contratos/Contrato.xhtml"></p:menuitem>
                         <p:menuitem style="color: #006666; font-family: sans-serif;" value="Crear Ticket" icon="/resources/images/soporte.png" url="/soporte/crearTicket.xhtml"></p:menuitem>
-                        <p:menuitem style="color: #006666; font-family: sans-serif;" value="Administración" icon="/resources/images/admin.png" url="Usuarios.xhtml"></p:menuitem>
+                        <p:menuitem style="color: #006666; font-family: sans-serif;" value="Administración" icon="/resources/images/admin.png" url="/admin/Usuarios.xhtml"></p:menuitem>
                     </p:dock>
                 </h:form>
             </h:body>

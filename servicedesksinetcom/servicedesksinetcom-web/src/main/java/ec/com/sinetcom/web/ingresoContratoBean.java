@@ -174,7 +174,7 @@ public class ingresoContratoBean implements Serializable {
         if (contratoServicio.crearContrato(contrato)) {
             Mensajes.mostrarMensajeInformativo("Contrato creado con éxito!");
         } else {
-            Mensajes.mostrarMensajeInformativo("Contrato no creado, error interno!");
+            Mensajes.mostrarMensajeDeError("Contrato no creado, error interno!");
         }
 
     }
