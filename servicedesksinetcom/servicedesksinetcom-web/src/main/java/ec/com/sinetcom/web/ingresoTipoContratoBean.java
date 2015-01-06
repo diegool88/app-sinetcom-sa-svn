@@ -8,6 +8,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.TipoContrato;
 import ec.com.sinetcom.servicios.TipoContratoServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -34,7 +35,7 @@ public class ingresoTipoContratoBean implements Serializable{
     
     @PostConstruct
     public void init() {
-        this.tiposContrato = tipoContratoServicio.cragarTiposContactos();
+        this.tiposContrato = tipoContratoServicio.cargarTiposContactos();
     }
     
     public void crearTipoContrato() {
@@ -43,14 +44,22 @@ public class ingresoTipoContratoBean implements Serializable{
         tipocontrato.setTipo(tipo);
         tipocontrato.setValido(valides);
         
-        tipoContratoServicio.crearTipoContrato(tipocontrato);
-        this.tiposContrato = tipoContratoServicio.cragarTiposContactos();
+        if(tipoContratoServicio.crearTipoContrato(tipocontrato)){
+            Mensajes.mostrarMensajeInformativo("Tipo Contrato creado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Tipo Contrato no se pudo crear!");
+        }
+        this.tiposContrato = tipoContratoServicio.cargarTiposContactos();
                 
     }
     
     public void eliminarTipo() {        
-        tipoContratoServicio.eliminarTipoContrato(tipoContratoSeleccionado.getId());  
-        this.tiposContrato = tipoContratoServicio.cragarTiposContactos();
+        if(tipoContratoServicio.eliminarTipoContrato(tipoContratoSeleccionado.getId())){
+            Mensajes.mostrarMensajeInformativo("Tipo Contrato eliminado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Tipo Contrato no se pudo eliminar!");
+        }  
+        this.tiposContrato = tipoContratoServicio.cargarTiposContactos();
     }
 
     public String getTipo() {

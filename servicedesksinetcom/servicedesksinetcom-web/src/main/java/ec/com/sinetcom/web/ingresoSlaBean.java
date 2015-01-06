@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.Sla;
 import ec.com.sinetcom.orm.TipoDisponibilidad;
 import ec.com.sinetcom.servicios.SlaServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -22,11 +22,11 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "ingresoSlaBean")
 @ViewScoped
-public class ingresoSlaBean implements Serializable{
-    
+public class ingresoSlaBean implements Serializable {
+
     @EJB
     private SlaServicio slaServicio;
-    
+
     private Integer numSla;
     private Integer tiempoRespuestaPAlta;
     private Integer tiempoRespuestaPMedia;
@@ -36,19 +36,19 @@ public class ingresoSlaBean implements Serializable{
     private Integer tiempoRespuestaEscalacion;
     private Integer tiempoSolucion;
     private Sla slaSeleccionado;
-    
+
     private List<Sla> slas;
     private List<TipoDisponibilidad> tiposDisponibilidad;
-    
+
     @PostConstruct
     public void init() {
-        this.slas = slaServicio.cragarSlas();
-        this.tiposDisponibilidad = slaServicio.cragarTiposDisponibilidad();
+        this.slas = slaServicio.cargarSlas();
+        this.tiposDisponibilidad = slaServicio.cargarTiposDisponibilidad();
     }
-    
+
     public void crearSla() {
         Sla sla = new Sla();
-        
+
         sla.setTipoDisponibilidadid(slaServicio.recuperarTipoDisponibilidad(numSla));
         sla.setTiempoRespuestaPrioridadAlta(tiempoRespuestaPAlta);
         sla.setTiempoRespuestaPrioridadMedia(tiempoRespuestaPMedia);
@@ -57,14 +57,22 @@ public class ingresoSlaBean implements Serializable{
         sla.setTiempoDeActualizacionDeEscalacion(tiempoActualizacionEscalacion);
         sla.setTiempoDeRespuestaDeEscalacion(tiempoRespuestaEscalacion);
         sla.setTiempoDeSolucion(tiempoSolucion);
-        
-        slaServicio.crearSLA(sla);
-        this.slas = slaServicio.cragarSlas();
+
+        if (slaServicio.crearSLA(sla)) {
+            Mensajes.mostrarMensajeInformativo("SLA creado exitosamente!");
+        } else {
+            Mensajes.mostrarMensajeDeError("Error interno, SLA no se pudo crear!");
+        }
+        this.slas = slaServicio.cargarSlas();
     }
-    
+
     public void eliminarSla() {
-        slaServicio.eliminarSLA(slaSeleccionado.getId());
-        this.slas = slaServicio.cragarSlas();
+        if (slaServicio.eliminarSLA(slaSeleccionado.getId())) {
+            Mensajes.mostrarMensajeInformativo("SLA eliminado exitosamente!");
+        } else {
+            Mensajes.mostrarMensajeDeError("Error interno, SLA no se pudo eliminar!");
+        }
+        this.slas = slaServicio.cargarSlas();
     }
 
     public Integer getNumSla() {
@@ -81,7 +89,7 @@ public class ingresoSlaBean implements Serializable{
 
     public void setTiempoRespuestaPAlta(Integer tiempoRespuestaPAlta) {
         this.tiempoRespuestaPAlta = tiempoRespuestaPAlta;
-    }  
+    }
 
     public Integer getTiempoRespuestaPMedia() {
         return tiempoRespuestaPMedia;
@@ -97,7 +105,7 @@ public class ingresoSlaBean implements Serializable{
 
     public void setTimepoRespuestaPBaja(Integer timepoRespuestaPBaja) {
         this.timepoRespuestaPBaja = timepoRespuestaPBaja;
-    }   
+    }
 
     public Integer getTiempoEscalacion() {
         return tiempoEscalacion;
@@ -121,7 +129,7 @@ public class ingresoSlaBean implements Serializable{
 
     public void setTiempoRespuestaEscalacion(Integer tiempoRespuestaEscalacion) {
         this.tiempoRespuestaEscalacion = tiempoRespuestaEscalacion;
-    }    
+    }
 
     public Integer getTiempoSolucion() {
         return tiempoSolucion;
@@ -153,5 +161,5 @@ public class ingresoSlaBean implements Serializable{
 
     public void setTiposDisponibilidad(List<TipoDisponibilidad> tiposDisponibilidad) {
         this.tiposDisponibilidad = tiposDisponibilidad;
-    }            
+    }
 }

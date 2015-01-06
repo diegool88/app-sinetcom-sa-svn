@@ -10,6 +10,7 @@ import ec.com.sinetcom.configuracion.UtilidadDeEncriptacion;
 import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.Usuario;
 import ec.com.sinetcom.servicios.UsuarioServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -66,6 +67,8 @@ public class ingresoUsuarioBean implements Serializable {
 
         usuarioServicio.crearUsuario(usuario);
         this.usuarios = usuarioServicio.cargarUsuarios();
+        
+        Mensajes.mostrarMensajeInformativo("Usuario creado exitosamente!");
     }
     
     public void eliminarUsuario() {
