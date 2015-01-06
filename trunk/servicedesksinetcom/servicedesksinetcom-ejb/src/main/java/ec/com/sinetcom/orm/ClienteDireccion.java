@@ -101,6 +101,10 @@ public class ClienteDireccion implements Serializable {
     public void setCiudad(Ciudad ciudad) {
         this.ciudad = ciudad;
     }
+    
+    public String getCompositeKey(){
+        return ciudad.getId() + clienteEmpresa.getRuc() + ".";
+    }
 
     @Override
     public int hashCode() {

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.dao.ClienteEmpresaFacade;
@@ -21,40 +20,48 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @LocalBean
-public class ContactoServicio {    
-    
+public class ContactoServicio {
+
     @EJB
     private ContactoFacade contactoFacade;
     @EJB
     private ClienteEmpresaFacade clienteEmpresaFacade;
-    
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    
-    public List<Contacto> cragarContactos() {
+    public List<Contacto> cargarContactos() {
         return contactoFacade.findAll();
     }
-    
-    public void crearContacto(Contacto contacto) {
-        contactoFacade.create(contacto);
-   }
-    
+
+    public boolean crearContacto(Contacto contacto) {
+        try {
+            contactoFacade.create(contacto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public List<ClienteEmpresa> cargarClientesEmpresas() {
         return clienteEmpresaFacade.findAll();
     }
-    
+
     public ClienteEmpresa recuperarClienteEmpresa(String id) {
-        return clienteEmpresaFacade.find(id);        
+        return clienteEmpresaFacade.find(id);
     }
-    
-     public void eliminarTipoContrato(Integer contacto) {
+
+    public boolean eliminarTipoContrato(Integer contacto) {
         try {
             Contacto aEliminar = contactoFacade.find(contacto);
             if (aEliminar != null) {
                 contactoFacade.remove(aEliminar);
-            }                         
+            }
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-               
+        return true;
+
     }
 }
