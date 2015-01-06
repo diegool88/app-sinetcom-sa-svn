@@ -4,10 +4,13 @@
  */
 package ec.com.sinetcom.dao;
 
+import ec.com.sinetcom.orm.Ciudad;
 import ec.com.sinetcom.orm.ClienteDireccion;
+import ec.com.sinetcom.orm.ClienteEmpresa;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,6 +28,20 @@ public class ClienteDireccionFacade extends AbstractFacade<ClienteDireccion> {
 
     public ClienteDireccionFacade() {
         super(ClienteDireccion.class);
+    }
+    
+    /**
+     * Permite verificar la existencia de una dirección
+     * @param ciudad
+     * @param clienteEmpresa
+     * @return 
+     */
+    public ClienteDireccion existeDireccionCliente(Ciudad ciudad, ClienteEmpresa clienteEmpresa){
+        String sql = "SELECT d FROM ClienteDireccion d WHERE d.clienteEmpresa = ?1 AND d.ciudad = ?2";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter(1, clienteEmpresa);
+        qry.setParameter(2, ciudad);
+        return qry.getResultList().isEmpty() ? null : (ClienteDireccion)qry.getSingleResult();
     }
     
 }

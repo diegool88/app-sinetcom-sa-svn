@@ -5,6 +5,7 @@
  */
 package ec.com.sinetcom.servicios;
 
+import com.sun.org.apache.bcel.internal.generic.InstructionConstants;
 import ec.com.sinetcom.configuracion.TareaCursoInfo;
 import ec.com.sinetcom.configuracion.TareaVisitaTecnicaInfo;
 import ec.com.sinetcom.configuracion.UtilidadDeEmail;
@@ -428,6 +429,15 @@ public class ContratoServicio {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * 
+     * @param clienteDireccion
+     * @return 
+     */
+    public boolean existeDireccionCliente(ClienteDireccion clienteDireccion){
+        return this.clienteDireccionFacade.existeDireccionCliente(clienteDireccion.getCiudad(), clienteDireccion.getClienteEmpresa()) != null;
     }
 
     /**

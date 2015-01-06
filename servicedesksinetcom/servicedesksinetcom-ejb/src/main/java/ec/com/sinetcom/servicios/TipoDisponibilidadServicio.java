@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.dao.TipoDisponibilidadFacade;
@@ -20,29 +19,36 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class TipoDisponibilidadServicio {
-    
+
     @EJB
     private TipoDisponibilidadFacade tipoDisponibilidadFacade;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    
-    public List<TipoDisponibilidad> ccargarTiposDisponibilidad() {
+    public List<TipoDisponibilidad> cargarTiposDisponibilidad() {
         return tipoDisponibilidadFacade.findAll();
     }
-    
-    public void crearTipoDisponibilidad(TipoDisponibilidad tipoDisponibilidad ) {
-        tipoDisponibilidadFacade.create(tipoDisponibilidad);
+
+    public boolean crearTipoDisponibilidad(TipoDisponibilidad tipoDisponibilidad) {
+        try {
+            tipoDisponibilidadFacade.create(tipoDisponibilidad);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
-    
-     public void eliminarTipoDisp(Integer tipoDisp) {
+
+    public boolean eliminarTipoDisp(Integer tipoDisp) {
         try {
             TipoDisponibilidad aEliminar = tipoDisponibilidadFacade.find(tipoDisp);
             if (aEliminar != null) {
                 tipoDisponibilidadFacade.remove(aEliminar);
-            }                         
+            }
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-               
+        return true;
     }
 }
