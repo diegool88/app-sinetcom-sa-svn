@@ -9,6 +9,7 @@ package ec.com.sinetcom.web;
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.servicios.ContactoServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -41,7 +42,7 @@ public class ingresoContactoBean implements Serializable{
     
     @PostConstruct
     public void init() {
-        this.contactos = contactoServicio.cragarContactos();
+        this.contactos = contactoServicio.cargarContactos();
         this.clientes = contactoServicio.cargarClientesEmpresas();
     }
     
@@ -56,13 +57,21 @@ public class ingresoContactoBean implements Serializable{
         contacto.setTelefonoFijo(telefono);
         contacto.setCorreoElectronico(mail);
         
-        contactoServicio.crearContacto(contacto);
-        this.contactos = contactoServicio.cragarContactos();
+        if(contactoServicio.crearContacto(contacto)){
+            Mensajes.mostrarMensajeInformativo("Contacto creado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo crear!");
+        }
+        this.contactos = contactoServicio.cargarContactos();
     }
     
     public void eliminarContacto() {
-        contactoServicio.eliminarTipoContrato(contactoSeleccionado.getId());
-        this.contactos = contactoServicio.cragarContactos();
+        if(contactoServicio.eliminarTipoContrato(contactoSeleccionado.getId())){
+            Mensajes.mostrarMensajeInformativo("Contacto eliminado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo eliminar");
+        }
+        this.contactos = contactoServicio.cargarContactos();
     }
 
     public String getRuc() {

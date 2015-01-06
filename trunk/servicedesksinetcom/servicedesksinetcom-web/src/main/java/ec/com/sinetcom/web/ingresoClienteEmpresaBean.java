@@ -10,6 +10,7 @@ import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.TipoEmpresa;
 import ec.com.sinetcom.orm.Usuario;
 import ec.com.sinetcom.servicios.ClienteEmpresaServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -59,12 +60,20 @@ public class ingresoClienteEmpresaBean implements Serializable{
         cliente.setTipoEmpresaid(clienteEmpresaServicio.recuperarTipoEmpresa(numTipoEmpresa));
         cliente.setUsuarioid(clienteEmpresaServicio.recuperarUsuario(numUsuario));
         
-        clienteEmpresaServicio.crearClienteEmpresa(cliente);
+        if(clienteEmpresaServicio.crearClienteEmpresa(cliente)){
+            Mensajes.mostrarMensajeInformativo("Cliente Empresa creado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Cliente Empresa no se pudo crear!");
+        }
          this.clientesEnpresa = clienteEmpresaServicio.cargarClientesEmpresa();
     }
     
     public void eliminarEmpresa() {
-        clienteEmpresaServicio.eliminarClienteEmpresa(clienteEmpresaSeleccionado.getRuc());
+        if(clienteEmpresaServicio.eliminarClienteEmpresa(clienteEmpresaSeleccionado.getRuc())){
+            Mensajes.mostrarMensajeInformativo("Cliente Empresa eliminado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Cliente Empresa no se pudo eliminar!");
+        }
         this.clientesEnpresa = clienteEmpresaServicio.cargarClientesEmpresa();
     }
 

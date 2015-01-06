@@ -8,6 +8,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.TipoEmpresa;
 import ec.com.sinetcom.servicios.TipoEmpresaServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -34,7 +35,7 @@ public class ingresoTipoEmpresaBean implements Serializable{
     
     @PostConstruct
     public void init() {
-        this.tiposEmpresa = tipoEmpresaServicio.cragarTiposEmpresa();
+        this.tiposEmpresa = tipoEmpresaServicio.cargarTiposEmpresa();
     }
     
     public void crearTipoEmpresa() {
@@ -43,13 +44,21 @@ public class ingresoTipoEmpresaBean implements Serializable{
         tipoEmpresa.setTipo(tipo);
         tipoEmpresa.setValido(validez);
         
-        tipoEmpresaServicio.crearTipoEmpresa(tipoEmpresa);
-        this.tiposEmpresa = tipoEmpresaServicio.cragarTiposEmpresa();
+        if(tipoEmpresaServicio.crearTipoEmpresa(tipoEmpresa)){
+            Mensajes.mostrarMensajeInformativo("Tipo Empresa creada existosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Tipo Empresa no se pudo crear!");
+        }
+        this.tiposEmpresa = tipoEmpresaServicio.cargarTiposEmpresa();
     }    
 
     public void eliminarTipoEmpresa() {
-        tipoEmpresaServicio.eliminarTipoEmpresa(tipoEmpresaSeleccionada.getId());
-        this.tiposEmpresa = tipoEmpresaServicio.cragarTiposEmpresa();
+        if(tipoEmpresaServicio.eliminarTipoEmpresa(tipoEmpresaSeleccionada.getId())){
+            Mensajes.mostrarMensajeInformativo("Tipo Empresa eliminada exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Tipo Empresa no se pudo eliminar!");
+        }
+        this.tiposEmpresa = tipoEmpresaServicio.cargarTiposEmpresa();
     }
     
     public String getTipo() {

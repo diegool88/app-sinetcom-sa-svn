@@ -14,7 +14,7 @@
 
                 <h:form id="verDireccionesForm">
                     <p:dataTable id="dtDirecciones" var="direccion" value="#{ingresoDireccionesBean.direcciones}" paginator="true" rows="15"
-                                 selection="#{ingresoContactoBean.contactoSeleccionado}" selectionMode="single" rowKey="#{direccion.clienteDireccionPK}" paginatorPosition="bottom"
+                                 selection="#{ingresoDireccionesBean.direccionSeleccionada}" selectionMode="single" rowKey="#{direccion.compositeKey}" filteredValue="#{ingresoDireccionesBean.direccionesFiltradas}" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
                         <f:facet name="header">
@@ -52,15 +52,15 @@
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
                             <p:outputLabel for="direccionCliente" value="Ruc Cliente"/>
-                            <p:selectOneMenu id="contactoRuc" value="#{ingresoDireccionesBean.nuevaDireccion.clienteEmpresa}" converter="#{clienteEmpresaConverter}" required="true">                    
+                            <p:selectOneMenu id="direccionCliente" value="#{ingresoDireccionesBean.nuevaDireccion.clienteEmpresa}" converter="#{clienteEmpresaConverter}" required="true">                    
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoDireccionesBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}-#{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
+                                <f:selectItems value="#{ingresoDireccionesBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial} - #{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
                              </p:selectOneMenu>
 
                             <p:outputLabel for="direccionCiudad" value="Ciudad:"/>
                             <p:selectOneMenu id="direccionCiudad" value="#{ingresoDireccionesBean.nuevaDireccion.ciudad}" converter="#{ciudadConverter}" required="true">
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoDireccionesBean.ciudades}" var="Ciudad" itemLabel="#{Ciudad.nombre}" itemValue="#{Ciudad.id}" />
+                                <f:selectItems value="#{ingresoDireccionesBean.ciudades}" var="Ciudad" itemLabel="#{Ciudad.nombre}" itemValue="#{Ciudad.id.toString()}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="direccion1" value="Dirección 1:"/>

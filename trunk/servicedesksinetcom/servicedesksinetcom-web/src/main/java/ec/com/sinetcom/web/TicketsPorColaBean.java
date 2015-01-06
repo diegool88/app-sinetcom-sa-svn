@@ -17,6 +17,7 @@ import ec.com.sinetcom.webutil.Mensajes;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,7 +132,8 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
 
     public void descargarArchivoAdjunto(ActionEvent event) {
         //ByteArrayInputStream stream = new ByteArrayInputStream(((Articulo)event.getComponent().getAttributes().get("idActividad")).getContenidoAdjunto());
-        Articulo articuloSel = (Articulo) event.getComponent().getAttributes().get("articuloId");
+        Integer articuloId = (Integer) event.getComponent().getAttributes().get("idArticulo");
+        Articulo articuloSel = this.ticketServicio.obtenerUnArticuloPorId(articuloId);
         this.archivoPorDescargar = new DefaultStreamedContent(new ByteArrayInputStream(articuloSel.getContenidoAdjunto()),
                 articuloSel.getExtensionArchivo().equals("jpg")
                 || articuloSel.getExtensionArchivo().equals("jpeg")
@@ -166,13 +168,20 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
         // close output stream response writer
         faces.responseComplete();
     }
+    
+    public String formatoCortoDeFechaYHora(Date fecha) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        return format.format(fecha);
+    }
 
     public void adjuntarArchivo(FileUploadEvent event) {
         this.archivoAdjunto = event.getFile();
+        Mensajes.mostrarMensajeInformativo("Archivo: " + event.getFile().getFileName() + " cargado correctamente!");
     }
 
     public void adjuntarArchivoHojaS(FileUploadEvent event){
         this.archivoAdjuntoHojaS = event.getFile();
+        Mensajes.mostrarMensajeInformativo("Archivo: " + event.getFile().getFileName() + " cargado correctamente!");
     }
     
     public void guardarArchivoAdjuntoHojaS(ActionEvent event){

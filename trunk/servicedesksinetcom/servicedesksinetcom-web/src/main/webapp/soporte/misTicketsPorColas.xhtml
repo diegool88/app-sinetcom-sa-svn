@@ -179,8 +179,8 @@
                     </p:panel>
                 </p:dialog>
                 <p:panel id="articulos" header="Articulos" footer="Articulos disponibles" style="margin-bottom: 20px;" >
-                    <c:forEach items="#{misTicketsPorCola.articulos}" var="articulo" rendered="#{misTicketsPorCola.articulos != null}">
-                        <p:panel id="articulo#{articulo.id}" header="Articulo ##{articulo.orden}">
+                    <ui:repeat value="#{misTicketsPorCola.articulos}" var="articulo" rendered="#{misTicketsPorCola.articulos != null}">
+                        <p:panel id="articulo" header="Articulo ##{articulo.orden}">
                             <h:panelGrid columns="2" cellpadding="10">
                                 <h:outputLabel>De: </h:outputLabel>
                                 <h:outputText value="#{articulo.de.correoElectronico}"></h:outputText>
@@ -189,14 +189,17 @@
                                 <h:outputLabel>Asunto: </h:outputLabel>
                                 <h:outputText value="#{articulo.asunto}"></h:outputText>
                                 <h:outputLabel>Mensaje: </h:outputLabel>
-                                <p:inputTextarea cols="40" rows="10" value="#{articulo.cuerpo}" readonly="true"></p:inputTextarea> 
+                                <h:outputText value="#{articulo.cuerpo}"></h:outputText>
+                                <h:outputLabel>Fecha y Hora: </h:outputLabel>
+                                <h:outputText value="#{misTicketsPorCola.formatoCortoDeFechaYHora(articulo.fechaDeCreacion)}"></h:outputText>
                                 <h:outputLabel>Adjunto: </h:outputLabel>
-                                <h:outputLink value="#" style="display: inline-table;" disabled="#{articulo.contenidoAdjunto != null ? 'false' : 'true'}" onclick="window.open('descarga.xhtml?articuloId=#{articulo.id}', 'Descarga', 'dependent=yes, menubar=no, toolbar=no, height=200, width=200');
-                                        return false;" target="_blank">#{articulo.contenidoAdjunto != null ? 'Descargar' : 'No disponible'}
-                                </h:outputLink>
+                                <p:commandButton value="Descargar" ajax="false" icon="ui-icon-arrowstop-1-s" immediate="true" disabled="#{not(articulo.contenidoAdjunto != null)}" actionListener="#{misTicketsPorCola.descargarArchivoAdjunto}">
+                                    <f:attribute value="#{articulo.id}" name="idArticulo"></f:attribute>
+                                    <p:fileDownload value="#{misTicketsPorCola.archivoPorDescargar}"></p:fileDownload>
+                                </p:commandButton>
                             </h:panelGrid>
                         </p:panel>
-                    </c:forEach>
+                    </ui:repeat>
                     <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{misTicketsPorCola.articulos != null}">
                         <h:panelGrid columns="3" cellpadding="10">
                             <h:outputLabel>Asunto: </h:outputLabel>

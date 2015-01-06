@@ -71,6 +71,7 @@
                         <p:menuitem value="Ver Clientes/Empresas" url="/contratos/ClienteEmpresa.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
                         <p:menuitem value="Tipos de Empresas" url="/contratos/TipoEmpresa.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
                         <p:menuitem value="Contactos" url="/contratos/Contactos.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
+                        <p:menuitem value="Direcciones" url="/contratos/Direcciones.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
                     </p:submenu>
                 </p:column>
                 <p:column>
@@ -88,10 +89,10 @@
                     <p:submenu label="Usuarios">
                         <p:menuitem value="Administrar Usuarios" url="/admin/Usuarios.xhtml"></p:menuitem>                        
                     </p:submenu>
-                    <p:submenu label="Grupos">
+<!--                    <p:submenu label="Grupos">
                         <p:menuitem value="Ver Grupos" url="/admin/Grupos.xhtml"></p:menuitem>
                         <p:menuitem value="Grupos-Permisos" url="/admin/GrupoPermisos.xhtml"></p:menuitem>
-                    </p:submenu>
+                    </p:submenu>-->
                     <p:submenu label="Información Sinetcom">
                         <p:menuitem value="Actualizar Información de Sinetcom" url="/admin/InformacionSinetcom.xhtml"></p:menuitem>
                     </p:submenu>

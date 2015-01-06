@@ -8,6 +8,7 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.TipoDisponibilidad;
 import ec.com.sinetcom.servicios.TipoDisponibilidadServicio;
+import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -34,7 +35,7 @@ public class ingresoTipoDisponibilidadBean implements Serializable{
     
     @PostConstruct
     public void init() {
-        this.tiposDisponibilidad = tipoDisponibilidadServicio.ccargarTiposDisponibilidad();
+        this.tiposDisponibilidad = tipoDisponibilidadServicio.cargarTiposDisponibilidad();
     }
     
     public void crearTipoDisponibilidad() {
@@ -43,13 +44,21 @@ public class ingresoTipoDisponibilidadBean implements Serializable{
         tipoDisponibilidad.setDisponibilidad(disponibilidad);
         tipoDisponibilidad.setValido(estado);
         
-        tipoDisponibilidadServicio.crearTipoDisponibilidad(tipoDisponibilidad);
-        this.tiposDisponibilidad = tipoDisponibilidadServicio.ccargarTiposDisponibilidad();
+        if(tipoDisponibilidadServicio.crearTipoDisponibilidad(tipoDisponibilidad)){
+            Mensajes.mostrarMensajeInformativo("Tipo de Disponibilidad creado exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Tipo de disponibilidad no se pudo crear!");
+        }
+        this.tiposDisponibilidad = tipoDisponibilidadServicio.cargarTiposDisponibilidad();
     }
     
     public void eliminarTipoDisponibilidad() {
-        tipoDisponibilidadServicio.eliminarTipoDisp(tipoDisponibilidadSeleccionada.getId());
-        this.tiposDisponibilidad = tipoDisponibilidadServicio.ccargarTiposDisponibilidad();
+        if(tipoDisponibilidadServicio.eliminarTipoDisp(tipoDisponibilidadSeleccionada.getId())){
+            Mensajes.mostrarMensajeInformativo("Tipo de Disponibilidad eliminada exitosamente!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, Tipo de disponibilidad no se pudo eliminar!");
+        }
+        this.tiposDisponibilidad = tipoDisponibilidadServicio.cargarTiposDisponibilidad();
     }
 
     public String getDisponibilidad() {

@@ -57,13 +57,13 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel for="usuarioCedula" value="Cedula:"/>
-                            <p:inputText id="usuarioCedula" value="#{ingresoUsuarioBean.numCedula}" required="true">
+                            <p:inputText id="usuarioCedula" value="#{ingresoUsuarioBean.numCedula}" maxlength="10">
                                 <f:ajax event="keyup" execute="@this" render=":growl"></f:ajax>
                                 <f:validator binding="#{cedulaCiudadaniaValidator}"></f:validator>
                             </p:inputText>
 
                             <p:outputLabel for="usuarioMail" value="e-Mail:"/>
-                            <p:inputText id="usuarioMail" value="#{ingresoUsuarioBean.mail}" required="true">
+                            <p:inputText id="usuarioMail" value="#{ingresoUsuarioBean.mail}" maxlength="45" required="true">
                                 <f:ajax event="keyup" execute="@this" render=":growl"></f:ajax>
                                 <f:validator binding="#{correoElectronicoValidator}"></f:validator>
                             </p:inputText>
@@ -72,19 +72,19 @@
                             <p:password id="usuarioPassword" value="#{ingresoUsuarioBean.password}" maxlength="15" feedback="true" promptLabel="Password (15 caracteres)" weakLabel="¿De Verdad?" goodLabel="Mejoraste.." strongLabel="Ahora nos entendemos!"  required="true"/>
 
                             <p:outputLabel for="usuarioNombre" value="Nombre:"/>
-                            <p:inputText id="usuarioNombre" value="#{ingresoUsuarioBean.nombre}" required="true"/>
+                            <p:inputText id="usuarioNombre" value="#{ingresoUsuarioBean.nombre}" maxlength="15" required="true"/>
 
                             <p:outputLabel for="usuarioApellido" value="Apellido:"/>
-                            <p:inputText id="usuarioApellido" value="#{ingresoUsuarioBean.apellido}" required="true"/>
+                            <p:inputText id="usuarioApellido" value="#{ingresoUsuarioBean.apellido}" maxlength="15" required="true"/>
 
                             <p:outputLabel for="usuarioCelular" value="Celular:"/>
-                            <p:inputText id="usuarioCelular" value="#{ingresoUsuarioBean.celular}" required="true"/>
+                            <p:inputText id="usuarioCelular" value="#{ingresoUsuarioBean.celular}" maxlength="15" required="true"/>
 
                             <p:outputLabel for="usuarioTelefono" value="Telefono:"/>
-                            <p:inputText id="usuarioTelefono" value="#{ingresoUsuarioBean.telefono}" required="true"/>
+                            <p:inputText id="usuarioTelefono" value="#{ingresoUsuarioBean.telefono}" maxlength="15"/>
 
                             <p:outputLabel for="usuarioTelfOficina" value="Telefono Oficina:"/>
-                            <p:inputText id="usuarioTelfOficina" value="#{ingresoUsuarioBean.telfoficina}" required="true"/>
+                            <p:inputText id="usuarioTelfOficina" value="#{ingresoUsuarioBean.telfoficina}" maxlength="15"/>
 
                             <p:outputLabel for="usuarioEstado" value="Activo?:"/>
                             <p:selectOneRadio id="usuarioEstado" value="#{ingresoUsuarioBean.estado}" required="true">

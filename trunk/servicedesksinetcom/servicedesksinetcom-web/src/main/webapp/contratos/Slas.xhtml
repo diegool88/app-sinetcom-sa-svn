@@ -39,6 +39,10 @@
                         <p:column headerText="Tiempo de Solución" sortBy="#{slas.tiempoDeSolucion}" filterBy="#{slas.tiempoDeSolucion}">
                             <h:outputText value="#{slas.tiempoDeSolucion} Horas"/>
                         </p:column>
+                        
+                        <p:column headerText="Disponibilidad">
+                            <h:outputText value="#{slas.tipoDisponibilidadid.disponibilidad}"></h:outputText>
+                        </p:column>
 
                         <f:facet name="footer">
                             <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
@@ -58,25 +62,25 @@
                                 <f:selectItems value="#{ingresoSlaBean.tiposDisponibilidad}" var="Disponibilidad" itemLabel="#{Disponibilidad.disponibilidad}" itemValue="#{Disponibilidad.id}"/>
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="slaTRPA" value="Tiempo de Respuesta Prioridad Alta:"/>
+                            <p:outputLabel for="slaTRPA" value="Tiempo de Respuesta Prioridad Alta (horas):"/>
                             <p:inputText id="slaTRPA" value="#{ingresoSlaBean.tiempoRespuestaPAlta}" required="true"/>
 
-                            <p:outputLabel for="slaTRPM" value="Tiempo de Respuesta Prioridad Media:"/>
+                            <p:outputLabel for="slaTRPM" value="Tiempo de Respuesta Prioridad Media (horas):"/>
                             <p:inputText id="slaTRPM" value="#{ingresoSlaBean.tiempoRespuestaPMedia}" required="true"/>
 
-                            <p:outputLabel for="slaTRPB" value="Tiempo de Respuesta Prioridad Baja:"/>
+                            <p:outputLabel for="slaTRPB" value="Tiempo de Respuesta Prioridad Baja (horas):"/>
                             <p:inputText id="slaTRPB" value="#{ingresoSlaBean.timepoRespuestaPBaja}" required="true"/>
 
-                            <p:outputLabel for="slaTEscalacion" value="Tiempo de Escalacion:"/>
+                            <p:outputLabel for="slaTEscalacion" value="Tiempo de Escalación (horas):"/>
                             <p:inputText id="slaTEscalacion" value="#{ingresoSlaBean.tiempoEscalacion}" required="true"/>
 
-                            <p:outputLabel for="slaTAEscalacion" value="Tiempo de Actualizacion de Escalacion:"/>
+                            <p:outputLabel for="slaTAEscalacion" value="Tiempo de Actualizacion de Escalación (horas):"/>
                             <p:inputText id="slaTAEscalacion" value="#{ingresoSlaBean.tiempoActualizacionEscalacion}" required="true"/>
 
-                            <p:outputLabel for="slaTREscalacion" value="Tiempo de Respuesta de Escalacion:"/>
+                            <p:outputLabel for="slaTREscalacion" value="Tiempo de Respuesta de Escalación (horas):"/>
                             <p:inputText id="slaTREscalacion" value="#{ingresoSlaBean.tiempoRespuestaEscalacion}" required="true"/>
 
-                            <p:outputLabel for="slaTiempoSolucion" value="Tiempo de Solucion:"/>
+                            <p:outputLabel for="slaTiempoSolucion" value="Tiempo de Solución (horas):"/>
                             <p:inputText id="slaTiempoSolucion" value="#{ingresoSlaBean.tiempoSolucion}" required="true"/> 
 
                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verSlaForm:dtSla">
