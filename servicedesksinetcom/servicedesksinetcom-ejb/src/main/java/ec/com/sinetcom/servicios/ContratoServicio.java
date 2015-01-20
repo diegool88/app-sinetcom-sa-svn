@@ -17,6 +17,7 @@ import ec.com.sinetcom.dao.ContratoFacade;
 import ec.com.sinetcom.dao.DatosSinetcomFacade;
 import ec.com.sinetcom.dao.GarantiaEconomicaFacade;
 import ec.com.sinetcom.dao.PagoFacade;
+import ec.com.sinetcom.dao.ProvinciaFacade;
 import ec.com.sinetcom.dao.SlaFacade;
 import ec.com.sinetcom.dao.TipoContratoFacade;
 import ec.com.sinetcom.dao.TipoDeVisitaFacade;
@@ -32,6 +33,7 @@ import ec.com.sinetcom.orm.Curso;
 import ec.com.sinetcom.orm.DatosSinetcom;
 import ec.com.sinetcom.orm.GarantiaEconomica;
 import ec.com.sinetcom.orm.Pago;
+import ec.com.sinetcom.orm.Provincia;
 import ec.com.sinetcom.orm.Sla;
 import ec.com.sinetcom.orm.TipoContrato;
 import ec.com.sinetcom.orm.TipoDeVisita;
@@ -81,6 +83,8 @@ public class ContratoServicio {
     private ClienteDireccionFacade clienteDireccionFacade;
     @EJB
     private CiudadFacade ciudadFacade;
+    @EJB
+    private ProvinciaFacade provinciaFacade;
     @EJB
     private CursoNotificadorServicio cursoNotificadorServicio;
     @EJB
@@ -258,9 +262,37 @@ public class ContratoServicio {
     public Ciudad recuperarCiudad(Integer id) {
         return ciudadFacade.find(id);
     }
+    
+    public Provincia recuperarProvincia(Integer id){
+        return provinciaFacade.find(id);
+    }
 
     public List<Ciudad> cargarCiudades() {
         return ciudadFacade.findAll();
+    }
+    
+    public List<Provincia> cargarProvincias(){
+        return provinciaFacade.findAll();
+    }
+    
+    public boolean crearCiudad(Ciudad ciudad){
+        try{
+            this.ciudadFacade.create(ciudad);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean crearProvincia(Provincia provincia){
+        try{
+            this.provinciaFacade.create(provincia);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**

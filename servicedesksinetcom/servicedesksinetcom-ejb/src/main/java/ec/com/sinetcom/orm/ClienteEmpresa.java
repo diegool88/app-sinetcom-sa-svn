@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +22,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.config.CacheIsolationType;
 
 /**
  *
@@ -31,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ClienteEmpresa.findAll", query = "SELECT c FROM ClienteEmpresa c")})
+@Cache(isolation = CacheIsolationType.ISOLATED)
 public class ClienteEmpresa implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc")
     private List<Ticket> ticketList;
@@ -61,11 +65,11 @@ public class ClienteEmpresa implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "nombreRepresentanteLegal")
     private String nombreRepresentanteLegal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc", fetch = FetchType.EAGER)
     private List<Contacto> contactoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc")
     private List<Contrato> contratoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresa")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresa", fetch = FetchType.EAGER)
     private List<ClienteDireccion> clienteDireccionList;
     @OneToMany(mappedBy = "clienteEmpresaruc")
     private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;

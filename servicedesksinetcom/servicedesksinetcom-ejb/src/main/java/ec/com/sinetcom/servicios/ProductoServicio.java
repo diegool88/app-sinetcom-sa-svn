@@ -92,6 +92,14 @@ public class ProductoServicio {
     }
     
     /**
+     * Servicio que permite crear una nueva unidad de medida
+     * @param unidadMedida 
+     */
+    public void crearUnidadDeMedida(UnidadMedida unidadMedida){
+        this.unidadMedidaFacade.create(unidadMedida);
+    }
+    
+    /**
      * Servicio que obtiene todos los parametros declarados
      * @return 
      */

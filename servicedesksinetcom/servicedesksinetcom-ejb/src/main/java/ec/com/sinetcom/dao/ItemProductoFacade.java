@@ -150,4 +150,13 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
         qry.setParameter(1, contrato);
         return qry.getResultList();
     }
+
+    /**
+     * Cargar un archivo cvs en la tabla ItemProducto
+     * @return 
+     */
+    public boolean cargarDatosItemProducto() {
+        Query qry = this.em.createNativeQuery("LOAD DATA INFILE '/temp/ItemProducto.csv' INTO TABLE ItemProducto CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
+        return qry.executeUpdate() > 0;
+    }
 }

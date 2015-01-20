@@ -4,6 +4,7 @@
  */
 package ec.com.sinetcom.servicios;
 
+import ec.com.sinetcom.configuracion.UtilidadDeEncriptacion;
 import ec.com.sinetcom.dao.CompetenciaFacade;
 import ec.com.sinetcom.dao.GrupoFacade;
 import ec.com.sinetcom.dao.PermisoFacade;
@@ -36,24 +37,56 @@ public class UsuarioServicio {
     @EJB
     private PermisoFacade permisoFacade;
 
-    /**
-     * Servicio para bloquear/desbloquear Usuario Registrado
-     *
-     * @param usuario
-     * @param bloquear
-     * @return
-     */
+    
     public List<Usuario> cargarUsuarios() {
         return usuarioFacade.findAll();
     }
 
-    public void crearUsuario(Usuario usuario) {
-        usuarioFacade.create(usuario);
+    public boolean crearUsuario(Usuario usuario) {
+        try{
+            usuarioFacade.create(usuario);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean actualizarUsuario(Usuario usuario){
+        try{
+            this.usuarioFacade.edit(usuario);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public void eliminarUsuario(Usuario usuario) {
-        usuarioFacade.remove(usuario);
+    public boolean eliminarUsuario(Usuario usuario) {
+        try{
+            if(usuarioFacade.tieneAsociacionConAlgunaEntidad(usuario.getId())){
+                throw new Exception("El usuario no puede ser borrado, ya que tiene asociado varias entidades");
+            }
+            usuarioFacade.remove(usuario);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
+    
+    public boolean actualizarPassword(Usuario usuario, String nuevoPassword){
+        try{
+            UtilidadDeEncriptacion utilidadDeEncriptacion = new UtilidadDeEncriptacion();
+            usuario.setPassword(utilidadDeEncriptacion.encriptar(nuevoPassword));
+            usuarioFacade.edit(usuario);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
 
     public List<Grupo> cargarGrupos() {
         return grupoFacade.findAll();
@@ -63,6 +96,13 @@ public class UsuarioServicio {
         return grupoFacade.find(id);
     }
 
+    /**
+     * Servicio para bloquear/desbloquear Usuario Registrado
+     *
+     * @param usuario
+     * @param bloquear
+     * @return
+     */
     public boolean cambiarActividadDeUsuario(Usuario usuario, boolean bloquear) {
 
         if (bloquear) {

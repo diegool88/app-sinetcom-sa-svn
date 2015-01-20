@@ -37,4 +37,11 @@ public class ContactoFacade extends AbstractFacade<Contacto> {
         return qry.getResultList();
     }
     
+    public boolean tieneContratosACargo(Integer contactoId){
+        String sql = "SELECT c FROM Contacto c WHERE c.id = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, contactoId);
+        return !((Contacto)qry.getSingleResult()).getContratoList().isEmpty();
+    }
+    
 }
