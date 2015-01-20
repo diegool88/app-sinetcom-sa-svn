@@ -14,24 +14,69 @@
                     <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
                     </p:dialog>
-                    <p:panel id="ingresoComponenteE">
-                        <p:panelGrid columns="3" columnClasses="label,value">
+                    <p:panelGrid columns="2">
+                        <p:panel id="ingresoComponenteE">
+                            <p:panelGrid columns="3" columnClasses="label,value">
+                                <f:facet name="header">
+                                    <h:outputText value="Nuevo Componente Electrónico Atómico"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="nombre" value="Nombre: "></p:outputLabel>
+                                <p:inputText id="nombre"  required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.componenteElectronicoAtomico.nombre}"></p:inputText>
+                                <p:message for="nombre"></p:message>
+                                <p:outputLabel for="parametros" value="Parámetros: "></p:outputLabel>
+                                <p:selectManyMenu style="width: 100%;" id="parametros" required="true" value="#{crearComponenteABean.componenteElectronicoAtomico.parametroDeProductoList}" converter="#{parametroProductoConverter}"  showCheckbox="true">
+                                    <f:selectItems value="#{crearComponenteABean.parametrosDeProductos}" var="parametro" itemLabel="#{parametro.nombre}" itemValue="#{parametro.id.toString()}"></f:selectItems>
+                                </p:selectManyMenu>
+                                <p:message for="parametros"></p:message>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Ingresar Componente Electrónico" actionListener="#{crearComponenteABean.crearComponenteElectronico}" process=":form:ingresoComponenteE" update="@form"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="ingresoAtributo">
+                            <p:panelGrid columns="3" columnClasses="label,value">
+                                <f:facet name="header">
+                                    <h:outputText value="Ingreso de nuevo Atributo"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="atributo" value="Nombre: "></p:outputLabel>
+                                <p:inputText id="atributo" required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.nuevoParametro.nombre}"></p:inputText>
+                                <p:message for="atributo"></p:message>
+                                <p:outputLabel for="tipoDato" value="Tipo de Dato: "></p:outputLabel>
+                                <p:selectOneMenu id="tipoDato" value="#{crearComponenteABean.nuevoParametro.tipoDeDato}">
+                                    <f:selectItem itemLabel="Entero" itemValue="1"></f:selectItem>
+                                    <f:selectItem itemLabel="Decimal" itemValue="2"></f:selectItem>
+                                    <f:selectItem itemLabel="Cadena de Caracteres" itemValue="3"></f:selectItem>
+                                </p:selectOneMenu>
+                                <p:message for="tipoDato"></p:message>
+                                <p:outputLabel for="descripcion" value="Descripcion: "></p:outputLabel>
+                                <p:inputTextarea id="descripcion" value="#{crearComponenteABean.nuevoParametro.descripcion}" cols="20" rows="10"></p:inputTextarea>
+                                <p:message for="descripcion"></p:message>
+                                <p:outputLabel for="unidadMedida" value="Unidad de M: "></p:outputLabel>
+                                <p:selectOneMenu id="unidadMedida" value="#{crearComponenteABean.nuevoParametro.unidadMedidaid}" converter="#{unidadMedidaConverter}" required="true" requiredMessage="* Requerido">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems value="#{crearComponenteABean.medidas}" var="medida" itemLabel="#{medida.nombre}" itemValue="#{medida.id.toString()}"></f:selectItems>
+                                </p:selectOneMenu>
+                                <p:message for="unidadMedida"></p:message>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar Atributo" process=":form:ingresoAtributo" actionListener="#{crearComponenteABean.ingresarParametro}" update=":form:ingresoAtributo, :form:parametros"></p:commandButton>
+                                    <p:commandButton value="Limpiar" process="@this" actionListener="#{crearComponenteABean.enserarPantallaParametro}" update="@form"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="ingresoUnidadMedida">
                             <f:facet name="header">
-                                <h:outputText value="Nuevo Componente Electrónico Atómico"></h:outputText>
+                                <h:outputText value="Ingreso nueva Unidad de M."></h:outputText>
                             </f:facet>
-                            <p:outputLabel for="nombre" value="Nombre: "></p:outputLabel>
-                            <p:inputText id="nombre"  required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.componenteElectronicoAtomico.nombre}"></p:inputText>
-                            <p:message for="nombre"></p:message>
-                            <p:outputLabel for="parametros" value="Parámetros: "></p:outputLabel>
-                            <p:selectManyMenu style="width: 100%;" id="parametros" value="#{crearComponenteABean.componenteElectronicoAtomico.parametroDeProductoList}" converter="#{parametroProductoConverter}"  showCheckbox="true">
-                                <f:selectItems value="#{crearComponenteABean.parametrosDeProductos}" var="parametro" itemLabel="#{parametro.nombre}" itemValue="#{parametro.id.toString()}"></f:selectItems>
-                            </p:selectManyMenu>
-                            <p:message for="parametros"></p:message>
+                            <p:panelGrid columns="3" columnClasses="label,value">
+                                <p:outputLabel for="nuevaUnidadMedida" value="Nombre:"></p:outputLabel>
+                                <p:inputText id="nuevaUnidadMedida" required="true" value="#{crearComponenteABean.unidadMedida.nombre}"></p:inputText>
+                                <p:message for="nuevaUnidadMedida"></p:message>
+                            </p:panelGrid>
                             <f:facet name="footer">
-                                <p:commandButton value="Ingresar Componente Electrónico" actionListener="#{crearComponenteABean.crearComponenteElectronico}" process=":form:ingresoComponenteE" update="@form"></p:commandButton>
+                                <p:commandButton value="Agregar Unidad M." actionListener="#{crearComponenteABean.ingresarUnidadMedida}" process=":form:ingresoUnidadMedida" update="@form"></p:commandButton>
                             </f:facet>
-                        </p:panelGrid>
-                    </p:panel>
+                        </p:panel>
+                    </p:panelGrid>
                     <p:panel id="componentesP">
                         <p:dataTable id="componentes" value="#{crearComponenteABean.componenteElectronicoAtomicos}" var="componente">
                             <f:facet name="header">
@@ -50,36 +95,6 @@
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable> 
-                    </p:panel>
-                    <p:panel id="ingresoAtributo">
-                        <p:panelGrid columns="3" columnClasses="label,value">
-                            <f:facet name="header">
-                                <h:outputText value="Ingreso de nuevo Atributo"></h:outputText>
-                            </f:facet>
-                            <p:outputLabel for="atributo" value="Nombre: "></p:outputLabel>
-                            <p:inputText id="atributo" required="true" requiredMessage="* Requerido" value="#{crearComponenteABean.nuevoParametro.nombre}"></p:inputText>
-                            <p:message for="atributo"></p:message>
-                            <p:outputLabel for="tipoDato" value="Tipo de Dato: "></p:outputLabel>
-                            <p:selectOneMenu id="tipoDato" value="#{crearComponenteABean.nuevoParametro.tipoDeDato}">
-                                <f:selectItem itemLabel="Entero" itemValue="1"></f:selectItem>
-                                <f:selectItem itemLabel="Decimal" itemValue="2"></f:selectItem>
-                                <f:selectItem itemLabel="Cadena de Caracteres" itemValue="3"></f:selectItem>
-                            </p:selectOneMenu>
-                            <p:message for="tipoDato"></p:message>
-                            <p:outputLabel for="descripcion" value="Descripcion: "></p:outputLabel>
-                            <p:inputTextarea id="descripcion" value="#{crearComponenteABean.nuevoParametro.descripcion}" cols="20" rows="10"></p:inputTextarea>
-                            <p:message for="descripcion"></p:message>
-                            <p:outputLabel for="unidadMedida" value="Unidad de M: "></p:outputLabel>
-                            <p:selectOneMenu id="unidadMedida" value="#{crearComponenteABean.nuevoParametro.unidadMedidaid}" converter="#{unidadMedidaConverter}" required="true" requiredMessage="* Requerido">
-                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
-                                <f:selectItems value="#{crearComponenteABean.medidas}" var="medida" itemLabel="#{medida.nombre}" itemValue="#{medida.id.toString()}"></f:selectItems>
-                            </p:selectOneMenu>
-                            <p:message for="unidadMedida"></p:message>
-                            <f:facet name="footer">
-                                <p:commandButton value="Agregar Atributo" process=":form:ingresoAtributo" actionListener="#{crearComponenteABean.ingresarParametro}" update=":form:ingresoAtributo, :form:parametros"></p:commandButton>
-                                <p:commandButton value="Limpiar" process="@this" actionListener="#{crearComponenteABean.enserarPantallaParametro}" update="@form"></p:commandButton>
-                            </f:facet>
-                        </p:panelGrid>
                     </p:panel>
                     <p:confirmDialog global="true">
                         <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.ClienteEmpresa;
@@ -16,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 
 /**
  *
@@ -23,112 +23,61 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "ingresoContactoBean")
 @ViewScoped
-public class ingresoContactoBean implements Serializable{
-    
+public class ingresoContactoBean implements Serializable {
+
     @EJB
     private ContactoServicio contactoServicio;
-    
-    private String ruc;
-    private String cedula;
-    private String nombre;
-    private String Cargo;
-    private String celular;
-    private String telefono;
-    private String mail;
+
     private Contacto contactoSeleccionado;
-    
+    private boolean esNuevoContacto;
+
     private List<Contacto> contactos;
     private List<ClienteEmpresa> clientes;
-    
+
     @PostConstruct
     public void init() {
         this.contactos = contactoServicio.cargarContactos();
         this.clientes = contactoServicio.cargarClientesEmpresas();
+        this.esNuevoContacto = false;
     }
-    
-    public void crearContacto() {
-        Contacto contacto = new Contacto();
-        
-        contacto.setClienteEmpresaruc(contactoServicio.recuperarClienteEmpresa(ruc));
-        contacto.setCedulaDeCuidadania(cedula);
-        contacto.setNombre(nombre);
-        contacto.setCargo(Cargo);
-        contacto.setTelefonoMovil(celular);
-        contacto.setTelefonoFijo(telefono);
-        contacto.setCorreoElectronico(mail);
-        
-        if(contactoServicio.crearContacto(contacto)){
-            Mensajes.mostrarMensajeInformativo("Contacto creado exitosamente!");
-        }else{
-            Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo crear!");
+
+    public void definirContacto(ActionEvent event) {
+        boolean esNuevo = Boolean.parseBoolean((String) event.getComponent().getAttributes().get("esNuevo"));
+        if (esNuevo) {
+            this.contactoSeleccionado = new Contacto();
+            this.esNuevoContacto = true;
+        } else {
+            this.esNuevoContacto = false;
         }
+    }
+
+    public void crearContacto() {
+        if (this.esNuevoContacto) {
+            if (contactoServicio.crearContacto(contactoSeleccionado)) {
+                Mensajes.mostrarMensajeInformativo("Contacto creado exitosamente!");
+            } else {
+                Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo crear!");
+            }
+        } else {
+            if (contactoServicio.editarContacto(contactoSeleccionado)) {
+                Mensajes.mostrarMensajeInformativo("Contacto actualizado exitosamente!");
+            } else {
+                Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo actualizar!");
+            }
+        }
+        
         this.contactos = contactoServicio.cargarContactos();
     }
-    
+
     public void eliminarContacto() {
-        if(contactoServicio.eliminarTipoContrato(contactoSeleccionado.getId())){
+        if (contactoServicio.eliminarTipoContrato(contactoSeleccionado.getId())) {
             Mensajes.mostrarMensajeInformativo("Contacto eliminado exitosamente!");
-        }else{
+        } else {
             Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo eliminar");
         }
         this.contactos = contactoServicio.cargarContactos();
     }
 
-    public String getRuc() {
-        return ruc;
-    }
-
-    public void setRuc(String ruc) {
-        this.ruc = ruc;
-    }
-
-    public String getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getCargo() {
-        return Cargo;
-    }
-
-    public void setCargo(String Cargo) {
-        this.Cargo = Cargo;
-    }
-
-    public String getCelular() {
-        return celular;
-    }
-
-    public void setCelular(String celular) {
-        this.celular = celular;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
 
     public Contacto getContactoSeleccionado() {
         return contactoSeleccionado;
@@ -152,5 +101,14 @@ public class ingresoContactoBean implements Serializable{
 
     public void setClientes(List<ClienteEmpresa> clientes) {
         this.clientes = clientes;
-    }        
+    }
+
+    public boolean isEsNuevoContacto() {
+        return esNuevoContacto;
+    }
+
+    public void setEsNuevoContacto(boolean esNuevoContacto) {
+        this.esNuevoContacto = esNuevoContacto;
+    }
+    
 }

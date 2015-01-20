@@ -11,7 +11,7 @@
             <h:head/>
             <h:body>
                 <h:form id="contratoForm">
-                    <p:dataTable id="dtContratos" rowKey="#{contrato.numero}" var="contrato" value="#{consultaContratoBean.contratos}" paginator="true" rows="15" lazy="true" selectionMode="single" selection="#{consultaContratoBean.contratoSeleccionado}" paginatorPosition="bottom"
+                    <p:dataTable id="dtContratos" rowKey="#{contrato.numero}" var="contrato" value="#{consultaContratoBean.contratos}" paginator="true" rows="15" selectionMode="single" selection="#{consultaContratoBean.contratoSeleccionado}" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
                         <p:ajax event="rowSelect" immediate="true" listener="#{consultaContratoBean.asignarContratoSeleccionado}" update="btnEditar"></p:ajax>

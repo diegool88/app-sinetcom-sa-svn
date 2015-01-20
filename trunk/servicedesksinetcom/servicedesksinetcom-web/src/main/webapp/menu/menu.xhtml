@@ -82,6 +82,9 @@
                     <p:submenu label="Reportes De Contratos">
                         <p:menuitem value="Ver Reportes" url="/contratos/reportesContratos.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.generaReportesDeContratos eq true}"></p:menuitem>
                     </p:submenu>
+                    <p:submenu label="Provincias y Ciudades">
+                        <p:menuitem value="Ver Provincias y Ciudades" url="/contratos/ProvinciasYCiudades.xhtml" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true or login.usuarioActual.grupoid.permiso.administraClientes eq true}"></p:menuitem>
+                    </p:submenu>
                 </p:column>
             </p:submenu>
             <p:submenu label="Administrar" rendered="#{login.usuarioActual.grupoid.permiso.administra eq true}">
@@ -89,12 +92,15 @@
                     <p:submenu label="Usuarios">
                         <p:menuitem value="Administrar Usuarios" url="/admin/Usuarios.xhtml"></p:menuitem>                        
                     </p:submenu>
-<!--                    <p:submenu label="Grupos">
-                        <p:menuitem value="Ver Grupos" url="/admin/Grupos.xhtml"></p:menuitem>
-                        <p:menuitem value="Grupos-Permisos" url="/admin/GrupoPermisos.xhtml"></p:menuitem>
-                    </p:submenu>-->
+                    <!--                    <p:submenu label="Grupos">
+                                            <p:menuitem value="Ver Grupos" url="/admin/Grupos.xhtml"></p:menuitem>
+                                            <p:menuitem value="Grupos-Permisos" url="/admin/GrupoPermisos.xhtml"></p:menuitem>
+                                        </p:submenu>-->
                     <p:submenu label="Información Sinetcom">
                         <p:menuitem value="Actualizar Información de Sinetcom" url="/admin/InformacionSinetcom.xhtml"></p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Subir Datos BD">
+                        <p:menuitem value="Subir Datos CSV" url="/admin/SubirRegistrosDeBD.xhtml"></p:menuitem>
                     </p:submenu>
                 </p:column>
             </p:submenu>

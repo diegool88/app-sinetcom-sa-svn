@@ -21,8 +21,8 @@
                             <h:outputText value="Contactos"/>
                         </f:facet>
                         
-                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
-                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar, btnEditar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar, btnEditar"></p:ajax>
 
                         <p:column headerText="Cedula" sortBy="#{contactos.cedulaDeCuidadania}" filterBy="#{contactos.cedulaDeCuidadania}">
                             <h:outputText value="#{contactos.cedulaDeCuidadania}"/>
@@ -45,39 +45,44 @@
                         </p:column>
 
                         <f:facet name="footer">
-                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnCrear" value="Crear" actionListener="#{ingresoContactoBean.definirContacto}" update=":contactosForm" onclick="PF('ingreso').show();" >
+                                <f:attribute name="esNuevo" value="true"></f:attribute>
+                            </p:commandButton>       
                             <p:commandButton id="btnEliminar" process="dtContactos" value="Eliminar" action="#{ingresoContactoBean.eliminarContacto()}" disabled="#{not(ingresoContactoBean.contactoSeleccionado != null)}" update=":verContactosForm:dtContactos"/>                       
+                            <p:commandButton id="btnEditar" process="dtContactos" value="Editar" actionListener="#{ingresoContactoBean.definirContacto}" disabled="#{not(ingresoContactoBean.contactoSeleccionado != null)}" update=":contactosForm" onclick="PF('ingreso').show();" >
+                                <f:attribute name="esNuevo" value="false"></f:attribute>
+                            </p:commandButton>
                         </f:facet>
                     </p:dataTable>    
                 </h:form>
 
-                <p:dialog header="Insertar Contacto" widgetVar="ingreso" modal="true">
+                <p:dialog header="Insertar / Editar Contacto" widgetVar="ingreso" modal="true">
                     <h:form id="contactosForm">
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
                             <p:outputLabel for="contactoRuc" value="Ruc Cliente"/>
-                            <p:selectOneMenu id="contactoRuc" value="#{ingresoContactoBean.ruc}" required="true">                    
+                            <p:selectOneMenu id="contactoRuc" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" required="true">                    
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
                                 <f:selectItems value="#{ingresoContactoBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}-#{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
                              </p:selectOneMenu>
 
                             <p:outputLabel for="contactoCedula" value="Cedula:"/>
-                            <p:inputText id="contactoCedula" value="#{ingresoContactoBean.cedula}" required="true"/>
+                            <p:inputText id="contactoCedula" maxlength="10" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.cedulaDeCuidadania}" required="true"/>
 
                             <p:outputLabel for="contactoNombre" value="Nombre:"/>
-                            <p:inputText id="contactoNombre" value="#{ingresoContactoBean.nombre}" required="true"/>
+                            <p:inputText id="contactoNombre" maxlength="30" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.nombre}" required="true"/>
 
                             <p:outputLabel for="contactoCargo" value="Cargo:"/>
-                            <p:inputText id="contactoCargo" value="#{ingresoContactoBean.cargo}" required="true"/>
+                            <p:inputText id="contactoCargo" maxlength="50" value="#{ingresoContactoBean.contactoSeleccionado.cargo}" required="true"/>
 
                             <p:outputLabel for="contactoCelular" value="Celular:"/>
-                            <p:inputText id="contactoCelular" value="#{ingresoContactoBean.celular}" required="true"/>
+                            <p:inputText id="contactoCelular" maxlength="15" value="#{ingresoContactoBean.contactoSeleccionado.telefonoMovil}" required="true"/>
 
                             <p:outputLabel for="contactoTelefono" value="Telefono:"/>
-                            <p:inputText id="contactoTelefono" value="#{ingresoContactoBean.telefono}" required="true"/>
+                            <p:inputText id="contactoTelefono" maxlength="15" value="#{ingresoContactoBean.contactoSeleccionado.telefonoFijo}" required="true"/>
 
                             <p:outputLabel for="contactoMail" value="e-Mail:"/>
-                            <p:inputText id="contactoMail" value="#{ingresoContactoBean.mail}" required="true"/>
+                            <p:inputText id="contactoMail" maxlength="45" value="#{ingresoContactoBean.contactoSeleccionado.correoElectronico}" required="true"/>
 
                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContactoBean.crearContacto()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verContactosForm:dtContactos">
                                 <f:ajax execute="@all" render="@form"/>
