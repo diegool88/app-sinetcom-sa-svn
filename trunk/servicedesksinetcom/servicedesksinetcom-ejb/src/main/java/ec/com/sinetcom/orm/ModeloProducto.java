@@ -27,6 +27,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.config.CacheIsolationType;
 
 /**
  *
@@ -37,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ModeloProducto.findAll", query = "SELECT m FROM ModeloProducto m")})
+@Cache(isolation = CacheIsolationType.ISOLATED)
 public class ModeloProducto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

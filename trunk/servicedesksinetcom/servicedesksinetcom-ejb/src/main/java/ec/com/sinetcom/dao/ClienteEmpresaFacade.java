@@ -42,4 +42,16 @@ public class ClienteEmpresaFacade extends AbstractFacade<ClienteEmpresa> {
         qry.setParameter(1, usuario);
         return qry.getResultList().isEmpty() ? null : (ClienteEmpresa)qry.getResultList().get(0);
     }
+    
+    public boolean tieneClienteEmpresaContratos(String ruc){
+        String sql = "SELECT c FROM ClienteEmpresa c WHERE c.ruc = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, ruc);
+        return !((ClienteEmpresa)qry.getSingleResult()).getContratoList().isEmpty();
+    }
+    
+    public boolean cargarDatosClienteEmpresa(){
+        Query qry = this.em.createNativeQuery("LOAD DATA INFILE '/temp/ClienteEmpresa.csv' INTO TABLE ClienteEmpresa CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
+        return qry.executeUpdate() > 0;
+    }
 }

@@ -42,6 +42,16 @@ public class ContactoServicio {
         }
         return true;
     }
+    
+    public boolean editarContacto(Contacto contacto) {
+        try {
+            contactoFacade.edit(contacto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     public List<ClienteEmpresa> cargarClientesEmpresas() {
         return clienteEmpresaFacade.findAll();
@@ -54,6 +64,9 @@ public class ContactoServicio {
     public boolean eliminarTipoContrato(Integer contacto) {
         try {
             Contacto aEliminar = contactoFacade.find(contacto);
+            if(contactoFacade.tieneContratosACargo(contacto)){
+                throw new Exception("No se puede eliminar un contacto que administra un contrato");
+            }
             if (aEliminar != null) {
                 contactoFacade.remove(aEliminar);
             }

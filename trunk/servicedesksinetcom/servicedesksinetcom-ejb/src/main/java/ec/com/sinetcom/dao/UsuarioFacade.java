@@ -119,4 +119,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         qry.setParameter("grupo", 1);
         return qry.getResultList();
     }
+    
+    /**
+     * Verifica si el usuario tiene asociación
+     * @param usuarioId
+     * @return 
+     */
+    public boolean tieneAsociacionConAlgunaEntidad(Integer usuarioId){
+        String sql = "SELECT u FROM Usuario u WHERE u.id = ?1";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter(1, usuarioId);
+        Usuario usuario = ((Usuario)qry.getSingleResult());
+        return !usuario.getClienteEmpresaList().isEmpty() && !usuario.getTicketList().isEmpty() && !usuario.getTicketList1().isEmpty() && !usuario.getDetalleDeMovimientoDeProductoList().isEmpty();
+    }
 }

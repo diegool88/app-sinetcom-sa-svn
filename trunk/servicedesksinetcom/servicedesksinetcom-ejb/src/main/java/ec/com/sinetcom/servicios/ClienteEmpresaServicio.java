@@ -6,6 +6,7 @@
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.dao.ClienteEmpresaFacade;
+import ec.com.sinetcom.dao.ContratoFacade;
 import ec.com.sinetcom.dao.TipoEmpresaFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
 import ec.com.sinetcom.orm.ClienteEmpresa;
@@ -47,6 +48,16 @@ public class ClienteEmpresaServicio {
         return true;
     }
 
+    public boolean editarClienteEmpresa(ClienteEmpresa empresa) {
+        try {
+            clienteEmpresaFacade.edit(empresa);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public List<Usuario> cargarUsuarios() {
         return usuarioFacade.findAll();
     }
@@ -66,6 +77,9 @@ public class ClienteEmpresaServicio {
     public boolean eliminarClienteEmpresa(String clienteEmpresa) {
         try {
             ClienteEmpresa aEliminar = clienteEmpresaFacade.find(clienteEmpresa);
+            if(clienteEmpresaFacade.tieneClienteEmpresaContratos(clienteEmpresa)){
+                throw new Exception("El cliente tiene contratos existentes, no es posible borrarlo!");
+            }
             if (aEliminar != null) {
                 clienteEmpresaFacade.remove(aEliminar);
             }
