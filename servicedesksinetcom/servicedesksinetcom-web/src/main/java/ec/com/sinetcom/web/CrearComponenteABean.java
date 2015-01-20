@@ -39,6 +39,8 @@ public class CrearComponenteABean implements Serializable {
     private ComponenteElectronicoAtomico componenteElectronicoAtomico;
     //Nuevo Parametro
     private ParametroDeProducto nuevoParametro;
+    //Nueva Unidad de Medida
+    private UnidadMedida unidadMedida;
 
     @PostConstruct
     public void doInit() {
@@ -46,6 +48,7 @@ public class CrearComponenteABean implements Serializable {
         this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
         this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
         this.nuevoParametro = new ParametroDeProducto();
+        this.unidadMedida = new UnidadMedida();
         this.componenteElectronicoAtomico = new ComponenteElectronicoAtomico();
     }
 
@@ -53,7 +56,14 @@ public class CrearComponenteABean implements Serializable {
         this.productoServicio.crearParametroProducto(this.nuevoParametro);
         this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
         this.nuevoParametro = new ParametroDeProducto();
-        Mensajes.mostrarMensajeInformativo("Se ha creado un nuevo parámetro de producto");
+        Mensajes.mostrarMensajeInformativo("Se ha creado un nuevo parámetro de producto!");
+    }
+    
+    public void ingresarUnidadMedida(ActionEvent event){
+        this.productoServicio.crearUnidadDeMedida(this.unidadMedida);
+        this.medidas = this.productoServicio.obtenerTodasLasUnidadesDeMedida();
+        this.unidadMedida = new UnidadMedida();
+        Mensajes.mostrarMensajeInformativo("Se ha creado una nueva unidad de medida!");
     }
 
     public void enserarPantallaParametro(ActionEvent event) {
@@ -64,7 +74,7 @@ public class CrearComponenteABean implements Serializable {
         this.productoServicio.crearComponenteElectronico(this.componenteElectronicoAtomico);
         this.componenteElectronicoAtomico = new ComponenteElectronicoAtomico();
         this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
-        Mensajes.mostrarMensajeInformativo("Componente creado satisfactoriamente");
+        Mensajes.mostrarMensajeInformativo("Componente creado satisfactoriamente!");
     }
     
     public void borrarComponenteElectronico(ActionEvent event){
@@ -114,6 +124,14 @@ public class CrearComponenteABean implements Serializable {
 
     public void setComponenteElectronicoAtomicos(List<ComponenteElectronicoAtomico> componenteElectronicoAtomicos) {
         this.componenteElectronicoAtomicos = componenteElectronicoAtomicos;
+    }
+
+    public UnidadMedida getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(UnidadMedida unidadMedida) {
+        this.unidadMedida = unidadMedida;
     }
 
 }

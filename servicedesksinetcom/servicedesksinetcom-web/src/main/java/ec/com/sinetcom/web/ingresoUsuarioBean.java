@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.configuracion.UtilidadDeEncriptacion;
@@ -17,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 
 /**
  *
@@ -25,14 +25,14 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean(name = "ingresoUsuarioBean")
 @ViewScoped
 public class ingresoUsuarioBean implements Serializable {
-    
+
     @EJB
     private UsuarioServicio usuarioServicio;
-        
+
     private Integer numGrupo;
     private String numCedula;
     private String mail;
-    private String password;
+    private String password; 
     private String nombre;
     private String apellido;
     private String celular;
@@ -40,42 +40,73 @@ public class ingresoUsuarioBean implements Serializable {
     private String telfoficina;
     private Boolean estado;
     private Usuario usuarioSeleccionado;
-    
+    private boolean esNuevoUsuario;
+
     private List<Usuario> usuarios;
     private List<Grupo> grupos;
-        
-    
+
     @PostConstruct
     public void init() {
         this.grupos = usuarioServicio.cargarGrupos();
-        this.usuarios = usuarioServicio.cargarUsuarios();        
+        this.usuarios = usuarioServicio.cargarUsuarios();
+        this.esNuevoUsuario = false;
     }
-    
-    public void crearUsuario() {
-        Usuario usuario = new Usuario();
-        UtilidadDeEncriptacion utilidadDeEncriptacion = new UtilidadDeEncriptacion();
-        usuario.setGrupoid(usuarioServicio.recuperarGrupo(numGrupo));
-        usuario.setCedulaDeCuidadania(numCedula);
-        usuario.setCorreoElectronico(mail);
-        usuario.setPassword(utilidadDeEncriptacion.encriptar(password));
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setTelefonoMovil(celular);
-        usuario.setTelefonoFijo(telefono);
-        usuario.setTelefonoEmpresarial(telfoficina);
-        usuario.setActivo(estado);
 
-        usuarioServicio.crearUsuario(usuario);
+    public void definirUsuario(ActionEvent event) {
+        boolean esNuevo = Boolean.parseBoolean((String) event.getComponent().getAttributes().get("esNuevo"));
+        if (esNuevo) {
+            this.usuarioSeleccionado = new Usuario();
+            this.esNuevoUsuario = true;
+            this.password = null;
+        } else {
+            this.esNuevoUsuario = false;
+        }
+    }
+
+    public void guardarUsuario() {
+        if (this.esNuevoUsuario) {
+            UtilidadDeEncriptacion utilidadDeEncriptacion = new UtilidadDeEncriptacion();
+            usuarioSeleccionado.setPassword(utilidadDeEncriptacion.encriptar(password));
+            if (usuarioServicio.crearUsuario(usuarioSeleccionado)) {
+                Mensajes.mostrarMensajeInformativo("Usuario creado exitosamente!");
+            } else {
+                Mensajes.mostrarMensajeDeError("Error interno, Usuario no se pudo crear!");
+            }
+        } else {
+            if (usuarioServicio.actualizarUsuario(usuarioSeleccionado)) {
+                Mensajes.mostrarMensajeInformativo("Usuario actualizado exitosamente!");
+            } else {
+                Mensajes.mostrarMensajeDeError("Error interno, Usuario no se pudo actualizar!");
+            }
+        }
         this.usuarios = usuarioServicio.cargarUsuarios();
-        
-        Mensajes.mostrarMensajeInformativo("Usuario creado exitosamente!");
+        this.usuarioSeleccionado = null;
+    }
+
+    public void eliminarUsuario() {
+        if (usuarioServicio.eliminarUsuario(usuarioSeleccionado)) {
+            Mensajes.mostrarMensajeInformativo("Usuario eliminado exitosamente!");
+        } else {
+            Mensajes.mostrarMensajeDeError("Error interno, Usuario no se pudo eliminar!");
+        }
+        this.usuarios = usuarioServicio.cargarUsuarios();
+        this.usuarioSeleccionado = null;
     }
     
-    public void eliminarUsuario() {
-        usuarioServicio.eliminarUsuario(usuarioSeleccionado.getId());
+    public void actualizarPassword(ActionEvent event){
+        if(this.usuarioServicio.actualizarPassword(usuarioSeleccionado, password)){
+            Mensajes.mostrarMensajeInformativo("Password actualizado con éxito!");
+        }else{
+            Mensajes.mostrarMensajeDeError("Error interno, no se pudo actualizar el password");
+        }
         this.usuarios = usuarioServicio.cargarUsuarios();
+        this.usuarioSeleccionado = null;
     }
-               
+    
+    public void limpiarCampos(){
+        this.usuarioSeleccionado = null;
+    }
+
     public Integer getNumGrupo() {
         return numGrupo;
     }
@@ -162,7 +193,7 @@ public class ingresoUsuarioBean implements Serializable {
 
     public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
         this.usuarioSeleccionado = usuarioSeleccionado;
-    }    
+    }
 
     public List<Grupo> getGrupos() {
         return grupos;
@@ -170,7 +201,7 @@ public class ingresoUsuarioBean implements Serializable {
 
     public void setGrupos(List<Grupo> grupos) {
         this.grupos = grupos;
-    }   
+    }
 
     public List<Usuario> getUsuarios() {
         return usuarios;
@@ -178,5 +209,13 @@ public class ingresoUsuarioBean implements Serializable {
 
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
-    }    
+    }
+
+    public boolean isEsNuevoUsuario() {
+        return esNuevoUsuario;
+    }
+
+    public void setEsNuevoUsuario(boolean esNuevoUsuario) {
+        this.esNuevoUsuario = esNuevoUsuario;
+    }
 }

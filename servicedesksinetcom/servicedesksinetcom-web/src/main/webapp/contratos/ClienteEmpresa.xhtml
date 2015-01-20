@@ -11,7 +11,7 @@
             <h:head/>       
             <h:body>
                 <h:form id="verClientesForm">
-                    <p:dataTable id="dtlClientes" rowKey="#{empresas.ruc}" var="empresas" value="#{ingresoClienteEmpresaBean.clientesEnpresa}" paginator="true" rows="15"
+                    <p:dataTable id="dtlClientes" rowKey="#{empresas.ruc}" var="empresas" value="#{ingresoClienteEmpresaBean.clientesEmpresa}" paginator="true" rows="15"
                                  selection="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado}" selectionMode="single" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -19,8 +19,8 @@
                             <h:outputText value="Clientes / Empresas"/>
                         </f:facet>
                         
-                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
-                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
+                        <p:ajax event="rowSelect" immediate="true" update="btnEliminar, btnEditar"></p:ajax>
+                        <p:ajax event="rowUnselect" immediate="true" update="btnEliminar, btnEditar"></p:ajax>
                         
                         <p:column exportable="false" width="10">
                             <p:rowToggler></p:rowToggler>
@@ -81,45 +81,50 @@
                             </p:panelGrid>
                         </p:rowExpansion>
                         <f:facet name="footer">
-                            <p:commandButton id="btnCrear" value="Crear" type="button" onclick="PF('ingreso').show();"/>       
+                            <p:commandButton id="btnCrear" value="Crear" process="dtlClientes" actionListener="#{ingresoClienteEmpresaBean.definirClienteEmpresa}" update=":clienteEmpresaForm" onclick="PF('ingreso').show();" >
+                                <f:attribute name="esNuevo" value="true"></f:attribute>
+                            </p:commandButton>       
                             <p:commandButton id="btnEliminar" process="dtlClientes" value="Eliminar" action="#{ingresoClienteEmpresaBean.eliminarEmpresa()}" disabled="#{not(ingresoClienteEmpresaBean.clienteEmpresaSeleccionado != null)}" update=":verClientesForm:dtlClientes"/>                       
+                            <p:commandButton id="btnEditar" process="dtlClientes" value="Editar" actionListener="#{ingresoClienteEmpresaBean.definirClienteEmpresa}" update=":clienteEmpresaForm" onclick="PF('ingreso').show();" disabled="#{not(ingresoClienteEmpresaBean.clienteEmpresaSeleccionado != null)}">
+                                <f:attribute name="esNuevo" value="false"></f:attribute>
+                            </p:commandButton>
                         </f:facet>
                     </p:dataTable>
 
                 </h:form>
 
-                <p:dialog header="Insertar Cliente / Empresa" widgetVar="ingreso" modal="true">
+                <p:dialog header="Insertar / Editar Cliente Empresa" widgetVar="ingreso" modal="true">
                     <h:form id="clienteEmpresaForm">
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
                             <p:outputLabel for="clienteEmpresaRuc" value="RUC:"/>
-                            <p:inputText id="clienteEmpresaRuc" value="#{ingresoClienteEmpresaBean.numRuc}" required="true"/>
+                            <p:inputText id="clienteEmpresaRuc" maxlength="15" disabled="#{not ingresoClienteEmpresaBean.esNuevoCliente}" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.ruc}" required="true"/>
 
                             <p:outputLabel for="clienteUsuarios" value="Usuario:"/>
-                            <p:selectOneMenu id="clienteUsuarios" value="#{ingresoClienteEmpresaBean.numUsuario}" required="true">
+                            <p:selectOneMenu id="clienteUsuarios" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.usuarioid}" converter="#{usuarioConverter}" required="true">
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoClienteEmpresaBean.usuarios}" var="Usuarios" itemLabel="#{Usuarios.nombre} #{Usuarios.apellido}" itemValue="#{Usuarios.id}" />
+                                <f:selectItems value="#{ingresoClienteEmpresaBean.usuarios}" var="Usuarios" itemLabel="#{Usuarios.nombre} #{Usuarios.apellido}" itemValue="#{Usuarios.id.toString()}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="clienteTipoEmpresa" value="Tipo Empresa:"/>
-                            <p:selectOneMenu id="clienteTipoEmpresa" value="#{ingresoClienteEmpresaBean.numTipoEmpresa}" required="true">
+                            <p:selectOneMenu id="clienteTipoEmpresa" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.tipoEmpresaid}" converter="#{tipoEmpresaConverter}" required="true">
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoClienteEmpresaBean.tiposEmpresa}" var="Tipos" itemLabel="#{Tipos.tipo}" itemValue="#{Tipos.id}" />
+                                <f:selectItems value="#{ingresoClienteEmpresaBean.tiposEmpresa}" var="Tipos" itemLabel="#{Tipos.tipo}" itemValue="#{Tipos.id.toString()}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="clienteRazonSocial" value="Razon Social:"/>
-                            <p:inputText id="clienteRazonSocial" value="#{ingresoClienteEmpresaBean.razonSocial}" required="true"/>
+                            <p:inputText id="clienteRazonSocial" maxlength="60" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.razonSocial}" required="true"/>
 
                             <p:outputLabel for="clienteNombreComercial" value="Nombre Comercial:"/>
-                            <p:inputText id="clienteNombreComercial" value="#{ingresoClienteEmpresaBean.nombreComercial}" required="true"/>
+                            <p:inputText id="clienteNombreComercial" maxlength="60" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.nombreComercial}" required="true"/>
 
                             <p:outputLabel for="clientepbx" value="Telefono PBX:"/>
-                            <p:inputText id="clientepbx" value="#{ingresoClienteEmpresaBean.telefono}" required="true"/>
+                            <p:inputText id="clientepbx" maxlength="15" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.telefonoPBX}" required="true"/>
 
                             <p:outputLabel for="clienteRepresentante" value="Representante Legal:"/>
-                            <p:inputText id="clienteRepresentante" value="#{ingresoClienteEmpresaBean.representantelegal}" required="true"/>
+                            <p:inputText id="clienteRepresentante" maxlength="30" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.nombreRepresentanteLegal}" required="true"/>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.crearEmpresa()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verClientesForm:dtlClientes">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.guardarEmpresa()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verClientesForm:dtlClientes">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

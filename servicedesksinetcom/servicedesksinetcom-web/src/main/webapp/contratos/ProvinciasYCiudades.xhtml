@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Provincias y Ciudades"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>       
+            <h:body>
+                <h:form id="verProvinciasYCiudades">
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            <h:outputText value="Creación de Provincias y Ciudades"></h:outputText>
+                        </f:facet>
+                        <p:panelGrid id="formProvincia" columns="2">
+                            <f:facet name="header"><h:outputText value="Ingreso Provincia"></h:outputText></f:facet>
+                            <p:outputLabel for="provinciaNombre" value="Nombre:"></p:outputLabel>
+                            <p:inputText id="provinciaNombre" value="#{provinciasYCiudadesBean.nuevaProvincia.nombre}" maxlength="45" required="true"></p:inputText>
+                            <f:facet name="footer">
+                                <p:commandButton value="Grabar" actionListener="#{provinciasYCiudadesBean.crearProvincia}" process=":verProvinciasYCiudades:formProvincia" update="@form"></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                        
+                        <p:panelGrid id="formCiudad" columns="2">
+                            <f:facet name="header"><h:outputText value="Ingreso Ciudad"></h:outputText></f:facet>
+                            <p:outputLabel for="ciudadNombre" value="Nombre:"></p:outputLabel>
+                            <p:inputText id="ciudadNombre" value="#{provinciasYCiudadesBean.nuevaCiudad.nombre}" maxlength="45" required="true"></p:inputText>
+                            <p:outputLabel for="provincia" value="Provincia:"></p:outputLabel>
+                            <p:selectOneMenu id="provincia" value="#{provinciasYCiudadesBean.nuevaCiudad.provinciaid}" converter="#{provinciaConverter}" required="true">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{provinciasYCiudadesBean.provincias}" var="provincia" itemLabel="#{provincia.nombre}" itemValue="#{provincia.id.toString()}"></f:selectItems>
+                            </p:selectOneMenu>
+                            <f:facet name="footer">
+                                <p:commandButton value="Grabar" actionListener="#{provinciasYCiudadesBean.crearCiudad}" process=":verProvinciasYCiudades:formCiudad" update="@form"></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2">
+                        <p:dataList id="dlProvincias" value="#{provinciasYCiudadesBean.provincias}" var="itemProvincia" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                            <f:facet name="header">
+                                <h:outputText value="Provincias"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{itemProvincia.nombre}"></h:outputText>
+                        </p:dataList>
+                        <p:dataList id="dlCiudades" value="#{provinciasYCiudadesBean.ciudades}" var="itemCiudad" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                            <f:facet name="header">
+                                <h:outputText value="Ciudades"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{itemCiudad.nombre} - #{itemCiudad.provinciaid.nombre}"></h:outputText>
+                        </p:dataList>
+                    </p:panelGrid>
+                </h:form>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+
+
