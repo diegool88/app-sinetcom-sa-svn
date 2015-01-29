@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AtencionesPorIngeniero" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="dd1b8bb5-dbc4-4d7e-97d7-bffe4b07935a">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="16"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="302"/>
+	<property name="ireport.y" value="42"/>
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
 	</style>
@@ -249,25 +249,28 @@ FROM
 			</textField>
 		</band>
 	</detail>
-	<summary>
-		<band height="42" splitType="Stretch">
+	<pageFooter>
+		<band height="50">
 			<textField>
-				<reportElement x="50" y="22" width="80" height="20" uuid="a221f6ca-2482-4624-bea0-bf5fea80f0e9"/>
+				<reportElement x="241" y="19" width="80" height="20" uuid="a221f6ca-2482-4624-bea0-bf5fea80f0e9"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="130" y="22" width="40" height="20" uuid="bd726ca9-9f65-4f0f-a38a-a9fc2e484c11"/>
+				<reportElement x="321" y="19" width="40" height="20" uuid="bd726ca9-9f65-4f0f-a38a-a9fc2e484c11"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="234" y="22" width="100" height="20" uuid="d96331cb-2165-417a-8c19-4ba2b7d4f2ab"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
+			<staticText>
+				<reportElement x="0" y="19" width="232" height="20" uuid="8d52dca2-36b0-4717-abfb-05ea4340128d"/>
+				<text><![CDATA[Sinetcom - Reporte Atenciones por Ingeniero]]></text>
+			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="402" y="22" width="153" height="20" uuid="0b8e9e87-0f4a-4ce8-82df-7c741d2ed995"/>
+				<reportElement x="416" y="19" width="139" height="20" uuid="0b8e9e87-0f4a-4ce8-82df-7c741d2ed995"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
 	</summary>
 </jasperReport>

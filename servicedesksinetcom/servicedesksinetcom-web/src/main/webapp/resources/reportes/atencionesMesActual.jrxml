@@ -205,21 +205,25 @@ WHERE
 			</staticText>
 		</band>
 	</detail>
-	<summary>
-		<band height="42" splitType="Stretch">
+	<pageFooter>
+		<band height="50">
 			<textField>
-				<reportElement x="234" y="10" width="100" height="20" uuid="5e9fbb34-66f6-48ea-a0b0-00b3cca6d8c3"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="-1" y="10" width="80" height="20" uuid="2e69012a-8935-4fd4-8d55-d68829914eb8"/>
+				<reportElement x="232" y="19" width="80" height="20" uuid="2e69012a-8935-4fd4-8d55-d68829914eb8"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="79" y="10" width="40" height="20" uuid="160b68a5-9810-4939-bd9e-6fcc99e88341"/>
+				<reportElement x="312" y="19" width="40" height="20" uuid="160b68a5-9810-4939-bd9e-6fcc99e88341"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="1" y="19" width="217" height="20" uuid="7a3c2300-fbd6-4fa6-a115-3e0191a074c9"/>
+				<text><![CDATA[Sinetcom - Reporte de Atenciones últ. mes]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="430" y="19" width="124" height="20" uuid="295f079b-3526-4d55-a66b-1a6f9bd25d4c"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 		</band>
-	</summary>
+	</pageFooter>
 </jasperReport>
