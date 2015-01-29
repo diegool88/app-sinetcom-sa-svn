@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AtencionesPorIngeniero" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dd1b8bb5-dbc4-4d7e-97d7-bffe4b07935a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AtencionesPorIngeniero" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="dd1b8bb5-dbc4-4d7e-97d7-bffe4b07935a">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="34"/>
+	<property name="ireport.x" value="16"/>
 	<property name="ireport.y" value="0"/>
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
@@ -9,6 +9,7 @@
 	<style name="detalles" forecolor="#000000" backcolor="#000000" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
 	</style>
+	<parameter name="realPath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      Ticket.`ticketNumber` AS Ticket_ticketNumber,
@@ -78,7 +79,7 @@ FROM
 					<textElement>
 						<font size="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Ing. " + $F{UsuarioP_nombre} + " " + $F{UsuarioP_apellido}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{UsuarioP_nombre} != null ? "Ing. " + $F{UsuarioP_nombre} + " " + $F{UsuarioP_apellido} : "Registro no disponible"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -90,7 +91,7 @@ FROM
 		<band height="79" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="218" height="38" uuid="774d68bf-c3d6-4b38-9390-9447ab1c9088"/>
-				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{realPath} + "/sinetcomLogo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="1" y="48" width="554" height="31" uuid="78b9fbb2-f982-4229-8f3e-ffc235986422"/>

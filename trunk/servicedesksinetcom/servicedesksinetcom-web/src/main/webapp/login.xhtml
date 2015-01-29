@@ -13,10 +13,10 @@
                     <div class="center" >
                         <p:panel id="basic" styleClass="centerPanel" header="Inicio de Sesión" style="margin-bottom:20px; width: 390px;">
                             <p:panelGrid columns="2">
-                                <p:column><h:outputLabel>Usuario</h:outputLabel></p:column>
-                                <p:column><p:inputText value="#{login.nombreUsuario}" ></p:inputText></p:column>
-                                <p:column><h:outputLabel>Contraseña</h:outputLabel></p:column>
-                                <p:column><p:password value="#{login.password}" ></p:password></p:column>
+                                <p:column><h:outputLabel for="nombreUsuario">Usuario</h:outputLabel></p:column>
+                                <p:column><p:inputText id="nombreUsuario" required="true" requiredMessage="Nombre de usuario requerido" value="#{login.nombreUsuario}" ></p:inputText></p:column>
+                                <p:column><h:outputLabel for="contrasena">Contraseña</h:outputLabel></p:column>
+                                <p:column><p:password id="contrasena" required="true" requiredMessage="Contraseña requerida" value="#{login.password}" ></p:password></p:column>
                                 <p:column></p:column>
                                 <p:column><p:commandButton value="Ingresar" ajax="false" action="#{login.login}"></p:commandButton></p:column>
                             </p:panelGrid>
