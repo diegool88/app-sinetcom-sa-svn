@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GarantiasEconomicasPorVencer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1ff79806-843f-4516-8870-d79af0509520">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GarantiasEconomicasPorVencer" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="1ff79806-843f-4516-8870-d79af0509520">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="realPath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      Contrato.`numero` AS Contrato_numero,
@@ -57,7 +58,7 @@ WHERE (SELECT COUNT(*) FROM
 		<band height="79" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="218" height="38" uuid="a060a833-9628-4261-8b37-663e00c3aeea"/>
-				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{realPath} + "/sinetcomLogo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="0" y="48" width="554" height="31" uuid="a2c04bdf-4b7b-450c-8814-c8d92f10e895"/>

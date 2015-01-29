@@ -6,6 +6,7 @@
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="12">
 		<pen lineColor="#FFFFFF"/>
 	</style>
+	<parameter name="realPath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      Ticket.`ticketNumber` AS Ticket_ticketNumber,
@@ -62,7 +63,7 @@ WHERE
 		<band height="79" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="218" height="38" uuid="8a3955c9-987c-4628-b756-13d2641379d0"/>
-				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{realPath} + "/sinetcomLogo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="1" y="48" width="554" height="31" uuid="cfc6379d-f977-411d-a13b-5c41ecef9905"/>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RegistroDeMovimiento" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="e6e17378-3525-449e-84f8-49c304123f55">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RegistroDeMovimiento" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" whenResourceMissingType="Empty" uuid="e6e17378-3525-449e-84f8-49c304123f55">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="112"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
@@ -11,6 +11,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="realPath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      RegistroDeMovimientoDeInventario.`codigo` AS RegistroDeMovimientoDeInventario_codigo,
@@ -57,7 +58,7 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="173" height="47" uuid="38ebcc63-57f4-474f-8bc9-1e97b96d3edd"/>
-				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{realPath} + "/sinetcomLogo.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

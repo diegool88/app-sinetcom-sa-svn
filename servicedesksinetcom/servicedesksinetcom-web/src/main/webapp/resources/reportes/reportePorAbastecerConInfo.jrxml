@@ -10,6 +10,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="realPath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT * FROM
 (
@@ -82,7 +83,7 @@ HAVING
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="650" height="66" uuid="ba297e55-9705-4a46-8f47-6139c1fe5f38"/>
-				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{realPath} + "/sinetcomLogo.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

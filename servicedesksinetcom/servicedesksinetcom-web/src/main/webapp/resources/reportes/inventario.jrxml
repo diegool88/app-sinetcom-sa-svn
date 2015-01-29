@@ -7,7 +7,8 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
-	<queryString language="SQL">
+	<parameter name="realPath" class="java.lang.String"/>
+	<queryString>
 		<![CDATA[SELECT
      ItemProducto.`numeroSerial` AS ItemProducto_numeroSerial,
      ItemProducto.`numeroDeParte` AS ItemProducto_numeroDeParte,
@@ -21,7 +22,7 @@
      Bodega.`nombre` AS Bodega_nombre
 FROM
      `ItemProducto` ItemProducto INNER JOIN `CondicionFisica` CondicionFisica ON ItemProducto.`CondicionFisica_id` = CondicionFisica.`id`
-     INNER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
+     LEFT OUTER JOIN `ComponenteElectronicoAtomico` ComponenteElectronicoAtomico ON ItemProducto.`ComponenteElectronicoAtomico_id` = ComponenteElectronicoAtomico.`id`
      INNER JOIN `ModeloProducto` ModeloProducto ON ItemProducto.`ModeloProducto_id` = ModeloProducto.`id`
      INNER JOIN `Bodega` Bodega ON ItemProducto.`Bodega_id` = Bodega.`id`
      INNER JOIN `LineaDeProducto` LineaDeProducto ON ModeloProducto.`LineaDeProducto_id` = LineaDeProducto.`id`
@@ -85,7 +86,7 @@ WHERE
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="409" height="55" uuid="0661ab15-fb88-48a5-8141-ddfa37019fb0"/>
-				<imageExpression><![CDATA["/Users/diegoflores/NetBeansProjects/servicedesksinetcom/servicedesksinetcom-web/src/main/webapp/resources/reportes/sinetcomLogo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{realPath}+"/sinetcomLogo.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

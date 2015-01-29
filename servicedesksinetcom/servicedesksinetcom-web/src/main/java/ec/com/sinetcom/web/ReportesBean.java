@@ -59,7 +59,7 @@ public class ReportesBean implements Serializable {
         InitialContext initialContext;
         try {
             initialContext = new InitialContext();
-            this.dataSource = (DataSource) initialContext.lookup("jdbc/appsinetcomlocal");
+            this.dataSource = (DataSource) initialContext.lookup("jdbc/appsinetcomprod");
             this.connection = this.dataSource.getConnection();
         } catch (NamingException ex) {
             Logger.getLogger(ReportesBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,7 +69,10 @@ public class ReportesBean implements Serializable {
     }
 
     public void generarReporteDeInventariosDisponiblesAgrupadoPorSitio(ActionEvent event) throws JRException, IOException {
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "inventario.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "inventario.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -102,7 +105,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDeCambiosRealizadosPorCliente(ActionEvent event) throws JRException, IOException {
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "cambiosRealizadosPorCliente.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "cambiosRealizadosPorCliente.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -135,7 +141,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDePartesPorAbastecer(ActionEvent event) throws JRException, IOException {
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "reportePorAbastecerConInfo.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "reportePorAbastecerConInfo.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -169,6 +178,8 @@ public class ReportesBean implements Serializable {
     
     public void generarRegistroDeMovimientoDeInventario(int idRegistro) throws IOException, JRException{
         Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
         parametros.put("registroMov_id", idRegistro);
         this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "registroDeMovimiento.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -178,7 +189,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDeAtencionesMesActual(ActionEvent event) throws JRException, IOException{
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "atencionesMesActual.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "atencionesMesActual.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -211,7 +225,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDeAtencionesPorIngeniero(ActionEvent event) throws JRException, IOException{
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "atencionesPorIngeniero.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "atencionesPorIngeniero.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -244,7 +261,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDeIncumplimientoDeSLA(ActionEvent event) throws JRException, IOException{
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "incumplimientoDeSLA.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "incumplimientoDeSLA.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -277,7 +297,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDeGarantiasPorVencerEnProx2Semanas(ActionEvent event) throws JRException, IOException{
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "garantiasPorVencerEnProx2Semanas.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "garantiasPorVencerEnProx2Semanas.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -310,7 +333,10 @@ public class ReportesBean implements Serializable {
     }
     
     public void generarReporteDePagosPorVencerEnProx2Semanas(ActionEvent event) throws JRException, IOException{
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "pagosPorVencerEnProx2Semanas.jasper"), new HashMap(), this.connection);
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "pagosPorVencerEnProx2Semanas.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -345,6 +371,8 @@ public class ReportesBean implements Serializable {
     public void generarActaDeEntregaRecepcion(ActionEvent event) throws JRException, IOException{
         Map parametros = new HashMap();
         String numeroContrato = (String) event.getComponent().getAttributes().get("numeroContrato");
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
         parametros.put("numeroContrato", numeroContrato);
         this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "actaDeEntregaRecepcion.jasper"), new HashMap(), this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
