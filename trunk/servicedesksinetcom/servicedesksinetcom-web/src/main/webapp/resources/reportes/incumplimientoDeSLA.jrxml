@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InclumplimientoSLA" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="b59f3c66-61a9-4621-ae14-fb0ff89e4567">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="25"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
@@ -91,11 +91,8 @@ AND
 	<pageHeader>
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch"/>
-	</columnHeader>
 	<detail>
-		<band height="218" splitType="Stretch">
+		<band height="225" splitType="Stretch">
 			<textField>
 				<reportElement x="51" y="0" width="189" height="20" uuid="3a437853-7511-4e23-ba45-e9f87ca01d8a"/>
 				<textFieldExpression><![CDATA[$F{Ticket_ticketNumber}]]></textFieldExpression>
@@ -178,13 +175,25 @@ AND
 			</staticText>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="22" width="145" height="20" uuid="a98d2055-3898-4804-b468-525b14bebc25"/>
+				<text><![CDATA[Sinetcom - Reporte de SLAs]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="213" y="22" width="80" height="20" uuid="7079bcbc-c40d-4481-b3dc-f20477f9a1b0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="293" y="22" width="40" height="20" uuid="e9b3720c-27ca-45eb-85af-f98c8a59a878"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="435" y="22" width="119" height="20" uuid="80991629-e829-4b97-96a6-d04d00249f1c"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

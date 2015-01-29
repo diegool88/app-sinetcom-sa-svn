@@ -128,21 +128,25 @@ WHERE (SELECT COUNT(*) FROM
 			</textField>
 		</band>
 	</detail>
-	<summary>
-		<band height="42" splitType="Stretch">
+	<pageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="26" width="204" height="20" uuid="2143371d-6ce5-4016-9f27-a22a24a7528c"/>
+				<text><![CDATA[Sinetcom - Reporte Garántias Por Vencer]]></text>
+			</staticText>
 			<textField>
-				<reportElement x="28" y="22" width="80" height="20" uuid="1f9c3c1e-910b-4095-aaa0-5e50261d4061"/>
+				<reportElement x="229" y="26" width="80" height="20" uuid="1f9c3c1e-910b-4095-aaa0-5e50261d4061"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="108" y="22" width="40" height="20" uuid="d485a099-7d60-4455-ad45-90088f645aae"/>
+				<reportElement x="309" y="26" width="40" height="20" uuid="d485a099-7d60-4455-ad45-90088f645aae"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="399" y="22" width="138" height="20" uuid="c217076f-b93f-4fb7-b099-1e6851bb3be6"/>
+				<reportElement x="416" y="26" width="138" height="20" uuid="c217076f-b93f-4fb7-b099-1e6851bb3be6"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
-	</summary>
+	</pageFooter>
 </jasperReport>

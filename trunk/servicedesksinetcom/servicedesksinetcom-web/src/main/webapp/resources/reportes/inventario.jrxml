@@ -50,7 +50,7 @@ WHERE
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Bodega_nombre}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Bodega_nombre} != null ? $F{Bodega_nombre} : "Registro no disponible"]]></textFieldExpression>
 				</textField>
 				<rectangle>
 					<reportElement mode="Opaque" x="97" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="1c3ce261-b1c7-4a7d-adfd-30ba5ead1c8e"/>
@@ -198,12 +198,21 @@ WHERE
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="96" y="0" width="267" height="20" uuid="47918a56-bca3-4ff3-aba5-5d93bdf9fb7b"/>
+				<reportElement x="96" y="0" width="223" height="20" uuid="47918a56-bca3-4ff3-aba5-5d93bdf9fb7b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Reporte de Inventarios]]></text>
+				<text><![CDATA[Sinetcom - Reporte de Inventarios]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="352" y="0" width="80" height="20" uuid="3f893e0f-974f-4a08-8b51-e7485ac089db"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="432" y="0" width="40" height="20" uuid="a793d12f-038b-4f9e-ac4c-cbea5d778798"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<summary>

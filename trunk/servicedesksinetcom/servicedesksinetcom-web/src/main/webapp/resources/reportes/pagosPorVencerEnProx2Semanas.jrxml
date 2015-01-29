@@ -131,25 +131,22 @@ WHERE (SELECT COUNT(*) FROM
 	<pageFooter>
 		<band height="54" splitType="Stretch">
 			<textField>
-				<reportElement x="10" y="22" width="80" height="20" uuid="aef2bb8f-236f-4300-815c-66db797cf013"/>
+				<reportElement x="232" y="22" width="80" height="20" uuid="aef2bb8f-236f-4300-815c-66db797cf013"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="90" y="22" width="40" height="20" uuid="84d695bf-1836-4b0b-a190-ad08eac6ebfb"/>
+				<reportElement x="312" y="22" width="40" height="20" uuid="84d695bf-1836-4b0b-a190-ad08eac6ebfb"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="229" y="22" width="100" height="20" uuid="87325f46-836a-41da-bba9-0006c07fed16"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="MMMMM dd, yyyy">
+			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="444" y="22" width="100" height="20" uuid="1156944b-8a29-4392-a218-d39af5acb181"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="22" width="188" height="20" uuid="e6b85e34-14ac-44b0-83aa-e15d487aa5b6"/>
+				<text><![CDATA[Sinetcom - Reporte Pagos Por Vencer]]></text>
+			</staticText>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>
