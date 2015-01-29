@@ -6,7 +6,6 @@
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.configuracion.TareaCursoInfo;
-import static ec.com.sinetcom.servicios.LoteTareaNotificarSLA.logger;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.ejb.Asynchronous;
