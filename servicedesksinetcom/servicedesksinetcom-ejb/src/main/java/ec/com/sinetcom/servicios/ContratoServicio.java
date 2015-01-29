@@ -14,6 +14,7 @@ import ec.com.sinetcom.dao.ClienteDireccionFacade;
 import ec.com.sinetcom.dao.ClienteEmpresaFacade;
 import ec.com.sinetcom.dao.ContactoFacade;
 import ec.com.sinetcom.dao.ContratoFacade;
+import ec.com.sinetcom.dao.CursoFacade;
 import ec.com.sinetcom.dao.DatosSinetcomFacade;
 import ec.com.sinetcom.dao.GarantiaEconomicaFacade;
 import ec.com.sinetcom.dao.PagoFacade;
@@ -24,6 +25,7 @@ import ec.com.sinetcom.dao.TipoDeVisitaFacade;
 import ec.com.sinetcom.dao.TipoDisponibilidadFacade;
 import ec.com.sinetcom.dao.TipoGarantiaFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
+import ec.com.sinetcom.dao.VisitaTecnicaFacade;
 import ec.com.sinetcom.orm.Ciudad;
 import ec.com.sinetcom.orm.ClienteDireccion;
 import ec.com.sinetcom.orm.ClienteEmpresa;
@@ -35,6 +37,7 @@ import ec.com.sinetcom.orm.GarantiaEconomica;
 import ec.com.sinetcom.orm.Pago;
 import ec.com.sinetcom.orm.Provincia;
 import ec.com.sinetcom.orm.Sla;
+import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.TipoContrato;
 import ec.com.sinetcom.orm.TipoDeVisita;
 import ec.com.sinetcom.orm.TipoDisponibilidad;
@@ -86,11 +89,17 @@ public class ContratoServicio {
     @EJB
     private ProvinciaFacade provinciaFacade;
     @EJB
+    private CursoFacade cursoFacade;
+    @EJB
+    private VisitaTecnicaFacade visitaTecnicaFacade;
+    @EJB
     private CursoNotificadorServicio cursoNotificadorServicio;
     @EJB
     private VisitaTecnicaNotificadorServicio visitaTecnicaNotificadorServicio;
     @EJB
     private DatosSinetcomFacade datosSinetcomFacade;
+    @EJB
+    private TicketServicio ticketServicio;
     
     public List<Contrato> cargarContratos() {
         return contratoFacade.findAll();
@@ -99,44 +108,44 @@ public class ContratoServicio {
     public boolean crearContrato(Contrato contrato) {
         try {
             contratoFacade.create(contrato);
-            if (!contrato.getCursoList().isEmpty()) {
-                for (Curso curso : contrato.getCursoList()) {
-                    TareaCursoInfo tareaCursoInfo = new TareaCursoInfo("c_" + curso.getCodigo(), "Notificador Curso # " + curso.getCodigo(), "LoteTareaNotificarCurso", curso);
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(curso.getFechaDeInicio());
-                    c.add(Calendar.DAY_OF_MONTH, -15);
-                    tareaCursoInfo.setStartDate(c.getTime());
-                    c.setTime(curso.getFechaDeInicio());
-                    tareaCursoInfo.setEndDate(c.getTime());
-                    tareaCursoInfo.setSecond("0");
-                    tareaCursoInfo.setMinute("0");
-                    tareaCursoInfo.setHour("8");
-                    tareaCursoInfo.setDayOfMonth("*");
-                    tareaCursoInfo.setMonth("*");
-                    tareaCursoInfo.setYear("*");
-                    tareaCursoInfo.setDescription("Tarea Notificador Curso# " + curso.getCodigo());
-                    this.cursoNotificadorServicio.createJob(tareaCursoInfo);
-                }
-            }
-            if (!contrato.getVisitaTecnicaList().isEmpty()) {
-                for (VisitaTecnica visitaT : contrato.getVisitaTecnicaList()) {
-                    TareaVisitaTecnicaInfo tareaVisitaTecnicaInfo = new TareaVisitaTecnicaInfo("v_" + visitaT.getId(), "Notificador Visita Técnica # " + visitaT.getId(), "LoteTareaNotificadorVisitaTecnica", visitaT);
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(visitaT.getFecha());
-                    c.add(Calendar.DAY_OF_MONTH, -15);
-                    tareaVisitaTecnicaInfo.setStartDate(c.getTime());
-                    c.setTime(visitaT.getFecha());
-                    tareaVisitaTecnicaInfo.setEndDate(c.getTime());
-                    tareaVisitaTecnicaInfo.setSecond("0");
-                    tareaVisitaTecnicaInfo.setMinute("0");
-                    tareaVisitaTecnicaInfo.setHour("8");
-                    tareaVisitaTecnicaInfo.setDayOfMonth("*");
-                    tareaVisitaTecnicaInfo.setMonth("*");
-                    tareaVisitaTecnicaInfo.setYear("*");
-                    tareaVisitaTecnicaInfo.setDescription("Tarea Notificador Curso# " + visitaT.getId());
-                    this.visitaTecnicaNotificadorServicio.createJob(tareaVisitaTecnicaInfo);
-                }
-            }
+//            if (!contrato.getCursoList().isEmpty()) {
+//                for (Curso curso : contrato.getCursoList()) {
+//                    TareaCursoInfo tareaCursoInfo = new TareaCursoInfo("c_" + curso.getCodigo(), "Notificador Curso # " + curso.getCodigo(), "LoteTareaNotificarCurso", curso);
+//                    Calendar c = Calendar.getInstance();
+//                    c.setTime(curso.getFechaDeInicio());
+//                    c.add(Calendar.DAY_OF_MONTH, -15);
+//                    tareaCursoInfo.setStartDate(c.getTime());
+//                    c.setTime(curso.getFechaDeInicio());
+//                    tareaCursoInfo.setEndDate(c.getTime());
+//                    tareaCursoInfo.setSecond("0");
+//                    tareaCursoInfo.setMinute("0");
+//                    tareaCursoInfo.setHour("8");
+//                    tareaCursoInfo.setDayOfMonth("*");
+//                    tareaCursoInfo.setMonth("*");
+//                    tareaCursoInfo.setYear("*");
+//                    tareaCursoInfo.setDescription("Tarea Notificador Curso# " + curso.getCodigo());
+//                    this.cursoNotificadorServicio.createJob(tareaCursoInfo);
+//                }
+//            }
+//            if (!contrato.getVisitaTecnicaList().isEmpty()) {
+//                for (VisitaTecnica visitaT : contrato.getVisitaTecnicaList()) {
+//                    TareaVisitaTecnicaInfo tareaVisitaTecnicaInfo = new TareaVisitaTecnicaInfo("v_" + visitaT.getId(), "Notificador Visita Técnica # " + visitaT.getId(), "LoteTareaNotificadorVisitaTecnica", visitaT);
+//                    Calendar c = Calendar.getInstance();
+//                    c.setTime(visitaT.getFecha());
+//                    c.add(Calendar.DAY_OF_MONTH, -15);
+//                    tareaVisitaTecnicaInfo.setStartDate(c.getTime());
+//                    c.setTime(visitaT.getFecha());
+//                    tareaVisitaTecnicaInfo.setEndDate(c.getTime());
+//                    tareaVisitaTecnicaInfo.setSecond("0");
+//                    tareaVisitaTecnicaInfo.setMinute("0");
+//                    tareaVisitaTecnicaInfo.setHour("8");
+//                    tareaVisitaTecnicaInfo.setDayOfMonth("*");
+//                    tareaVisitaTecnicaInfo.setMonth("*");
+//                    tareaVisitaTecnicaInfo.setYear("*");
+//                    tareaVisitaTecnicaInfo.setDescription("Tarea Notificador Curso# " + visitaT.getId());
+//                    this.visitaTecnicaNotificadorServicio.createJob(tareaVisitaTecnicaInfo);
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,6 +312,10 @@ public class ContratoServicio {
         UtilidadDeEmail utilidadDeEmail = new UtilidadDeEmail();
         DatosSinetcom datosSinetcom = this.datosSinetcomFacade.find("1791839692001");
         if (pagos != null && !pagos.isEmpty()) {
+            List<String> cc = new ArrayList<String>();
+            cc.add(datosSinetcom.getEmailPresidente());
+            cc.add(datosSinetcom.getEmailGerenteComercial());
+            cc.add(datosSinetcom.getEmailGerenteGeneral());
             for (Pago pago : pagos) {
                 utilidadDeEmail.enviarMensajeConAdjunto(datosSinetcom.getEmailNoResponder(), datosSinetcom.getEmailSupervisorContratos(), "Notificación Pago por Vencer", crearCuerpoDeCorreoDeNotificacionDePagoPorVencer(pago), null, null, null);
             }
@@ -317,11 +330,68 @@ public class ContratoServicio {
         UtilidadDeEmail utilidadDeEmail = new UtilidadDeEmail();
         DatosSinetcom datosSinetcom = this.datosSinetcomFacade.find("1791839692001");
         if (garantias != null && !garantias.isEmpty()) {
+            List<String> cc = new ArrayList<String>();
+            cc.add(datosSinetcom.getEmailPresidente());
+            cc.add(datosSinetcom.getEmailGerenteGeneral());
+            cc.add(datosSinetcom.getEmailGerenteComercial());
             for (GarantiaEconomica garantia : garantias) {
                 utilidadDeEmail.enviarMensajeConAdjunto(datosSinetcom.getEmailNoResponder(), datosSinetcom.getEmailSupervisorContratos(), "Notificación Garantía E. por Vencer", crearCuerpoDeCorreoDeNotificacionDeGarantiaEconomicaPorVencer(garantia), null, null, null);
             }
         }
     }
+    
+    /**
+     * Verifica los cursos que se dictarán en las prox 2 semanas
+     */
+    public void verificarCursosADictarEnProx2Semanas(){
+        List<Curso> cursos = this.cursoFacade.obtenerTodosLosCursosADictarEnProx2Semanas();
+        UtilidadDeEmail utilidadDeEmail = new UtilidadDeEmail();
+        DatosSinetcom datosSinetcom = this.datosSinetcomFacade.find("1791839692001");
+        if(cursos != null && !cursos.isEmpty()){
+            List<String> cc = new ArrayList<String>();
+            cc.add(datosSinetcom.getEmailPresidente());
+            cc.add(datosSinetcom.getEmailGerenteComercial());
+            cc.add(datosSinetcom.getEmailGerenteTecnico());
+            for(Curso curso : cursos){
+                utilidadDeEmail.enviarMensajeConAdjunto(datosSinetcom.getEmailNoResponder(), datosSinetcom.getEmailSupervisorContratos(), "Notificación Curso por dictar", crearCuerpoDeCorreoDeCursoProximo(curso), cc, null, null);
+            }
+        }
+    }
+    
+    /**
+     * Verifica las visitas tecnicas que se deben realizar en las proximas 2 semanas
+     */
+    public void verificarVisitasTecnicasEnProx2Semanas(){
+        List<VisitaTecnica> visitasTecnicas = this.visitaTecnicaFacade.obtenerTodasLasVisitasTecnicasEnProx2Semanas();
+        UtilidadDeEmail utilidadDeEmail = new UtilidadDeEmail();
+        DatosSinetcom datosSinetcom = this.datosSinetcomFacade.find("1791839692001");
+        if(visitasTecnicas != null && !visitasTecnicas.isEmpty()){
+            List<String> cc = new ArrayList<String>();
+            cc.add(datosSinetcom.getEmailPresidente());
+            cc.add(datosSinetcom.getEmailGerenteComercial());
+            cc.add(datosSinetcom.getEmailGerenteTecnico());
+            for(VisitaTecnica visitaTecnica : visitasTecnicas){
+                utilidadDeEmail.enviarMensajeConAdjunto(datosSinetcom.getEmailNoResponder(), datosSinetcom.getEmailGerenteTecnico(), "Notificación Visita Técnica", crearCuerpoDeVisitaTecnicaProxima(visitaTecnica), cc, null, null);
+            }
+        }
+    }
+    
+//    public void verificarVisitasTecnicasDelPresenteDia(){
+//        List<VisitaTecnica> visitaTecnicas = this.visitaTecnicaFacade.obtenerTodasLasVisitasTecnicasProgramadasParaEsteDia();
+//        if(visitaTecnicas != null && !visitaTecnicas.isEmpty()){
+//            for(VisitaTecnica visitaTecnica: visitaTecnicas){
+//                Ticket ticket = new Ticket();
+//                ticket.setClienteEmpresaruc(visitaTecnica.getContratonumero().getClienteEmpresaruc());
+//                ticket.setColaid(this.ticketServicio.obtenerColaTicket(7));
+//                ticket.setEstadoTicketcodigo(this.ticketServicio.obtenerTodosLosEstados().get(0));
+//                ticket.setServicioTicketcodigo(this.ticketServicio.obtenerServicioTicket(2));
+//                ticket.setPrioridadTicketcodigo(this.ticketServicio.obtenerPrioridadTicket(3));
+//                ticket.setUsuarioidcreador(this.ticketServicio.obtenerUsuario(2));
+//                ticket.setUsuarioidpropietario(this.ticketServicio.obtenerUsuario(2));
+//                ticket.setUsuarioidresponsable(this.ticketServicio.obtenerUsuario(2));
+//            }
+//        }
+//    }
 
     /**
      * Crea el cuerpo del mensaje de correo electrónico de un pago por vencer
