@@ -129,7 +129,7 @@ FROM
 					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cambiosRealizadosPorCliente_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{realPath} + "/cambiosRealizadosPorCliente_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="0" y="84" width="525" height="52" uuid="f6eff571-d313-49aa-a22d-27d7c725c59d"/>
@@ -137,7 +137,7 @@ FROM
 					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cambiosRealizadosPorCliente_subreport2.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{realPath} + "/cambiosRealizadosPorCliente_subreport2.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

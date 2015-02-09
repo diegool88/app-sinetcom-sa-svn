@@ -124,7 +124,7 @@ WHERE (SELECT COUNT(*) FROM
 					<subreportParameterExpression><![CDATA[$F{Contrato_numero}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "pagosPorVencerEnProx2Semanas_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{realPath} + "/pagosPorVencerEnProx2Semanas_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

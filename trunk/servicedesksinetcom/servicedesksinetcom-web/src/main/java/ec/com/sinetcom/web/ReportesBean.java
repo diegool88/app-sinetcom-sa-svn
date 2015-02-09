@@ -374,7 +374,7 @@ public class ReportesBean implements Serializable {
         String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
         parametros.put("realPath", realPath);
         parametros.put("numeroContrato", numeroContrato);
-        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "actaDeEntregaRecepcion.jasper"), new HashMap(), this.connection);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "actaDeEntregaRecepcion.jasper"), parametros, this.connection);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String tipo = (String) event.getComponent().getAttributes().get("tipo");
         String archivo = (String) event.getComponent().getAttributes().get("archivo");
@@ -382,12 +382,48 @@ public class ReportesBean implements Serializable {
         //Se valida la cabecera
         if (archivo.equals("pdf")) {
             if (tipo != null && !tipo.isEmpty() && tipo.equals("d")) {
-                httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReportePagosPorVencerEnProx2Semanas" + formatoFecha.format(Calendar.getInstance().getTime()) + ".pdf");
+                httpServletResponse.addHeader("Content-disposition", "attachment; filename=ActaDeEntregaRecepcion" + formatoFecha.format(Calendar.getInstance().getTime()) + ".pdf");
             }
         } else if (archivo.equals("word")) {
-            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReportePagosPorVencerEnProx2Semanas" + formatoFecha.format(Calendar.getInstance().getTime()) + ".docx");
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ActaDeEntregaRecepcion" + formatoFecha.format(Calendar.getInstance().getTime()) + ".docx");
         } else if (archivo.equals("excel")) {
-            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ReportePagosPorVencerEnProx2Semanas" + formatoFecha.format(Calendar.getInstance().getTime()) + ".xlsx");
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ActaDeEntregaRecepcion" + formatoFecha.format(Calendar.getInstance().getTime()) + ".xlsx");
+        }
+        ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+        //Se define el Jasper Export
+        if (archivo.equals("pdf")) {
+            JasperExportManager.exportReportToPdfStream(this.jasperPrint, servletOutputStream);
+        } else if (archivo.equals("word")) {
+            JRDocxExporter docxExporter = new JRDocxExporter();
+            docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
+            docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            docxExporter.exportReport();
+        } else if (archivo.equals("excel")) {
+            JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+            xlsxExporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
+            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+            xlsxExporter.exportReport();
+        }
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+    
+    public void generarActaDeEntregaRecepcion(String numeroContrato, String tipo, String archivo) throws JRException, IOException{
+        Map parametros = new HashMap();
+        String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes);
+        parametros.put("realPath", realPath);
+        parametros.put("numeroContrato", numeroContrato);
+        this.jasperPrint = JasperFillManager.fillReport(FacesContext.getCurrentInstance().getExternalContext().getRealPath(pathReportes + "actaDeEntregaRecepcion.jasper"), parametros, this.connection);
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        
+        //Se valida la cabecera
+        if (archivo.equals("pdf")) {
+            if (tipo != null && !tipo.isEmpty() && tipo.equals("d")) {
+                httpServletResponse.addHeader("Content-disposition", "attachment; filename=ActaDeEntregaRecepcion" + formatoFecha.format(Calendar.getInstance().getTime()) + ".pdf");
+            }
+        } else if (archivo.equals("word")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ActaDeEntregaRecepcion" + formatoFecha.format(Calendar.getInstance().getTime()) + ".docx");
+        } else if (archivo.equals("excel")) {
+            httpServletResponse.addHeader("Content-disposition", "attachment; filename=ActaDeEntregaRecepcion" + formatoFecha.format(Calendar.getInstance().getTime()) + ".xlsx");
         }
         ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
         //Se define el Jasper Export
