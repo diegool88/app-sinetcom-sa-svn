@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PorAbastecer" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" whenResourceMissingType="Empty" uuid="66284476-54d3-4246-b83a-a45ceae7e2c6">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="636"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="209"/>
+	<property name="ireport.y" value="112"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
@@ -124,7 +124,7 @@ HAVING
 					<subreportParameterExpression><![CDATA[$F{ItemProducto_numeroSerial}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reportePorAbastecerConInfo_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{realPath} + "/reportePorAbastecerConInfo_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="97" y="38" width="100" height="20" uuid="0b0f9f67-dd1d-4103-9297-ced98cf8b0ab"/>

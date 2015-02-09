@@ -113,7 +113,7 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "registroDeMovimiento_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{realPath} + "/registroDeMovimiento_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="0" y="207" width="150" height="20" uuid="4c695aee-9241-48ca-8ee7-f8cce9297421"/>
@@ -162,7 +162,7 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "registroDeMovimiento_subreport2.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{realPath} + "/registroDeMovimiento_subreport2.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

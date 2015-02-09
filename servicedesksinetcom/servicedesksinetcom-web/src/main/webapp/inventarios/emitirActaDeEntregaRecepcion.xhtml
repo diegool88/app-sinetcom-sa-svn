@@ -12,43 +12,53 @@
             <h:body>
                 <h:form>
                     <p:panel menuTitle="Emisión de Acta Recepción">
-                        <p:dataTable id="contratos" value="#{emitirActaDeERBean.contratos}" selectionMode="single" selection="#{emitirActaDeERBean.contratoSeleccionado}" var="contrato" rowKey="#{contrato.numero}">
-                            <p:ajax event="rowSelect" update="contratos" listener="#{emitirActaDeERBean.seleccion}"></p:ajax>
-                            <p:ajax event="rowUnselect" update="contratos"></p:ajax>
+                        <p:dataTable id="contratos" widgetVar="contratos" value="#{emitirActaDeERBean.contratos}" var="contrato" rowKey="#{contrato.numero}" paginator="true" rows="10">
                             <f:facet name="header">
                                 <h:outputText value="Lista de Contratos"></h:outputText>
                             </f:facet>
-                            <p:column headerText="Número">
+                            <p:column headerText="Número" filterBy="#{contrato.numero}" filterMatchMode="contains">
                                 <h:outputText value="#{contrato.numero}"></h:outputText>
                             </p:column>
-                            <p:column headerText="Cliente">
+                            <p:column headerText="Cliente" filterBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterMatchMode="contains">
                                 <h:outputText value="#{contrato.clienteEmpresaruc.nombreComercial}"></h:outputText>
                             </p:column>
-                            <p:column headerText="Fecha Suscripción">
+                            <p:column headerText="Fecha Suscripción" filterBy="#{contrato.fechaDeSuscripcion}" filterMatchMode="contains">
                                 <h:outputText value="#{emitirActaDeERBean.formatoCortoDeFecha(contrato.fechaDeSuscripcion)}"></h:outputText>
                             </p:column>
-                            <p:column headerText="Validez">
+                            <p:column headerText="Validez" filterBy="#{contrato.tiempoDeValidez}" filterMatchMode="contains">
                                 <h:outputText value="#{contrato.tiempoDeValidez} años"></h:outputText>
                             </p:column>
+                            <p:column headerText="Descarga">
+                                <p:panelGrid columns="4">
+                                    <h:commandLink actionListener="#{reportesBean.generarActaDeEntregaRecepcion}">
+                                        <f:attribute name="tipo" value="g"></f:attribute>
+                                        <f:attribute name="archivo" value="pdf"></f:attribute>
+                                        <f:attribute value="#{contrato.numero}" name="numeroContrato"></f:attribute>
+                                        <p:graphicImage library="images" height="40px" width="40px"  name="pdf.png"></p:graphicImage>
+                                    </h:commandLink>
+                                    <h:commandLink id="btnPdf2" actionListener="#{reportesBean.generarActaDeEntregaRecepcion}">
+                                        <f:attribute name="tipo" value="d"></f:attribute>
+                                        <f:attribute name="archivo" value="pdf"></f:attribute>
+                                        <f:attribute name="numeroContrato" value="#{contrato.numero}"></f:attribute>
+                                        <p:graphicImage library="images" height="40px" width="40px" name="pdf2.png"></p:graphicImage>
+                                    </h:commandLink>
+                                    <h:commandLink id="btnWord" actionListener="#{reportesBean.generarActaDeEntregaRecepcion}">
+                                        <f:attribute name="archivo" value="word"></f:attribute>
+                                        <f:attribute name="numeroContrato" value="#{contrato.numero}"></f:attribute>
+                                        <p:graphicImage library="images" height="40px" width="40px" name="word.png"></p:graphicImage>
+                                    </h:commandLink>
+                                    <h:commandLink id="btnExcel" actionListener="#{reportesBean.generarActaDeEntregaRecepcion}">
+                                        <f:attribute name="archivo" value="excel"></f:attribute>
+                                        <f:attribute name="numeroContrato" value="#{contrato.numero}"></f:attribute>
+                                        <p:graphicImage library="images" height="40px" width="40px" name="excel.png"></p:graphicImage>
+                                    </h:commandLink>
+                                </p:panelGrid>
+                            </p:column>
                             <f:facet name="footer">
-                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
-                                    <p:graphicImage library="images" height="40px" width="40px"  name="pdf.png"></p:graphicImage>
-                                    <f:attribute name="tipo" value="g"></f:attribute>
-                                    <f:attribute name="archivo" value="pdf"></f:attribute>
-                                </h:commandLink>
-                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
-                                    <p:graphicImage library="images" height="40px" width="40px" name="pdf2.png"></p:graphicImage>
-                                    <f:attribute name="tipo" value="d"></f:attribute>
-                                    <f:attribute name="archivo" value="pdf"></f:attribute>
-                                </h:commandLink>
-                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
-                                    <p:graphicImage library="images" height="40px" width="40px" name="word.png"></p:graphicImage>
-                                    <f:attribute name="archivo" value="word"></f:attribute>
-                                </h:commandLink>
-                                <h:commandLink actionListener="#{emitirActaDeERBean.generarActaDeEntregaRecepcion}" disabled="#{not(emitirActaDeERBean.contratoSeleccionado != null)}">
-                                    <p:graphicImage library="images" height="40px" width="40px" name="excel.png"></p:graphicImage>
-                                    <f:attribute name="archivo" value="excel"></f:attribute>
-                                </h:commandLink>
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('contratos').filter()" style="width:150px" placeholder="Ingrese Búsqueda"/>
+                                </p:outputPanel>
                             </f:facet>
                         </p:dataTable>
                     </p:panel>
