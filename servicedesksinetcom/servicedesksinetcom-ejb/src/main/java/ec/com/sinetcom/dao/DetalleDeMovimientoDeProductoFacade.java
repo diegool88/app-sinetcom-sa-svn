@@ -36,7 +36,7 @@ public class DetalleDeMovimientoDeProductoFacade extends AbstractFacade<DetalleD
      * @return 
      */
     public List<DetalleDeMovimientoDeProducto> forzarCargaDeHistorialDeMovimientoPorRegistro(RegistroDeMovimientoDeInventario registro){
-        String sql = "SELECT h FROM HistorialDeMovimientoDeProducto h WHERE h.registroDeMovimientoDeInventariocodigo = ?1";
+        String sql = "SELECT h FROM DetalleDeMovimientoDeProducto h WHERE h.registroDeMovimientoDeInventariocodigo = ?1";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, registro);
         return qry.getResultList();
