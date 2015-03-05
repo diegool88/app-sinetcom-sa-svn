@@ -30,7 +30,7 @@
                             <p:outputLabel for="producto">Seleccione el Producto: </p:outputLabel>
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="producto" converter="#{itemProductoConverter}" value="#{crearTicketBean.ticket.itemProductonumeroSerial}" required="true">
+                            <p:selectOneMenu id="producto" converter="#{itemProductoConverter}" value="#{crearTicketBean.ticket.itemProductonumeroSerial}" filter="true" filterMatchMode="contains" required="true">
                                 <f:selectItem itemLabel="-- Seleccione una opción --" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{crearTicketBean.itemProductos}" var="pro" itemLabel="#{pro.modeloProductoid.lineaDeProductoid.nombre} #{pro.modeloProductoid.modelo} - #{pro.numeroSerial}" itemValue="#{pro.numeroSerial}"></f:selectItems>
                             </p:selectOneMenu> 

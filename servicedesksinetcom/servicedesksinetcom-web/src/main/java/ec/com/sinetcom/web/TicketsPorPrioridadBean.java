@@ -88,6 +88,8 @@ public class TicketsPorPrioridadBean extends BotonesTickets implements Serializa
     private StreamedContent archivoPorDescargar;
     //Link de descarga
     private UICommand link;
+    //Tab Activo
+    private Integer tabSeleccionadoIndex;
 
     @PostConstruct
     public void doInit() {
@@ -103,6 +105,14 @@ public class TicketsPorPrioridadBean extends BotonesTickets implements Serializa
             this.sinSeleccion();
         }
         this.resueltoConExito = true;
+        this.tabSeleccionadoIndex = 0;
+    }
+    
+    public void recargarTablaTickets(){
+        //System.out.println("Tabla Refrescada!");
+        //System.out.println(tabSeleccionadoIndex);
+        //Mensajes.mostrarMensajeInformativo(tabSeleccionado);
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), tabSeleccionadoIndex + 1);
     }
 
     public void cambioDeTab(TabChangeEvent event) {
@@ -403,6 +413,14 @@ public class TicketsPorPrioridadBean extends BotonesTickets implements Serializa
 
     public void setArchivoAdjuntoHojaS(UploadedFile archivoAdjuntoHojaS) {
         this.archivoAdjuntoHojaS = archivoAdjuntoHojaS;
+    }
+
+    public Integer getTabSeleccionadoIndex() {
+        return tabSeleccionadoIndex;
+    }
+
+    public void setTabSeleccionadoIndex(Integer tabSeleccionadoIndex) {
+        this.tabSeleccionadoIndex = tabSeleccionadoIndex;
     }
     
     
