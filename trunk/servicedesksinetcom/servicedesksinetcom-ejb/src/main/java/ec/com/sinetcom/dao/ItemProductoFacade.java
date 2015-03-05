@@ -45,7 +45,7 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
      * @return
      */
     public List<ItemProducto> obtenerTodosLosProductosDeCliente(List<Contrato> contratos) {
-        String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero.numero IN :contratos AND i.itemProductonumeroSerialpadre IS NULL";
+        String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero.numero IN :contratosL AND i.itemProductonumeroSerialpadre IS NULL";
         Query qry = this.em.createQuery(sql);
         List<String> numeroContratos = new ArrayList<String>();
         for (Contrato contrato : contratos) {
@@ -58,7 +58,12 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
                 }
             }
         }
-        qry.setParameter("contratos", numeroContratos);
+        
+        if(numeroContratos.isEmpty()){
+            return null;
+        }
+        
+        qry.setParameter("contratosL", numeroContratos);
         return qry.getResultList();
     }
 
