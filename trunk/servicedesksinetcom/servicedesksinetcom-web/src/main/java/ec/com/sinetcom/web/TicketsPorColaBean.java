@@ -89,6 +89,8 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
     private StreamedContent archivoPorDescargar;
     //Link de descarga
     private UICommand link;
+    //Tab Activo
+    private Integer tabSeleccionadoIndex;
 
     @PostConstruct
     public void doInit() {
@@ -104,6 +106,14 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
             this.sinSeleccion();
         }
         this.resueltoConExito = true;
+        this.tabSeleccionadoIndex = 0;
+    }
+    
+    public void recargarTablaTickets(){
+        //System.out.println("Tabla Refrescada!");
+        //System.out.println(tabSeleccionadoIndex);
+        //Mensajes.mostrarMensajeInformativo(tabSeleccionado);
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), tabSeleccionadoIndex + 1);
     }
 
     public void cambioDeTab(TabChangeEvent event) {
@@ -405,5 +415,13 @@ public class TicketsPorColaBean extends BotonesTickets implements Serializable {
     public void setArchivoAdjuntoHojaS(UploadedFile archivoAdjuntoHojaS) {
         this.archivoAdjuntoHojaS = archivoAdjuntoHojaS;
     } 
+
+    public Integer getTabSeleccionadoIndex() {
+        return tabSeleccionadoIndex;
+    }
+
+    public void setTabSeleccionadoIndex(Integer tabSeleccionadoIndex) {
+        this.tabSeleccionadoIndex = tabSeleccionadoIndex;
+    }
     
 }

@@ -25,15 +25,15 @@
                             <p:rowToggler></p:rowToggler>
                         </p:column>
 
-                        <p:column headerText="Número" sortBy="#{contrato.numero}" filterBy="#{contrato.numero}">
+                        <p:column headerText="Número" sortBy="#{contrato.numero}" filterBy="#{contrato.numero}" filterMatchMode="exact">
                             <h:outputText value="#{contrato.numero}"/>
                         </p:column>
 
-                        <p:column headerText="Cliente" sortBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterBy="#{ontrato.clienteEmpresaruc.nombreComercial}">
+                        <p:column headerText="Cliente" sortBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterMatchMode="contains">
                             <h:outputText value="#{contrato.clienteEmpresaruc.nombreComercial}"/>
                         </p:column>
 
-                        <p:column headerText="Fecha de Suscripción">
+                        <p:column headerText="Fecha de Suscripción" sortBy="#{contrato.fechaDeSuscripcion}" filterBy="#{contrato.fechaDeSuscripcion}" filterMatchMode="contains">
                             <h:outputText value="#{consultaContratoBean.formatoCortoDeFecha(contrato.fechaDeSuscripcion)}"></h:outputText>
                         </p:column>
 
