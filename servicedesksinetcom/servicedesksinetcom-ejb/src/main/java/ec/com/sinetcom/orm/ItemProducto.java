@@ -26,6 +26,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.config.CacheIsolationType;
 
 /**
  *
@@ -36,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ItemProducto.findAll", query = "SELECT i FROM ItemProducto i")})
+@Cache(isolation = CacheIsolationType.ISOLATED)
 public class ItemProducto implements Serializable, Cloneable {
     @ManyToMany(mappedBy = "itemProductoList1")
     private List<Contrato> contratoList;

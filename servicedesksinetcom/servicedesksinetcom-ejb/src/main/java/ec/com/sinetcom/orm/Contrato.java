@@ -28,6 +28,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.config.CacheIsolationType;
 
 /**
  *
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Contrato.findAll", query = "SELECT c FROM Contrato c")})
+@Cache(isolation = CacheIsolationType.ISOLATED)
 public class Contrato implements Serializable {
     @Basic(optional = false)
     @NotNull
