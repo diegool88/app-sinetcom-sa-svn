@@ -147,8 +147,11 @@ public class ingresoContratoBean implements Serializable {
         contrato.setFechaDeEntregaRecepcion(fechaEntregaRecepcion);
         //Se agregan los pagos, garantias, visitas tecnicas y cursos
         if (!pagos.isEmpty()) {
+            int i = 0;
             for (Pago pago : pagos) {
                 pago.setContratonumero(contrato);
+                if(i==0)pago.setAnticipo(true);
+                i++;
             }
             contrato.setPagoList(this.pagos);
         }

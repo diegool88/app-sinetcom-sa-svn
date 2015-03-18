@@ -29,7 +29,7 @@
                             <h:outputText value="#{empresas.ruc}"/>
                         </p:column>
 
-                        <p:column headerText="Razon Social" sortBy="#{empresas.razonSocial}" filterBy="#{empresas.razonSocial}">
+                        <p:column headerText="Razón Social" sortBy="#{empresas.razonSocial}" filterBy="#{empresas.razonSocial}">
                             <h:outputText value="#{empresas.razonSocial}"/>
                         </p:column>
 
@@ -37,7 +37,7 @@
                             <h:outputText value="#{empresas.nombreComercial}"/>
                         </p:column>
 
-                        <p:column headerText="Telefono" sortBy="#{empresas.telefonoPBX}" filterBy="#{empresas.telefonoPBX}">
+                        <p:column headerText="Teléfono" sortBy="#{empresas.telefonoPBX}" filterBy="#{empresas.telefonoPBX}">
                             <h:outputText value="#{empresas.telefonoPBX}"/>
                         </p:column>
 
@@ -70,9 +70,9 @@
                                         <f:facet name="header">
                                             <h:outputText value="Dirección ##{index.index + 1}"></h:outputText>
                                         </f:facet>
-                                        <p:outputLabel for="direccion1" value="Direccion 1: "></p:outputLabel>
+                                        <p:outputLabel for="direccion1" value="Dirección 1: "></p:outputLabel>
                                         <h:outputText id="direccion1" value="#{direccion.direccion1 != null ? direccion.direccion1 : 'No disponible'}"></h:outputText>
-                                        <p:outputLabel for="direccion2" value="Direccion 2: "></p:outputLabel>
+                                        <p:outputLabel for="direccion2" value="Dirección 2: "></p:outputLabel>
                                         <h:outputText id="direccion2" value="#{direccion.direccion2 != null ? direccion.direccion2 : 'No disponible'}"></h:outputText>
                                         <p:outputLabel for="ciudad" value="Ciudad: "></p:outputLabel>
                                         <h:outputText id="ciudad" value="#{direccion.ciudad.nombre }"></h:outputText>
@@ -112,7 +112,7 @@
                                 <f:selectItems value="#{ingresoClienteEmpresaBean.tiposEmpresa}" var="Tipos" itemLabel="#{Tipos.tipo}" itemValue="#{Tipos.id.toString()}" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="clienteRazonSocial" value="Razon Social:"/>
+                            <p:outputLabel for="clienteRazonSocial" value="Razón Social:"/>
                             <p:inputText id="clienteRazonSocial" maxlength="60" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.razonSocial}" required="true"/>
 
                             <p:outputLabel for="clienteNombreComercial" value="Nombre Comercial:"/>

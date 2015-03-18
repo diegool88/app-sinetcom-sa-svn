@@ -24,7 +24,7 @@
                         <p:ajax event="rowSelect" immediate="true" update="btnEliminar, btnEditar"></p:ajax>
                         <p:ajax event="rowUnselect" immediate="true" update="btnEliminar, btnEditar"></p:ajax>
 
-                        <p:column headerText="Cedula" sortBy="#{contactos.cedulaDeCuidadania}" filterBy="#{contactos.cedulaDeCuidadania}">
+                        <p:column headerText="Cédula" sortBy="#{contactos.cedulaDeCuidadania}" filterBy="#{contactos.cedulaDeCuidadania}">
                             <h:outputText value="#{contactos.cedulaDeCuidadania}"/>
                         </p:column>
 
@@ -36,7 +36,7 @@
                             <h:outputText value="#{contactos.correoElectronico}"/>
                         </p:column>
 
-                        <p:column headerText="Telefono" sortBy="#{contactos.telefonoFijo}" filterBy="#{contactos.telefonoFijo}">
+                        <p:column headerText="Teléfono" sortBy="#{contactos.telefonoFijo}" filterBy="#{contactos.telefonoFijo}">
                             <h:outputText value="#{contactos.telefonoFijo}"/>
                         </p:column>
 
@@ -63,10 +63,10 @@
                             <p:outputLabel for="contactoRuc" value="Ruc Cliente"/>
                             <p:selectOneMenu id="contactoRuc" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" required="true">                    
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoContactoBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}-#{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
+                                <f:selectItems value="#{ingresoContactoBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}" itemValue="#{Clientes.ruc}" />
                              </p:selectOneMenu>
 
-                            <p:outputLabel for="contactoCedula" value="Cedula:"/>
+                            <p:outputLabel for="contactoCedula" value="Cédula de C.:"/>
                             <p:inputText id="contactoCedula" maxlength="10" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.cedulaDeCuidadania}" required="true"/>
 
                             <p:outputLabel for="contactoNombre" value="Nombre:"/>
@@ -78,7 +78,7 @@
                             <p:outputLabel for="contactoCelular" value="Celular:"/>
                             <p:inputText id="contactoCelular" maxlength="15" value="#{ingresoContactoBean.contactoSeleccionado.telefonoMovil}" required="true"/>
 
-                            <p:outputLabel for="contactoTelefono" value="Telefono:"/>
+                            <p:outputLabel for="contactoTelefono" value="Teléfono:"/>
                             <p:inputText id="contactoTelefono" maxlength="15" value="#{ingresoContactoBean.contactoSeleccionado.telefonoFijo}" required="true"/>
 
                             <p:outputLabel for="contactoMail" value="e-Mail:"/>

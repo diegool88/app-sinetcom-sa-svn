@@ -93,7 +93,7 @@
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Descarga">
-                                <h:commandLink actionListener="#{actualizarRegistroDeMovBean.descargarRegistroDeMovimientoDeInventario}">
+                                <h:commandLink immediate="true" actionListener="#{actualizarRegistroDeMovBean.descargarRegistroDeMovimientoDeInventario}">
                                     <f:attribute value="#{registroF.codigo}" name="idRegistro"></f:attribute>
                                     <p:graphicImage library="images" width="40" height="40"  name="pdf.png"></p:graphicImage>
                                 </h:commandLink>

@@ -112,7 +112,7 @@ public class TicketsPorPrioridadBean extends BotonesTickets implements Serializa
         //System.out.println("Tabla Refrescada!");
         //System.out.println(tabSeleccionadoIndex);
         //Mensajes.mostrarMensajeInformativo(tabSeleccionado);
-        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), tabSeleccionadoIndex + 1);
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaPrioridad(null, tabSeleccionadoIndex + 1);
     }
 
     public void cambioDeTab(TabChangeEvent event) {
@@ -179,7 +179,7 @@ public class TicketsPorPrioridadBean extends BotonesTickets implements Serializa
     }
     
     public String formatoCortoDeFechaYHora(Date fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return format.format(fecha);
     }
 
