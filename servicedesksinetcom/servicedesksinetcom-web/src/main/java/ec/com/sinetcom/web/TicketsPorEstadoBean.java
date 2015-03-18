@@ -111,7 +111,7 @@ public class TicketsPorEstadoBean extends BotonesTickets implements Serializable
         //System.out.println("Tabla Refrescada!");
         //System.out.println(tabSeleccionadoIndex);
         //Mensajes.mostrarMensajeInformativo(tabSeleccionado);
-        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), tabSeleccionadoIndex + 1);
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnEstado(null, tabSeleccionadoIndex + 1);
     }
 
     public void cambioDeTab(TabChangeEvent event) {
@@ -185,7 +185,7 @@ public class TicketsPorEstadoBean extends BotonesTickets implements Serializable
     }
     
     public String formatoCortoDeFechaYHora(Date fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return format.format(fecha);
     }
 

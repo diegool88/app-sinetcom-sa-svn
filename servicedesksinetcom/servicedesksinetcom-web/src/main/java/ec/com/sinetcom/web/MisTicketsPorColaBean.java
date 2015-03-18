@@ -180,7 +180,7 @@ public class MisTicketsPorColaBean extends BotonesTickets implements Serializabl
     }
     
     public String formatoCortoDeFechaYHora(Date fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return format.format(fecha);
     }
 

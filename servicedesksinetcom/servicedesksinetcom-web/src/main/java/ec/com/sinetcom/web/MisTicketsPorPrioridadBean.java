@@ -112,7 +112,7 @@ public class MisTicketsPorPrioridadBean extends BotonesTickets implements Serial
         //System.out.println("Tabla Refrescada!");
         //System.out.println(tabSeleccionadoIndex);
         //Mensajes.mostrarMensajeInformativo(tabSeleccionado);
-        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaCola(administracionUsuarioBean.getUsuarioActual(), tabSeleccionadoIndex + 1);
+        this.tickets = this.ticketServicio.obtenerTodosLosTicketsPorUnaPrioridad(administracionUsuarioBean.getUsuarioActual(), tabSeleccionadoIndex + 1);
     }
 
     
@@ -180,7 +180,7 @@ public class MisTicketsPorPrioridadBean extends BotonesTickets implements Serial
     }
     
     public String formatoCortoDeFechaYHora(Date fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return format.format(fecha);
     }
 

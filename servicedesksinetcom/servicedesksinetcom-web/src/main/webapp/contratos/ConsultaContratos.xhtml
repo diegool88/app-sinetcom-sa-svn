@@ -38,7 +38,7 @@
                         </p:column>
 
                         <p:rowExpansion>
-                            <p:panelGrid style="width: 700px;" columns="2">
+                            <p:panelGrid id="detallesC" style="width: 700px;" columns="2">
                                 <f:facet name="header">
                                     <h:outputText value="#{contrato.numero}"></h:outputText>
                                 </f:facet>
@@ -165,10 +165,28 @@
                                         <h:outputText value="#{curso.fechaDeInicio != null ? consultaContratoBean.formatoCortoDeFecha(curso.fechaDeInicio) : 'No disponible'}"/>
                                     </p:panelGrid>
                                 </ui:repeat>
+                                <p:outputLabel for="equipos" value="Equipos:"></p:outputLabel>
+                                <ui:repeat id="equipos" value="#{contrato.itemProductoSoloPadres}" var="equipo" varStatus="index">
+                                    <p:panelGrid columns="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="Equipo ##{index.index + 1}"/>
+                                        </f:facet>
+                                        <p:outputLabel value="Serial:"/>
+                                        <h:outputText value="#{equipo.numeroSerial}"/>
+                                        <p:outputLabel value="Número de Parte"/>
+                                        <h:outputText value="#{equipo.numeroDeParte != null ? equipo.numeroDeParte : 'N/A'}"/>
+                                        <p:outputLabel value="Descripción:"/>
+                                        <h:outputText value="#{equipo.descripcion}"/>
+                                    </p:panelGrid>
+                                </ui:repeat>
                                 <p:outputLabel for="descargaContrato" value="Contrato Digital:"/>
                                 <p:commandButton id="descargaContrato" value="Descargar" icon="ui-icon-arrowstop-1-s" ajax="false" immediate="true" actionListener="#{consultaContratoBean.asignarContratoDescarga}">
                                     <f:attribute value="#{contrato.numero}" name="contratoNumero"/>
                                     <p:fileDownload value="#{consultaContratoBean.contratoDigital}"/>
+                                </p:commandButton>
+                                <p:outputLabel for="printer">Imprimir Registro</p:outputLabel>
+                                <p:commandButton id="printer" value="Imprimir" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                                    <p:printer target="detallesC"></p:printer>
                                 </p:commandButton>
                             </p:panelGrid>
                         </p:rowExpansion>

@@ -41,7 +41,10 @@
                             <h:outputText value="#{ticket.estadoTicketcodigo.nombre}"></h:outputText>
                         </p:column>
                         <p:column headerText="Fecha de Creación" width="280">
-                            <h:outputText value="#{ticket.fechaDeCreacion}"></h:outputText>
+                            <h:outputText value="#{ticketsPorCola.formatoCortoDeFechaYHora(ticket.fechaDeCreacion)}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Fecha de U. Modificación" width="280">
+                            <h:outputText value="#{ticketsPorCola.formatoCortoDeFechaYHora(ticket.fechaDeModificacion)}"></h:outputText>
                         </p:column>
                         <p:column headerText="Asunto" width="280">
                             <h:outputText value="#{ticket.titulo}"></h:outputText>
@@ -116,10 +119,10 @@
                                 Detalle de Actividades
                             </f:facet>
                             <p:column headerText="Fecha Inicio">
-                                #{actividad.fechaInicio}
+                                #{ticketsPorCola.formatoCortoDeFechaYHora(actividad.fechaInicio)}
                             </p:column>
                             <p:column headerText="Fecha Fin">
-                                #{actividad.fechaFin}
+                                #{ticketsPorCola.formatoCortoDeFechaYHora(actividad.fechaFin)}
                             </p:column>
                             <p:column headerText="Tiempo de Viaje">
                                 #{actividad.horasDeViaje != null ? actividad.horasDeViaje : "0"} h / #{actividad.minutosDeViaje != null ? actividad.minutosDeViaje : "0"} m

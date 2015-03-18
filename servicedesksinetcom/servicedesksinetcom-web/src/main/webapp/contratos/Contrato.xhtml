@@ -58,8 +58,8 @@
                         <p:calendar id="contratoFechaSuscripcion" value="#{ingresoContratoBean.fechaSuscripcion}" showOn="button" required="true"/>
 
                         <p:outputLabel for="contratoObjeto" value="Objeto:"/>
-                        <p:inputText id="contratoObjeto" value="#{ingresoContratoBean.objeto}" required="true"/>
-
+                        <p:inputTextarea id="contratoObjeto" cols="25" rows="8" value="#{ingresoContratoBean.objeto}" required="true"/>
+                        
                         <p:outputLabel for="contratoPrecio" value="Precio ($):"/>
                         <p:inputText id="contratoPrecio" type="number" value="#{ingresoContratoBean.precio}" required="true"/>
 
