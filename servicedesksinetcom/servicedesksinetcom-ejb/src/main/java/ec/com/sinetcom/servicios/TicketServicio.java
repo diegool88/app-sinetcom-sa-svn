@@ -41,6 +41,7 @@ import ec.com.sinetcom.orm.ServicioTicket;
 import ec.com.sinetcom.orm.Sla;
 import ec.com.sinetcom.orm.Ticket;
 import ec.com.sinetcom.orm.Usuario;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -326,6 +327,16 @@ public class TicketServicio {
      */
     public void actualizarInformacionTicket(Ticket ticket) {
         this.ticketFacade.edit(ticket);
+    }
+    
+    /**
+     * Devuelve un formato corto de fecha y hora
+     * @param fecha
+     * @return 
+     */
+    public String formatoCortoDeFecha(Date fecha){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return format.format(fecha);
     }
 
     /**
@@ -992,7 +1003,7 @@ public class TicketServicio {
         cuerpo.append("Ticket #: ").append(ticket.getTicketNumber()).append("\n");
         cuerpo.append("Creado por: ").append(ticket.getUsuarioidcreador().getNombre()).append(" ").append(ticket.getUsuarioidcreador().getApellido()).append("\n");
         cuerpo.append("Empresa: ").append(ticket.getClienteEmpresaruc().getNombreComercial()).append("\n");
-        cuerpo.append("Fecha y Hora de Creación: ").append(ticket.getFechaDeCreacion().toString()).append("\n");
+        cuerpo.append("Fecha y Hora de Creación: ").append(formatoCortoDeFecha(ticket.getFechaDeCreacion())).append("\n");
         cuerpo.append("Prioridad: ").append(ticket.getPrioridadTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Servicio Solicitado: ").append(ticket.getServicioTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Estado: ").append(ticket.getEstadoTicketcodigo().getNombre()).append("\n");
@@ -1002,7 +1013,7 @@ public class TicketServicio {
         Contrato contrato = ticket.getItemProductonumeroSerial().getContratonumero();
         fechaMaximaDeValidez.setTime(contrato.getFechaDeEntregaRecepcion());
         fechaMaximaDeValidez.add(Calendar.YEAR, contrato.getTiempoDeValidez());
-        long diferenciaTiempo = (int) ((new Date()).getTime() - fechaMaximaDeValidez.getTime().getTime()) / (1000 * 60 * 60 * 24);
+        long diferenciaTiempo = Math.abs(((new Date()).getTime() - fechaMaximaDeValidez.getTime().getTime()) / (1000 * 60 * 60 * 24));
         if (diferenciaTiempo <= 30) {
             cuerpo.append("NOTA: Recuerde que solo quedan ").append(diferenciaTiempo).append(" días para la finalización del contrato de soporte sobre este equipo.").append("\n");
         }
@@ -1013,22 +1024,22 @@ public class TicketServicio {
             switch (ticket.getPrioridadTicketcodigo().getValor()) {
                 case 1:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadAlta());
-                    cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
+                    cuerpo.append("Hora máxima de Primer Contacto: ").append(formatoCortoDeFecha(c.getTime())).append("\n");
                     break;
                 case 2:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadMedia());
-                    cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
+                    cuerpo.append("Hora máxima de Primer Contacto: ").append(formatoCortoDeFecha(c.getTime())).append("\n");
                     break;
                 case 3:
                     c.add(Calendar.HOUR, ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoRespuestaPrioridadBaja());
-                    cuerpo.append("Hora máxima de Primer Contacto: ").append(c.getTime()).append("\n");
+                    cuerpo.append("Hora máxima de Primer Contacto: ").append(formatoCortoDeFecha(c.getTime())).append("\n");
                     break;
             }
             Calendar g = Calendar.getInstance();
             g.add(Calendar.YEAR, ticket.getItemProductonumeroSerial().getContratonumero().getGarantiaTecnica());
             cuerpo.append("Tiempo de resolución: ").append(ticket.getItemProductonumeroSerial().getContratonumero().getSlaid().getTiempoDeSolucion()).append(" h\n");
             cuerpo.append("Repuestos: ").append(ticket.getItemProductonumeroSerial().getContratonumero().getIncluyeRepuestos() ? "Incluye" : "No Incluye").append("\n");
-            cuerpo.append("Garantía Técnica: ").append(g.getTime().compareTo(new Date()) < 0 ? "Vencido" : "En vigencia").append(" Fecha: ").append(g.getTime()).append("\n");
+            cuerpo.append("Garantía Técnica: ").append(g.getTime().compareTo(new Date()) < 0 ? "Vencido" : "En vigencia").append("; Fecha: ").append(formatoCortoDeFecha(g.getTime())).append("\n");
             Contacto contacto = ticket.getItemProductonumeroSerial().getContratonumero().getAdministradorDeContrato();
             cuerpo.append("Persona de Contacto: ").append(contacto.getNombre()).append("\n");
             cuerpo.append("Teléfono fijo: ").append(contacto.getTelefonoFijo()).append("\n");
@@ -1069,8 +1080,11 @@ public class TicketServicio {
         StringBuilder cuerpo = new StringBuilder();
         //Agregamos el nuevo articulo al ticket
         cuerpo.append("Se ha agregado un nuevo artículo al ticket# ").append(articulo.getTicketticketNumber().getTicketNumber()).append("\n\n");
+        //Agregamos el asunto
+        cuerpo.append("Asunto: ").append(articulo.getAsunto()).append("\n\n");
         //Agregamos el cuerpo del articulo
-        cuerpo.append(articulo.getCuerpo()).append("\n");
+        cuerpo.append("Detalle: ").append(articulo.getCuerpo()).append("\n\n");
+        cuerpo.append("Saludos Cordiales.");
         return cuerpo.toString();
     }
 
@@ -1087,10 +1101,10 @@ public class TicketServicio {
         //Agregamos el cuerpo del ticket cerrado
         cuerpo.append("Se ha cerrado el ticket# ").append(ticket.getTicketNumber()).append(" vea abajo los detalles: ").append("\n");
         //Agregamos el detalle del cierre del ticket
-        cuerpo.append("Hora de Cierre: ").append(ticket.getFechaDeCierre()).append("\n");
+        cuerpo.append("Hora de Cierre: ").append(formatoCortoDeFecha(ticket.getFechaDeCierre())).append("\n");
         cuerpo.append("Usuario: ").append(usuario.getNombreCompleto()).append("\n");
         cuerpo.append("El ticket fue cerrado con éxito!").append("\n\n");
-        cuerpo.append("Saludos Cordiales");
+        cuerpo.append("Saludos Cordiales.");
         return cuerpo.toString();
     }
 
