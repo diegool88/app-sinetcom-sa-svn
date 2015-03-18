@@ -47,10 +47,12 @@ import ec.com.sinetcom.orm.VisitaTecnica;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.mail.internet.MailDateFormat;
 
 /**
  *
@@ -182,6 +184,11 @@ public class ContratoServicio {
             return false;
         }
         return true;
+    }
+    
+    public String formatoCortoDeFecha(Date fecha){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        return format.format(fecha);
     }
 
     public List<TipoContrato> cargarTiposContrato() {
@@ -406,7 +413,7 @@ public class ContratoServicio {
         cuerpo.append("Le informamos que un pago se encuentra por vencer, a continuación los detalles: ").append("\n\n");
         cuerpo.append("Contrato: ").append(pago.getContratonumero().getNumero()).append("\n");
         cuerpo.append("Monto: ").append(pago.getMonto()).append("\n");
-        cuerpo.append("Plazo Máximo: ").append(pago.getPlazo()).append("\n");
+        cuerpo.append("Plazo Máximo: ").append(formatoCortoDeFecha(pago.getPlazo())).append("\n");
         cuerpo.append("Pago Número: ").append(pago.getOrden()).append("\n");
         cuerpo.append("¿Es anticipo?: ").append(pago.getAnticipo() != null && pago.getAnticipo() ? "Si" : "No").append("\n\n\n");
         cuerpo.append("Saludos Cordiales.").append("\n");
@@ -428,7 +435,7 @@ public class ContratoServicio {
         cuerpo.append("Le informamos que un pago se encuentra por vencer, a continuación los detalles: ").append("\n\n");
         cuerpo.append("Contrato: ").append(garantiaEconomica.getContratonumero().getNumero()).append("\n");
         cuerpo.append("Monto: ").append(garantiaEconomica.getValor()).append("\n");
-        cuerpo.append("Fecha de finalización: ").append(garantiaEconomica.getFechaFin()).append("\n");
+        cuerpo.append("Fecha de finalización: ").append(formatoCortoDeFecha(garantiaEconomica.getFechaFin())).append("\n");
         cuerpo.append("Porcentaje: ").append(garantiaEconomica.getPorcentaje()).append("%\n");
         cuerpo.append("¿Es renovable?: ").append(garantiaEconomica.getRenovable() ? "Si" : "No").append("\n");
         cuerpo.append("Tipo de Garantía E.: ").append(garantiaEconomica.getTipoGarantiaid().getTipo()).append("\n\n\n");
@@ -581,7 +588,7 @@ public class ContratoServicio {
         sb.append("Tema a tratar: ").append(curso.getTemaATratar()).append("\n");
         sb.append("Cliente: ").append(curso.getContratonumero().getClienteEmpresaruc().getNombreComercial()).append("\n");
         sb.append("Número de contrato: ").append(curso.getContratonumero().getNumero()).append("\n");
-        sb.append("Fecha: ").append(new SimpleDateFormat("dd/MM/yyyy").format(curso.getFechaDeInicio())).append("\n");
+        sb.append("Fecha: ").append(formatoCortoDeFecha(curso.getFechaDeInicio())).append("\n");
         sb.append("Instructor: ").append(curso.getNombreInstructor()).append("\n");
         sb.append("¿Es un curso oficial?: ").append(curso.getOficial() ? "Si" : "No").append("\n");
         sb.append("Número de horas totales: ").append(curso.getNumeroDeHorasTotales()).append(" horas").append("\n");
@@ -597,7 +604,7 @@ public class ContratoServicio {
         sb.append("Le recordamos que se acerca una visita técnica, a continuación los detalles:").append("\n");
         sb.append("Descripción: ").append(visitaTecnica.getDescripcion()).append("\n");
         sb.append("Tipo de Mantenimiento: ").append(visitaTecnica.getTipoDeVisitaid().getNombre()).append("\n");
-        sb.append("Fecha: ").append(new SimpleDateFormat("dd/MM/yyyy").format(visitaTecnica.getFecha())).append("\n");
+        sb.append("Fecha: ").append(formatoCortoDeFecha(visitaTecnica.getFecha())).append("\n");
         sb.append("Cliente: ").append(visitaTecnica.getContratonumero().getClienteEmpresaruc().getNombreComercial()).append("\n");
         sb.append("Contrato: ").append(visitaTecnica.getContratonumero().getNumero()).append("\n\n");
         sb.append("Saludos Cordiales.").append("\n\n");

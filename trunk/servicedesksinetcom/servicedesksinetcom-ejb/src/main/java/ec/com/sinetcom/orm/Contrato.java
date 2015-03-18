@@ -6,6 +6,7 @@ package ec.com.sinetcom.orm;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -417,6 +418,14 @@ public class Contrato implements Serializable {
 
     public void setItemProductoList(List<ItemProducto> itemProductoList) {
         this.itemProductoList = itemProductoList;
+    }
+    
+    public List<ItemProducto> getItemProductoSoloPadres(){
+        List<ItemProducto> padres = new ArrayList<ItemProducto>();
+        for (ItemProducto item : this.itemProductoList){
+            if(item.getItemProductonumeroSerialpadre() == null) padres.add(item);
+        }
+        return padres;
     }
 
     @Override
