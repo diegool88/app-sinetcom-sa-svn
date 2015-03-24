@@ -161,7 +161,7 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
      * @return 
      */
     public boolean cargarDatosItemProducto() {
-        Query qry = this.em.createNativeQuery("LOAD DATA INFILE '/temp/ItemProducto.csv' INTO TABLE ItemProducto CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
+        Query qry = this.em.createNativeQuery("LOAD DATA LOCAL INFILE '/temp/ItemProducto.csv' INTO TABLE ItemProducto CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
         return qry.executeUpdate() > 0;
     }
 }
