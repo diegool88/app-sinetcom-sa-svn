@@ -51,7 +51,7 @@ public class ClienteEmpresaFacade extends AbstractFacade<ClienteEmpresa> {
     }
     
     public boolean cargarDatosClienteEmpresa(){
-        Query qry = this.em.createNativeQuery("LOAD DATA INFILE '/temp/ClienteEmpresa.csv' INTO TABLE ClienteEmpresa CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
+        Query qry = this.em.createNativeQuery("LOAD DATA LOCAL INFILE '/temp/ClienteEmpresa.csv' INTO TABLE ClienteEmpresa CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
         return qry.executeUpdate() > 0;
     }
 }
