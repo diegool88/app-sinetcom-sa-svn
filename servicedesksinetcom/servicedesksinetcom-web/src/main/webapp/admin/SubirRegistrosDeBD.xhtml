@@ -11,45 +11,21 @@
             <h:head/>
             <h:body>
                 <h:form id="verDatosSinetcomForm">
-                    <p:panelGrid columns="1">
+                    <p:panelGrid columns="2">
                         <f:facet name="header">
-                            <h:outputText value="Selección de Archivos CSV"></h:outputText>
+                            <h:outputText value="Subir Archivo CSV"></h:outputText>
                         </f:facet>
-                        <p:panelGrid columns="2">
-                            <f:facet name="header">
-                                <h:outputText value="Tabla Cliente Empresa"></h:outputText>
-                            </f:facet>
-                            <p:outputLabel value="Cliente Empresa:" for="cliente" />
-                            <p:fileUpload id="cliente"  value="Cargar Archivo" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(csv)$/" multiple="false" update=":growl" fileUploadListener="#{subirDatosBDBean.cargarArchivo}" />
-                            <f:facet name="footer">
-                                <p:commandButton value="Enviar Datos" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
-                                    <f:attribute name="tabla" value="ClienteEmpresa"></f:attribute>
-                                </p:commandButton>
-                            </f:facet>
-                        </p:panelGrid>
-                        <p:panelGrid columns="2">
-                            <f:facet name="header">
-                                <h:outputText value="Tabla Contrato"></h:outputText>
-                            </f:facet>
-                            <p:outputLabel value="Contrato:" for="contrato" />
-                            <p:fileUpload id="contrato"  value="Cargar Archivo" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(csv)$/" multiple="false" update=":growl" fileUploadListener="#{subirDatosBDBean.cargarArchivo}" />
-                            <f:facet name="footer">
-                                <p:commandButton value="Enviar Datos" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
-                                    <f:attribute name="tabla" value="Contrato"></f:attribute>
-                                </p:commandButton>
-                            </f:facet>
-                        </p:panelGrid>
-                        <p:panelGrid columns="2">
-                            <f:facet name="header">
-                                <h:outputText value="Tabla ItemProducto(Inventario)"></h:outputText>
-                            </f:facet>
-                            <p:outputLabel value="Inventario:" for="inventario" />
-                            <p:fileUpload id="inventario"  value="Cargar Archivo" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(csv)$/" multiple="false" update=":growl" fileUploadListener="#{subirDatosBDBean.cargarArchivo}" />
-                            <f:facet name="footer">
-                                <p:commandButton value="Enviar Datos" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
-                                    <f:attribute name="tabla" value="ItemProducto"></f:attribute>
-                                </p:commandButton>
-                            </f:facet>
+                        <p:fileUpload value="Seleccione Archivo CSV" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(csv)$/" multiple="false" update=":growl" fileUploadListener="#{subirDatosBDBean.cargarArchivo}" />
+                        <p:panelGrid columns="1">
+                            <p:commandButton value="Subir Empresas" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
+                                <f:attribute name="tabla" value="ClienteEmpresa"></f:attribute>
+                            </p:commandButton>
+                            <p:commandButton value="Subir Contratos" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
+                                <f:attribute name="tabla" value="Contrato"></f:attribute>
+                            </p:commandButton>
+                            <p:commandButton value="Subir Inventario" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
+                                <f:attribute name="tabla" value="ItemProducto"></f:attribute>
+                            </p:commandButton>
                         </p:panelGrid>
                     </p:panelGrid>
                 </h:form>

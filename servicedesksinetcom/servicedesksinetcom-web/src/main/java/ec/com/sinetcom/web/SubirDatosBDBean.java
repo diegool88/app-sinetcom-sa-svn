@@ -74,7 +74,7 @@ public class SubirDatosBDBean implements Serializable {
             Mensajes.mostrarMensajeDeError("Error de lectura/escritura de datos!");
             e2.printStackTrace();
         } catch(Exception e){
-            Mensajes.mostrarMensajeDeError(e.getMessage());
+            Mensajes.mostrarMensajeDeError(e.toString());
             e.printStackTrace();
         }
     }
