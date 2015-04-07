@@ -133,7 +133,7 @@
                             </p:column>
                             <p:column headerText="Monto">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{pago.monto}"></h:outputText></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{pago.monto.setScale(2, RoundingMode.CEILING)}"></h:outputText></f:facet>
                                     <f:facet name="input"><p:inputText value="#{pago.monto}"></p:inputText></f:facet>
                                 </p:cellEditor>
                             </p:column>
