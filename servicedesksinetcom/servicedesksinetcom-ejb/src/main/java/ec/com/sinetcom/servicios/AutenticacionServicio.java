@@ -43,7 +43,7 @@ public class AutenticacionServicio {
         UtilidadDeEncriptacion utilidadDeEncriptacion = new UtilidadDeEncriptacion();
         String passwordEncriptado = utilidadDeEncriptacion.encriptar(password);
         this.usuario = this.usuarioFacade.verificarExistenciaDeUsuario(nombreUsuario, passwordEncriptado);
-        if(this.usuario != null){
+        if(this.usuario != null && this.usuario.getActivo()){
             return this.usuario;
         }else{
             return null;
