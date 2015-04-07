@@ -1,0 +1,16 @@
+----------------------------------------------------------------
+2015-04-07 20:18:09.065 GMT:
+ Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instancia a816c00e-014c-9588-6f7e-00000a0af998 
+en el directorio de base de datos /private/var/folders/f7/qtspxpxx0t10s2h01dxd05pw0000gn/T/gfembed4504361254575435209tmp/lib/databases/ejbtimer  con el cargador de clases sun.misc.Launcher$AppClassLoader@520ed128
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_65-b17
+Cargador de clases de base de datos iniciado - derby.database.classpath=''
+----------------------------------------------------------------
+2015-04-07 20:18:25.834 GMT:
+ Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instancia ce8780ad-014c-9588-6f7e-00000a0af998 
+en el directorio de base de datos /private/var/folders/f7/qtspxpxx0t10s2h01dxd05pw0000gn/T/gfembed1662183616629235590tmp/lib/databases/ejbtimer  con el cargador de clases sun.misc.Launcher$AppClassLoader@520ed128
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_65-b17
+Cargador de clases de base de datos iniciado - derby.database.classpath=''
