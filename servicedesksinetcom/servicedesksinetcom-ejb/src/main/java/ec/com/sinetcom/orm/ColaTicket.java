@@ -59,9 +59,7 @@ public class ColaTicket implements Serializable {
     private Date fechaDeCreacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "colaid")
     private List<Ticket> ticketList;
-    @JoinColumn(name = "Competencia_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Competencia competenciaid;
+    
 
     public ColaTicket() {
     }
@@ -116,14 +114,6 @@ public class ColaTicket implements Serializable {
 
     public void setTicketList(List<Ticket> ticketList) {
         this.ticketList = ticketList;
-    }
-
-    public Competencia getCompetenciaid() {
-        return competenciaid;
-    }
-
-    public void setCompetenciaid(Competencia competenciaid) {
-        this.competenciaid = competenciaid;
     }
 
     @Override

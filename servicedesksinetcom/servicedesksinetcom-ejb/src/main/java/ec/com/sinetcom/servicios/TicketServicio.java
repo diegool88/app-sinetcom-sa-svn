@@ -28,7 +28,6 @@ import ec.com.sinetcom.orm.ActividadEnSitio;
 import ec.com.sinetcom.orm.Articulo;
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.ColaTicket;
-import ec.com.sinetcom.orm.Competencia;
 import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.orm.Contrato;
 import ec.com.sinetcom.orm.DatosSinetcom;
@@ -946,16 +945,6 @@ public class TicketServicio {
 
         //Se inicializa el arreglo total
         List<String> ccTodos = new ArrayList<String>();
-        //Se envía un correo a todos los que tienen la competencia respectiva al caso
-        Competencia competencias = ticket.getColaid().getCompetenciaid();
-        List<Usuario> usuarios = this.usuarioFacade.obtenerUsuariosPorCompetencias(competencias);
-
-        //String[] correosCC1 = new String[usuarios == null ? 0 : usuarios.size()];
-        if (usuarios != null) {
-            for (Usuario usuarioContacto : usuarios) {
-                ccTodos.add(usuarioContacto.getCorreoElectronico());
-            }
-        }
 
         //Se añade a las persona que esten involucradas en el caso
         if (incluirClientes) {

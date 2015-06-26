@@ -40,6 +40,8 @@ import org.eclipse.persistence.config.CacheIsolationType;
     @NamedQuery(name = "ItemProducto.findAll", query = "SELECT i FROM ItemProducto i")})
 @Cache(isolation = CacheIsolationType.ISOLATED)
 public class ItemProducto implements Serializable, Cloneable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerial")
+    private List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList;
     @ManyToMany(mappedBy = "itemProductoList1")
     private List<Contrato> contratoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerial")
@@ -332,6 +334,15 @@ public class ItemProducto implements Serializable, Cloneable {
         }else{
             return "No disponible";
         }
+    }
+
+    @XmlTransient
+    public List<HistorialDeContratosYEquipos> getHistorialDeContratosYEquiposList() {
+        return historialDeContratosYEquiposList;
+    }
+
+    public void setHistorialDeContratosYEquiposList(List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList) {
+        this.historialDeContratosYEquiposList = historialDeContratosYEquiposList;
     }
     
 }
