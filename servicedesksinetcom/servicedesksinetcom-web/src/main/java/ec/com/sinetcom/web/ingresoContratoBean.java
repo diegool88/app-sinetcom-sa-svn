@@ -35,6 +35,8 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
@@ -80,6 +82,7 @@ public class ingresoContratoBean implements Serializable {
     private Date fechaInicioGTecnica;
     private Date fechaFacturacion;
     private Date fechaEntregaRecepcion;
+    private String observaciones;
 
     private List<Contrato> contratos;
     private List<TipoContrato> tiposContrato;
@@ -99,7 +102,9 @@ public class ingresoContratoBean implements Serializable {
     //private VisitaTecnica nuevaVisitaTecnica;
 
     private List<Date> fechasPagos = new ArrayList<Date>();
-    private UploadedFile adendum;
+    private UploadedFile poliza;
+    private UploadedFile actaDeERProyecto;
+    private UploadedFile actaDeEREquipos;
 
     @PostConstruct
     public void init() {
@@ -123,6 +128,14 @@ public class ingresoContratoBean implements Serializable {
     }
 
     public void grabarContrato(ActionEvent event) {
+        
+        if(this.contratoDigital == null){
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            ctx.validationFailed();
+            Mensajes.mostrarMensajeDeError("El Contrato digital no se ha cargado!");
+            return;
+        }
+        
         Contrato contrato = new Contrato();
 
         contrato.setNumero(numeroContrato);
@@ -145,6 +158,10 @@ public class ingresoContratoBean implements Serializable {
         contrato.setFechaDeFacturacion(fechaFacturacion);
         contrato.setNumeroDeFactura(numeroFactura);
         contrato.setFechaDeEntregaRecepcion(fechaEntregaRecepcion);
+        contrato.setActaEREquiposDigital(actaDeEREquipos.getContents());
+        contrato.setActaERProyectoDigital(actaDeERProyecto.getContents());
+        contrato.setObservaciones(observaciones);
+        
         //Se agregan los pagos, garantias, visitas tecnicas y cursos
         if (!pagos.isEmpty()) {
             int i = 0;
@@ -188,18 +205,11 @@ public class ingresoContratoBean implements Serializable {
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Fecha Seleccionada", format.format(evento.getObject())));
     }
 
-    public void fechasPago() {
-
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-
-        requestContext.execute("PF('fechas').show()");
-    }
-
     public void calcularFechasPagos() {
         if (cantidadPagos != null) {
             Calendar c = Calendar.getInstance();
             c.setTime(this.fechaSuscripcion);
-            c.add(Calendar.YEAR, this.getTiempoValidez());
+            c.add(Calendar.MONTH, this.getTiempoValidez());
             int diasTotales = (int) ((c.getTime().getTime() - this.fechaSuscripcion.getTime()) / (1000 * 60 * 60 * 24));
             int diasEntre = (int) Math.round((double) diasTotales / (double) this.cantidadPagos);
             double monto = this.precio.doubleValue() / (double) this.cantidadPagos;
@@ -219,7 +229,7 @@ public class ingresoContratoBean implements Serializable {
         if (cantidadDeVisitasPorA != null) {
             Calendar c = Calendar.getInstance();
             c.setTime(this.fechaSuscripcion);
-            c.add(Calendar.YEAR, this.getTiempoValidez());
+            c.add(Calendar.MONTH, this.getTiempoValidez());
             int diasTotales = (int) ((c.getTime().getTime() - this.fechaSuscripcion.getTime()) / (1000 * 60 * 60 * 24));
             int diasEntre = (int) Math.round((double) diasTotales / (double) this.cantidadDeVisitasPorA);
             //Eliminamos los registros que sean del mismo tipo
@@ -273,9 +283,9 @@ public class ingresoContratoBean implements Serializable {
         }
     }
 
-    public void cargarAdendum(FileUploadEvent event) {
-        this.adendum = event.getFile();
-        Mensajes.mostrarMensajeInformativo("El adendum " + event.getFile().getFileName() + " se ha cargado con éxito!");
+    public void cargarPoliza(FileUploadEvent event) {
+        this.poliza = event.getFile();
+        Mensajes.mostrarMensajeInformativo("La póliza " + event.getFile().getFileName() + " se ha cargado con éxito!");
     }
 
     public void eliminarGarantia(ActionEvent event) {
@@ -285,8 +295,8 @@ public class ingresoContratoBean implements Serializable {
 
     public void agregarGarantia(ActionEvent event) {
         this.nuevaGarantiaEconomica.setTipoGarantiaid(this.contratoServicio.recuperarTipoDeGarantia(this.tipoGarantia));
-        if (this.adendum != null) {
-            this.nuevaGarantiaEconomica.setAdendum(this.adendum.getContents());
+        if (this.poliza != null) {
+            this.nuevaGarantiaEconomica.setAdendum(this.poliza.getContents());
         }
         this.garantiasE.add(nuevaInstanciaGarantiaEconomica(this.nuevaGarantiaEconomica));
         this.nuevaGarantiaEconomica = new GarantiaEconomica();
@@ -329,6 +339,10 @@ public class ingresoContratoBean implements Serializable {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         return format.format(fecha);
     }
+    
+    public BigDecimal formatoDosDecimales(BigDecimal valor){
+        return valor.setScale(2, RoundingMode.CEILING);
+    }
 
     public void cargarContactosDeCliente() {
         if (this.rucCliente != null || this.rucCliente.length() > 0) {
@@ -336,31 +350,19 @@ public class ingresoContratoBean implements Serializable {
         }
     }
 
-    public void click() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-
-        requestContext.update("form:display");
-        requestContext.execute("PF('dlg').show()");
-    }
-
-    public byte[] convetirPDF(UploadedFile file) {
-        FileInputStream fileInputStream = null;
-
-        byte[] bFile = new byte[(int) file.toString().length()];
-
-        try {
-            fileInputStream = new FileInputStream(file.toString());
-            fileInputStream.read(bFile);
-            fileInputStream.close();
-        } catch (IOException e) {
-        }
-
-        return bFile;
-    }
-
     public void cargarContratoDigital(FileUploadEvent event) {
         this.contratoDigital = event.getFile();
         Mensajes.mostrarMensajeInformativo("El contrato " + event.getFile().getFileName() + " se ha cargado con éxito!");
+    }
+    
+    public void cargarActaDeERProyecto(FileUploadEvent event){
+        this.actaDeERProyecto = event.getFile();
+        Mensajes.mostrarMensajeInformativo("El acta de E/R de Proyecto " + event.getFile().getFileName() + " se ha cargado con éxito!");
+    }
+    
+    public void cargarActaDeEREquipos(FileUploadEvent event){
+        this.actaDeEREquipos = event.getFile();
+        Mensajes.mostrarMensajeInformativo("El acta de E/R de Equipos " + event.getFile().getFileName() + " se ha cargado con éxito!");
     }
 
     public String getNumeroContrato() {
@@ -698,5 +700,15 @@ public class ingresoContratoBean implements Serializable {
     public void setNuevoCurso(Curso nuevoCurso) {
         this.nuevoCurso = nuevoCurso;
     }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+    
+    
 
 }

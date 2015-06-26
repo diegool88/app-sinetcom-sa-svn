@@ -37,11 +37,8 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 	<field name="TipoDeMovimiento_nombre" class="java.lang.String"/>
 	<field name="RegistroDeMovimientoDeInventario_fechaDeEmision" class="java.sql.Timestamp"/>
 	<field name="RegistroDeMovimientoDeInventario_fechaDeEntrada" class="java.sql.Timestamp"/>
-	<background>
-		<band height="575" splitType="Stretch"/>
-	</background>
 	<title>
-		<band height="104" splitType="Stretch">
+		<band height="304" splitType="Stretch">
 			<staticText>
 				<reportElement style="Title" x="0" y="0" width="532" height="67" uuid="068d3931-80bf-48ef-b537-cf155e650f1f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -60,55 +57,55 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 				<reportElement x="0" y="0" width="173" height="47" uuid="38ebcc63-57f4-474f-8bc9-1e97b96d3edd"/>
 				<imageExpression><![CDATA[$P{realPath} + "/sinetcomLogo.png"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="0" y="114" width="100" height="20" uuid="30ad3899-9347-4919-810a-4c0beddc3331"/>
+				<text><![CDATA[Fecha de Emisión: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="114" width="156" height="20" uuid="5db66275-31f2-40c8-b558-fee18b96d9f9"/>
+				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_fechaDeEmision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="134" width="22" height="20" uuid="3a759a12-2a9b-4a93-a9e9-d504a764dfc9"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="22" y="134" width="100" height="20" uuid="36c9563f-bed7-4cf6-a7c8-fccffc2d9e30"/>
+				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="154" width="100" height="20" uuid="a6c2c38b-aef9-437f-a06c-4939e72baad6"/>
+				<text><![CDATA[Tipo de Movimiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="154" width="156" height="20" uuid="912c3473-1597-42e8-8d5d-48c559f1d955"/>
+				<textFieldExpression><![CDATA[$F{TipoDeMovimiento_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="191" width="100" height="20" uuid="e297211b-e3a3-4906-8944-3c6bc81bd4fb"/>
+				<text><![CDATA[Nombre del Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="191" width="432" height="20" uuid="5ee04815-87cd-4aa5-a1a4-c5d8acac0b7d"/>
+				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="211" width="122" height="20" uuid="82caa717-e9e5-4106-8dbc-e12e8ab06e37"/>
+				<text><![CDATA[Detalle del Movimiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="122" y="211" width="410" height="87" uuid="d1dad7d7-54c6-432f-99d3-effc739cd90d"/>
+				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_detalleMotivoDelMovimiento}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<detail>
-		<band height="607">
-			<staticText>
-				<reportElement x="0" y="7" width="100" height="20" uuid="30ad3899-9347-4919-810a-4c0beddc3331"/>
-				<text><![CDATA[Fecha de Emisión: ]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="100" y="7" width="156" height="20" uuid="5db66275-31f2-40c8-b558-fee18b96d9f9"/>
-				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_fechaDeEmision}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="27" width="22" height="20" uuid="3a759a12-2a9b-4a93-a9e9-d504a764dfc9"/>
-				<text><![CDATA[No.]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="22" y="27" width="100" height="20" uuid="36c9563f-bed7-4cf6-a7c8-fccffc2d9e30"/>
-				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="47" width="100" height="20" uuid="a6c2c38b-aef9-437f-a06c-4939e72baad6"/>
-				<text><![CDATA[Tipo de Movimiento:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="100" y="47" width="156" height="20" uuid="912c3473-1597-42e8-8d5d-48c559f1d955"/>
-				<textFieldExpression><![CDATA[$F{TipoDeMovimiento_nombre}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="84" width="100" height="20" uuid="e297211b-e3a3-4906-8944-3c6bc81bd4fb"/>
-				<text><![CDATA[Nombre del Cliente:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="100" y="84" width="432" height="20" uuid="5ee04815-87cd-4aa5-a1a4-c5d8acac0b7d"/>
-				<textFieldExpression><![CDATA[$F{ClienteEmpresa_nombreComercial}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="104" width="122" height="20" uuid="82caa717-e9e5-4106-8dbc-e12e8ab06e37"/>
-				<text><![CDATA[Detalle del Movimiento:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="122" y="104" width="410" height="87" uuid="d1dad7d7-54c6-432f-99d3-effc739cd90d"/>
-				<textFieldExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_detalleMotivoDelMovimiento}]]></textFieldExpression>
-			</textField>
+		<band height="114">
 			<subreport>
-				<reportElement x="0" y="227" width="532" height="81" uuid="e14d86dc-e586-4b2d-abd6-715f492c5a04"/>
+				<reportElement x="0" y="27" width="532" height="81" uuid="e14d86dc-e586-4b2d-abd6-715f492c5a04"/>
 				<subreportParameter name="registro_id">
 					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -116,48 +113,17 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 				<subreportExpression><![CDATA[$P{realPath} + "/registroDeMovimiento_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="0" y="207" width="150" height="20" uuid="4c695aee-9241-48ca-8ee7-f8cce9297421"/>
+				<reportElement x="0" y="7" width="150" height="20" uuid="4c695aee-9241-48ca-8ee7-f8cce9297421"/>
 				<text><![CDATA[Detalle de Partes Salientes:]]></text>
 			</staticText>
+		</band>
+		<band height="122">
 			<staticText>
-				<reportElement x="31" y="502" width="100" height="20" uuid="e201d27b-3379-43dc-81e8-ea965afb91a0"/>
-				<text><![CDATA[Fecha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="200" y="502" width="125" height="20" uuid="09468a6f-e5c6-4e9a-bd5f-5b78fcbc859c"/>
-				<text><![CDATA[Nombre y Firma Técnico]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="375" y="502" width="159" height="20" uuid="4ca58746-b314-4f22-ac3e-99d22c23befa"/>
-				<text><![CDATA[Nombre Y Firma Autorizada]]></text>
-			</staticText>
-			<line>
-				<reportElement x="31" y="554" width="100" height="1" uuid="a18b3933-0b30-4708-989d-2979f6a11673"/>
-			</line>
-			<line>
-				<reportElement x="216" y="553" width="100" height="1" uuid="e6c35ebf-8755-46d8-8420-dbdafb05e992"/>
-			</line>
-			<line>
-				<reportElement x="398" y="552" width="100" height="1" uuid="59ccffaa-ef0c-4654-af8d-054d5bf2ba93"/>
-			</line>
-			<staticText>
-				<reportElement x="31" y="560" width="100" height="20" uuid="68a7d686-93bd-4dd7-ad4d-ce48c53ad585"/>
-				<text><![CDATA[Elaborado Por]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="216" y="560" width="100" height="20" uuid="7ccdf434-da00-41a0-ba51-3a7104c50f53"/>
-				<text><![CDATA[Técnico Sinetcom]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="398" y="560" width="100" height="20" uuid="2eae9b3e-6dc2-44ed-80ea-42df8c234133"/>
-				<text><![CDATA[Firma Autorizada]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="315" width="150" height="20" uuid="d9de2bfb-7a04-469e-80ad-aebeb99aa23a"/>
+				<reportElement x="0" y="12" width="150" height="20" uuid="d9de2bfb-7a04-469e-80ad-aebeb99aa23a"/>
 				<text><![CDATA[Detalle de Partes Entrantes:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="0" y="335" width="532" height="73" uuid="b367e230-d6ec-44a9-a283-ab2c291cb0f2"/>
+				<reportElement x="0" y="32" width="532" height="73" uuid="b367e230-d6ec-44a9-a283-ab2c291cb0f2"/>
 				<subreportParameter name="registro_id">
 					<subreportParameterExpression><![CDATA[$F{RegistroDeMovimientoDeInventario_codigo}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -166,9 +132,6 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 			</subreport>
 		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="39" splitType="Stretch">
 			<textField pattern="EEEEE dd MMMMM yyyy">
@@ -187,7 +150,41 @@ WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 			</staticText>
 		</band>
 	</pageFooter>
-	<summary>
-		<band splitType="Stretch"/>
-	</summary>
+	<lastPageFooter>
+		<band height="162">
+			<staticText>
+				<reportElement x="32" y="48" width="100" height="20" uuid="e201d27b-3379-43dc-81e8-ea965afb91a0"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="201" y="48" width="125" height="20" uuid="09468a6f-e5c6-4e9a-bd5f-5b78fcbc859c"/>
+				<text><![CDATA[Nombre y Firma Técnico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="48" width="159" height="20" uuid="4ca58746-b314-4f22-ac3e-99d22c23befa"/>
+				<text><![CDATA[Nombre Y Firma Autorizada]]></text>
+			</staticText>
+			<line>
+				<reportElement x="32" y="100" width="100" height="1" uuid="a18b3933-0b30-4708-989d-2979f6a11673"/>
+			</line>
+			<line>
+				<reportElement x="217" y="99" width="100" height="1" uuid="e6c35ebf-8755-46d8-8420-dbdafb05e992"/>
+			</line>
+			<line>
+				<reportElement x="399" y="98" width="100" height="1" uuid="59ccffaa-ef0c-4654-af8d-054d5bf2ba93"/>
+			</line>
+			<staticText>
+				<reportElement x="32" y="106" width="100" height="20" uuid="68a7d686-93bd-4dd7-ad4d-ce48c53ad585"/>
+				<text><![CDATA[Elaborado Por]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="217" y="106" width="100" height="20" uuid="7ccdf434-da00-41a0-ba51-3a7104c50f53"/>
+				<text><![CDATA[Técnico Sinetcom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="106" width="100" height="20" uuid="2eae9b3e-6dc2-44ed-80ea-42df8c234133"/>
+				<text><![CDATA[Firma Autorizada]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
 </jasperReport>

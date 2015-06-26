@@ -25,32 +25,32 @@
 
                         <p:outputLabel for="contratoTipo" value="Tipo de Contrato:"/>
                         <p:selectOneMenu id="contratoTipo" value="#{ingresoContratoBean.tipoContrato}" required="true">                    
-                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
                             <f:selectItems value="#{ingresoContratoBean.tiposContrato}" var="tipos" itemLabel="#{tipos.tipo}" itemValue="#{tipos.id}"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel for="clienteEmpresa" value="Cliente:"/>
                         <p:selectOneMenu id="clienteEmpresa" value="#{ingresoContratoBean.rucCliente}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" required="true">
-                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
                             <f:selectItems value="#{ingresoContratoBean.clientesRuc}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
                             <p:ajax listener="#{ingresoContratoBean.cargarContactosDeCliente()}" update="contratoAdministrador" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>               
 
                         <p:outputLabel for="contratoSla" value="SLA:"/>
                         <p:selectOneMenu id="contratoSla" value="#{ingresoContratoBean.numSla}" required="true">
-                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
                             <f:selectItems value="#{ingresoContratoBean.slas}" var="sla" itemLabel="P.A: #{sla.tiempoRespuestaPrioridadAlta} h, P.M: #{sla.tiempoRespuestaPrioridadMedia} h, P.B: #{sla.tiempoRespuestaPrioridadBaja} h - Disponibilidad: #{sla.tipoDisponibilidadid.disponibilidad}" itemValue="#{sla.id}"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel for="contratoManager" value="Account Manager Asignado:"/>
                         <p:selectOneMenu id="contratoManager" value="#{ingresoContratoBean.numAccountManager}" required="true">
-                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
                             <f:selectItems value="#{ingresoContratoBean.usuarios}" var="Accounts" itemLabel="#{Accounts.nombre} #{Accounts.apellido}" itemValue="#{Accounts.id}" />
                         </p:selectOneMenu>
 
                         <p:outputLabel for="contratoAdministrador" value="Administrador de Contrato:"/>
                         <p:selectOneMenu id="contratoAdministrador" value="#{ingresoContratoBean.numAdminContrato}" required="true">
-                            <f:selectItem itemLabel="Selecione..." itemValue=""/>
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
                             <f:selectItems value="#{ingresoContratoBean.contactos}" var="AdminC" itemLabel="#{AdminC.nombre}" itemValue="#{AdminC.id}" />
                         </p:selectOneMenu>
 
@@ -58,24 +58,27 @@
                         <p:calendar id="contratoFechaSuscripcion" value="#{ingresoContratoBean.fechaSuscripcion}" showOn="button" required="true"/>
 
                         <p:outputLabel for="contratoObjeto" value="Objeto:"/>
-                        <p:inputTextarea id="contratoObjeto" cols="25" rows="8" value="#{ingresoContratoBean.objeto}" required="true"/>
+                        <p:inputTextarea id="contratoObjeto" cols="40" rows="8" value="#{ingresoContratoBean.objeto}" required="true"/>
                         
                         <p:outputLabel for="contratoPrecio" value="Precio ($):"/>
                         <p:inputText id="contratoPrecio" type="number" value="#{ingresoContratoBean.precio}" required="true"/>
 
-                        <p:outputLabel for="contratoValidez" value="Tiempo de Validez (años):"/>
+                        <p:outputLabel for="contratoValidez" value="Plazo del Contrato (meses):"/>
                         <p:inputText id="contratoValidez" type="number" value="#{ingresoContratoBean.tiempoValidez}" required="true"/>
 
                         <p:outputLabel for="contratoGarantiaTecnica" value="Garantía Técnica (años):"/>
                         <p:inputText id="contratoGarantiaTecnica" type="number" value="#{ingresoContratoBean.garantiatecnica}"/>
 
-                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Garantía Técnica:"/>
+                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Garantía Técnica (E/R del Proyecto):"/>
                         <p:calendar id="contratoFechaInicioGarantiaTecnica" value="#{ingresoContratoBean.fechaInicioGTecnica}" showOn="button"/>
+                        
+                        <p:outputLabel for="actaEntregaDelProyecto" value="Acta de E/R del Proyecto:" />
+                        <p:fileUpload id="actaEntregaDelProyecto" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarActaDeERProyecto}"/>
 
                         <p:outputLabel for="contratoDigital" value="Contrato Digitalizado (PDF):"/>
-                        <p:fileUpload id="contratoDigital" required="true" mode="advanced" auto="true" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarContratoDigital}"/>
-
-                        <p:outputLabel for="srvSoporteMantenimiento" value="Servicio Soporte Mantenimiento (años):"/>
+                        <p:fileUpload id="contratoDigital" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarContratoDigital}"/>
+                        
+                        <p:outputLabel for="srvSoporteMantenimiento" value="Garantía Técnica Sinetcom (años):"/>
                         <p:inputText id="srvSoporteMantenimiento" type="number" value="#{ingresoContratoBean.srvSoportemantenimiento}" required="true"/>
 
                         <p:outputLabel for="contratoRepuestos" value="¿Incluye Repuestos?:"/>
@@ -96,9 +99,15 @@
                         <p:outputLabel for="contratoFacturaNumero" value="Factura Número:"/>
                         <p:inputText id="contratoFacturaNumero" value="#{ingresoContratoBean.numeroFactura}"/>
 
-                        <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepción:"/>
+                        <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepción de equipos:"/>
                         <p:calendar id="contratoFechaEntregaRecepcion" value="#{ingresoContratoBean.fechaEntregaRecepcion}" showOn="button"/>                
 
+                        <p:outputLabel for="actaEREquipos" value="Acta de E/R de Equipos:"/>
+                        <p:fileUpload id="actaEREquipos" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarActaDeEREquipos}"/>
+                        
+                        <p:outputLabel for="observaciones" value="Observaciones:"/>
+                        <p:inputTextarea id="observaciones" cols="40" rows="8" maxlength="1024" required="false" value="#{ingresoContratoBean.observaciones}"/>
+                        
                         <p:outputLabel for="contratoPagos" value="Pagos:"/>
                         <p:commandButton id="contratoPagos" value="Ver Pagos" process="contratoFechaSuscripcion, contratoPrecio, contratoValidez" onclick="PF('fechas').show();" />
 
@@ -108,9 +117,9 @@
                         <p:outputLabel for="contratoVisitasTecnicas" value="Visitas Técnicas:"/>
                         <p:commandButton id="contratoVisitasTecnicas" value="Ver Visitas Técnicas" process="contratoFechaSuscripcion, contratoValidez" onclick="PF('visitasT').show();"></p:commandButton>
 
-                        <p:outputLabel for="contratoCursos" value="Cursos:"/>
-                        <p:commandButton id="contratoCursos" value="Ver Cursos" process="@none" onclick="PF('cursos').show();"></p:commandButton>
-
+                        <p:outputLabel for="contratoCursos" value="Capacitaciones:"/>
+                        <p:commandButton id="contratoCursos" value="Ver Capacitaciones" process="@none" onclick="PF('cursos').show();"></p:commandButton>
+                        
                         <f:facet name="footer">
                             <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoContrato:contrato" update="@form" actionListener="#{ingresoContratoBean.grabarContrato}" onstart="statusDialog.show()" onsuccess="statusDialog.show()">
                             </p:commandButton>
@@ -133,7 +142,7 @@
                             </p:column>
                             <p:column headerText="Monto">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{pago.monto.setScale(2, RoundingMode.CEILING)}"></h:outputText></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{ingresoContratoBean.formatoDosDecimales(pago.monto)}"></h:outputText></f:facet>
                                     <f:facet name="input"><p:inputText value="#{pago.monto}"></p:inputText></f:facet>
                                 </p:cellEditor>
                             </p:column>
@@ -149,7 +158,7 @@
                         </p:dataTable>
                     </p:dialog>
                     <p:dialog header="Garantías Económicas" widgetVar="garantias" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
-                        <p:panel id="garantiasEcomicas">
+                        <p:panel id="garantiasEconomicas">
                             <p:panelGrid columns="2" >
                                 <f:facet name="header">
                                     <h:outputText value="Ingreso de Garantía Económica"></h:outputText>
@@ -175,17 +184,17 @@
                                     <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                 </p:selectOneRadio>
-                                <p:outputLabel for="adendum" value="Adendum:"/>
-                                <p:fileUpload id="adendum" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarAdendum}" ></p:fileUpload>
+                                <p:outputLabel for="poliza" value="Póliza Digital:"/>
+                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarAdendum}" ></p:fileUpload>
                                 <f:facet name="footer">
-                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoContrato:garantiasEcomicas" update=":nuevoContrato:garantiasEcomicas" actionListener="#{ingresoContratoBean.agregarGarantia}"></p:commandButton>
+                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoContrato:garantiasEconomicas" update=":nuevoContrato:garantiasEconomicas" actionListener="#{ingresoContratoBean.agregarGarantia}"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
                             <br/>
                             <br/>
                             <p:dataTable id="garantias" value="#{ingresoContratoBean.garantiasE}" rowIndexVar="rowId" var="garantia">
                                 <f:facet name="header">
-                                    <h:outputText value="Grantías Económicas Ingresadas"></h:outputText>
+                                    <h:outputText value="Garantías Económicas Ingresadas"></h:outputText>
                                 </f:facet>
                                 <p:column headerText="Tipo de Garantía">
                                     <h:outputText value="#{garantia.tipoGarantiaid.tipo}"></h:outputText>
@@ -214,8 +223,8 @@
                     <p:dialog header="Visitas Técnicas" widgetVar="visitasT" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
                         <p:panel id="visitasTecnicas">
                             <p:panelGrid columns="2">
-                                <p:outputLabel for="visitasPorAnio" value="Visitas por año:"></p:outputLabel>
-                                <p:inputText id="visitasPorAnio" value="#{ingresoContratoBean.cantidadDeVisitasPorA}" required="true"></p:inputText>
+                                <p:outputLabel for="visitasPorContrato" value="Visitas por contrato:"></p:outputLabel>
+                                <p:inputText id="visitasPorContrato" value="#{ingresoContratoBean.cantidadDeVisitasPorA}" required="true"></p:inputText>
                                 <p:outputLabel for="tipoDeVisita" value="Tipo de Visita:"></p:outputLabel>
                                 <p:selectOneMenu id="tipoDeVisita" value="#{ingresoContratoBean.tipoDeVisita}" required="true">
                                     <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
@@ -260,11 +269,11 @@
                             </p:dataTable>
                         </p:panel>
                     </p:dialog>
-                    <p:dialog header="Cursos" widgetVar="cursos" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                    <p:dialog header="Capacitaciones" widgetVar="cursos" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
                         <p:panel id="cursosProgramados">
                             <p:panelGrid columns="2">
                                 <f:facet name="header">
-                                    <h:outputText value="Ingreso de Curso"></h:outputText>
+                                    <h:outputText value="Ingreso de Capacitación"></h:outputText>
                                 </f:facet>
                                 <p:outputLabel for="temaATratar" value="Tema a tratar:"></p:outputLabel>
                                 <p:inputText id="temaATratar" value="#{ingresoContratoBean.nuevoCurso.temaATratar}" required="true"></p:inputText>
@@ -291,7 +300,7 @@
                                 <p:outputLabel for="centroCapacitacion" value="Centro de Capacitación:"></p:outputLabel>
                                 <p:inputTextarea id="centroCapacitacion" value="#{ingresoContratoBean.nuevoCurso.centroDeCapacitacion}" required="true" cols="20" rows="8"></p:inputTextarea>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Agregar Curso" actionListener="#{ingresoContratoBean.agregarCurso}" process=":nuevoContrato:cursosProgramados" update=":nuevoContrato:cursosProgramados"></p:commandButton>
+                                    <p:commandButton value="Agregar Capacitación" actionListener="#{ingresoContratoBean.agregarCurso}" process=":nuevoContrato:cursosProgramados" update=":nuevoContrato:cursosProgramados"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
                             <br/>

@@ -52,8 +52,8 @@
                             <p:outputLabel for="productoPadre" value="Producto Padre: "></p:outputLabel>
                             <p:selectOneMenu id="productoPadre" value="#{ingresarProductoPiezaNA.productoPadreSeleccionado}" converter="#{itemProductoConverter}" filter="true" filterMatchMode="contains" >
                                 <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
-                                <f:selectItems value="#{ingresarProductoPiezaNA.productosPadre}" var="padre" itemLabel="SN: #{padre.numeroSerial}" itemValue="#{padre.numeroSerial}"></f:selectItems>
-                                <p:ajax update=":form:contrato, :form:bodega, :form:fechaCompra, :form:numFactura, :form:numPedido" listener="#{ingresarProductoPiezaNA.actualizarContrato()}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                                <f:selectItems value="#{ingresarProductoPiezaNA.productosPadre}" var="padre" itemLabel="#{padre.descripcion}, SN: #{padre.numeroSerial}" itemValue="#{padre.numeroSerial}"></f:selectItems>
+                                <p:ajax update=":form:contrato, :form:bodega, :form:fechaCompra, :form:numFactura, :form:numPedido" listener="#{ingresarProductoPiezaNA.actualizarContratoYBodega()}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
                             <p:message for="productoPadre"></p:message>
                             <p:outputLabel for="compatible" value="Productos Compatibles"></p:outputLabel>

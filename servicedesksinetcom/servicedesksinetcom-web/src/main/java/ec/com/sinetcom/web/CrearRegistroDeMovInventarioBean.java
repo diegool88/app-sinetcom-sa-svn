@@ -119,6 +119,7 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
             Mensajes.mostrarMensajeInformativo("Registro de Movimiento de Inventario creado satisfactoriamente!");
             for (ItemProducto itemProducto : this.listaDeItems) {
                 this.productoServicio.crearHistorialDeMovimientoDeInventario(itemProducto, this.movimientoDeInventario, this.administracionUsuarioBean.getUsuarioActual());
+                this.productoServicio.crearRegistroDeHistorialDeEquiposYContratos(itemProducto, itemProducto.getContratonumero());
                 Mensajes.mostrarMensajeInformativo("Movimiento de salida para el item: " + itemProducto.getNumeroSerial());
             }
         } else {

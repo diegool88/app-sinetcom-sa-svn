@@ -1,0 +1,438 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Adendum"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>        
+            <h:body>
+                <script type="text/javascript">
+                    var delay = (function () {
+                        var timer = 0;
+                        return function (callback, ms) {
+                            clearTimeout(timer);
+                            timer = setTimeout(callback, ms);
+                        };
+                    })();
+                    
+                    function retraso(){
+                        delay(function (){enviarPeticionFiltro();},2000);
+                    }
+
+                    /// jQuery("").keyup(function () {
+                    ///    delay(function () {
+                    ///        enviarPeticionFiltro();
+                    ///    }, 2000);
+                    ///});
+                </script>
+                <h:form id="nuevoAdendum" enctype="multipart/form-data">
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage library="images" name="ajax_loader.gif" />
+                    </p:dialog>
+                    <p:remoteCommand name="enviarPeticionFiltro" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" update=":nuevoAdendum:equiposTree2" process="@this, :nuevoAdendum:filtroEquipos" actionListener="#{ingresoAdendumBean.actualizarTreeNodeEquipos}"></p:remoteCommand>
+                    <p:panelGrid columns="1" id="seleccionContrato">
+                        <p:dataTable id="dtContratos" value="#{ingresoAdendumBean.contratosDisponibles}" var="contrato" paginator="true" rows="15" rowKey="#{contrato.numero}" selectionMode="single" selection="#{ingresoAdendumBean.contratoSeleccionado}" paginatorPosition="bottom"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                            <p:ajax event="rowSelect" immediate="true" listener="#{ingresoAdendumBean.asignarContratoSeleccionado}" update=":nuevoAdendum:contrato, :nuevoAdendum:atadoEquipos" onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"></p:ajax>
+                            <p:ajax event="rowUnselect" immediate="true" update=":nuevoAdendum:contrato"></p:ajax>             
+                            <f:facet name="header">
+                                <h:outputText value="Contratos"></h:outputText>
+                            </f:facet>
+                            <p:column headerText="Número">
+                                #{contrato.numero}
+                            </p:column>
+                            <p:column headerText="Cliente">
+                                #{contrato.clienteEmpresaruc.nombreComercial}
+                            </p:column>
+                            <p:column headerText="Fecha Suscripción">
+                                #{ingresoAdendumBean.formatoCortoDeFecha(contrato.fechaDeSuscripcion)}
+                            </p:column>
+                        </p:dataTable>
+                    </p:panelGrid>
+                    <p:panelGrid id="contrato" columns="2" rendered="#{ingresoAdendumBean.contratoSeleccionado != null}">
+                        <f:facet name="header">
+                            <h:outputText value="Ingreso de nuevo Adendum"></h:outputText>
+                        </f:facet>
+
+                        <p:outputLabel for="contratoNumero" value="Número de Contrato:"/>
+                        <p:inputText id="contratoNumero" value="#{ingresoAdendumBean.nuevoAdendum.numero}" disabled="true" required="true"/>
+
+                        <p:outputLabel for="contratoTipo" value="Tipo de Contrato:"/>
+                        <p:selectOneMenu id="contratoTipo" value="#{ingresoAdendumBean.nuevoAdendum.tipoContratoid}" converter="#{tipoContratoConverter}" required="true">                    
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
+                            <f:selectItems value="#{ingresoAdendumBean.tiposContrato}" var="tipos" itemLabel="#{tipos.tipo}" itemValue="#{tipos.id.toString()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="clienteEmpresa" value="Cliente:"/>
+                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoAdendumBean.nuevoAdendum.clienteEmpresaruc}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" converter="#{clienteEmpresaConverter}" required="true">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
+                            <f:selectItems value="#{ingresoAdendumBean.clientesRuc}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                            <p:ajax listener="#{ingresoAdendumBean.cargarContactosDeCliente()}" update="contratoAdministrador" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
+                        </p:selectOneMenu>               
+
+                        <p:outputLabel for="contratoSla" value="SLA:"/>
+                        <p:selectOneMenu id="contratoSla" value="#{ingresoAdendumBean.nuevoAdendum.slaid}" converter="#{slaConverter}" required="true">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
+                            <f:selectItems value="#{ingresoAdendumBean.slas}" var="sla" itemLabel="P.A: #{sla.tiempoRespuestaPrioridadAlta} h, P.M: #{sla.tiempoRespuestaPrioridadMedia} h, P.B: #{sla.tiempoRespuestaPrioridadBaja} h - Disponibilidad: #{sla.tipoDisponibilidadid.disponibilidad}" itemValue="#{sla.id.toString()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="contratoManager" value="Account Manager Asignado:"/>
+                        <p:selectOneMenu id="contratoManager" value="#{ingresoAdendumBean.nuevoAdendum.accountManagerAsignado}" converter="#{usuarioConverter}" required="true">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
+                            <f:selectItems value="#{ingresoAdendumBean.usuarios}" var="Accounts" itemLabel="#{Accounts.nombre} #{Accounts.apellido}" itemValue="#{Accounts.id.toString()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="contratoAdministrador" value="Administrador de Contrato:"/>
+                        <p:selectOneMenu id="contratoAdministrador" value="#{ingresoAdendumBean.nuevoAdendum.administradorDeContrato}" converter="#{contactoConverter}" required="true">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
+                            <f:selectItems value="#{ingresoAdendumBean.contactos}" var="AdminC" itemLabel="#{AdminC.nombre}" itemValue="#{AdminC.id.toString()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="contratoFechaSuscripcion" value="Fecha de Suscripción:"/>
+                        <p:calendar id="contratoFechaSuscripcion" value="#{ingresoAdendumBean.nuevoAdendum.fechaDeSuscripcion}" showOn="button" required="true"/>
+
+                        <p:outputLabel for="contratoObjeto" value="Objeto:"/>
+                        <p:inputTextarea id="contratoObjeto" cols="40" rows="8" value="#{ingresoAdendumBean.nuevoAdendum.objeto}" required="true"/>
+
+                        <p:outputLabel for="contratoPrecio" value="Precio ($):"/>
+                        <p:inputText id="contratoPrecio" type="number" value="#{ingresoAdendumBean.nuevoAdendum.precioTotal}" required="true"/>
+
+                        <p:outputLabel for="contratoValidez" value="Plazo del Contrato (meses):"/>
+                        <p:inputText id="contratoValidez" type="number" value="#{ingresoAdendumBean.nuevoAdendum.tiempoDeValidez}" required="true"/>
+
+                        <p:outputLabel for="contratoGarantiaTecnica" value="Garantía Técnica (años):"/>
+                        <p:inputText id="contratoGarantiaTecnica" type="number" value="#{ingresoAdendumBean.nuevoAdendum.garantiaTecnica}"/>
+
+                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Garantía Técnica (E/R del Proyecto):"/>
+                        <p:calendar id="contratoFechaInicioGarantiaTecnica" value="#{ingresoAdendumBean.nuevoAdendum.fechaInicioGarantiaTecnica}" showOn="button"/>
+
+                        <p:outputLabel for="actaEntregaDelProyecto" value="Acta de E/R del Proyecto:" />
+                        <p:fileUpload id="actaEntregaDelProyecto" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarActaDeERProyecto}"/>
+
+                        <p:outputLabel for="contratoDigital" value="Contrato Digitalizado (PDF):"/>
+                        <p:fileUpload id="contratoDigital" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarContratoDigital}"/>
+
+                        <p:outputLabel for="srvSoporteMantenimiento" value="Garantía Técnica Sinetcom (años):"/>
+                        <p:inputText id="srvSoporteMantenimiento" type="number" value="#{ingresoAdendumBean.nuevoAdendum.servicioSoporteMantenimiento}" required="true"/>
+
+                        <p:outputLabel for="contratoRepuestos" value="¿Incluye Repuestos?:"/>
+                        <p:selectOneRadio id="contratoRepuestos" value="#{ingresoAdendumBean.nuevoAdendum.incluyeRepuestos}" required="true">
+                            <f:selectItem itemLabel="Si" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </p:selectOneRadio>
+
+                        <p:outputLabel for="contratoHorasSoporteAno" value="Horas de Soporte Anual:"/>
+                        <p:inputText id="contratoHorasSoporteAno" type="number" value="#{ingresoAdendumBean.nuevoAdendum.horasDeSoporteAnual}" required="true"/>
+
+                        <p:outputLabel for="contratoHorasSoporteUtilizadas" value="Horas de Soporte Utilizadas:"/>
+                        <p:inputText id="contratoHorasSoporteUtilizadas" type="number" value="#{ingresoAdendumBean.nuevoAdendum.horasDeSoporteUtilizadas}" required="true"/>
+
+                        <p:outputLabel for="contratoFechaFacturacion" value="Fecha Facturación de Contrato:"/>
+                        <p:calendar id="contratoFechaFacturacion" value="#{ingresoAdendumBean.nuevoAdendum.fechaDeFacturacion}" showOn="button"/>
+
+                        <p:outputLabel for="contratoFacturaNumero" value="Factura Número:"/>
+                        <p:inputText id="contratoFacturaNumero" value="#{ingresoAdendumBean.nuevoAdendum.numeroDeFactura}"/>
+
+                        <p:outputLabel for="contratoFechaEntregaRecepcion" value="Fecha Entrega Recepción de equipos:"/>
+                        <p:calendar id="contratoFechaEntregaRecepcion" value="#{ingresoAdendumBean.nuevoAdendum.fechaDeEntregaRecepcion}" showOn="button"/>                
+
+                        <p:outputLabel for="actaEREquipos" value="Acta de E/R de Equipos:"/>
+                        <p:fileUpload id="actaEREquipos" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarActaDeEREquipos}"/>
+
+                        <p:outputLabel for="observaciones" value="Observaciones:"/>
+                        <p:inputTextarea id="observaciones" cols="40" rows="8" maxlength="1024" required="false" value="#{ingresoAdendumBean.nuevoAdendum.observaciones}"/>
+
+                        <p:outputLabel for="contratoPagos" value="Pagos:"/>
+                        <p:commandButton id="contratoPagos" value="Ver Pagos" process="contratoFechaSuscripcion, contratoPrecio, contratoValidez" onclick="PF('fechas').show();" />
+
+                        <p:outputLabel for="contratoGarantias" value="Garantías Económicas:"/>
+                        <p:commandButton id="contratoGarantias" value="Ver Garantías E." process="contratoPrecio" onclick="PF('garantias').show();"/>
+
+                        <p:outputLabel for="contratoVisitasTecnicas" value="Visitas Técnicas:"/>
+                        <p:commandButton id="contratoVisitasTecnicas" value="Ver Visitas Técnicas" process="contratoFechaSuscripcion, contratoValidez" onclick="PF('visitasT').show();"></p:commandButton>
+
+                        <p:outputLabel for="contratoCursos" value="Capacitaciones:"/>
+                        <p:commandButton id="contratoCursos" value="Ver Capacitaciones" process="@none" onclick="PF('cursos').show();"></p:commandButton>
+
+                        <p:outputLabel for="equiposContrato" value="Equipos:"/>
+                        <p:commandButton id="equiposContrato" value="Ver Equipos" immediate="true" update=":nuevoAdendum:atadoEquipos" onclick="PF('equipos').show();"></p:commandButton>
+                        <f:facet name="footer">
+                            <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoAdendum:contrato" update="@form" actionListener="#{ingresoAdendumBean.grabarAdendum}" onstart="statusDialog.show()" onsuccess="statusDialog.show()">
+                            </p:commandButton>
+                        </f:facet>
+                    </p:panelGrid> 
+
+                    <p:dialog header="Insertar Fechas de Pago" widgetVar="fechas" showEffect="fade" hideEffect="fade" modal="true">                   
+                        <h:panelGrid id="prueba" columns="2" columnClasses="colum" cellpadding="5">    
+                            <p:outputLabel for="cantidadPagos" value="Cantidad de Pagos"/>
+                            <p:inputText id="cantidadPagos" value="#{ingresoAdendumBean.cantidadPagos}">
+                                <p:ajax event="keyup" listener="#{ingresoAdendumBean.calcularFechasPagos()}" update="pagos"></p:ajax>
+                            </p:inputText>
+                        </h:panelGrid>  
+                        <p:dataTable id="pagos" value="#{ingresoAdendumBean.pagos}" var="pago" editable="true">
+                            <f:facet name="header">
+                                <h:outputText value="Pagos"></h:outputText>
+                            </f:facet>
+                            <p:column headerText="Orden">
+                                <h:outputText value="#{pago.orden}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Monto">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ingresoAdendumBean.formatoDosDecimales(pago.monto)}"></h:outputText></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{pago.monto}"></p:inputText></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Fecha">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ingresoAdendumBean.formatoCortoDeFecha(pago.plazo)}"></h:outputText></f:facet>
+                                    <f:facet name="input"><p:calendar value="#{pago.plazo}" pattern="dd/MM/yyyy"></p:calendar></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                    </p:dialog>
+                    <p:dialog header="Garantías Económicas" widgetVar="garantias" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="garantiasEconomicas">
+                            <p:panelGrid columns="2" >
+                                <f:facet name="header">
+                                    <h:outputText value="Ingreso de Garantía Económica"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="tipoGarantia" value="Tipo de Garantía:"/>
+                                <p:selectOneMenu id="tipoGarantia" value="#{ingresoAdendumBean.tipoGarantia}" required="true" requiredMessage="* Requerido">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems var="tipoGarantia" value="#{ingresoAdendumBean.tipoGarantias}" itemLabel="#{tipoGarantia.tipo}" itemValue="#{tipoGarantia.id}"></f:selectItems>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="porcentaje" value="Porcentaje:"/>
+                                <p:inputText id="porcentaje" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.porcentaje}" maxlength="3" required="true" validatorMessage="Porcentaje max. 100%">
+                                    <p:ajax event="keyup" listener="#{ingresoAdendumBean.calcularValorDeGarantiaE()}" update="valor" process="contratoPrecio, porcentaje"></p:ajax>
+                                    <f:validateDoubleRange for="porcentaje" maximum="100" minimum="1" ></f:validateDoubleRange>
+                                </p:inputText>
+                                <p:outputLabel for="valor" value="Valor:"/>
+                                <p:inputText id="valor" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.valor}" required="true" readonly="true"></p:inputText>
+                                <p:outputLabel for="fechaInicio" value="Fecha de Inicio:"/>
+                                <p:calendar id="fechaInicio" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.fechaInicio}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
+                                <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
+                                <p:calendar id="fechaFin" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.fechaFin}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
+                                <p:outputLabel for="renovable" value="¿Renovable?:"/>
+                                <p:selectOneRadio id="renovable" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.renovable}" required="true">
+                                    <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                    <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                                </p:selectOneRadio>
+                                <p:outputLabel for="poliza" value="Póliza Digital:"/>
+                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarAdendum}" ></p:fileUpload>
+                                <f:facet name="footer">
+                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoAdendum:garantiasEconomicas" update=":nuevoAdendum:garantiasEconomicas" actionListener="#{ingresoAdendumBean.agregarGarantia}"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                            <br/>
+                            <br/>
+                            <p:dataTable id="garantias" value="#{ingresoAdendumBean.garantiasE}" rowIndexVar="rowId" var="garantia">
+                                <f:facet name="header">
+                                    <h:outputText value="Garantías Económicas Ingresadas"></h:outputText>
+                                </f:facet>
+                                <p:column headerText="Tipo de Garantía">
+                                    <h:outputText value="#{garantia.tipoGarantiaid.tipo}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Porcentaje">
+                                    <h:outputText value="#{garantia.porcentaje}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Valor">
+                                    <h:outputText value="#{garantia.valor}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha Inicio">
+                                    <h:outputText value="#{ingresoAdendumBean.formatoCortoDeFecha(garantia.fechaInicio)}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha Fin">
+                                    <h:outputText value="#{ingresoAdendumBean.formatoCortoDeFecha(garantia.fechaFin)}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandButton icon="ui-icon-trash" update=":nuevoAdendum:garantias" process="@this" actionListener="#{ingresoAdendumBean.eliminarGarantia}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                        <f:attribute name="garantiaIndex" value="#{rowId}"></f:attribute>
+                                        <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta garantía?" icon="ui-icon-alert"></p:confirm>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:dialog>
+                    <p:dialog header="Visitas Técnicas" widgetVar="visitasT" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="visitasTecnicas">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel for="visitasPorContrato" value="Visitas por contrato:"></p:outputLabel>
+                                <p:inputText id="visitasPorContrato" value="#{ingresoAdendumBean.cantidadDeVisitasPorA}" required="true"></p:inputText>
+                                <p:outputLabel for="tipoDeVisita" value="Tipo de Visita:"></p:outputLabel>
+                                <p:selectOneMenu id="tipoDeVisita" value="#{ingresoAdendumBean.tipoDeVisita}" required="true">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems value="#{ingresoAdendumBean.tipoDeVisitas}" var="tipoVisita" itemLabel="#{tipoVisita.nombre}" itemValue="#{tipoVisita.id}"></f:selectItems>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="descripcionVT" value="Descripción Visitas Técnica:"></p:outputLabel>
+                                <p:inputText id="descripcionVT" value="#{ingresoAdendumBean.descripcionVisitaT}"></p:inputText>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar Visitas Técnicas" actionListener="#{ingresoAdendumBean.calcularFechasVisitasTecnicas}" process=":nuevoAdendum:visitasTecnicas" update=":nuevoAdendum:visitasTecnicas"></p:commandButton>
+                                    <p:commandButton value="Limpiar Visitas Técnicas" actionListener="#{ingresoAdendumBean.limpiarVisitasTecnicas}" process="@this" update=":nuevoAdendum:visitasTecnicas"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                            <br/>
+                            <p:dataTable id="visitasT" value="#{ingresoAdendumBean.visitasTecnicas}" rowIndexVar="rowId" editable="true" var="visitaT">
+                                <f:facet name="header">
+                                    <h:outputText value="Visitas Técnicas"></h:outputText>
+                                </f:facet>
+                                <p:column headerText="Tipo de Visita">
+                                    <h:outputText value="#{ingresoAdendumBean.tipoDeVisitaid.nombre}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{ingresoAdendumBean.formatoCortoDeFecha(visitaT.fecha)}"></h:outputText></f:facet>
+                                        <f:facet name="input"><p:calendar value="#{visitaT.fecha}" pattern="dd/MM/yyyy"></p:calendar></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Descripción">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{visitaT.descripcion}"></h:outputText></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{visitaT.descripcion}"></p:inputText></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width:32px">
+                                    <p:rowEditor />
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandButton icon="ui-icon-trash" update=":nuevoAdendum:visitasT" process="@this" actionListener="#{ingresoAdendumBean.eliminarVisitaTecnica}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                        <f:attribute name="visitaIndex" value="#{rowId}"></f:attribute>
+                                        <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar esta visita técnica?" icon="ui-icon-alert"></p:confirm>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:dialog>
+                    <p:dialog header="Capacitaciones" widgetVar="cursos" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="cursosProgramados">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Ingreso de Capacitación"></h:outputText>
+                                </f:facet>
+                                <p:outputLabel for="temaATratar" value="Tema a tratar:"></p:outputLabel>
+                                <p:inputText id="temaATratar" value="#{ingresoAdendumBean.nuevoCurso.temaATratar}" required="true"></p:inputText>
+                                <p:outputLabel for="fechaInicioCurso" value="Fecha de Inicio:"></p:outputLabel>
+                                <p:calendar id="fechaInicioCurso" value="#{ingresoAdendumBean.nuevoCurso.fechaDeInicio}" pattern="dd/MM/yyyy" required="true"></p:calendar>
+                                <p:outputLabel for="numParticipantes" value="Número de Participantes:"></p:outputLabel>
+                                <p:inputText id="numParticipantes" value="#{ingresoAdendumBean.nuevoCurso.numeroDeParticipantes}" required="true"></p:inputText>
+                                <p:outputLabel for="numHorasTotales" value="Horas Totales del Curso:"></p:outputLabel>
+                                <p:inputText id="numHorasTotales" value="#{ingresoAdendumBean.nuevoCurso.numeroDeHorasTotales}" required="true"></p:inputText>
+                                <p:outputLabel for="oficial" value="¿Es curso oficial?:"></p:outputLabel>
+                                <p:selectOneRadio id="oficial" value="#{ingresoAdendumBean.nuevoCurso.oficial}" required="true">
+                                    <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
+                                    <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+                                    <p:ajax listener="#{ingresoAdendumBean.limpiarNombreDeInstructor()}" update="instructorSinetcom, nombreInstructor"></p:ajax>
+                                </p:selectOneRadio>
+                                <p:outputLabel for="instructorSinetcom" value="Instructor de Sinetcom:"></p:outputLabel>
+                                <p:selectOneMenu id="instructorSinetcom" value="#{ingresoAdendumBean.instructorSinetcom}" disabled="#{ingresoAdendumBean.nuevoCurso.oficial}">
+                                    <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
+                                    <f:selectItems value="#{ingresoAdendumBean.tecnicos}" var="instructor" itemLabel="#{instructor.nombreCompleto}" itemValue="#{instructor.id}"></f:selectItems>
+                                    <p:ajax listener="#{ingresoAdendumBean.actualizarNombreDeInstructor()}" update="nombreInstructor"></p:ajax>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="nombreInstructor" value="Nombre del Instructor:"></p:outputLabel>
+                                <p:inputText id="nombreInstructor" value="#{ingresoAdendumBean.nuevoCurso.nombreInstructor}" required="true" readonly="#{not ingresoAdendumBean.nuevoCurso.oficial}"></p:inputText>
+                                <p:outputLabel for="centroCapacitacion" value="Centro de Capacitación:"></p:outputLabel>
+                                <p:inputTextarea id="centroCapacitacion" value="#{ingresoAdendumBean.nuevoCurso.centroDeCapacitacion}" required="true" cols="20" rows="8"></p:inputTextarea>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar Capacitación" actionListener="#{ingresoAdendumBean.agregarCurso}" process=":nuevoAdendum:cursosProgramados" update=":nuevoAdendum:cursosProgramados"></p:commandButton>
+                                </f:facet>
+                            </p:panelGrid>
+                            <br/>
+                            <p:dataTable id="cursos" value="#{ingresoAdendumBean.cursos}" var="curso" rowIndexVar="rowId">
+                                <f:facet name="header">
+                                    <h:outputText value="Cursos Programados"></h:outputText>
+                                </f:facet>
+                                <p:column headerText="Tema" width="30">
+                                    <h:outputText value="#{curso.temaATratar}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Instructor">
+                                    <h:outputText value="#{curso.nombreInstructor}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Num. Part.">
+                                    <h:outputText value="#{curso.numeroDeParticipantes}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Num. Horas">
+                                    <h:outputText value="#{curso.numeroDeHorasTotales}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Oficial">
+                                    <h:outputText value="#{curso.oficial ? 'Si' : 'No'}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <h:outputText value="#{ingresoAdendumBean.formatoCortoDeFecha(curso.fechaDeInicio)}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandButton icon="ui-icon-trash" update=":nuevoAdendum:cursos" process="@this" actionListener="#{ingresoAdendumBean.eliminarCurso}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
+                                        <f:attribute name="cursoIndex" value="#{rowId}"></f:attribute>
+                                        <p:confirm header="Confirmación" message="¿Está seguro que desea eliminar este curso?" icon="ui-icon-alert"></p:confirm>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:dialog>
+                    <p:dialog header="Equipos" widgetVar="equipos" height="500" style="overflow: scroll;" showEffect="fade" hideEffect="fade" modal="true">
+                        <p:panel id="atadoEquipos" rendered="#{ingresoAdendumBean.equiposPadre != null}">
+                            <p:panelGrid columns="1">
+                                <p:treeTable id="equiposTree" value="#{ingresoAdendumBean.equiposPadre}" var="equipo" selectionMode="checkbox" selection="#{ingresoAdendumBean.equiposPadreSeleccionados}">
+                                    <f:facet name="header">
+                                        Equipos dentro del Contrato Disponibles
+                                    </f:facet>
+                                    <p:column headerText="S/N">
+                                        #{equipo.numeroSerial}
+                                    </p:column>
+                                    <p:column headerText="P/N">
+                                        #{equipo.numeroDeParte}
+                                    </p:column>
+                                    <p:column headerText="Descripción">
+                                        #{equipo.descripcion}
+                                    </p:column>
+                                </p:treeTable>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="atadoEquiposLocal" rendered="#{ingresoAdendumBean.equiposPadreStockLocal != null}"> 
+                            <p:panelGrid columns="1">
+                                <p:inputText id="filtroEquipos" onkeyup="retraso();" placeholder="Filtre por número serial" style="width: 100%;" value="#{ingresoAdendumBean.filtro}">
+                                </p:inputText>
+                                <p:treeTable id="equiposTree2" value="#{ingresoAdendumBean.equiposPadreStockLocal}" var="equipo" selectionMode="checkbox" selection="#{ingresoAdendumBean.equiposPadreStockLocalSeleccionados}">
+                                    <p:ajax event="select" listener="#{ingresoAdendumBean.nodoSeleccionado}" />
+                                    <p:ajax event="unselect" listener="#{ingresoAdendumBean.nodoDeseleccionado}" />
+                                    <f:facet name="header">
+                                        Equipos dentro del Stock Local Disponibles
+                                    </f:facet>
+                                    <p:column headerText="S/N">
+                                        #{equipo.numeroSerial}
+                                    </p:column>
+                                    <p:column headerText="P/N">
+                                        #{equipo.numeroDeParte}
+                                    </p:column>
+                                    <p:column headerText="Descripción">
+                                        #{equipo.descripcion}
+                                    </p:column>
+                                </p:treeTable>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:dialog>
+                    <p:confirmDialog global="true">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                    <script type="text/javascript">
+                        function start() {
+                            statusDialog.show();
+                        }
+                        function stop() {
+                            statusDialog.hide();
+                        }
+                    </script>
+                </h:form>                                      
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

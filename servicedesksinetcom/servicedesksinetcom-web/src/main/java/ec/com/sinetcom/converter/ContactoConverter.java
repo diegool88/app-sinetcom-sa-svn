@@ -4,8 +4,7 @@
  */
 package ec.com.sinetcom.converter;
 
-import ec.com.sinetcom.servicios.TicketServicio;
-import ec.com.sinetcom.servicios.UsuarioServicio;
+import ec.com.sinetcom.servicios.ContratoServicio;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -16,16 +15,16 @@ import javax.faces.convert.Converter;
  *
  * @author diegoflores
  */
-@ManagedBean(name="competenciaConverter")
-public class CompetenciaConverter implements Converter{
+@ManagedBean(name="contactoConverter")
+public class ContactoConverter implements Converter{
 
     @EJB
-    private UsuarioServicio usuarioServicio;
+    private ContratoServicio contratoServicio;
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if(value != null && value.trim().length() > 0){
-            return this.usuarioServicio.obtenerCompetencia(Integer.parseInt(value));
+            return this.contratoServicio.recuperarContacto(Integer.parseInt(value));
         }else{
             return null;
         }
