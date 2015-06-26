@@ -63,7 +63,8 @@
             <p:submenu label="Contratos" rendered="#{login.usuarioActual.grupoid.nombre.toLowerCase() ne 'cliente'}">
                 <p:column>
                     <p:submenu label="Contrato">
-                        <p:menuitem value="Ingreso" url="/contratos/Contrato.xhtml" ></p:menuitem>
+                        <p:menuitem value="Ingresar Contrato" url="/contratos/Contrato.xhtml" ></p:menuitem>
+                        <p:menuitem value="Ingresar Adendum" url="/contratos/Adendum.xhtml"></p:menuitem>
                         <p:menuitem value="Tipos de Contratos" url="/contratos/TiposContrato.xhtml" ></p:menuitem>
                         <p:menuitem value="Consultar Contratos" url="/contratos/ConsultaContratos.xhtml" ></p:menuitem>
                     </p:submenu>

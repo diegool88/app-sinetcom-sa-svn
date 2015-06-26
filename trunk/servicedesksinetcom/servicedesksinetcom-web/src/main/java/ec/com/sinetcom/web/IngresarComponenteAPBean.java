@@ -143,17 +143,18 @@ public class IngresarComponenteAPBean implements Serializable {
     public void actualizarProductoPadre() {
         this.productosPadre = this.productoServicio.obtenerTodosLosProductosPadrePorModelo(this.modeloProductoSeleccionado);
     }
-
-    public void actualizarContrato() {
-        if (this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null) {
-            this.nuevoProductoCA.setContratonumero(this.productoPadreSeleccionado.getContratonumero());
-            this.nuevoProductoCA.setBodegaid(null);
+    
+    public void actualizarContratoYBodega() {
+        if (this.productoPadreSeleccionado != null) {
+            this.nuevoProductoCA.setContratonumero(this.productoPadreSeleccionado.getContratonumero() != null ? this.productoPadreSeleccionado.getContratonumero() : null);
+            this.nuevoProductoCA.setBodegaid(this.productoPadreSeleccionado.getBodegaid() != null ? this.productoPadreSeleccionado.getBodegaid() : null);
             this.nuevoProductoCA.setNumeroDeFactura(this.productoPadreSeleccionado.getNumeroDeFactura());
             this.nuevoProductoCA.setNumeroDePedido(this.productoPadreSeleccionado.getNumeroDePedido());
             this.nuevoProductoCA.setFechaDeCompra(this.productoPadreSeleccionado.getFechaDeCompra());
             this.nuevoProductoCA.setCondicionFisicaid(this.productoPadreSeleccionado.getCondicionFisicaid());
         }else{
             this.nuevoProductoCA.setContratonumero(null);
+            this.nuevoProductoCA.setBodegaid(null);
         }
     }
     
@@ -193,7 +194,7 @@ public class IngresarComponenteAPBean implements Serializable {
         this.nuevoProductoCA.setModeloProductoid(this.modeloProductoSeleccionado);
         this.nuevoProductoCA.setComponenteElectronicoAtomicoid(this.componenteEASeleccionado);
         /*
-        Nuevo Condigo
+        Nuevo Codigo
         */
         this.nuevoProductoCA.setItemProductonumeroSerialpadre(this.productoPadreSeleccionado);
         this.nuevoProductoCA.setModeloProductoList(this.modeloProductosCompatibles);

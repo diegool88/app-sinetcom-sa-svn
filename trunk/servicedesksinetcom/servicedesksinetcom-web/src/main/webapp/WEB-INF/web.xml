@@ -47,7 +47,7 @@
     </context-param>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/welcome.xhtml</location>
+        <location>/login.xhtml</location>
     </error-page>
 <!--    <security-constraint>
         <display-name>AdminConstraint</display-name>

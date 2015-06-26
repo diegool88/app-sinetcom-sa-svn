@@ -129,16 +129,17 @@ public class IngresarProductoPiezaNA implements Serializable{
         this.actualizarNumeroParte();
     }
 
-    public void actualizarContrato() {
-        if (this.productoPadreSeleccionado != null && this.productoPadreSeleccionado.getContratonumero() != null) {
-            this.nuevoProducto.setContratonumero(this.productoPadreSeleccionado.getContratonumero());
-            this.nuevoProducto.setBodegaid(null);
+    public void actualizarContratoYBodega() {
+        if (this.productoPadreSeleccionado != null) {
+            this.nuevoProducto.setContratonumero(this.productoPadreSeleccionado.getContratonumero() != null ? this.productoPadreSeleccionado.getContratonumero() : null);
+            this.nuevoProducto.setBodegaid(this.productoPadreSeleccionado.getBodegaid() != null ? this.productoPadreSeleccionado.getBodegaid() : null);
             this.nuevoProducto.setNumeroDeFactura(this.productoPadreSeleccionado.getNumeroDeFactura());
             this.nuevoProducto.setNumeroDePedido(this.productoPadreSeleccionado.getNumeroDePedido());
             this.nuevoProducto.setFechaDeCompra(this.productoPadreSeleccionado.getFechaDeCompra());
             this.nuevoProducto.setCondicionFisicaid(this.productoPadreSeleccionado.getCondicionFisicaid());
         }else{
             this.nuevoProducto.setContratonumero(null);
+            this.nuevoProducto.setBodegaid(null);
         }
     }
     

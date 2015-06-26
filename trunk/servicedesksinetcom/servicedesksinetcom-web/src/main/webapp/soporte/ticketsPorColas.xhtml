@@ -25,13 +25,28 @@
                     </c:forEach>
                 </p:tabView>
                 <div style="overflow: auto">
-                    <p:dataTable id="tabla" var="ticket" value="#{ticketsPorCola.tickets}" scrollWidth="100%" scrollable="true" selectionMode="single" rows="10" paginator="true" selection="#{ticketsPorCola.ticketSeleccionado}"  rowKey="#{ticket.ticketNumber}" >
+                    <p:dataTable id="tabla" var="ticket" value="#{ticketsPorCola.tickets}" selectionMode="single" rows="10" paginator="true" selection="#{ticketsPorCola.ticketSeleccionado}"  rowKey="#{ticket.ticketNumber}" resizableColumns="true" liveResize="true" >
                         <f:facet name="header">
                             #{ticketsPorCola.tabSeleccionado}
                         </f:facet>
                         <p:ajax event="rowSelect" immediate="true" listener="#{ticketsPorCola.registroSeleccionado}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:articulos, @this"></p:ajax>
                         <p:ajax event="rowUnselect" immediate="true" listener="#{ticketsPorCola.registroDeseleccionado}" update=":form:articulos, @this"></p:ajax>
-                        <p:column headerText="Número de Ticket" width="280">
+                        <p:column headerText="Número de Ticket">
+                            <h:outputText value="#{ticket.ticketNumber}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Asunto">
+                            <h:outputText value="#{ticket.titulo}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Prioridad">
+                            <h:outputText value="#{ticket.prioridadTicketcodigo.nombre}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Empresa">
+                            <h:outputText value="#{ticket.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                        </p:column>
+                        <p:column headerText="Equipo">
+                            <h:outputText value="#{ticket.itemProductonumeroSerial.numeroSerial} - #{ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{ticket.itemProductonumeroSerial.modeloProductoid.modelo}"></h:outputText>
+                        </p:column>
+<!--                        <p:column headerText="Número de Ticket" width="280">
                             <h:outputText value="#{ticket.ticketNumber}"></h:outputText>
                         </p:column>
                         <p:column headerText="Prioridad" width="280">
@@ -63,8 +78,8 @@
                         </p:column>
                         <p:column headerText="Propietario" width="280">
                             <h:outputText value="Ing. #{ticket.usuarioidpropietario.nombreCompleto}"></h:outputText>
-                        </p:column>
-                        <f:facet name="footer" rendered="#{login.usuarioActual.grupoid.permiso.administra or login.usuarioActual.grupoid.permiso.administraTicketsPropietarios}">
+                        </p:column>-->
+                        <f:facet name="footer">
                             <p:commandButton value="Cerrar Ticket" icon="ui-icon-circle-check" update=":form:cerrarT" disabled="#{ticketsPorCola.desactivarCerrarTicket}" immediate="true" oncomplete="cerrarTicketDialog.show()"></p:commandButton>
                             <p:commandButton value="Poner en Pendiente" icon="ui-icon-clock" update=":form:tabla" disabled="#{ticketsPorCola.desactivarPonerEnPendiente}" process="@this" immediate="true" ajax="false" actionListener="#{ticketsPorCola.ponerEnPendiente}" ></p:commandButton>
                             <p:commandButton value="Re-abrir Caso" icon="ui-icon-refresh" update=":form:tabla" disabled="#{ticketsPorCola.desactivarReAbrirCaso}" process="@this" immediate="true" ajax="false" actionListener="#{ticketsPorCola.reAbrirCaso}"></p:commandButton>
@@ -74,8 +89,37 @@
                             <p:commandButton value="Descargar Hoja S." icon="ui-icon-arrowthickstop-1-s" ajax="false" disabled="#{ticketsPorCola.desactivarDescargarHojaDeServicio}" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);">
                                 <p:fileDownload value="#{ticketsPorCola.archivoPorDescargar}"></p:fileDownload>
                             </p:commandButton>
+                            <p:commandButton value="Ver Detalles" icon="ui-icon-search" process="tabla" update=":form:ticketDetail" disabled="#{empty ticketsPorCola.ticketSeleccionado}" oncomplete="PF('ticketDialog').show()"></p:commandButton>
                         </f:facet>
                     </p:dataTable>
+                    <p:dialog header="Detalles del Ticket" widgetVar="ticketDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="ticketDetail" style="text-align:center;">
+                            <p:panelGrid id="detalles" columns="2" rendered="#{not empty ticketsPorCola.ticketSeleccionado}">
+                                    <p:outputLabel value="Número de Ticket:"/>
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.ticketNumber}"></h:outputText>
+                                    <p:outputLabel value="Prioridad:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.prioridadTicketcodigo.nombre}"></h:outputText>
+                                    <p:outputLabel value="Fecha de Creación:" />
+                                    <h:outputText value="#{ticketsPorCola.formatoCortoDeFechaYHora(ticketsPorCola.ticketSeleccionado.fechaDeCreacion)}"></h:outputText>
+                                    <p:outputLabel value="Fecha de Última Modificación:" />
+                                    <h:outputText value="#{ticketsPorCola.formatoCortoDeFechaYHora(ticketsPorCola.ticketSeleccionado.fechaDeModificacion)}"></h:outputText>
+                                    <p:outputLabel value="Asunto:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.titulo}"></h:outputText>
+                                    <p:outputLabel value="Empresa:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                                    <p:outputLabel value="Equipo:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.itemProductonumeroSerial.numeroSerial} - #{ticketsPorCola.ticketSeleccionado.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{ticketsPorCola.ticketSeleccionado.itemProductonumeroSerial.modeloProductoid.modelo}"></h:outputText>
+                                    <p:outputLabel value="Servicio:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.servicioTicketcodigo.nombre}"></h:outputText>
+                                    <p:outputLabel value="Cola:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.colaid.nombre}"></h:outputText>
+                                    <p:outputLabel value="Creador:" />
+                                    <h:outputText value="#{ticketsPorCola.ticketSeleccionado.usuarioidcreador.nombreCompleto}"></h:outputText>
+                                    <p:outputLabel value="Propietario:" />
+                                    <h:outputText value="Ing. #{ticketsPorCola.ticketSeleccionado.usuarioidpropietario.nombreCompleto}"></h:outputText>
+                                </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
                 </div>
                 <p:dialog header="Asignar Ticket a Ingeniero" widgetVar="asignarDialog" modal="true" showEffect="fade" hideEffect="fade">
                     <p:panel id="asignarT">
@@ -182,9 +226,9 @@
                         </f:facet>
                     </p:panel>
                 </p:dialog>
-                <p:panel id="articulos" header="Articulos" footer="Articulos disponibles" style="margin-bottom: 20px;" >
+                <p:panel id="articulos" header="Notas" footer="Notas disponibles" style="margin-bottom: 20px;" >
                     <ui:repeat value="#{ticketsPorCola.articulos}" var="articulo" rendered="#{ticketsPorCola.articulos != null}">
-                        <p:panel id="articulo" header="Articulo ##{articulo.orden}">
+                        <p:panel id="articulo" header="Nota ##{articulo.orden}">
                             <h:panelGrid columns="2" cellpadding="10">
                                 <h:outputLabel>De: </h:outputLabel>
                                 <h:outputText value="#{articulo.de.correoElectronico}"></h:outputText>
@@ -204,7 +248,7 @@
                             </h:panelGrid>
                         </p:panel>
                     </ui:repeat>
-                    <p:panel id="nuevoArticulo" header="Nuevo Articulo" rendered="#{ticketsPorCola.articulos != null}">
+                    <p:panel id="nuevoArticulo" header="Nueva Nota" rendered="#{ticketsPorCola.articulos != null}">
                         <h:panelGrid columns="3" cellpadding="10">
                             <h:outputLabel>Asunto: </h:outputLabel>
                             <p:inputText id="asunto" value="#{ticketsPorCola.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
@@ -217,7 +261,7 @@
                             <p:message for="archivo"></p:message>
                         </h:panelGrid>
                         <f:facet name="footer">
-                            <p:commandButton value="Agregar Artículo" disabled="#{ticketsPorCola.desactivarAgregarArticulo}" actionListener="#{ticketsPorCola.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
+                            <p:commandButton value="Agregar Nota" disabled="#{ticketsPorCola.desactivarAgregarArticulo}" actionListener="#{ticketsPorCola.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
                         </f:facet>
                     </p:panel>
                 </p:panel>
