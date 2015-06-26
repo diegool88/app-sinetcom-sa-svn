@@ -30,6 +30,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import org.eclipse.persistence.config.CacheIsolationType;
 
 /**
@@ -48,7 +49,24 @@ public class Contrato implements Serializable {
     @Lob
     @Column(name = "contratoDigital")
     private byte[] contratoDigital;
+    @Lob
+    @Column(name = "actaERProyectoDigital")
+    private byte[] actaERProyectoDigital;
+    @Lob
+    @Column(name = "actaEREquiposDigital")
+    private byte[] actaEREquiposDigital;
+    @Size(max = 1024)
+    @Column(name = "observaciones")
+    private String observaciones;
+    @OneToMany(mappedBy = "adendumDe")
+    private List<Contrato> contratoList;
+    @JoinColumn(name = "adendumDe", referencedColumnName = "numero")
+    @ManyToOne
+    private Contrato adendumDe;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
+    private List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero", orphanRemoval = true)
+    @CascadeOnDelete
     private List<VisitaTecnica> visitaTecnicaList;
     @JoinTable(name = "HistorialDeContratosYEquipos", joinColumns = {
         @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")}, inverseJoinColumns = {
@@ -145,11 +163,13 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc")
     @ManyToOne(optional = false)
     private ClienteEmpresa clienteEmpresaruc;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero", orphanRemoval = true)
+    @CascadeOnDelete
     private List<Curso> cursoList;
     @OneToMany(mappedBy = "contratonumero")
     private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero", orphanRemoval = true)
+    @CascadeOnDelete
     private List<GarantiaEconomica> garantiaEconomicaList;
     @OneToMany(mappedBy = "contratonumero")
     private List<ItemProducto> itemProductoList;
@@ -463,13 +483,6 @@ public class Contrato implements Serializable {
         this.itemProductoList1 = itemProductoList;
     }
 
-    public byte[] getContratoDigital() {
-        return contratoDigital;
-    }
-
-    public void setContratoDigital(byte[] contratoDigital) {
-        this.contratoDigital = contratoDigital;
-    }
 
     @XmlTransient
     public List<VisitaTecnica> getVisitaTecnicaList() {
@@ -478,6 +491,64 @@ public class Contrato implements Serializable {
 
     public void setVisitaTecnicaList(List<VisitaTecnica> visitaTecnicaList) {
         this.visitaTecnicaList = visitaTecnicaList;
+    }
+
+    public byte[] getContratoDigital() {
+        return contratoDigital;
+    }
+
+    public void setContratoDigital(byte[] contratoDigital) {
+        this.contratoDigital = contratoDigital;
+    }
+
+    public byte[] getActaERProyectoDigital() {
+        return actaERProyectoDigital;
+    }
+
+    public void setActaERProyectoDigital(byte[] actaERProyectoDigital) {
+        this.actaERProyectoDigital = actaERProyectoDigital;
+    }
+
+    public byte[] getActaEREquiposDigital() {
+        return actaEREquiposDigital;
+    }
+
+    public void setActaEREquiposDigital(byte[] actaEREquiposDigital) {
+        this.actaEREquiposDigital = actaEREquiposDigital;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    @XmlTransient
+    public List<Contrato> getContratoList() {
+        return contratoList;
+    }
+
+    public void setContratoList(List<Contrato> contratoList) {
+        this.contratoList = contratoList;
+    }
+
+    public Contrato getAdendumDe() {
+        return adendumDe;
+    }
+
+    public void setAdendumDe(Contrato adendumDe) {
+        this.adendumDe = adendumDe;
+    }
+
+    @XmlTransient
+    public List<HistorialDeContratosYEquipos> getHistorialDeContratosYEquiposList() {
+        return historialDeContratosYEquiposList;
+    }
+
+    public void setHistorialDeContratosYEquiposList(List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList) {
+        this.historialDeContratosYEquiposList = historialDeContratosYEquiposList;
     }
     
 }

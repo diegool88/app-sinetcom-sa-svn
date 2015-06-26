@@ -37,8 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
 //@NamedQueries({
 //    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
-    @ManyToMany(mappedBy = "usuarioList")
-    private List<Competencia> competenciaList;
     @Basic(optional = false)
     @NotNull
     @Column(name = "activo")
@@ -91,12 +89,6 @@ public class Usuario implements Serializable {
     private List<Contrato> contratoList;
     @OneToMany(mappedBy = "intructorSinetcom")
     private List<Curso> cursoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<CampoUsuario> campoUsuarioList;
-    @OneToMany(mappedBy = "usuarioidmodificacion")
-    private List<Faq> faqList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioidcreacion")
-    private List<Faq> faqList1;
     @JoinColumn(name = "Grupo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Grupo grupoid;
@@ -217,35 +209,6 @@ public class Usuario implements Serializable {
         this.cursoList = cursoList;
     }
 
-    
-    
-    @XmlTransient
-    public List<CampoUsuario> getCampoUsuarioList() {
-        return campoUsuarioList;
-    }
-
-    public void setCampoUsuarioList(List<CampoUsuario> campoUsuarioList) {
-        this.campoUsuarioList = campoUsuarioList;
-    }
-
-    @XmlTransient
-    public List<Faq> getFaqList() {
-        return faqList;
-    }
-
-    public void setFaqList(List<Faq> faqList) {
-        this.faqList = faqList;
-    }
-
-    @XmlTransient
-    public List<Faq> getFaqList1() {
-        return faqList1;
-    }
-
-    public void setFaqList1(List<Faq> faqList1) {
-        this.faqList1 = faqList1;
-    }
-
     public Grupo getGrupoid() {
         return grupoid;
     }
@@ -348,15 +311,6 @@ public class Usuario implements Serializable {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
-    }
-
-    @XmlTransient
-    public List<Competencia> getCompetenciasList() {
-        return competenciaList;
-    }
-
-    public void setCompetenciasList(List<Competencia> competenciasList) {
-        this.competenciaList = competenciasList;
     }
 
     public String getNombreCompleto() {

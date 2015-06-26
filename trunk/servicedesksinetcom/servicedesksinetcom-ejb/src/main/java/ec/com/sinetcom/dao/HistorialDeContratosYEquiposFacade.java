@@ -1,10 +1,11 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.Faq;
+import ec.com.sinetcom.orm.HistorialDeContratosYEquipos;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author diegoflores
  */
 @Stateless
-public class FaqFacade extends AbstractFacade<Faq> {
+public class HistorialDeContratosYEquiposFacade extends AbstractFacade<HistorialDeContratosYEquipos> {
     @PersistenceContext(unitName = "ec.com.sinetcom_servicedesksinetcom-ejb_ejb_1PU")
     private EntityManager em;
 
@@ -23,8 +24,8 @@ public class FaqFacade extends AbstractFacade<Faq> {
         return em;
     }
 
-    public FaqFacade() {
-        super(Faq.class);
+    public HistorialDeContratosYEquiposFacade() {
+        super(HistorialDeContratosYEquipos.class);
     }
     
 }

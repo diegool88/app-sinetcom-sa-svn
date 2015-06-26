@@ -310,6 +310,10 @@ public class ContratoServicio {
         }
         return true;
     }
+    
+    public int obtenerIndiceDeAdendum(Contrato contrato){
+        return this.contratoFacade.obtenerIndiceDeAdendum(contrato);
+    }
 
     /**
      * Verifica los pagos por vencer en la prox 2 semanas

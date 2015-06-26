@@ -5,13 +5,9 @@
 package ec.com.sinetcom.servicios;
 
 import ec.com.sinetcom.configuracion.UtilidadDeEncriptacion;
-import ec.com.sinetcom.dao.CompetenciaFacade;
 import ec.com.sinetcom.dao.GrupoFacade;
-import ec.com.sinetcom.dao.PermisoFacade;
 import ec.com.sinetcom.dao.UsuarioFacade;
-import ec.com.sinetcom.orm.Competencia;
 import ec.com.sinetcom.orm.Grupo;
-import ec.com.sinetcom.orm.Permiso;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.List;
 import javax.ejb.EJB;
@@ -31,11 +27,8 @@ public class UsuarioServicio {
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
-    private CompetenciaFacade competenciasFacade;
-    @EJB
     private GrupoFacade grupoFacade;
-    @EJB
-    private PermisoFacade permisoFacade;
+    
 
     
     public List<Usuario> cargarUsuarios() {
@@ -137,24 +130,6 @@ public class UsuarioServicio {
         return this.usuarioFacade.obtenerTodosLosClientes();
     }
 
-    /**
-     * Permite obtener una competencia
-     *
-     * @param id
-     * @return
-     */
-    public Competencia obtenerCompetencia(int id) {
-        return this.competenciasFacade.find(id);
-    }
-
-    /**
-     * Obtiene todas las competencias
-     *
-     * @return
-     */
-    public List<Competencia> obtenerTodasLasCompetencias() {
-        return this.competenciasFacade.findAll();
-    }
 
     /**
      * Obtiene todos los grupos
@@ -173,16 +148,6 @@ public class UsuarioServicio {
      */
     public Grupo obtenerGrupoPorId(int id) {
         return this.grupoFacade.find(id);
-    }
-
-    /**
-     * Obtiene un Permiso
-     *
-     * @param id
-     * @return
-     */
-    public Permiso obtenerPermisosPorId(int id) {
-        return this.permisoFacade.find(id);
     }
 
     /**

@@ -51,8 +51,8 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
         for (Contrato contrato : contratos) {
             if (contrato.getFechaDeEntregaRecepcion() != null) {
                 Calendar fechaMaximaDeValidez = Calendar.getInstance();
-                fechaMaximaDeValidez.setTime(contrato.getFechaDeEntregaRecepcion());
-                fechaMaximaDeValidez.add(Calendar.YEAR, contrato.getTiempoDeValidez());
+                fechaMaximaDeValidez.setTime(contrato.getFechaInicioGarantiaTecnica());
+                fechaMaximaDeValidez.add(Calendar.MONTH, contrato.getTiempoDeValidez());
                 if (fechaMaximaDeValidez.getTime().compareTo(new Date()) >= 0) {
                     numeroContratos.add(contrato.getNumero());
                 }
@@ -153,6 +153,28 @@ public class ItemProductoFacade extends AbstractFacade<ItemProducto> {
         String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero = ?1";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, contrato);
+        return qry.getResultList();
+    }
+    
+    /***
+     * Obtiene todos los productos padre de un contrato
+     * @param contrato
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodosLosProductosPadreDeUnContrato(Contrato contrato){
+        String sql = "SELECT i FROM ItemProducto i WHERE i.contratonumero = ?1 AND i.itemProductonumeroSerialpadre IS NULL";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter(1, contrato);
+        return qry.getResultList();
+    }
+    
+    /**
+     * Obtiene todos los productos padre del stock local
+     * @return 
+     */
+    public List<ItemProducto> obtenerTodosLosProductosPadreDeStockLocal(){
+        String sql = "SELECT i FROM ItemProducto i WHERE i.bodegaid IS NOT NULL AND i.itemProductonumeroSerialpadre IS NULL";
+        Query qry = this.em.createQuery(sql);
         return qry.getResultList();
     }
 

@@ -32,4 +32,16 @@ public class ContratoFacade extends AbstractFacade<Contrato> {
         Query qry = this.em.createNativeQuery("LOAD DATA LOCAL INFILE '/temp/Contrato.csv' INTO TABLE Contrato CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES;");
         return qry.executeUpdate() > 0;
     }
+    
+    /**
+     * Obtiene el número del secuencial del adendum de un contrato
+     * @param contrato
+     * @return 
+     */
+    public int obtenerIndiceDeAdendum(Contrato contrato){
+        String sql = "SELECT c FROM Contrato c WHERE c.numero LIKE :contrato";
+        Query qry = this.em.createQuery(sql);
+        qry.setParameter("contrato", "%" + contrato.getNumero() + "%");
+        return qry.getResultList().size();
+    }
 }

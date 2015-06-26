@@ -4,7 +4,6 @@
  */
 package ec.com.sinetcom.dao;
 
-import ec.com.sinetcom.orm.Competencia;
 import ec.com.sinetcom.orm.Grupo;
 import ec.com.sinetcom.orm.Usuario;
 import java.util.ArrayList;
@@ -36,17 +35,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
-    /**
-     * Permite obtener las competencias de un usuario (No funciona)
-     * @param competencias
-     * @return 
-     */
-    public List<Usuario> obtenerUsuariosPorCompetencias(Competencia competencias){
-        String sql = "SELECT u FROM Usuario u INNER JOIN u.competenciaList c WHERE c.id = ?1";
-        Query qry = this.em.createQuery(sql);
-        qry.setParameter(1, competencias.getId());
-        return qry.getResultList().isEmpty() ? null : qry.getResultList();
-    }
     
     /**
      * Permite verificar la existencia de un usuario registrado
