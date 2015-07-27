@@ -55,7 +55,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         String sql;
         //Query qry;
         if (empresa != null) {
-            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaruc = ?3 ) AND t.estadoTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
+            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaid = ?3 ) AND t.estadoTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
         } else {
             sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.estadoTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
         }
@@ -99,7 +99,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         ClienteEmpresa empresa = this.clienteEmpresaFacade.obtenerClienteEmpresaPorUsuario(usuario);
         String sql;
         if (empresa != null) {
-            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaruc = ?3) AND t.servicioTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
+            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaid = ?3) AND t.servicioTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
         } else {
             sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.servicioTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
         }
@@ -142,7 +142,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         String sql;
 
         if (empresa != null) {
-            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaruc = ?3 ) AND t.prioridadTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
+            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaid = ?3 ) AND t.prioridadTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
         } else {
             sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.prioridadTicketcodigo = ?2 ORDER BY t.ticketNumber DESC";
         }
@@ -202,7 +202,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         String sql;
 
         if (empresa != null) {
-            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaruc = ?3 ) AND t.colaid = ?2 ORDER BY t.ticketNumber DESC";
+            sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 OR t.clienteEmpresaid = ?3 ) AND t.colaid = ?2 ORDER BY t.ticketNumber DESC";
         } else {
             sql = "SELECT t FROM Ticket t WHERE ( t.usuarioidpropietario = ?1 OR t.usuarioidcreador = ?1 ) AND t.colaid = ?2 ORDER BY t.ticketNumber DESC";
         }
@@ -354,7 +354,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
         int mes = Calendar.getInstance().get(Calendar.MONTH) + 1;
         int anio = Calendar.getInstance().get(Calendar.YEAR);
 
-        String sql = "SELECT t FROM Ticket t WHERE FUNC('MONTH',t.clienteEmpresaruc) = ?1 AND FUNC('YEAR',t.fechaDeCreacion) = ?2 AND t.clienteEmpresaruc = ?3";
+        String sql = "SELECT t FROM Ticket t WHERE FUNC('MONTH',t.clienteEmpresaid) = ?1 AND FUNC('YEAR',t.fechaDeCreacion) = ?2 AND t.clienteEmpresaid = ?3";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, mes);
         qry.setParameter(2, anio);
@@ -373,7 +373,7 @@ public class TicketFacade extends AbstractFacade<Ticket> {
 
         int anio = Calendar.getInstance().get(Calendar.YEAR);
 
-        String sql = "SELECT t FROM Ticket t WHERE FUNC('YEAR',t.fechaDeCreacion) = ?1 AND t.clienteEmpresaruc = ?2";
+        String sql = "SELECT t FROM Ticket t WHERE FUNC('YEAR',t.fechaDeCreacion) = ?1 AND t.clienteEmpresaid = ?2";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, anio);
         qry.setParameter(2, clienteEmpresa);
