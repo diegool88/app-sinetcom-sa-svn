@@ -55,6 +55,9 @@ public class Contrato implements Serializable {
     @Lob
     @Column(name = "actaEREquiposDigital")
     private byte[] actaEREquiposDigital;
+    @JoinColumn(name = "ClienteEmpresa_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private ClienteEmpresa clienteEmpresaid;
     @Size(max = 1024)
     @Column(name = "observaciones")
     private String observaciones;
@@ -160,9 +163,6 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "administradorDeContrato", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Contacto administradorDeContrato;
-    @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc")
-    @ManyToOne(optional = false)
-    private ClienteEmpresa clienteEmpresaruc;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contratonumero", orphanRemoval = true)
     @CascadeOnDelete
     private List<Curso> cursoList;
@@ -396,14 +396,6 @@ public class Contrato implements Serializable {
         this.administradorDeContrato = administradorDeContrato;
     }
 
-    public ClienteEmpresa getClienteEmpresaruc() {
-        return clienteEmpresaruc;
-    }
-
-    public void setClienteEmpresaruc(ClienteEmpresa clienteEmpresaruc) {
-        this.clienteEmpresaruc = clienteEmpresaruc;
-    }
-
     @XmlTransient
     public List<Curso> getCursoList() {
         return cursoList;
@@ -493,29 +485,6 @@ public class Contrato implements Serializable {
         this.visitaTecnicaList = visitaTecnicaList;
     }
 
-    public byte[] getContratoDigital() {
-        return contratoDigital;
-    }
-
-    public void setContratoDigital(byte[] contratoDigital) {
-        this.contratoDigital = contratoDigital;
-    }
-
-    public byte[] getActaERProyectoDigital() {
-        return actaERProyectoDigital;
-    }
-
-    public void setActaERProyectoDigital(byte[] actaERProyectoDigital) {
-        this.actaERProyectoDigital = actaERProyectoDigital;
-    }
-
-    public byte[] getActaEREquiposDigital() {
-        return actaEREquiposDigital;
-    }
-
-    public void setActaEREquiposDigital(byte[] actaEREquiposDigital) {
-        this.actaEREquiposDigital = actaEREquiposDigital;
-    }
 
     public String getObservaciones() {
         return observaciones;
@@ -549,6 +518,38 @@ public class Contrato implements Serializable {
 
     public void setHistorialDeContratosYEquiposList(List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList) {
         this.historialDeContratosYEquiposList = historialDeContratosYEquiposList;
+    }
+
+    public byte[] getContratoDigital() {
+        return contratoDigital;
+    }
+
+    public void setContratoDigital(byte[] contratoDigital) {
+        this.contratoDigital = contratoDigital;
+    }
+
+    public byte[] getActaERProyectoDigital() {
+        return actaERProyectoDigital;
+    }
+
+    public void setActaERProyectoDigital(byte[] actaERProyectoDigital) {
+        this.actaERProyectoDigital = actaERProyectoDigital;
+    }
+
+    public byte[] getActaEREquiposDigital() {
+        return actaEREquiposDigital;
+    }
+
+    public void setActaEREquiposDigital(byte[] actaEREquiposDigital) {
+        this.actaEREquiposDigital = actaEREquiposDigital;
+    }
+
+    public ClienteEmpresa getClienteEmpresaid() {
+        return clienteEmpresaid;
+    }
+
+    public void setClienteEmpresaid(ClienteEmpresa clienteEmpresaid) {
+        this.clienteEmpresaid = clienteEmpresaid;
     }
     
 }

@@ -80,6 +80,16 @@ public class UsuarioServicio {
         return true;
     }
     
+    public boolean verificarActualizacionCedulaCiudadania(Usuario usuario, String cedulaNueva){
+        Usuario usuarioQ = this.usuarioFacade.obtenerUsuarioPorCedulaCiudadania(cedulaNueva);
+        return usuarioQ != null ? usuarioQ.equals(usuario) : true;
+    }
+    
+    public boolean verificarActualizacionEmail(Usuario usuario, String emailNuevo){
+        Usuario usuarioQ = this.usuarioFacade.obtenerUsuarioPorCorreoElectronico(emailNuevo);
+        return usuarioQ != null ? usuarioQ.equals(usuario) : true;
+    }
+    
 
     public List<Grupo> cargarGrupos() {
         return grupoFacade.findAll();

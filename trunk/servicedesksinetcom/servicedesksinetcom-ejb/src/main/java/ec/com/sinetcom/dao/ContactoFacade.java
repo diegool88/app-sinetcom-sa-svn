@@ -31,7 +31,7 @@ public class ContactoFacade extends AbstractFacade<Contacto> {
     }
     
     public List<Contacto> obtenerContactosDeCliente(ClienteEmpresa clienteEmpresa){
-        String sql = "SELECT c FROM Contacto c WHERE c.clienteEmpresaruc = ?1";
+        String sql = "SELECT c FROM Contacto c WHERE c.clienteEmpresaid = ?1";
         Query qry = this.em.createQuery(sql);  
         qry.setParameter(1, clienteEmpresa);
         return qry.getResultList();
@@ -44,4 +44,27 @@ public class ContactoFacade extends AbstractFacade<Contacto> {
         return !((Contacto)qry.getSingleResult()).getContratoList().isEmpty();
     }
     
+    /**
+     * Permite obtener un contacto por correo electrónico
+     * @param correoElectronico
+     * @return 
+     */
+    public Contacto obtenerContactoPorCorreoElectronico(String correoElectronico){
+        String sql = "SELECT c FROM Contacto c WHERE c.correoElectronico = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, correoElectronico);
+        return qry.getResultList().isEmpty() ? null : (Contacto)qry.getSingleResult();
+    }
+    
+    /**
+     * Permite obtener un usuario por cedula de ciudadania
+     * @param cedula
+     * @return 
+     */
+    public Contacto obtenerContactoPorCedulaCiudadania(String cedula){
+        String sql = "SELECT c FROM Contacto c WHERE c.cedulaDeCuidadania = ?1";
+        Query qry = this.em.createQuery(sql);  
+        qry.setParameter(1, cedula);
+        return qry.getResultList().isEmpty() ? null : (Contacto)qry.getSingleResult();
+    }
 }

@@ -203,7 +203,7 @@ public class ContratoServicio {
         return clienteEmpresaFacade.findAll();
     }
 
-    public ClienteEmpresa recuperarRucEmpresa(String id) {
+    public ClienteEmpresa recuperarRucEmpresa(Integer id) {
         return clienteEmpresaFacade.find(id);
     }
 
@@ -441,7 +441,7 @@ public class ContratoServicio {
         cuerpo.append("Monto: ").append(garantiaEconomica.getValor()).append("\n");
         cuerpo.append("Fecha de finalización: ").append(formatoCortoDeFecha(garantiaEconomica.getFechaFin())).append("\n");
         cuerpo.append("Porcentaje: ").append(garantiaEconomica.getPorcentaje()).append("%\n");
-        cuerpo.append("¿Es renovable?: ").append(garantiaEconomica.getRenovable() ? "Si" : "No").append("\n");
+        cuerpo.append("¿Es renovación?: ").append(garantiaEconomica.getRenovacion()? "Si" : "No").append("\n");
         cuerpo.append("Tipo de Garantía E.: ").append(garantiaEconomica.getTipoGarantiaid().getTipo()).append("\n\n\n");
         cuerpo.append("Saludos Cordiales.").append("\n");
 
@@ -550,7 +550,7 @@ public class ContratoServicio {
      * @return 
      */
     public boolean existeDireccionCliente(ClienteDireccion clienteDireccion){
-        return this.clienteDireccionFacade.existeDireccionCliente(clienteDireccion.getCiudad(), clienteDireccion.getClienteEmpresa()) != null;
+        return this.clienteDireccionFacade.existeDireccionCliente(clienteDireccion.getCiudad(), clienteDireccion.getClienteEmpresaid()) != null;
     }
 
     /**
@@ -590,7 +590,7 @@ public class ContratoServicio {
         sb.append("Reciba un cordial saludo,").append("\n\n");
         sb.append("Le recordamos que un nuevo curso se aproxima, a continuación los detalles:").append("\n");
         sb.append("Tema a tratar: ").append(curso.getTemaATratar()).append("\n");
-        sb.append("Cliente: ").append(curso.getContratonumero().getClienteEmpresaruc().getNombreComercial()).append("\n");
+        sb.append("Cliente: ").append(curso.getContratonumero().getClienteEmpresaid().getNombreComercial()).append("\n");
         sb.append("Número de contrato: ").append(curso.getContratonumero().getNumero()).append("\n");
         sb.append("Fecha: ").append(formatoCortoDeFecha(curso.getFechaDeInicio())).append("\n");
         sb.append("Instructor: ").append(curso.getNombreInstructor()).append("\n");
@@ -609,7 +609,7 @@ public class ContratoServicio {
         sb.append("Descripción: ").append(visitaTecnica.getDescripcion()).append("\n");
         sb.append("Tipo de Mantenimiento: ").append(visitaTecnica.getTipoDeVisitaid().getNombre()).append("\n");
         sb.append("Fecha: ").append(formatoCortoDeFecha(visitaTecnica.getFecha())).append("\n");
-        sb.append("Cliente: ").append(visitaTecnica.getContratonumero().getClienteEmpresaruc().getNombreComercial()).append("\n");
+        sb.append("Cliente: ").append(visitaTecnica.getContratonumero().getClienteEmpresaid().getNombreComercial()).append("\n");
         sb.append("Contrato: ").append(visitaTecnica.getContratonumero().getNumero()).append("\n\n");
         sb.append("Saludos Cordiales.").append("\n\n");
         

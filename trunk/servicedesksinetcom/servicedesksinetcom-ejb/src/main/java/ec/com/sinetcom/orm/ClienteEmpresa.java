@@ -11,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,14 +38,18 @@ import org.eclipse.persistence.config.CacheIsolationType;
     @NamedQuery(name = "ClienteEmpresa.findAll", query = "SELECT c FROM ClienteEmpresa c")})
 @Cache(isolation = CacheIsolationType.ISOLATED)
 public class ClienteEmpresa implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaid")
     private List<Ticket> ticketList;
     private static final long serialVersionUID = 1L;
-    @Id
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 15)
-    @Column(name = "ruc")
+    @Column(name = "ruc", unique = true)
     private String ruc;
     @Basic(optional = false)
     @NotNull
@@ -65,13 +71,13 @@ public class ClienteEmpresa implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "nombreRepresentanteLegal")
     private String nombreRepresentanteLegal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaid", fetch = FetchType.EAGER)
     private List<Contacto> contactoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaruc")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaid")
     private List<Contrato> contratoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresa", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteEmpresaid", fetch = FetchType.EAGER)
     private List<ClienteDireccion> clienteDireccionList;
-    @OneToMany(mappedBy = "clienteEmpresaruc")
+    @OneToMany(mappedBy = "clienteEmpresaid")
     private List<RegistroDeMovimientoDeInventario> registroDeMovimientoDeInventarioList;
     @JoinColumn(name = "Usuario_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -187,10 +193,31 @@ public class ClienteEmpresa implements Serializable {
         this.tipoEmpresaid = tipoEmpresaid;
     }
 
+    @XmlTransient
+    public List<Ticket> getTicketList() {
+        return ticketList;
+    }
+
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
+    }
+
+    public ClienteEmpresa(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (ruc != null ? ruc.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -201,7 +228,7 @@ public class ClienteEmpresa implements Serializable {
             return false;
         }
         ClienteEmpresa other = (ClienteEmpresa) object;
-        if ((this.ruc == null && other.ruc != null) || (this.ruc != null && !this.ruc.equals(other.ruc))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -209,16 +236,7 @@ public class ClienteEmpresa implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.ClienteEmpresa[ ruc=" + ruc + " ]";
-    }
-
-    @XmlTransient
-    public List<Ticket> getTicketList() {
-        return ticketList;
-    }
-
-    public void setTicketList(List<Ticket> ticketList) {
-        this.ticketList = ticketList;
+        return "ec.com.sinetcom.orm.ClienteEmpresa[ id=" + id + " ]";
     }
     
 }

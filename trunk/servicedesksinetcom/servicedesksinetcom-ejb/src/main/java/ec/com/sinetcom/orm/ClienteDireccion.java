@@ -9,6 +9,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -28,9 +31,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ClienteDireccion.findAll", query = "SELECT c FROM ClienteDireccion c")})
 public class ClienteDireccion implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @JoinColumn(name = "ClienteEmpresa_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private ClienteEmpresa clienteEmpresaid;
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ClienteDireccionPK clienteDireccionPK;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -39,35 +48,11 @@ public class ClienteDireccion implements Serializable {
     @Size(max = 45)
     @Column(name = "direccion2")
     private String direccion2;
-    @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private ClienteEmpresa clienteEmpresa;
-    @JoinColumn(name = "Ciudad_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "Ciudad_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Ciudad ciudad;
 
     public ClienteDireccion() {
-    }
-
-    public ClienteDireccion(ClienteDireccionPK clienteDireccionPK) {
-        this.clienteDireccionPK = clienteDireccionPK;
-    }
-
-    public ClienteDireccion(ClienteDireccionPK clienteDireccionPK, String direccion1) {
-        this.clienteDireccionPK = clienteDireccionPK;
-        this.direccion1 = direccion1;
-    }
-
-    public ClienteDireccion(int ciudadid, String clienteEmpresaruc) {
-        this.clienteDireccionPK = new ClienteDireccionPK(ciudadid, clienteEmpresaruc);
-    }
-
-    public ClienteDireccionPK getClienteDireccionPK() {
-        return clienteDireccionPK;
-    }
-
-    public void setClienteDireccionPK(ClienteDireccionPK clienteDireccionPK) {
-        this.clienteDireccionPK = clienteDireccionPK;
     }
 
     public String getDireccion1() {
@@ -86,14 +71,6 @@ public class ClienteDireccion implements Serializable {
         this.direccion2 = direccion2;
     }
 
-    public ClienteEmpresa getClienteEmpresa() {
-        return clienteEmpresa;
-    }
-
-    public void setClienteEmpresa(ClienteEmpresa clienteEmpresa) {
-        this.clienteEmpresa = clienteEmpresa;
-    }
-
     public Ciudad getCiudad() {
         return ciudad;
     }
@@ -101,15 +78,31 @@ public class ClienteDireccion implements Serializable {
     public void setCiudad(Ciudad ciudad) {
         this.ciudad = ciudad;
     }
-    
-    public String getCompositeKey(){
-        return ciudad.getId() + clienteEmpresa.getRuc() + ".";
+
+    public ClienteDireccion(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public ClienteEmpresa getClienteEmpresaid() {
+        return clienteEmpresaid;
+    }
+
+    public void setClienteEmpresaid(ClienteEmpresa clienteEmpresaid) {
+        this.clienteEmpresaid = clienteEmpresaid;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (clienteDireccionPK != null ? clienteDireccionPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -120,7 +113,7 @@ public class ClienteDireccion implements Serializable {
             return false;
         }
         ClienteDireccion other = (ClienteDireccion) object;
-        if ((this.clienteDireccionPK == null && other.clienteDireccionPK != null) || (this.clienteDireccionPK != null && !this.clienteDireccionPK.equals(other.clienteDireccionPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -128,7 +121,7 @@ public class ClienteDireccion implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.sinetcom.orm.ClienteDireccion[ clienteDireccionPK=" + clienteDireccionPK + " ]";
+        return "ec.com.sinetcom.orm.ClienteDireccion[ id=" + id + " ]";
     }
     
 }

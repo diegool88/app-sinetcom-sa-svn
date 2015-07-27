@@ -181,8 +181,52 @@ public class ProductoServicio {
     public boolean eliminarComponenteElectronico(int electronicoAtomico) {
         try {
             ComponenteElectronicoAtomico componenteElectronicoAtomico = this.componenteElectronicoAtomicoFacade.find(electronicoAtomico);
-            this.componenteElectronicoAtomicoFacade.remove(componenteElectronicoAtomico);
+            if(!componenteElectronicoAtomico.getItemProductoList().isEmpty()){
+                throw new Exception("Este componente electrónico está siendo usado por items del inventario");
+            }else{
+                this.componenteElectronicoAtomicoFacade.remove(componenteElectronicoAtomico);
+            }
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Elimina un aributo de componente atómico
+     * @param atributo
+     * @return 
+     */
+    public boolean eliminarAtributo(int atributo){
+        try{
+            ParametroDeProducto parametro = this.parametrosDeProductoFacade.find(atributo);
+            if(!parametro.getAtributoItemProductoList().isEmpty()){
+                throw new Exception("Este atributo está siendo usado por items del inventario");
+            }else{
+                this.parametrosDeProductoFacade.remove(parametro);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Elimina una unidad de medida
+     * @param unidadMedida
+     * @return 
+     */
+    public boolean eliminarUnidadDeMedida(int unidadMedida){
+        try{
+            UnidadMedida unidadM = this.unidadMedidaFacade.find(unidadMedida);
+            if(!unidadM.getParametrosDeProductoList().isEmpty()){
+                throw new Exception("Esta unidad de medida está siendo usada por atributos de producto");
+            }else{
+                this.unidadMedidaFacade.remove(unidadM);
+            }
+        }catch(Exception e){
             e.printStackTrace();
             return false;
         }

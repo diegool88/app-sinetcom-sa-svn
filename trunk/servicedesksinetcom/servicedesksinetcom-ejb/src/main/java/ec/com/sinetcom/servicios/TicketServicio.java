@@ -147,8 +147,8 @@ public class TicketServicio {
      * @param ruc
      * @return
      */
-    public ClienteEmpresa obtenerClienteEmpresa(String ruc) {
-        return this.clienteEmpresaFacade.find(ruc.trim());
+    public ClienteEmpresa obtenerClienteEmpresa(Integer id) {
+        return this.clienteEmpresaFacade.find(id);
     }
 
     /**
@@ -948,7 +948,7 @@ public class TicketServicio {
 
         //Se añade a las persona que esten involucradas en el caso
         if (incluirClientes) {
-            List<Contacto> contactos = this.contactoFacade.obtenerContactosDeCliente(ticket.getClienteEmpresaruc());
+            List<Contacto> contactos = this.contactoFacade.obtenerContactosDeCliente(ticket.getClienteEmpresaid());
             if (contactos != null) {
                 for (Contacto contactoEmpresa : contactos) {
                     ccTodos.add(contactoEmpresa.getCorreoElectronico());
@@ -991,7 +991,7 @@ public class TicketServicio {
         cuerpo.append("Le informamos que un nuevo ticket de soporte se ha creado:").append("\n");
         cuerpo.append("Ticket #: ").append(ticket.getTicketNumber()).append("\n");
         cuerpo.append("Creado por: ").append(ticket.getUsuarioidcreador().getNombre()).append(" ").append(ticket.getUsuarioidcreador().getApellido()).append("\n");
-        cuerpo.append("Empresa: ").append(ticket.getClienteEmpresaruc().getNombreComercial()).append("\n");
+        cuerpo.append("Empresa: ").append(ticket.getClienteEmpresaid().getNombreComercial()).append("\n");
         cuerpo.append("Fecha y Hora de Creación: ").append(formatoCortoDeFecha(ticket.getFechaDeCreacion())).append("\n");
         cuerpo.append("Prioridad: ").append(ticket.getPrioridadTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Servicio Solicitado: ").append(ticket.getServicioTicketcodigo().getNombre()).append("\n");
@@ -1120,7 +1120,7 @@ public class TicketServicio {
     private String crearCuerpoDeCorreoPrimerContactoTicket(Ticket ticket) {
         StringBuilder cuerpo = new StringBuilder();
         cuerpo.append("Este es un correo autómatico de recordatorio.").append("\n\n");
-        cuerpo.append("Le recordamos que debe establecer contacto con el cliente ").append(ticket.getClienteEmpresaruc().getNombreComercial()).append(" a favor del ticket# ").append(ticket.getTicketNumber()).append(".\n");
+        cuerpo.append("Le recordamos que debe establecer contacto con el cliente ").append(ticket.getClienteEmpresaid().getNombreComercial()).append(" a favor del ticket# ").append(ticket.getTicketNumber()).append(".\n");
         cuerpo.append("NOTA: Evite incumplir con el SLA de este ticket!").append("\n\n");
         cuerpo.append("Saludos!").append("\n");
         return cuerpo.toString();
@@ -1139,7 +1139,7 @@ public class TicketServicio {
         cuerpo.append("A continuación los detalles: ").append("\n");
         cuerpo.append("Ticket #: ").append(ticket.getTicketNumber()).append("\n");
         cuerpo.append("Creado por: ").append(ticket.getUsuarioidcreador().getNombre()).append(" ").append(ticket.getUsuarioidcreador().getApellido()).append("\n");
-        cuerpo.append("Empresa: ").append(ticket.getClienteEmpresaruc().getNombreComercial()).append("\n");
+        cuerpo.append("Empresa: ").append(ticket.getClienteEmpresaid().getNombreComercial()).append("\n");
         cuerpo.append("Fecha y Hora de Creación: ").append(ticket.getFechaDeCreacion().toString()).append("\n");
         cuerpo.append("Prioridad: ").append(ticket.getPrioridadTicketcodigo().getNombre()).append("\n");
         cuerpo.append("Servicio Solicitado: ").append(ticket.getServicioTicketcodigo().getNombre()).append("\n");
