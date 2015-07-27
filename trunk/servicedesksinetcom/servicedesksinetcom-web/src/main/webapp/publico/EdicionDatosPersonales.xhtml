@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilla.xhtml">
+    <ui:define name="title"><h:outputText value="Sinetcom - Ingreso de Clientes"></h:outputText></ui:define>
+    <ui:define name="menu"><ui:include src="/menu/menu.xhtml" /></ui:define>
+    <ui:define name="content">
+        <f:view contentType="text/html">
+            <h:head/>
+            <h:body>
+                <h:form id="editarForm">
+                    <p:panelGrid columns="2" columnClasses="label,colum">
+                        
+                        <f:facet name="header">
+                            <h:outputText value="Edición de Datos Personales"></h:outputText>
+                        </f:facet>
+                        
+                        <p:outputLabel for="usuarioCedulaE" value="Cédula:"/>
+                        <p:inputText id="usuarioCedulaE" validator="#{edicionDatosPersonalesBean.validarActualizacionCedulaDeCiudadania}" value="#{edicionDatosPersonalesBean.usuario.cedulaDeCuidadania}" maxlength="10">
+                        </p:inputText>
+
+                        <p:outputLabel for="usuarioMailE" value="e-Mail:"/>
+                        <p:inputText id="usuarioMailE" validator="#{edicionDatosPersonalesBean.validarActualizacionEmail}" value="#{edicionDatosPersonalesBean.usuario.correoElectronico}" maxlength="45" required="true">
+                        </p:inputText>
+
+                        <p:outputLabel for="usuarioNombreE" value="Nombre:"/>
+                        <p:inputText id="usuarioNombreE" value="#{edicionDatosPersonalesBean.usuario.nombre}" maxlength="15" required="true"/>
+
+                        <p:outputLabel for="usuarioApellidoE" value="Apellido:"/>
+                        <p:inputText id="usuarioApellidoE" value="#{edicionDatosPersonalesBean.usuario.apellido}" maxlength="15" required="true"/>
+
+                        <p:outputLabel for="usuarioCelularE" value="Celular:"/>
+                        <p:inputText id="usuarioCelularE" value="#{edicionDatosPersonalesBean.usuario.telefonoMovil}" maxlength="15" required="true"/>
+
+                        <p:outputLabel for="usuarioTelefonoE" value="Teléfono:"/>
+                        <p:inputText id="usuarioTelefonoE" value="#{edicionDatosPersonalesBean.usuario.telefonoFijo}" maxlength="15"/>
+
+                        <p:outputLabel for="usuarioTelfOficinaE" value="Teléfono Oficina:"/>
+                        <p:inputText id="usuarioTelfOficinaE" value="#{edicionDatosPersonalesBean.usuario.telefonoEmpresarial}" maxlength="15"/>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{edicionDatosPersonalesBean.guardarUsuario()}" process=":editarForm" onstart="statusDialog.show()" oncomplete="statusDialog.hide()">
+                            <f:ajax execute="@all" render="@form"/>
+                        </p:commandButton>
+                            <p:commandButton id="btnCambiarPassword" value="Cambiar Password" onclick="PF('actualizarP').show();" update=":cambioPForm"/>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+                <p:dialog header="Cambio de Password" widgetVar="actualizarP" modal="true">
+                    <h:form id="cambioPForm">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel for="pwOld" value="Password Anterior:"></p:outputLabel>
+                            <p:password id="pwOld" required="true" validator="#{edicionDatosPersonalesBean.validarAntiguoPassword}"></p:password>
+                            <p:outputLabel for="pw1" value="Nuevo password:"></p:outputLabel>
+                            <p:password id="pw1" required="true" value="#{edicionDatosPersonalesBean.password}" match="pw2"></p:password>
+                            <p:outputLabel for="pw2" value="Re-ingrese nuevo password:"></p:outputLabel>
+                            <p:password id="pw2" required="true" value="#{edicionDatosPersonalesBean.password}"></p:password>
+                            <f:facet name="footer">
+                                <p:commandButton value="Cambiar" actionListener="#{edicionDatosPersonalesBean.actualizarPassword}" process=":cambioPForm" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('actualizarP').hide();} statusDialog.hide();" ></p:commandButton>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </h:body>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

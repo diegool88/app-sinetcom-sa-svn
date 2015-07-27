@@ -45,13 +45,13 @@
                             <p:outputLabel for="tipoEmpresaTipo" value="Tipo:"/>
                             <p:inputText id="tipoEmpresaTipo" value="#{ingresoTipoEmpresaBean.tipo}" required="true"/>
 
-                             <p:outputLabel for="tipoEmpresaEstado" value="Valido?:"/>
+                             <p:outputLabel for="tipoEmpresaEstado" value="¿Válido?:"/>
                              <p:selectOneRadio id="tipoEmpresaEstado" value="#{ingresoTipoEmpresaBean.validez}" required="true">
                                 <f:selectItem itemLabel="Si" itemValue="true"/>                    
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoEmpresaBean.crearTipoEmpresa()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();"  update=":verTipoEmpresaForm:dtTiposEmpresa">
+                             <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoEmpresaBean.crearTipoEmpresa()}" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();"  update=":verTipoEmpresaForm:dtTiposEmpresa">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

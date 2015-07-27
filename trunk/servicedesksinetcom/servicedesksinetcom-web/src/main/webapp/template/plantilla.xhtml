@@ -12,34 +12,39 @@
         <!--<link rel="stylesheet" type="text/css" media="all" href="css/style.css"></link>-->
         <h:outputStylesheet library="css" name="style.css"></h:outputStylesheet> 
         <title>SD Sinetcom - <ui:insert name="title">Sin Titulo</ui:insert></title>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/sinetcomlogoico.ico']}"/>    
     </h:head>
     <h:body>
-            <div id="mensaje">
-<!--                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />-->
-                <p:growl id="growl" showDetail="true" autoUpdate="true" globalOnly="" life="3000" />
+        <div id="mensaje">
+            <p:growl id="growl" showDetail="true" autoUpdate="true" globalOnly="" life="3000" />
+        </div>
+        <div id="loader">
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage library="images" name="ajax_loader.gif" />
+            </p:dialog>
+        </div>
+        <div id="page">
+            <div id="header">
+                <ui:insert name="header" >
+                    <ui:include src="/template/common/commonheader.xhtml" />
+                </ui:insert>
+                <div style="position: absolute; top: 5px; right: 0px; color: #ffffff">
+                    <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenid(o/a) #{login.usuarioActual.nombre}! - <p:commandLink style="color: #ffffff;" value="(Cerrar Sesión)" immediate="true" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink style="color: #ffffff;" value="Iniciar Sesión" immediate="true" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
+                </div>
+                <ui:insert name="menu">
+                </ui:insert>
             </div>
-            <div id="page">
-                <div id="header">
-                    <ui:insert name="header" >
-                        <ui:include src="/template/common/commonheader.xhtml" />
+            <div id="contents">
+                <h:panelGroup class="background" layout="block">
+                    <ui:insert name="content" >
                     </ui:insert>
-                    <div style="position: absolute; top: 5px; right: 0px; color: #ffffff">
-                        <ui:insert name="loginInfo"><c:choose><c:when test="#{login.estaUsuarioAutenticado()}">Bienvenid(o/a) #{login.usuarioActual.nombre}! - <p:commandLink style="color: #ffffff;" value="(Cerrar Sesión)" immediate="true" action="#{login.logout()}"></p:commandLink></c:when><c:otherwise><p:commandLink style="color: #ffffff;" value="Iniciar Sesión" immediate="true" action="login?faces-redirect=true"></p:commandLink></c:otherwise></c:choose></ui:insert>
-                    </div>
-                    <ui:insert name="menu">
-                    </ui:insert>
-                </div>
-                <div id="contents">
-                    <h:panelGroup class="background" layout="block">
-                        <ui:insert name="content" >
-                        </ui:insert>
-                    </h:panelGroup>
-                </div>
-                <div id="footer">
-                    <ui:insert name="footer" >
-                        Sinetcom S.A. 2014 - Todos los derechos Reservados.
-                    </ui:insert>
-                </div>
+                </h:panelGroup>
             </div>
+            <div id="footer">
+                <ui:insert name="footer" >
+                    Sinetcom S.A. 2014 - Todos los derechos Reservados.
+                </ui:insert>
+            </div>
+        </div>
     </h:body>
 </html>

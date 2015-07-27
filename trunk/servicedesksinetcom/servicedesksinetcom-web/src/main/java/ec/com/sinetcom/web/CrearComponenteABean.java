@@ -85,6 +85,24 @@ public class CrearComponenteABean implements Serializable {
             this.componenteElectronicoAtomicos = this.productoServicio.obtenerTodosLosComponentesElectronicos();
         }
     }
+    
+    public void borrarAtributo(ActionEvent event){
+        if(!this.productoServicio.eliminarAtributo((Integer)event.getComponent().getAttributes().get("idAtributo"))){
+            Mensajes.mostrarMensajeDeError("El Atributo no pudo ser borrado, se encuentra en uso!");
+        }else{
+            Mensajes.mostrarMensajeInformativo("Atributo borrado exitosamente!");
+            this.parametrosDeProductos = this.productoServicio.obtenerTodosLosParametrosDeProducto();
+        }
+    }
+    
+    public void borrarUnidadM(ActionEvent event){
+        if(!this.productoServicio.eliminarUnidadDeMedida((Integer)event.getComponent().getAttributes().get("idUnidadM"))){
+            Mensajes.mostrarMensajeDeError("La unidad de medida no pudo ser borrado, se encuentra en uso!");
+        }else{
+            Mensajes.mostrarMensajeInformativo("Unididad de medida borrada exitosamente!");
+            this.medidas = this.productoServicio.obtenerTodasLasUnidadesDeMedida();
+        }
+    }
 
     public List<ParametroDeProducto> getParametrosDeProductos() {
         return parametrosDeProductos;

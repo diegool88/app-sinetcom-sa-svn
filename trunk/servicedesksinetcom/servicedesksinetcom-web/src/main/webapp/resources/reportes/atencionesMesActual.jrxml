@@ -29,7 +29,7 @@
 FROM
      `Usuario` UsuarioPropietario INNER JOIN `Ticket` Ticket ON UsuarioPropietario.`id` = Ticket.`Usuario_id_propietario`
      INNER JOIN `Usuario` UsuarioCreador ON Ticket.`Usuario_id_creador` = UsuarioCreador.`id`
-     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Ticket.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Ticket.`ClienteEmpresa_id` = ClienteEmpresa.`id`
      INNER JOIN `EstadoTicket` EstadoTicket ON Ticket.`EstadoTicket_codigo` = EstadoTicket.`codigo`
      INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
      INNER JOIN `PrioridadTicket` PrioridadTicket ON Ticket.`PrioridadTicket_codigo` = PrioridadTicket.`codigo`

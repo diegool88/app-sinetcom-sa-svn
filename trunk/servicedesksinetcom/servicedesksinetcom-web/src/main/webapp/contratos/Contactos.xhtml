@@ -61,16 +61,16 @@
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
                             <p:outputLabel for="contactoRuc" value="Ruc Cliente"/>
-                            <p:selectOneMenu id="contactoRuc" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" required="true">                    
+                            <p:selectOneMenu id="contactoRuc" value="#{ingresoContactoBean.contactoSeleccionado.clienteEmpresaid}" converter="#{clienteEmpresaConverter}" required="true">                    
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoContactoBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}" itemValue="#{Clientes.ruc}" />
+                                <f:selectItems value="#{ingresoContactoBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial}" itemValue="#{Clientes.id.toString()}" />
                              </p:selectOneMenu>
 
                             <p:outputLabel for="contactoCedula" value="Cédula de C.:"/>
-                            <p:inputText id="contactoCedula" maxlength="10" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.cedulaDeCuidadania}" required="true"/>
+                            <p:inputText id="contactoCedula" maxlength="10" value="#{ingresoContactoBean.contactoSeleccionado.cedulaDeCuidadania}" validator="#{ingresoContactoBean.validarActualizacionCedulaDeCiudadania}" required="true"/>
 
                             <p:outputLabel for="contactoNombre" value="Nombre:"/>
-                            <p:inputText id="contactoNombre" maxlength="30" disabled="#{not ingresoContactoBean.esNuevoContacto}" value="#{ingresoContactoBean.contactoSeleccionado.nombre}" required="true"/>
+                            <p:inputText id="contactoNombre" maxlength="30" value="#{ingresoContactoBean.contactoSeleccionado.nombre}" required="true"/>
 
                             <p:outputLabel for="contactoCargo" value="Cargo:"/>
                             <p:inputText id="contactoCargo" maxlength="50" value="#{ingresoContactoBean.contactoSeleccionado.cargo}" required="true"/>
@@ -82,9 +82,9 @@
                             <p:inputText id="contactoTelefono" maxlength="15" value="#{ingresoContactoBean.contactoSeleccionado.telefonoFijo}" required="true"/>
 
                             <p:outputLabel for="contactoMail" value="e-Mail:"/>
-                            <p:inputText id="contactoMail" maxlength="45" value="#{ingresoContactoBean.contactoSeleccionado.correoElectronico}" required="true"/>
+                            <p:inputText id="contactoMail" maxlength="45" value="#{ingresoContactoBean.contactoSeleccionado.correoElectronico}" validator="#{ingresoContactoBean.validarActualizacionEmail}" required="true"/>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContactoBean.crearContacto()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verContactosForm:dtContactos">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoContactoBean.crearContacto()}" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();" update=":verContactosForm:dtContactos">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

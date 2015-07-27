@@ -29,7 +29,7 @@ public class ClienteEmpresaConverter implements Converter{
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if(value != null && value.trim().length() > 0){
-            return this.ticketServicio.obtenerClienteEmpresa(value);
+            return this.ticketServicio.obtenerClienteEmpresa(Integer.parseInt(value));
         }else{
             return null;
         }

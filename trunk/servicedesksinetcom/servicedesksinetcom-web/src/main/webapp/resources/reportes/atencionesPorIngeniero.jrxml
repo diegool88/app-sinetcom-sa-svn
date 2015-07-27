@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AtencionesPorIngeniero" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="dd1b8bb5-dbc4-4d7e-97d7-bffe4b07935a">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="302"/>
-	<property name="ireport.y" value="42"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
 	</style>
@@ -16,7 +16,6 @@
      Ticket.`Usuario_id_propietario` AS Ticket_Usuario_id_propietario,
      Ticket.`Usuario_id_creador` AS Ticket_Usuario_id_creador,
      Ticket.`ItemProducto_numeroSerial` AS Ticket_ItemProducto_numeroSerial,
-     Ticket.`ClienteEmpresa_ruc` AS Ticket_ClienteEmpresa_ruc,
      Ticket.`titulo` AS Ticket_titulo,
      Ticket.`tiempoDeVida` AS Ticket_tiempoDeVida,
      Ticket.`fechaDeCreacion` AS Ticket_fechaDeCreacion,
@@ -35,7 +34,8 @@
      ServicioTicket.`nombre` AS ServicioTicket_nombre,
      ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
      ItemProducto.`Contrato_numero` AS ItemProducto_Contrato_numero,
-     ColaTicket.`nombre` AS ColaTicket_nombre
+     ColaTicket.`nombre` AS ColaTicket_nombre,
+     ClienteEmpresa.`ruc` AS ClienteEmpresa_ruc
 FROM
      `Ticket` Ticket INNER JOIN `EstadoTicket` EstadoTicket ON Ticket.`EstadoTicket_codigo` = EstadoTicket.`codigo`
      INNER JOIN `Usuario` UsuarioPropietario ON Ticket.`Usuario_id_propietario` = UsuarioPropietario.`id`
@@ -43,14 +43,13 @@ FROM
      INNER JOIN `ItemProducto` ItemProducto ON Ticket.`ItemProducto_numeroSerial` = ItemProducto.`numeroSerial`
      INNER JOIN `PrioridadTicket` PrioridadTicket ON Ticket.`PrioridadTicket_codigo` = PrioridadTicket.`codigo`
      INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
-     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Ticket.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Ticket.`ClienteEmpresa_id` = ClienteEmpresa.`id`
      INNER JOIN `ColaTicket` ColaTicket ON Ticket.`ColaTicket_id` = ColaTicket.`id`]]>
 	</queryString>
 	<field name="Ticket_ticketNumber" class="java.lang.Integer"/>
 	<field name="Ticket_Usuario_id_propietario" class="java.lang.Integer"/>
 	<field name="Ticket_Usuario_id_creador" class="java.lang.Integer"/>
 	<field name="Ticket_ItemProducto_numeroSerial" class="java.lang.String"/>
-	<field name="Ticket_ClienteEmpresa_ruc" class="java.lang.String"/>
 	<field name="Ticket_titulo" class="java.lang.String"/>
 	<field name="Ticket_tiempoDeVida" class="java.sql.Timestamp"/>
 	<field name="Ticket_fechaDeCreacion" class="java.sql.Timestamp"/>
@@ -70,6 +69,7 @@ FROM
 	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
 	<field name="ItemProducto_Contrato_numero" class="java.lang.String"/>
 	<field name="ColaTicket_nombre" class="java.lang.String"/>
+	<field name="ClienteEmpresa_ruc" class="java.lang.String"/>
 	<group name="UsuarioP_nombre">
 		<groupExpression><![CDATA[$F{UsuarioP_nombre}]]></groupExpression>
 		<groupHeader>

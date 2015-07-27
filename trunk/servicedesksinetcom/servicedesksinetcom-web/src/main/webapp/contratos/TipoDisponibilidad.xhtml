@@ -46,13 +46,13 @@
                             <p:outputLabel for="tipoDisponibilidadDisponibilidad" value="Disponibilidad:"/>
                             <p:inputText id="tipoDisponibilidadDisponibilidad" value="#{ingresoTipoDisponibilidadBean.disponibilidad}" required="true"/>
 
-                            <p:outputLabel for="tipoDisponibilidadEstado" value="Valido?:"/>
+                            <p:outputLabel for="tipoDisponibilidadEstado" value="¿Válido?:"/>
                             <p:selectOneRadio id="tipoDisponibilidadEstado" value="#{ingresoTipoDisponibilidadBean.estado}" required="true">
                                 <f:selectItem itemLabel="Si" itemValue="true"/>                    
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoDisponibilidadBean.crearTipoDisponibilidad()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verTipoDispForm:dtTipoDisp">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoTipoDisponibilidadBean.crearTipoDisponibilidad()}" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();" update=":verTipoDispForm:dtTipoDisp">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

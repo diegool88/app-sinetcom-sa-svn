@@ -12,10 +12,15 @@ import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.validator.ValidatorException;
 
 /**
  *
@@ -76,6 +81,20 @@ public class ingresoContactoBean implements Serializable {
             Mensajes.mostrarMensajeDeError("Error interno, Contacto no se pudo eliminar");
         }
         this.contactos = contactoServicio.cargarContactos();
+    }
+    
+    @PermitAll
+    public void validarActualizacionCedulaDeCiudadania(FacesContext context, UIComponent component, Object value){
+        if(!this.contactoServicio.verificarActualizacionCedulaCiudadania(this.contactoSeleccionado, (String)value)){
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Cédula de Ciudadanía existente!"));
+        }
+    }
+    
+    @PermitAll
+    public void validarActualizacionEmail(FacesContext context, UIComponent component, Object value){
+        if(!this.contactoServicio.verificarActualizacionEmail(this.contactoSeleccionado, (String)value)){
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email ingresado existente!"));
+        }
     }
 
 

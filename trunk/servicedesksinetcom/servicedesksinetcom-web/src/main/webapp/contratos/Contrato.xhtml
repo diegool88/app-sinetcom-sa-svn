@@ -12,9 +12,9 @@
             <h:head/>        
             <h:body>                                    
                 <h:form id="nuevoContrato" enctype="multipart/form-data">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:panelGrid id="contrato" columns="2">
                         <f:facet name="header">
                             <h:outputText value="Ingreso de nuevo contrato"></h:outputText>
@@ -30,9 +30,9 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel for="clienteEmpresa" value="Cliente:"/>
-                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoContratoBean.rucCliente}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" required="true">
+                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoContratoBean.idCliente}" filter="true" filterMatchMode="startsWith" required="true">
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
-                            <f:selectItems value="#{ingresoContratoBean.clientesRuc}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                            <f:selectItems value="#{ingresoContratoBean.clientes}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.id}"/>
                             <p:ajax listener="#{ingresoContratoBean.cargarContactosDeCliente()}" update="contratoAdministrador" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>               
 
@@ -54,34 +54,94 @@
                             <f:selectItems value="#{ingresoContratoBean.contactos}" var="AdminC" itemLabel="#{AdminC.nombre}" itemValue="#{AdminC.id}" />
                         </p:selectOneMenu>
 
-                        <p:outputLabel for="contratoFechaSuscripcion" value="Fecha de Suscripción:"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoFechaSuscripcion" value="Fecha de Suscripción:"/>
+                            <h:link id="tooltip1" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip1" value="Fecha en la que se firma el contrato por ambas partes."></p:tooltip>
+                        </h:panelGroup>
                         <p:calendar id="contratoFechaSuscripcion" value="#{ingresoContratoBean.fechaSuscripcion}" showOn="button" required="true"/>
 
-                        <p:outputLabel for="contratoObjeto" value="Objeto:"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoObjeto" value="Objeto:"/>
+                            <h:link id="tooltip2" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip2" value="Objeto del contrato, según se registra en el contrato original."></p:tooltip>
+                        </h:panelGroup>
                         <p:inputTextarea id="contratoObjeto" cols="40" rows="8" value="#{ingresoContratoBean.objeto}" required="true"/>
                         
-                        <p:outputLabel for="contratoPrecio" value="Precio ($):"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoPrecio" value="Precio ($):"/>
+                            <h:link id="tooltip3" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip3" value="Precio total del proyecto."></p:tooltip>
+                        </h:panelGroup>
                         <p:inputText id="contratoPrecio" type="number" value="#{ingresoContratoBean.precio}" required="true"/>
 
-                        <p:outputLabel for="contratoValidez" value="Plazo del Contrato (meses):"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoValidez" value="Plazo del Contrato (meses):"/>
+                            <h:link id="tooltip4" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip4" value="Duración del contrato en meses a partir de la fecha en que se hace efectivo el contrato."></p:tooltip>
+                        </h:panelGroup>
                         <p:inputText id="contratoValidez" type="number" value="#{ingresoContratoBean.tiempoValidez}" required="true"/>
 
-                        <p:outputLabel for="contratoGarantiaTecnica" value="Garantía Técnica (años):"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoGarantiaTecnica" value="Garantía Técnica (años):"/>
+                            <h:link id="tooltip5" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip5" value="Tiempo en años de soporte/garantía en partes y piezas de la solución."></p:tooltip>
+                        </h:panelGroup>
                         <p:inputText id="contratoGarantiaTecnica" type="number" value="#{ingresoContratoBean.garantiatecnica}"/>
 
-                        <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Garantía Técnica (E/R del Proyecto):"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoFechaInicioGarantiaTecnica" value="Fecha Inicio Garantía Técnica (E/R del Proyecto):"/>
+                            <h:link id="tooltip6" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip6" value="Fecha en la que se entrega por completo el proyecto, después de entregar funcionando la solución, con su respectiva documentación."></p:tooltip>
+                        </h:panelGroup>
                         <p:calendar id="contratoFechaInicioGarantiaTecnica" value="#{ingresoContratoBean.fechaInicioGTecnica}" showOn="button"/>
                         
-                        <p:outputLabel for="actaEntregaDelProyecto" value="Acta de E/R del Proyecto:" />
+                        <h:panelGroup>
+                            <p:outputLabel for="actaEntregaDelProyecto" value="Acta de E/R del Proyecto (PDF):" />
+                            <h:link id="tooltip7" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip7" value="Escaneado del original del acta de entrega recepción."></p:tooltip>
+                        </h:panelGroup>
                         <p:fileUpload id="actaEntregaDelProyecto" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarActaDeERProyecto}"/>
 
-                        <p:outputLabel for="contratoDigital" value="Contrato Digitalizado (PDF):"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoDigital" value="Contrato Digitalizado (PDF):"/>
+                            <h:link id="tooltip8" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip8" value="Escaneado de la copia original del contrato."></p:tooltip>
+                        </h:panelGroup>
                         <p:fileUpload id="contratoDigital" required="true" mode="advanced" auto="true" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarContratoDigital}"/>
                         
-                        <p:outputLabel for="srvSoporteMantenimiento" value="Garantía Técnica Sinetcom (años):"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="srvSoporteMantenimiento" value="Garantía Técnica Sinetcom (años):"/>
+                            <h:link id="tooltip9" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip9" value="Soporte en años dado únicamente por la empresa, sin tomar en cuenta el proveedor."></p:tooltip>
+                        </h:panelGroup>
                         <p:inputText id="srvSoporteMantenimiento" type="number" value="#{ingresoContratoBean.srvSoportemantenimiento}" required="true"/>
 
-                        <p:outputLabel for="contratoRepuestos" value="¿Incluye Repuestos?:"/>
+                        <h:panelGroup>
+                            <p:outputLabel for="contratoRepuestos" value="¿Incluye Repuestos?:"/>
+                            <h:link id="tooltip10" disabled="true" style="margin-left: 10px;">
+                                <p:graphicImage library="images" height="20px" width="20px" name="questionmark.png"></p:graphicImage>
+                            </h:link>
+                            <p:tooltip for="tooltip10" value="¿Se incluye garantía en repuestos de partes y piezas para los equipos adquiridos en este contrato?."></p:tooltip>
+                        </h:panelGroup>
                         <p:selectOneRadio id="contratoRepuestos" value="#{ingresoContratoBean.repuestos}" required="true">
                             <f:selectItem itemLabel="Si" itemValue="true"/>
                             <f:selectItem itemLabel="No" itemValue="false"/>
@@ -121,7 +181,7 @@
                         <p:commandButton id="contratoCursos" value="Ver Capacitaciones" process="@none" onclick="PF('cursos').show();"></p:commandButton>
                         
                         <f:facet name="footer">
-                            <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoContrato:contrato" update="@form" actionListener="#{ingresoContratoBean.grabarContrato}" onstart="statusDialog.show()" onsuccess="statusDialog.show()">
+                            <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoContrato:contrato" update="@form" actionListener="#{ingresoContratoBean.grabarContrato}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
                             </p:commandButton>
                         </f:facet>
                     </p:panelGrid> 
@@ -130,7 +190,7 @@
                         <h:panelGrid id="prueba" columns="2" columnClasses="colum" cellpadding="5">    
                             <p:outputLabel for="cantidadPagos" value="Cantidad de Pagos"/>
                             <p:inputText id="cantidadPagos" value="#{ingresoContratoBean.cantidadPagos}">
-                                <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularFechasPagos()}" update="pagos"></p:ajax>
+                                <p:ajax event="keyup" listener="#{ingresoContratoBean.calcularFechasPagos()}" update="pagos" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:ajax>
                             </p:inputText>
                         </h:panelGrid>  
                         <p:dataTable id="pagos" value="#{ingresoContratoBean.pagos}" var="pago" editable="true">
@@ -163,8 +223,10 @@
                                 <f:facet name="header">
                                     <h:outputText value="Ingreso de Garantía Económica"></h:outputText>
                                 </f:facet>
+                                <p:outputLabel for="numeroPoliza" value="Número de Póliza:"/>
+                                <p:inputText id="numeroPoliza" value="#{ingresoContratoBean.nuevaGarantiaEconomica.numeroPoliza}" maxlength="50" required="true"/>
                                 <p:outputLabel for="tipoGarantia" value="Tipo de Garantía:"/>
-                                <p:selectOneMenu id="tipoGarantia" value="#{ingresoContratoBean.tipoGarantia}" required="true" requiredMessage="* Requerido">
+                                <p:selectOneMenu id="tipoGarantia" value="#{ingresoContratoBean.tipoGarantia}" required="true" >
                                     <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                     <f:selectItems var="tipoGarantia" value="#{ingresoContratoBean.tipoGarantias}" itemLabel="#{tipoGarantia.tipo}" itemValue="#{tipoGarantia.id}"></f:selectItems>
                                 </p:selectOneMenu>
@@ -179,15 +241,15 @@
                                 <p:calendar id="fechaInicio" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaInicio}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
                                 <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
                                 <p:calendar id="fechaFin" value="#{ingresoContratoBean.nuevaGarantiaEconomica.fechaFin}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
-                                <p:outputLabel for="renovable" value="¿Renovable?:"/>
-                                <p:selectOneRadio id="renovable" value="#{ingresoContratoBean.nuevaGarantiaEconomica.renovable}" required="true">
+                                <p:outputLabel for="renovacion" value="¿Es renovación?:"/>
+                                <p:selectOneRadio id="renovacion" value="#{ingresoContratoBean.nuevaGarantiaEconomica.renovacion}" required="true">
                                     <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                 </p:selectOneRadio>
                                 <p:outputLabel for="poliza" value="Póliza Digital:"/>
-                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarAdendum}" ></p:fileUpload>
+                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarPoliza}" ></p:fileUpload>
                                 <f:facet name="footer">
-                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoContrato:garantiasEconomicas" update=":nuevoContrato:garantiasEconomicas" actionListener="#{ingresoContratoBean.agregarGarantia}"></p:commandButton>
+                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoContrato:garantiasEconomicas" update=":nuevoContrato:garantiasEconomicas" actionListener="#{ingresoContratoBean.agregarGarantia}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
                             <br/>
@@ -233,7 +295,7 @@
                                 <p:outputLabel for="descripcionVT" value="Descripción Visitas Técnica:"></p:outputLabel>
                                 <p:inputText id="descripcionVT" value="#{ingresoContratoBean.descripcionVisitaT}"></p:inputText>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Agregar Visitas Técnicas" actionListener="#{ingresoContratoBean.calcularFechasVisitasTecnicas}" process=":nuevoContrato:visitasTecnicas" update=":nuevoContrato:visitasTecnicas"></p:commandButton>
+                                    <p:commandButton value="Agregar Visitas Técnicas" actionListener="#{ingresoContratoBean.calcularFechasVisitasTecnicas}" process=":nuevoContrato:visitasTecnicas" update=":nuevoContrato:visitasTecnicas" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" ></p:commandButton>
                                     <p:commandButton value="Limpiar Visitas Técnicas" actionListener="#{ingresoContratoBean.limpiarVisitasTecnicas}" process="@this" update=":nuevoContrato:visitasTecnicas"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
@@ -300,13 +362,13 @@
                                 <p:outputLabel for="centroCapacitacion" value="Centro de Capacitación:"></p:outputLabel>
                                 <p:inputTextarea id="centroCapacitacion" value="#{ingresoContratoBean.nuevoCurso.centroDeCapacitacion}" required="true" cols="20" rows="8"></p:inputTextarea>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Agregar Capacitación" actionListener="#{ingresoContratoBean.agregarCurso}" process=":nuevoContrato:cursosProgramados" update=":nuevoContrato:cursosProgramados"></p:commandButton>
+                                    <p:commandButton value="Agregar Capacitación" actionListener="#{ingresoContratoBean.agregarCurso}" process=":nuevoContrato:cursosProgramados" update=":nuevoContrato:cursosProgramados" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
                             <br/>
                             <p:dataTable id="cursos" value="#{ingresoContratoBean.cursos}" var="curso" rowIndexVar="rowId">
                                 <f:facet name="header">
-                                    <h:outputText value="Cursos Programados"></h:outputText>
+                                    <h:outputText value="Capacitaciones Programadas"></h:outputText>
                                 </f:facet>
                                 <p:column headerText="Tema" width="30">
                                     <h:outputText value="#{curso.temaATratar}"></h:outputText>

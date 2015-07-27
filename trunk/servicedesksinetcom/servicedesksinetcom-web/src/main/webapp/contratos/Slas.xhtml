@@ -83,7 +83,7 @@
                             <p:outputLabel for="slaTiempoSolucion" value="Tiempo de Solución (horas):"/>
                             <p:inputText id="slaTiempoSolucion" value="#{ingresoSlaBean.tiempoSolucion}" required="true"/> 
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verSlaForm:dtSla">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoSlaBean.crearSla()}" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();" update=":verSlaForm:dtSla">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

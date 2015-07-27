@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InclumplimientoSLA" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="b59f3c66-61a9-4621-ae14-fb0ff89e4567">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="296"/>
 	<style name="columnas" forecolor="#FFFFFF" backcolor="#FFFFFF" fontSize="8">
 		<pen lineColor="#FFFFFF"/>
 	</style>
@@ -26,27 +26,27 @@
      Sla.`tiempoDeRespuestaDeEscalacion` AS Sla_tiempoDeRespuestaDeEscalacion,
      Sla.`tiempoDeSolucion` AS Sla_tiempoDeSolucion,
      TipoDisponibilidad.`disponibilidad` AS TipoDisponibilidad_disponibilidad,
-     Contrato.`ClienteEmpresa_ruc` AS Contrato_ClienteEmpresa_ruc,
      ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
      Sla.`tiempoRespuestaPrioridadAlta` AS Sla_tiempoRespuestaPrioridadAlta,
      PrioridadTicket.`nombre` AS PrioridadTicket_nombre,
      ServicioTicket.`nombre` AS ServicioTicket_nombre,
      Usuario.`nombre` AS Usuario_nombre,
      Usuario.`apellido` AS Usuario_apellido,
-     PrioridadTicket.`valor` AS PrioridadTicket_valor
+     PrioridadTicket.`valor` AS PrioridadTicket_valor,
+     ClienteEmpresa.`ruc` AS ClienteEmpresa_ruc
 FROM
      `Ticket` Ticket INNER JOIN `ItemProducto` ItemProducto ON Ticket.`ItemProducto_numeroSerial` = ItemProducto.`numeroSerial`
      INNER JOIN `Contrato` Contrato ON ItemProducto.`Contrato_numero` = Contrato.`numero`
      INNER JOIN `Sla` Sla ON Contrato.`Sla_id` = Sla.`id`
-     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_id` = ClienteEmpresa.`id`
      INNER JOIN `TipoDisponibilidad` TipoDisponibilidad ON Sla.`TipoDisponibilidad_id` = TipoDisponibilidad.`id`
      INNER JOIN `PrioridadTicket` PrioridadTicket ON Ticket.`PrioridadTicket_codigo` = PrioridadTicket.`codigo`
      INNER JOIN `ServicioTicket` ServicioTicket ON Ticket.`ServicioTicket_codigo` = ServicioTicket.`codigo`
      INNER JOIN `Usuario` Usuario ON Ticket.`Usuario_id_propietario` = Usuario.`id`
 WHERE
      Ticket.`fechaDeCierre` IS NOT NULL
-AND
-     (Ticket.`EstadoTicket_codigo` = 3 OR Ticket.`EstadoTicket_codigo` = 4)]]>
+ AND (Ticket.`EstadoTicket_codigo` = 3
+  OR Ticket.`EstadoTicket_codigo` = 4)]]>
 	</queryString>
 	<field name="Ticket_ticketNumber" class="java.lang.Integer"/>
 	<field name="Ticket_ItemProducto_numeroSerial" class="java.lang.String"/>
@@ -62,7 +62,6 @@ AND
 	<field name="Sla_tiempoDeRespuestaDeEscalacion" class="java.lang.Integer"/>
 	<field name="Sla_tiempoDeSolucion" class="java.lang.Integer"/>
 	<field name="TipoDisponibilidad_disponibilidad" class="java.lang.String"/>
-	<field name="Contrato_ClienteEmpresa_ruc" class="java.lang.String"/>
 	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
 	<field name="Sla_tiempoRespuestaPrioridadAlta" class="java.lang.Integer"/>
 	<field name="PrioridadTicket_nombre" class="java.lang.String"/>
@@ -70,6 +69,7 @@ AND
 	<field name="Usuario_nombre" class="java.lang.String"/>
 	<field name="Usuario_apellido" class="java.lang.String"/>
 	<field name="PrioridadTicket_valor" class="java.lang.Integer"/>
+	<field name="ClienteEmpresa_ruc" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

@@ -17,9 +17,9 @@
             </h:head>
             <h:body>
                 <h:form id="contratoForm">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:dataTable id="dtContratos" rowKey="#{contrato.numero}" var="contrato" value="#{consultaContratoBean.contratos}" paginator="true" rows="15" selectionMode="single" selection="#{consultaContratoBean.contratoSeleccionado}" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
@@ -38,8 +38,8 @@
                             <h:outputText value="#{contrato.numero}"/>
                         </p:column>
 
-                        <p:column headerText="Cliente" sortBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterMatchMode="contains">
-                            <h:outputText value="#{contrato.clienteEmpresaruc.nombreComercial}"/>
+                        <p:column headerText="Cliente" sortBy="#{contrato.clienteEmpresaid.nombreComercial}" filterBy="#{contrato.clienteEmpresaid.nombreComercial}" filterMatchMode="contains">
+                            <h:outputText value="#{contrato.clienteEmpresaid.nombreComercial}"/>
                         </p:column>
 
                         <p:column headerText="Fecha de Suscripción" sortBy="#{contrato.fechaDeSuscripcion}" filterBy="#{contrato.fechaDeSuscripcion}" filterMatchMode="contains">
@@ -56,7 +56,7 @@
                                     <p:outputLabel value="Tipo de Contrato:"/>
                                     <h:outputText value="#{contrato.tipoContratoid.tipo}"/>
                                     <p:outputLabel value="Cliente:"></p:outputLabel>
-                                    <h:outputText value="#{contrato.clienteEmpresaruc.nombreComercial}"/>
+                                    <h:outputText value="#{contrato.clienteEmpresaid.nombreComercial}"/>
                                     <p:outputLabel value="SLA:"/>
                                     <h:outputText value="PA: #{contrato.slaid.tiempoRespuestaPrioridadAlta} h
                                                   PM: #{contrato.slaid.tiempoRespuestaPrioridadMedia} h
@@ -119,6 +119,8 @@
                                         <f:facet name="header">
                                             <h:outputText value="Garantía ##{index.index + 1}"/>
                                         </f:facet>
+                                        <p:outputLabel value="Número"/>
+                                        <h:outputText value="#{garantia.numeroPoliza}"/>
                                         <p:outputLabel value="Valor:"/>
                                         <h:outputText value="$ #{garantia.valor}"/>
                                         <p:outputLabel value="Porcentaje:"/>
@@ -129,12 +131,12 @@
                                         <h:outputText value="#{consultaContratoBean.formatoCortoDeFecha(garantia.fechaFin)}"/>
                                         <p:outputLabel value="Tipo Garantía:"/>
                                         <h:outputText value="#{garantia.tipoGarantiaid.tipo}"/>
-                                        <p:outputLabel value="¿Renovable?:"/>
-                                        <h:outputText value="#{garantia.renovable ? 'Si' : 'No'}"/>
-                                        <p:outputLabel value="Adendum:"/>
-                                        <p:commandButton value="Descargar" disabled="#{not(garantia.adendum != null)}" icon="ui-icon-arrowstop-1-s" ajax="false" immediate="true" actionListener="#{consultaContratoBean.asignarAdendumDescarga}">
+                                        <p:outputLabel value="¿Renovación?:"/>
+                                        <h:outputText value="#{garantia.renovacion ? 'Si' : 'No'}"/>
+                                        <p:outputLabel value="Poliza:"/>
+                                        <p:commandButton value="Descargar" disabled="#{not(garantia.poliza != null)}" icon="ui-icon-arrowstop-1-s" ajax="false" immediate="true" actionListener="#{consultaContratoBean.asignarPolizaDescarga}">
                                             <f:attribute value="#{garantia.id}" name="garantiaId"/>
-                                            <p:fileDownload value="#{consultaContratoBean.adendum}"/>
+                                            <p:fileDownload value="#{consultaContratoBean.poliza}"/>
                                         </p:commandButton>
                                     </p:panelGrid>
                                 </ui:repeat>
@@ -147,7 +149,7 @@
                                         <p:outputLabel value="Tipo de Visita:"/>
                                         <h:outputText value="#{visitaT.tipoDeVisitaid.nombre}"/>
                                         <p:outputLabel value="Fecha:"/>
-                                        <h:outputText value="#{visitaT.fecha}"/>
+                                        <h:outputText value="#{consultaContratoBean.formatoCortoDeFecha(visitaT.fecha)}"/>
                                         <p:outputLabel value="Descripción:"/>
                                         <h:outputText value="#{visitaT.descripcion}"/>
                                     </p:panelGrid>
@@ -192,6 +194,16 @@
                                 <p:commandButton id="descargaContrato" value="Descargar" icon="ui-icon-arrowstop-1-s" ajax="false" immediate="true" actionListener="#{consultaContratoBean.asignarContratoDescarga}">
                                     <f:attribute value="#{contrato.numero}" name="contratoNumero"/>
                                     <p:fileDownload value="#{consultaContratoBean.contratoDigital}"/>
+                                </p:commandButton>
+                                <p:outputLabel for="descargaActaEREquipos" value="Acta E/R Equipos Digital:"/>
+                                <p:commandButton id="descargaActaEREquipos" value="Descargar" icon="ui-icon-arrowstop-1-s" ajax="false" immediate="true" actionListener="#{consultaContratoBean.asignarActaEREquiposDescarga}">
+                                    <f:attribute value="#{contrato.numero}" name="contratoNumero"/>
+                                    <p:fileDownload value="#{consultaContratoBean.actaEREquipos}"/>
+                                </p:commandButton>
+                                <p:outputLabel for="descargaActaERProyecto" value="Acta E/R Proyecto Digital:"/>
+                                <p:commandButton id="descargaActaERProyecto" value="Descargar" icon="ui-icon-arrowstop-1-s" ajax="false" immediate="true" actionListener="#{consultaContratoBean.asignarActaERProyectoDescarga}">
+                                    <f:attribute value="#{contrato.numero}" name="contratoNumero"/>
+                                    <p:fileDownload value="#{consultaContratoBean.actaERProyecto}"/>
                                 </p:commandButton>
                                 <p:outputLabel for="printer">Imprimir Registro</p:outputLabel>
                                 <p:commandButton id="printer" value="Imprimir" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
@@ -296,8 +308,8 @@
                                     <p:calendar id="fechaInicio" value="#{consultaContratoBean.nuevaGarantiaE.fechaInicio}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
                                     <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
                                     <p:calendar id="fechaFin" value="#{consultaContratoBean.nuevaGarantiaE.fechaFin}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
-                                    <p:outputLabel for="renovable" value="¿Renovable?:"/>
-                                    <p:selectOneRadio id="renovable" styleClass="noIncluye" value="#{consultaContratoBean.nuevaGarantiaE.renovable}" required="true">
+                                    <p:outputLabel for="renovacion" value="¿Es Renovación?:"/>
+                                    <p:selectOneRadio id="renovacion" styleClass="noIncluye" value="#{consultaContratoBean.nuevaGarantiaE.renovacion}" required="true">
                                         <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
                                         <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                     </p:selectOneRadio>
@@ -349,7 +361,7 @@
                                         </p:column>
                                         <p:column headerText="Poliza Digital">
                                             <p:cellEditor>
-                                                <f:facet name="output"><h:outputText value="#{not empty garantiaE.adendum ? 'Tiene Póliza Digital' : 'No Tiene Póliza Digital'}"></h:outputText></f:facet>
+                                                <f:facet name="output"><h:outputText value="#{not empty garantiaE.poliza ? 'Tiene Póliza Digital' : 'No Tiene Póliza Digital'}"></h:outputText></f:facet>
                                                 <f:facet name="input">
                                                     <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{consultaContratoBean.cargarPoliza}" ></p:fileUpload>
                                                 </f:facet>

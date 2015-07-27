@@ -18,14 +18,14 @@
      ClienteEmpresa.`nombreComercial` AS ClienteEmpresa_nombreComercial,
      Contrato.`numero` AS Contrato_numero,
      TipoDeMovimiento.`nombre` AS TipoDeMovimiento_nombre,
-     RegistroDeMovimientoDeInventario.`ClienteEmpresa_ruc` AS RegistroDeMovimientoDeInventario_ClienteEmpresa_ruc,
+     RegistroDeMovimientoDeInventario.`ClienteEmpresa_id` AS RegistroDeMovimientoDeInventario_ClienteEmpresa_id,
      RegistroDeMovimientoDeInventario.`Contrato_numero` AS RegistroDeMovimientoDeInventario_Contrato_numero,
      Contrato.`tiempoDeValidez` AS Contrato_tiempoDeValidez,
      Contrato.`fechaInicioGarantiaTecnica` AS Contrato_fechaInicioGarantiaTecnica
 FROM
-     `ClienteEmpresa` ClienteEmpresa INNER JOIN `Contrato` Contrato ON ClienteEmpresa.`ruc` = Contrato.`ClienteEmpresa_ruc`
+     `ClienteEmpresa` ClienteEmpresa INNER JOIN `Contrato` Contrato ON ClienteEmpresa.`id` = Contrato.`ClienteEmpresa_id`
      INNER JOIN `RegistroDeMovimientoDeInventario` RegistroDeMovimientoDeInventario ON Contrato.`numero` = RegistroDeMovimientoDeInventario.`Contrato_numero`
-     AND RegistroDeMovimientoDeInventario.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     AND RegistroDeMovimientoDeInventario.`ClienteEmpresa_id` = ClienteEmpresa.`id`
      INNER JOIN `TipoDeMovimiento` TipoDeMovimiento ON RegistroDeMovimientoDeInventario.`TipoDeMovimiento_id` = TipoDeMovimiento.`id`]]>
 	</queryString>
 	<field name="RegistroDeMovimientoDeInventario_codigo" class="java.lang.Integer"/>
@@ -34,7 +34,7 @@ FROM
 	<field name="ClienteEmpresa_nombreComercial" class="java.lang.String"/>
 	<field name="Contrato_numero" class="java.lang.String"/>
 	<field name="TipoDeMovimiento_nombre" class="java.lang.String"/>
-	<field name="RegistroDeMovimientoDeInventario_ClienteEmpresa_ruc" class="java.lang.String"/>
+	<field name="RegistroDeMovimientoDeInventario_ClienteEmpresa_id" class="java.lang.Integer"/>
 	<field name="RegistroDeMovimientoDeInventario_Contrato_numero" class="java.lang.String"/>
 	<field name="Contrato_tiempoDeValidez" class="java.lang.Integer"/>
 	<field name="Contrato_fechaInicioGarantiaTecnica" class="java.sql.Timestamp"/>

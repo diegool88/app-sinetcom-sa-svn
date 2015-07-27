@@ -11,46 +11,39 @@
             <h:head />
             <h:body>
                 <h:form id="form">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:panel id="ingresoDeModelos">
                         <f:facet name="header">
                             <h:outputText value="Creación de nuevo Modelo de Producto"></h:outputText>
                         </f:facet>
-                        <p:panelGrid columns="3" columnClasses="label,value">
+                        <p:panelGrid columns="2" columnClasses="label,value">
                             <p:outputLabel for="fabricante" value="Fabricante: "></p:outputLabel>
-                            <p:selectOneMenu id="fabricante" required="true" requiredMessage="* Requerido" value="#{crearModeloDeProductoBean.fabricanteSeleccionado}" converter="#{fabricanteConverter}">
+                            <p:selectOneMenu id="fabricante" required="true"  value="#{crearModeloDeProductoBean.fabricanteSeleccionado}" converter="#{fabricanteConverter}">
                                 <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{crearModeloDeProductoBean.fabricantes}" var="fabricante" itemLabel="#{fabricante.nombre}" itemValue="#{fabricante.id.toString()}"></f:selectItems>
                                 <p:ajax update="categoria" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
-                            <p:message for="fabricante"></p:message>
                             <p:outputLabel for="categoria" value="Categoría: "></p:outputLabel>
-                            <p:selectOneMenu id="categoria" required="true" requiredMessage="* Requerido" value="#{crearModeloDeProductoBean.categoriaSeleccionada}" converter="#{categoriaConverter}">
+                            <p:selectOneMenu id="categoria" required="true"  value="#{crearModeloDeProductoBean.categoriaSeleccionada}" converter="#{categoriaConverter}">
                                 <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{crearModeloDeProductoBean.fabricanteSeleccionado.categoriaProductoList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.id.toString()}"></f:selectItems>
                                 <p:ajax listener="#{crearModeloDeProductoBean.actualizarLineaDeProductos()}" update="lineaDeProducto" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                             </p:selectOneMenu>
-                            <p:message for="categoria"></p:message>
                             <p:outputLabel for="lineaDeProducto" value="Línea de Producto"></p:outputLabel>
-                            <p:selectOneMenu id="lineaDeProducto" required="true" requiredMessage="* Requerido" value="#{crearModeloDeProductoBean.lineaDeProductoSeleccionada}" converter="#{lineaProductoConverter}">
+                            <p:selectOneMenu id="lineaDeProducto" required="true"  value="#{crearModeloDeProductoBean.lineaDeProductoSeleccionada}" converter="#{lineaProductoConverter}">
                                 <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                 <f:selectItems value="#{crearModeloDeProductoBean.lineasDeProductos}" var="lineaP" itemLabel="#{lineaP.nombre}" itemValue="#{lineaP.id.toString()}"></f:selectItems>
                             </p:selectOneMenu>
-                            <p:message for="lineaDeProducto"></p:message>
                             <p:outputLabel for="modelo" value="Nombre de Modelo: "></p:outputLabel>
-                            <p:inputText id="modelo" value="#{crearModeloDeProductoBean.nuevoModeloProducto.modelo}" required="true" requiredMessage="* Requerido"></p:inputText>
-                            <p:message for="modelo"></p:message>
+                            <p:inputText id="modelo" value="#{crearModeloDeProductoBean.nuevoModeloProducto.modelo}" required="true" ></p:inputText>
                             <p:outputLabel for="numeroParte" value="N/P: "></p:outputLabel>
-                            <p:inputText id="numeroParte" value="#{crearModeloDeProductoBean.nuevoModeloProducto.numeroDeParte}" required="true" requiredMessage="* Requerido"></p:inputText>
-                            <p:message for="numeroParte"></p:message>
+                            <p:inputText id="numeroParte" value="#{crearModeloDeProductoBean.nuevoModeloProducto.numeroDeParte}" required="true" ></p:inputText>
                             <p:outputLabel for="fechaL" value="Fecha de Lanzamiento al M.: "></p:outputLabel>
                             <p:calendar id="fechaL" value="#{crearModeloDeProductoBean.nuevoModeloProducto.fechaLanzamiento}" pattern="MM/dd/yyyy" mode="popup"></p:calendar>
-                            <p:message for="fechaL"></p:message>
                             <p:outputLabel for="fechaEOL" value="Fecha de EOL: "></p:outputLabel>
                             <p:calendar id="fechaEOL" value="#{crearModeloDeProductoBean.nuevoModeloProducto.endOfLife}" pattern="MM/dd/yyyy" mode="popup"></p:calendar>
-                            <p:message for="fechaEOL"></p:message>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Crear Modelo de Producto" actionListener="#{crearModeloDeProductoBean.crearModeloDeProducto}" update="@form, :form:modelos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>

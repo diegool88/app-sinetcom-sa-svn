@@ -34,7 +34,7 @@
                         <p:outputLabel value="Email Gerente Técnico:" for="emailGerenteTecnico" />
                         <p:inputText id="emailGerenteTecnico" value="#{informacionSinetcomBean.datosSinetcom.emailGerenteTecnico}" title="Email Gerente Tecnico" />
                         <f:facet name="footer">
-                            <p:commandButton value="Actualizar Información" actionListener="#{informacionSinetcomBean.actualizarInformacionDeSinetcom}" update="@form"></p:commandButton>
+                            <p:commandButton value="Actualizar Información" actionListener="#{informacionSinetcomBean.actualizarInformacionDeSinetcom}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" update="@form"></p:commandButton>
                         </f:facet>
                     </p:panelGrid>
                 </h:form>

@@ -13,10 +13,15 @@ import ec.com.sinetcom.webutil.Mensajes;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.validator.ValidatorException;
 
 /**
  *
@@ -101,6 +106,20 @@ public class ingresoUsuarioBean implements Serializable {
         }
         this.usuarios = usuarioServicio.cargarUsuarios();
         this.usuarioSeleccionado = null;
+    }
+    
+    @PermitAll
+    public void validarActualizacionCedulaDeCiudadania(FacesContext context, UIComponent component, Object value){
+        if(!this.usuarioServicio.verificarActualizacionCedulaCiudadania(this.usuarioSeleccionado, (String)value)){
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Cédula de Ciudadanía existente!"));
+        }
+    }
+    
+    @PermitAll
+    public void validarActualizacionEmail(FacesContext context, UIComponent component, Object value){
+        if(!this.usuarioServicio.verificarActualizacionEmail(this.usuarioSeleccionado, (String)value)){
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Email ingresado existente!"));
+        }
     }
     
     public void limpiarCampos(){

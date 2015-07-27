@@ -11,9 +11,9 @@
     <ui:define name="title">Sinetcom - Descarga</ui:define>
     <ui:define name="content">
         <f:view contentType="text/html">
-            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                 <p:graphicImage library="images" name="ajax_loader.gif" />
-            </p:dialog>
+            </p:dialog>-->
             <h:form>
                 <p:commandButton binding="#{descargaBean.boton}" value="Descargar Archivo" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
                     <p:fileDownload value="#{descargaBean.archivoPorDescargar}" />

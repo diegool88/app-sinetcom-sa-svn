@@ -80,7 +80,7 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
 
     public void actualizarUbicacionPorContrato() {
         if (this.movimientoDeInventario.getContratonumero() != null) {
-            this.movimientoDeInventario.setClienteEmpresaruc(this.movimientoDeInventario.getContratonumero().getClienteEmpresaruc());
+            this.movimientoDeInventario.setClienteEmpresaid(this.movimientoDeInventario.getContratonumero().getClienteEmpresaid());
         }
     }
 
@@ -90,10 +90,10 @@ public class CrearRegistroDeMovInventarioBean implements Serializable {
 
     public void actualizarClienteYContrato() {
         if (this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 4 || this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 3) {
-            this.movimientoDeInventario.setClienteEmpresaruc(null);
+            this.movimientoDeInventario.setClienteEmpresaid(null);
             this.movimientoDeInventario.setContratonumero(null);
         } else if (this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 1 || this.movimientoDeInventario.getTipoDeMovimientoid().getId() == 2) {
-            this.movimientoDeInventario.setClienteEmpresaruc(null);
+            this.movimientoDeInventario.setClienteEmpresaid(null);
             this.movimientoDeInventario.setContratonumero(null);
         }
     }

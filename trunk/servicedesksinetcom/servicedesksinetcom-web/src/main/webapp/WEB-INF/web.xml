@@ -15,7 +15,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            10
         </session-timeout>
     </session-config>
     <context-param>
@@ -47,7 +47,7 @@
     </context-param>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/login.xhtml</location>
+        <location>/welcome.xhtml?faces-redirect=true</location>
     </error-page>
 <!--    <security-constraint>
         <display-name>AdminConstraint</display-name>

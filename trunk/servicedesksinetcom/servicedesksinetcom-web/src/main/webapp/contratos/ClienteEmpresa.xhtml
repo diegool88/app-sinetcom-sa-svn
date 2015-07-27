@@ -98,7 +98,7 @@
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
                             <p:outputLabel for="clienteEmpresaRuc" value="RUC:"/>
-                            <p:inputText id="clienteEmpresaRuc" maxlength="15" disabled="#{not ingresoClienteEmpresaBean.esNuevoCliente}" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.ruc}" required="true"/>
+                            <p:inputText id="clienteEmpresaRuc" maxlength="15" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.ruc}" required="true"/>
 
                             <p:outputLabel for="clienteUsuarios" value="Usuario:"/>
                             <p:selectOneMenu id="clienteUsuarios" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.usuarioid}" converter="#{usuarioConverter}" required="true">
@@ -124,7 +124,7 @@
                             <p:outputLabel for="clienteRepresentante" value="Representante Legal:"/>
                             <p:inputText id="clienteRepresentante" maxlength="30" value="#{ingresoClienteEmpresaBean.clienteEmpresaSeleccionado.nombreRepresentanteLegal}" required="true"/>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.guardarEmpresa()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verClientesForm:dtlClientes">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoClienteEmpresaBean.guardarEmpresa()}" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();" update=":verClientesForm:dtlClientes">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

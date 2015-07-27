@@ -23,7 +23,7 @@
                         <p:ajax event="rowSelect" immediate="true" update="btnEliminar, btnEditar, btnCambiarPassword"></p:ajax>
                         <p:ajax event="rowUnselect" immediate="true" update="btnEliminar, btnEditar, btnCambiarPassword"></p:ajax>
                         
-                        <p:column headerText="Cedula" sortBy="#{usuarios.cedulaDeCuidadania}" filterBy="#{usuarios.cedulaDeCuidadania}">
+                        <p:column headerText="Cédula" sortBy="#{usuarios.cedulaDeCuidadania}" filterBy="#{usuarios.cedulaDeCuidadania}">
                             <h:outputText value="#{usuarios.cedulaDeCuidadania}"/>
                         </p:column>
 
@@ -62,7 +62,7 @@
                                 <f:selectItems value="#{ingresoUsuarioBean.grupos}" var="Grupos" itemLabel="#{Grupos.nombre}" itemValue="#{Grupos.id.toString()}" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="usuarioCedula" value="Cedula:"/>
+                            <p:outputLabel for="usuarioCedula" value="Cédula:"/>
                             <p:inputText id="usuarioCedula" value="#{ingresoUsuarioBean.usuarioSeleccionado.cedulaDeCuidadania}" maxlength="10">
                                 <f:ajax event="keyup" execute="@this" render=":growl"></f:ajax>
                                 <f:validator binding="#{cedulaCiudadaniaValidator}"></f:validator>
@@ -75,8 +75,11 @@
                             </p:inputText>
 
                             <p:outputLabel for="usuarioPassword" value="Password:"/>
-                            <p:password id="usuarioPassword" value="#{ingresoUsuarioBean.password}" maxlength="15" feedback="true" promptLabel="Password (15 caracteres)" weakLabel="¿De Verdad?" goodLabel="Mejoraste.." strongLabel="Ahora nos entendemos!" required="true"/>
+                            <p:password id="usuarioPassword" value="#{ingresoUsuarioBean.password}" maxlength="15" match="usuarioPasswordRetype" feedback="true" promptLabel="Password (15 caracteres)" weakLabel="¿De Verdad?" goodLabel="Mejoraste.." strongLabel="Ahora nos entendemos!" required="true"/>
 
+                            <p:outputLabel for="usuarioPassword" value="Re-ingrese Password:"/>
+                            <p:password id="usuarioPasswordRetype" value="#{ingresoUsuarioBean.password}" maxlength="15" required="true"/>
+                            
                             <p:outputLabel for="usuarioNombre" value="Nombre:"/>
                             <p:inputText id="usuarioNombre" value="#{ingresoUsuarioBean.usuarioSeleccionado.nombre}" maxlength="15" required="true"/>
 
@@ -86,19 +89,19 @@
                             <p:outputLabel for="usuarioCelular" value="Celular:"/>
                             <p:inputText id="usuarioCelular" value="#{ingresoUsuarioBean.usuarioSeleccionado.telefonoMovil}" maxlength="15" required="true"/>
 
-                            <p:outputLabel for="usuarioTelefono" value="Telefono:"/>
+                            <p:outputLabel for="usuarioTelefono" value="Teléfono:"/>
                             <p:inputText id="usuarioTelefono" value="#{ingresoUsuarioBean.usuarioSeleccionado.telefonoFijo}" maxlength="15"/>
 
-                            <p:outputLabel for="usuarioTelfOficina" value="Telefono Oficina:"/>
+                            <p:outputLabel for="usuarioTelfOficina" value="Teléfono Oficina:"/>
                             <p:inputText id="usuarioTelfOficina" value="#{ingresoUsuarioBean.usuarioSeleccionado.telefonoEmpresarial}" maxlength="15"/>
 
-                            <p:outputLabel for="usuarioEstado" value="Activo?:"/>
+                            <p:outputLabel for="usuarioEstado" value="¿Usuario Activo?:"/>
                             <p:selectOneRadio id="usuarioEstado" value="#{ingresoUsuarioBean.usuarioSeleccionado.activo}" required="true">
                                 <f:selectItem itemLabel="Si" itemValue="true"/>                    
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.guardarUsuario()}" process=":usuarioForm" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verUsuariosForm:dtUsuarios">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.guardarUsuario()}" process=":usuarioForm" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();" update=":verUsuariosForm:dtUsuarios">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
                         </h:panelGrid>
@@ -112,6 +115,21 @@
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>
                                 <f:selectItems value="#{ingresoUsuarioBean.grupos}" var="Grupos" itemLabel="#{Grupos.nombre}" itemValue="#{Grupos.id.toString()}" />
                             </p:selectOneMenu>
+                            
+                            <p:outputLabel for="usuarioCedulaE" value="Cédula:"/>
+                            <p:inputText id="usuarioCedulaE" validator="#{ingresoUsuarioBean.validarActualizacionCedulaDeCiudadania}" value="#{ingresoUsuarioBean.usuarioSeleccionado.cedulaDeCuidadania}" maxlength="10">
+                            </p:inputText>
+
+                            <p:outputLabel for="usuarioMailE" value="e-Mail:"/>
+                            <p:inputText id="usuarioMailE" validator="#{ingresoUsuarioBean.validarActualizacionEmail}" value="#{ingresoUsuarioBean.usuarioSeleccionado.correoElectronico}" maxlength="45" required="true">
+                            </p:inputText>
+                            
+                            <p:outputLabel for="usuarioNombreE" value="Nombre:"/>
+                            <p:inputText id="usuarioNombreE" value="#{ingresoUsuarioBean.usuarioSeleccionado.nombre}" maxlength="15" required="true"/>
+
+                            <p:outputLabel for="usuarioApellidoE" value="Apellido:"/>
+                            <p:inputText id="usuarioApellidoE" value="#{ingresoUsuarioBean.usuarioSeleccionado.apellido}" maxlength="15" required="true"/>
+                            
                             <p:outputLabel for="usuarioCelularE" value="Celular:"/>
                             <p:inputText id="usuarioCelularE" value="#{ingresoUsuarioBean.usuarioSeleccionado.telefonoMovil}" maxlength="15" required="true"/>
 
@@ -127,7 +145,7 @@
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
                             
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.guardarUsuario()}" process=":editarForm" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('editar').hide();" update=":verUsuariosForm:dtUsuarios">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoUsuarioBean.guardarUsuario()}" process=":editarForm" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('editar').hide();} statusDialog.hide();" update=":verUsuariosForm:dtUsuarios">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
                             
@@ -143,7 +161,7 @@
                             <p:outputLabel for="pw2" value="Re-ingrese nuevo password:"></p:outputLabel>
                             <p:password id="pw2" required="true" value="#{ingresoUsuarioBean.password}"></p:password>
                             <f:facet name="footer">
-                                <p:commandButton value="Cambiar" actionListener="#{ingresoUsuarioBean.actualizarPassword}" process=":cambioPForm" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('actualizarP').hide();" update=":verUsuariosForm:dtUsuarios"></p:commandButton>
+                                <p:commandButton value="Cambiar" actionListener="#{ingresoUsuarioBean.actualizarPassword}" process=":cambioPForm" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('actualizarP').hide();} statusDialog.hide();" update=":verUsuariosForm:dtUsuarios"></p:commandButton>
                             </f:facet>
                         </p:panelGrid>
                     </h:form>

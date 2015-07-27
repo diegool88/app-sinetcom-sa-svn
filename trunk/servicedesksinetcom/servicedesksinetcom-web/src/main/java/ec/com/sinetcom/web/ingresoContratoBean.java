@@ -5,6 +5,7 @@
  */
 package ec.com.sinetcom.web;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.orm.Contacto;
 import ec.com.sinetcom.orm.Contrato;
@@ -18,6 +19,7 @@ import ec.com.sinetcom.orm.TipoGarantia;
 import ec.com.sinetcom.orm.Usuario;
 import ec.com.sinetcom.orm.VisitaTecnica;
 import ec.com.sinetcom.servicios.ContratoServicio;
+import ec.com.sinetcom.webutil.Calendario;
 import ec.com.sinetcom.webutil.Mensajes;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,6 +32,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -39,6 +43,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import org.json.simple.parser.ParseException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -57,7 +62,7 @@ public class ingresoContratoBean implements Serializable {
 
     private String numeroContrato;
     private Integer tipoContrato;
-    private String rucCliente;
+    private Integer idCliente;
     private Integer numSla;
     private Integer numAccountManager;
     private Integer numAdminContrato;
@@ -86,7 +91,7 @@ public class ingresoContratoBean implements Serializable {
 
     private List<Contrato> contratos;
     private List<TipoContrato> tiposContrato;
-    private List<ClienteEmpresa> clientesRuc;
+    private List<ClienteEmpresa> clientes;
     private List<Sla> slas;
     private List<Usuario> Usuarios;
     private List<Contacto> Contactos;
@@ -111,7 +116,7 @@ public class ingresoContratoBean implements Serializable {
 
         this.contratos = contratoServicio.cargarContratos();
         this.tiposContrato = contratoServicio.cargarTiposContrato();
-        this.clientesRuc = contratoServicio.cargarEmpresas();
+        this.clientes = contratoServicio.cargarEmpresas();
         this.slas = contratoServicio.cargarSlas();
         this.Usuarios = contratoServicio.cargarUsuariosVentas();
         //this.Usuarios = contratoServicio.cargarUsuarios();
@@ -129,10 +134,14 @@ public class ingresoContratoBean implements Serializable {
 
     public void grabarContrato(ActionEvent event) {
         
-        if(this.contratoDigital == null){
+        if(this.contratoDigital == null || this.actaDeEREquipos == null || this.actaDeERProyecto == null){
             FacesContext ctx = FacesContext.getCurrentInstance();
             ctx.validationFailed();
-            Mensajes.mostrarMensajeDeError("El Contrato digital no se ha cargado!");
+            StringBuilder builder = new StringBuilder();
+            if(this.contratoDigital == null) builder.append("El Contrato digital no se ha cargado!\n");
+            if(this.actaDeEREquipos == null) builder.append("El Acta E/R de Equipos digital no se ha cargado!\n");
+            if(this.actaDeERProyecto == null) builder.append("El Acta E/R de Proyecto digital no se ha cargado!");
+            Mensajes.mostrarMensajeDeError(builder.toString());
             return;
         }
         
@@ -140,7 +149,7 @@ public class ingresoContratoBean implements Serializable {
 
         contrato.setNumero(numeroContrato);
         contrato.setTipoContratoid(contratoServicio.recuperarTipoContrato(tipoContrato));
-        contrato.setClienteEmpresaruc(contratoServicio.recuperarRucEmpresa(rucCliente));
+        contrato.setClienteEmpresaid(contratoServicio.recuperarRucEmpresa(idCliente));
         contrato.setSlaid(contratoServicio.recuperarSla(numSla));
         contrato.setAccountManagerAsignado(contratoServicio.recuperarUsuario(numAccountManager));
         contrato.setAdministradorDeContrato(contratoServicio.recuperarContacto(numAdminContrato));
@@ -244,6 +253,13 @@ public class ingresoContratoBean implements Serializable {
             for (int i = 0; i < this.cantidadDeVisitasPorA; i++) {
                 if (i > 0) {
                     c.add(Calendar.DAY_OF_MONTH, diasEntre);
+                    try {
+                        c.setTime(Calendario.obtenerSiguienteDiaHabil(c.getTime()));
+                    } catch (IOException ex) {
+                        Logger.getLogger(ingresoContratoBean.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(ingresoContratoBean.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 this.visitasTecnicas.add(new VisitaTecnica(c.getTime(), this.contratoServicio.recuperarTipoDeVisita(this.tipoDeVisita), this.descripcionVisitaT));
             }
@@ -296,7 +312,7 @@ public class ingresoContratoBean implements Serializable {
     public void agregarGarantia(ActionEvent event) {
         this.nuevaGarantiaEconomica.setTipoGarantiaid(this.contratoServicio.recuperarTipoDeGarantia(this.tipoGarantia));
         if (this.poliza != null) {
-            this.nuevaGarantiaEconomica.setAdendum(this.poliza.getContents());
+            this.nuevaGarantiaEconomica.setPoliza(this.poliza.getContents());
         }
         this.garantiasE.add(nuevaInstanciaGarantiaEconomica(this.nuevaGarantiaEconomica));
         this.nuevaGarantiaEconomica = new GarantiaEconomica();
@@ -307,10 +323,11 @@ public class ingresoContratoBean implements Serializable {
         garantiaE.setFechaFin(garantiaEconomica.getFechaFin());
         garantiaE.setFechaInicio(garantiaEconomica.getFechaInicio());
         garantiaE.setPorcentaje(garantiaEconomica.getPorcentaje());
-        garantiaE.setRenovable(garantiaEconomica.getRenovable());
+        garantiaE.setRenovacion(garantiaEconomica.getRenovacion());
         garantiaE.setTipoGarantiaid(garantiaEconomica.getTipoGarantiaid());
         garantiaE.setValor(garantiaEconomica.getValor());
-        garantiaE.setAdendum(garantiaEconomica.getAdendum());
+        garantiaE.setPoliza(garantiaEconomica.getPoliza());
+        garantiaE.setNumeroPoliza(garantiaEconomica.getNumeroPoliza());
         return garantiaE;
     }
 
@@ -345,8 +362,8 @@ public class ingresoContratoBean implements Serializable {
     }
 
     public void cargarContactosDeCliente() {
-        if (this.rucCliente != null || this.rucCliente.length() > 0) {
-            this.Contactos = this.contratoServicio.cargarTodosLosContactosDeCliente(this.contratoServicio.recuperarRucEmpresa(this.rucCliente));
+        if (this.idCliente != null || this.idCliente > 0) {
+            this.Contactos = this.contratoServicio.cargarTodosLosContactosDeCliente(this.contratoServicio.recuperarRucEmpresa(this.idCliente));
         }
     }
 
@@ -381,12 +398,12 @@ public class ingresoContratoBean implements Serializable {
         this.tipoContrato = tipoContrato;
     }
 
-    public String getRucCliente() {
-        return rucCliente;
+    public Integer getIdCliente() {
+        return idCliente;
     }
 
-    public void setRucCliente(String rucCliente) {
-        this.rucCliente = rucCliente;
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
     }
 
     public Integer getNumSla() {
@@ -549,12 +566,12 @@ public class ingresoContratoBean implements Serializable {
         this.tiposContrato = tiposContrato;
     }
 
-    public List<ClienteEmpresa> getClientesRuc() {
-        return clientesRuc;
+    public List<ClienteEmpresa> getClientes() {
+        return clientes;
     }
 
-    public void setClientesRuc(List<ClienteEmpresa> clientesRuc) {
-        this.clientesRuc = clientesRuc;
+    public void setClientes(List<ClienteEmpresa> clientes) {
+        this.clientes = clientes;
     }
 
     public List<Sla> getSlas() {

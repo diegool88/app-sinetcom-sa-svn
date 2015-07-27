@@ -237,6 +237,10 @@ public class IngresarComponenteAPBean implements Serializable {
         nuevoItemProducto.setNumeroDePedido(itemProducto.getNumeroDePedido());
         nuevoItemProducto.setModeloProductoList(itemProducto.getModeloProductoList());
         nuevoItemProducto.setDescripcion(itemProducto.getDescripcion());
+        nuevoItemProducto.setFechaIngresoABodega(itemProducto.getFechaIngresoABodega());
+        nuevoItemProducto.setFobUnitario(itemProducto.getFobUnitario());
+        nuevoItemProducto.setIndice(itemProducto.getIndice());
+        nuevoItemProducto.setCosteo(itemProducto.getCosteo());
         return nuevoItemProducto;
     }
 
