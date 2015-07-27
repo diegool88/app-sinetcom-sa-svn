@@ -19,8 +19,8 @@
                             <p:column headerText="Número" filterBy="#{contrato.numero}" filterMatchMode="contains">
                                 <h:outputText value="#{contrato.numero}"></h:outputText>
                             </p:column>
-                            <p:column headerText="Cliente" filterBy="#{contrato.clienteEmpresaruc.nombreComercial}" filterMatchMode="contains">
-                                <h:outputText value="#{contrato.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                            <p:column headerText="Cliente" filterBy="#{contrato.clienteEmpresaid.nombreComercial}" filterMatchMode="contains">
+                                <h:outputText value="#{contrato.clienteEmpresaid.nombreComercial}"></h:outputText>
                             </p:column>
                             <p:column headerText="Fecha Suscripción" filterBy="#{contrato.fechaDeSuscripcion}" filterMatchMode="contains">
                                 <h:outputText value="#{emitirActaDeERBean.formatoCortoDeFecha(contrato.fechaDeSuscripcion)}"></h:outputText>

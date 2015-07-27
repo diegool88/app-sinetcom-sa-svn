@@ -11,15 +11,15 @@
             <h:head />
             <h:body>
                 <h:form id="form">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:panel>
                         <f:facet name="header">
                             <h:outputText value="Actualización de Registro de Movimiento de Inventario"></h:outputText>
                         </f:facet>
                         <p:dataTable id="tablaRegistros" value="#{actualizarRegistroDeMovBean.movimientoDeInventarios}" selection="#{actualizarRegistroDeMovBean.seleccion}" selectionMode="single" var="item" rowKey="#{item.codigo}" >
-                            <p:ajax event="rowSelect" listener="#{actualizarRegistroDeMovBean.registroSeleccionado}" update=":form:tablaRegistros:botonActualizar, :form:actualizarR, :form:botonActualizar" />
+                            <p:ajax event="rowSelect" listener="#{actualizarRegistroDeMovBean.registroSeleccionado}" update=":form:tablaRegistros:botonActualizar, :form:actualizarR, :form:botonActualizar" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
                             <p:ajax event="rowUnselect" listener="#{actualizarRegistroDeMovBean.registroDeSeleccionado}" update=":form:tablaRegistros:botonActualizar, :form:actualizarR, :form:botonActualizar" />
                             <f:facet name="header">
                                 <h:outputText value="Registros de Mov. de Inventario por actualizar"></h:outputText>
@@ -60,7 +60,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Cliente"/>
                                 </f:facet>
-                                <h:outputText value="#{item.clienteEmpresaruc != null ? item.clienteEmpresaruc.nombreComercial : 'N/A'}"/>
+                                <h:outputText value="#{item.clienteEmpresaid != null ? item.clienteEmpresaid.nombreComercial : 'N/A'}"/>
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton id="botonActualizar" value="Actualizar" disabled="#{empty actualizarRegistroDeMovBean.seleccion or empty actualizarRegistroDeMovBean.seleccion.codigo}" immediate="true" onclick="actualizarR.show()"></p:commandButton>
@@ -77,10 +77,10 @@
                                 <h:outputText value="#{registroF.tipoDeMovimientoid.nombre}"></h:outputText>
                             </p:column>
                             <p:column headerText="Contrato">
-                                <h:outputText value="#{registroF.contratonumero.clienteEmpresaruc.nombreComercial} - #{registroF.contratonumero.numero}"></h:outputText>
+                                <h:outputText value="#{registroF.contratonumero.clienteEmpresaid.nombreComercial} - #{registroF.contratonumero.numero}"></h:outputText>
                             </p:column>
                             <p:column headerText="Empresa">
-                                <h:outputText value="#{registroF.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                                <h:outputText value="#{registroF.clienteEmpresaid.nombreComercial}"></h:outputText>
                             </p:column>
                             <p:column headerText="Fecha Entrada">
                                 <h:outputText value="#{registroF.fechaDeEntrada}">
@@ -105,23 +105,21 @@
                                     <h:outputText value="Selección de Ingresos"></h:outputText>
                                 </f:facet>
                                 <ui:repeat id="loop" rendered="#{actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 3 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 4 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 5}" value="#{actualizarRegistroDeMovBean.seleccion.detalleDeMovimientoDeProductoList}" var="productoS">
-                                    <p:panelGrid columns="3">
+                                    <p:panelGrid columns="2">
                                         <p:outputLabel for="ingreso" value="Producto Entrante para '#{productoS.itemProductonumeroSerialsale.numeroSerial}': "></p:outputLabel>
-                                        <p:selectOneMenu id="ingreso" value="#{productoS.itemProductonumeroSerialentra}" filter="true" filterMatchMode="contains" required="true" requiredMessage="* Requerido" converter="#{itemProductoConverter}">
+                                        <p:selectOneMenu id="ingreso" value="#{productoS.itemProductonumeroSerialentra}" filter="true" filterMatchMode="contains" required="true"  converter="#{itemProductoConverter}">
                                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                             <f:selectItems value="#{actualizarRegistroDeMovBean.inventarioEntranteDisponible}" var="stockD" itemLabel="#{stockD.componenteElectronicoAtomicoid != null ? stockD.componenteElectronicoAtomicoid.nombre : stockD.descripcion } - S/N: #{stockD.numeroSerial}" itemValue="#{stockD.numeroSerial}"></f:selectItems>
                                         </p:selectOneMenu>
-                                        <p:message for="ingreso"></p:message>
                                     </p:panelGrid>
                                 </ui:repeat>
                                 <ui:repeat id="loop1" rendered="#{actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 1 or actualizarRegistroDeMovBean.seleccion.tipoDeMovimientoid.id eq 2}" value="#{actualizarRegistroDeMovBean.seleccion.detalleDeMovimientoDeProductoList}" var="producto">
-                                    <p:panelGrid columns="3">
+                                    <p:panelGrid columns="2">
                                         <p:outputLabel for="bodega" value="Ingrese la bodega para '#{producto.itemProductonumeroSerialsale.numeroSerial}': "></p:outputLabel>
-                                        <p:selectOneMenu id="bodega" value="#{producto.itemProductonumeroSerialsale.bodegaid}" converter="#{bodegaConverter}" required="true" requiredMessage="* Requerido">
+                                        <p:selectOneMenu id="bodega" value="#{producto.itemProductonumeroSerialsale.bodegaid}" converter="#{bodegaConverter}" required="true" >
                                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                             <f:selectItems value="#{actualizarRegistroDeMovBean.bodegas}" var="bodegaD" itemLabel="#{bodegaD.nombre}" itemValue="#{bodegaD.id.toString()}"></f:selectItems>
                                         </p:selectOneMenu> 
-                                        <p:message for="bodega"></p:message>
                                     </p:panelGrid>
                                 </ui:repeat>
                                 <f:facet name="footer">

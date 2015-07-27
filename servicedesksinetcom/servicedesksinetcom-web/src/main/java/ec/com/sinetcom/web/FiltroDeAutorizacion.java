@@ -23,7 +23,7 @@ import org.primefaces.application.PrimeResourceHandler;
  * @author diegoflores
  */
 
-@WebFilter(urlPatterns = {"/admin/*","/soporte/*","/inventarios/*","/contratos/*"})
+@WebFilter(urlPatterns = {"/admin/*","/soporte/*","/inventarios/*","/contratos/*","/publico/*"})
 public class FiltroDeAutorizacion implements Filter {
     
     @Override
@@ -72,45 +72,53 @@ public class FiltroDeAutorizacion implements Filter {
     
     private boolean verificarPermiso(Usuario usuario, HttpServletRequest req){
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("cliente")){
-            return !(!req.getRequestURI().toLowerCase().contains("mistickets") && !req.getRequestURI().toLowerCase().contains("crearticket") 
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !req.getRequestURI().toLowerCase().contains("mistickets") 
+                    && !req.getRequestURI().toLowerCase().contains("crearticket") 
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome"));
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("ventas")){
-            return !(!(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultarcontratos"))
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultarcontratos"))
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("preventa")){
-            return !(!(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultarcontratos"))
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultarcontratos"))
                     && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/") && (req.getRequestURI().toLowerCase().contains("mistickets") || req.getRequestURI().toLowerCase().contains("crearticket"))) 
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("tecnico")){
-            return !(!(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/") && req.getRequestURI().toLowerCase().contains("buscarstock"))
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/") && req.getRequestURI().toLowerCase().contains("buscarstock"))
                     && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/") && (req.getRequestURI().toLowerCase().contains("mistickets") || req.getRequestURI().toLowerCase().contains("crearticket"))) 
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("inventarios")){
-            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/")
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/")
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("contratos")){
-            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/")
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/")
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("gerencia")){
-            return !(!(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && (req.getRequestURI().toLowerCase().contains("reportes") || req.getRequestURI().toLowerCase().contains("consultacontratos"))) 
+            return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
+                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && (req.getRequestURI().toLowerCase().contains("reportes") || req.getRequestURI().toLowerCase().contains("consultacontratos"))) 
                     && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/") && req.getRequestURI().toLowerCase().contains("reportes")) 
                     && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/inventarios/") && req.getRequestURI().toLowerCase().contains("reportes"))
                     && !req.getRequestURI().toLowerCase().contains("login")

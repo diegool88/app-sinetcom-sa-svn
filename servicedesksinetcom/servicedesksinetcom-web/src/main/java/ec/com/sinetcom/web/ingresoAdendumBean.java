@@ -69,7 +69,7 @@ public class ingresoAdendumBean implements Serializable {
     private UIInput filtroInputText;
     private String filtro;
     private List<TipoContrato> tiposContrato;
-    private List<ClienteEmpresa> clientesRuc;
+    private List<ClienteEmpresa> clientes;
     private List<Sla> slas;
     private List<Usuario> Usuarios;
     private List<Contacto> Contactos;
@@ -107,7 +107,7 @@ public class ingresoAdendumBean implements Serializable {
         this.contratosDisponibles = this.contratoServicio.cargarContratos();
         this.nuevoAdendum = new Contrato();
         this.tiposContrato = contratoServicio.cargarTiposContrato();
-        this.clientesRuc = contratoServicio.cargarEmpresas();
+        this.clientes = contratoServicio.cargarEmpresas();
         this.slas = contratoServicio.cargarSlas();
         this.Usuarios = contratoServicio.cargarUsuariosVentas();
         this.tipoGarantias = contratoServicio.cargarTipoDeGarantias();
@@ -135,12 +135,17 @@ public class ingresoAdendumBean implements Serializable {
 
     public void grabarAdendum(ActionEvent event) {
         //Se agregan los pagos, garantias, visitas tecnicas y cursos así como los adjuntos
-        if (this.contratoDigital == null) {
+        if(this.contratoDigital == null || this.actaDeEREquipos == null || this.actaDeERProyecto == null){
             FacesContext ctx = FacesContext.getCurrentInstance();
             ctx.validationFailed();
-            Mensajes.mostrarMensajeDeError("El Contrato digital no se ha cargado!");
+            StringBuilder builder = new StringBuilder();
+            if(this.contratoDigital == null) builder.append("El Contrato digital no se ha cargado!\n");
+            if(this.actaDeEREquipos == null) builder.append("El Acta E/R de Equipos digital no se ha cargado!\n");
+            if(this.actaDeERProyecto == null) builder.append("El Acta E/R de Proyecto digital no se ha cargado!");
+            Mensajes.mostrarMensajeDeError(builder.toString());
             return;
         }
+        
         this.nuevoAdendum.setContratoDigital(this.contratoDigital.getContents());
         this.nuevoAdendum.setActaEREquiposDigital(this.actaDeEREquipos.getContents());
         this.nuevoAdendum.setActaERProyectoDigital(this.actaDeERProyecto.getContents());
@@ -176,12 +181,12 @@ public class ingresoAdendumBean implements Serializable {
         }
 
         if (contratoServicio.crearContrato(this.nuevoAdendum)) {
-            if (this.equiposPadreSeleccionados.length > 0) {
+            if (this.equiposPadreSeleccionados != null && this.equiposPadreSeleccionados.length > 0) {
                 for (TreeNode equiposPadreSeleccionado : equiposPadreSeleccionados) {
                     cambiarEquipoDeContrato(equiposPadreSeleccionado, this.nuevoAdendum);
                 }
             }
-            if (this.equiposPadreStockLocalSeleccionados1.size() > 0) {
+            if (this.equiposPadreStockLocalSeleccionados1 != null && this.equiposPadreStockLocalSeleccionados1.size() > 0) {
                 for (TreeNode equiposPadreSeleccionado : equiposPadreStockLocalSeleccionados1) {
                     cambiarEquipoDeContrato(equiposPadreSeleccionado, this.nuevoAdendum);
                 }
@@ -190,6 +195,7 @@ public class ingresoAdendumBean implements Serializable {
         } else {
             Mensajes.mostrarMensajeDeError("Adendum no creado, error interno!");
         }
+        this.contratosDisponibles = this.contratoServicio.cargarContratos();
     }
 
     public Contrato obtenerNuevaInstanciaDeContrato(Contrato contrato) {
@@ -198,11 +204,11 @@ public class ingresoAdendumBean implements Serializable {
         int indiceFinal = contrato.getNumero().length();
         nuevaInstancia.setNumero(contrato.getNumero().substring(indiceInicial, indiceFinal).contains("-AD") ? contrato.getNumero().substring(0, indiceFinal - 1) + (Integer.parseInt(contrato.getNumero().substring(indiceFinal - 1, indiceFinal)) + 1) : contrato.getNumero() + "-AD" + this.contratoServicio.obtenerIndiceDeAdendum(contrato));
         nuevaInstancia.setTipoContratoid(contrato.getTipoContratoid());
-        nuevaInstancia.setClienteEmpresaruc(contrato.getClienteEmpresaruc());
+        nuevaInstancia.setClienteEmpresaid(contrato.getClienteEmpresaid());
         nuevaInstancia.setSlaid(contrato.getSlaid());
         nuevaInstancia.setAccountManagerAsignado(contrato.getAccountManagerAsignado());
         nuevaInstancia.setAdministradorDeContrato(contrato.getAdministradorDeContrato());
-        this.Contactos = contrato.getClienteEmpresaruc().getContactoList();
+        this.Contactos = contrato.getClienteEmpresaid().getContactoList();
         nuevaInstancia.setFechaDeSuscripcion(contrato.getFechaDeSuscripcion());
         nuevaInstancia.setObjeto(contrato.getObjeto());
         nuevaInstancia.setPrecioTotal(contrato.getPrecioTotal());
@@ -419,7 +425,7 @@ public class ingresoAdendumBean implements Serializable {
     public void agregarGarantia(ActionEvent event) {
         this.nuevaGarantiaEconomica.setTipoGarantiaid(this.contratoServicio.recuperarTipoDeGarantia(this.tipoGarantia));
         if (this.poliza != null) {
-            this.nuevaGarantiaEconomica.setAdendum(this.poliza.getContents());
+            this.nuevaGarantiaEconomica.setPoliza(this.poliza.getContents());
         }
         this.garantiasE.add(nuevaInstanciaGarantiaEconomica(this.nuevaGarantiaEconomica));
         this.nuevaGarantiaEconomica = new GarantiaEconomica();
@@ -430,10 +436,11 @@ public class ingresoAdendumBean implements Serializable {
         garantiaE.setFechaFin(garantiaEconomica.getFechaFin());
         garantiaE.setFechaInicio(garantiaEconomica.getFechaInicio());
         garantiaE.setPorcentaje(garantiaEconomica.getPorcentaje());
-        garantiaE.setRenovable(garantiaEconomica.getRenovable());
+        garantiaE.setRenovacion(garantiaEconomica.getRenovacion());
         garantiaE.setTipoGarantiaid(garantiaEconomica.getTipoGarantiaid());
         garantiaE.setValor(garantiaEconomica.getValor());
-        garantiaE.setAdendum(garantiaEconomica.getAdendum());
+        garantiaE.setPoliza(garantiaEconomica.getPoliza());
+        garantiaE.setNumeroPoliza(garantiaEconomica.getNumeroPoliza());
         return garantiaE;
     }
 
@@ -468,8 +475,8 @@ public class ingresoAdendumBean implements Serializable {
     }
 
     public void cargarContactosDeCliente() {
-        if (this.nuevoAdendum.getClienteEmpresaruc() != null || this.nuevoAdendum.getClienteEmpresaruc().getRuc().length() > 0) {
-            this.Contactos = this.contratoServicio.cargarTodosLosContactosDeCliente(this.contratoServicio.recuperarRucEmpresa(this.nuevoAdendum.getClienteEmpresaruc().getRuc()));
+        if (this.nuevoAdendum.getClienteEmpresaid()!= null || this.nuevoAdendum.getClienteEmpresaid().getRuc().length() > 0) {
+            this.Contactos = this.contratoServicio.cargarTodosLosContactosDeCliente(this.contratoServicio.recuperarRucEmpresa(this.nuevoAdendum.getClienteEmpresaid().getId()));
         }
     }
 
@@ -496,12 +503,12 @@ public class ingresoAdendumBean implements Serializable {
         this.tiposContrato = tiposContrato;
     }
 
-    public List<ClienteEmpresa> getClientesRuc() {
-        return clientesRuc;
+    public List<ClienteEmpresa> getClientes() {
+        return clientes;
     }
 
-    public void setClientesRuc(List<ClienteEmpresa> clientesRuc) {
-        this.clientesRuc = clientesRuc;
+    public void setClientes(List<ClienteEmpresa> clientes) {
+        this.clientes = clientes;
     }
 
     public List<Sla> getSlas() {

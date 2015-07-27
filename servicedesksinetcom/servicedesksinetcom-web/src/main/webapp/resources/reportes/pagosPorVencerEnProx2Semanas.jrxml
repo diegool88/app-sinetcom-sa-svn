@@ -29,7 +29,7 @@
 FROM
      `Contrato` Contrato INNER JOIN `TipoContrato` TipoContrato ON Contrato.`TipoContrato_id` = TipoContrato.`id`
      INNER JOIN `Contacto` Contacto ON Contrato.`administradorDeContrato` = Contacto.`id`
-     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     INNER JOIN `ClienteEmpresa` ClienteEmpresa ON Contrato.`ClienteEmpresa_id` = ClienteEmpresa.`id`
      INNER JOIN `Usuario` Usuario ON Contrato.`accountManagerAsignado` = Usuario.`id`
 WHERE (SELECT COUNT(*) FROM
      `Pago` Pago WHERE Pago.`Contrato_numero` = Contrato.`numero` AND TIMESTAMPDIFF(DAY, NOW(),`Pago`.`plazo`) <= 15 AND TIMESTAMPDIFF(DAY, NOW(),`Pago`.`plazo`) >= 0) >= 1]]>

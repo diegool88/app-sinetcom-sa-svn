@@ -97,7 +97,7 @@ public class CrearTicketBean implements Serializable {
      * Actualiza el combo de productos de un cliente
      */
     public void actualizarProductosCliente() {
-        this.itemProductos = this.ticketServicio.obtenerTodosLosProductosDeUnCliente(this.ticket.getClienteEmpresaruc());
+        this.itemProductos = this.ticketServicio.obtenerTodosLosProductosDeUnCliente(this.ticket.getClienteEmpresaid());
     }
 
     /**

@@ -11,40 +11,35 @@
             <h:head />
             <h:body>
                 <h:form id="form">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
-                    <p:panelGrid columns="3">
+                    </p:dialog>-->
+                    <p:panelGrid columns="2">
                         <f:facet name="header">
                             <h:outputText value="Registro de Movimiento de Inventario"></h:outputText>
                         </f:facet>
                         <p:outputLabel value="Detalle Motivo Del Movimiento: " for="detalleMotivoDelMovimiento" />
-                        <p:inputTextarea id="detalleMotivoDelMovimiento" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.detalleMotivoDelMovimiento}" title="DetalleMotivoDelMovimiento" required="true" requiredMessage="* Requerido"/>
-                        <p:message for="detalleMotivoDelMovimiento"></p:message>
+                        <p:inputTextarea id="detalleMotivoDelMovimiento" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.detalleMotivoDelMovimiento}" title="DetalleMotivoDelMovimiento" required="true" />
                         <p:outputLabel value="Número De Factura:" for="numeroDeFactura" />
                         <p:inputText id="numeroDeFactura" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.numeroDeFactura}" title="NumeroDeFactura" />
-                        <p:message for="numeroDeFactura"></p:message>
                         <p:outputLabel value="Motivo: " for="tipoDeMovimientoid" />
-                        <p:selectOneMenu id="tipoDeMovimientoid" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid}" converter="#{tipoDeMovimientoConverter}" required="true" requiredMessage="* Requerido">
+                        <p:selectOneMenu id="tipoDeMovimientoid" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid}" converter="#{tipoDeMovimientoConverter}" required="true" >
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                             <f:selectItems value="#{crearRegistroDeMovInventarioBean.tipoDeMovimientos}" var="tipo" itemLabel="#{tipo.nombre}" itemValue="#{tipo.id.toString()}"/>
                             <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarClienteYContrato()}" update="clienteEmpresaruc, contratonumero"></p:ajax>
                         </p:selectOneMenu>
-                        <p:message for="tipoDeMovimientoid"></p:message>
                         <p:outputLabel value="Contrato: " for="contratonumero" />
                         <p:selectOneMenu id="contratonumero" required="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 3 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 4}" disabled="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 1 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 2}" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.contratonumero}" converter="#{contratoConverter}" >
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
-                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.contratos}" var="contrato" itemLabel="#{contrato.clienteEmpresaruc.nombreComercial} - #{contrato.numero}" itemValue="#{contrato.numero.toString()}"/>
+                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.contratos}" var="contrato" itemLabel="#{contrato.clienteEmpresaid.nombreComercial} - #{contrato.numero}" itemValue="#{contrato.numero.toString()}"/>
                             <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarUbicacionPorContrato()}" update="clienteEmpresaruc" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>
-                        <p:message for="contratonumero" ></p:message>
                         <p:outputLabel value="Empresa: " for="clienteEmpresaruc" />
-                        <p:selectOneMenu id="clienteEmpresaruc" required="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 1 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 2}" disabled="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 3 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 4}" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.clienteEmpresaruc}" converter="#{clienteEmpresaConverter}" >
+                        <p:selectOneMenu id="clienteEmpresaruc" required="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 1 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 2}" disabled="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 3 or crearRegistroDeMovInventarioBean.movimientoDeInventario.tipoDeMovimientoid.id == 4}" value="#{crearRegistroDeMovInventarioBean.movimientoDeInventario.clienteEmpresaid}" converter="#{clienteEmpresaConverter}" >
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
-                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.clienteEmpresas}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                            <f:selectItems value="#{crearRegistroDeMovInventarioBean.clienteEmpresas}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.id.toString()}"/>
                             <p:ajax listener="#{crearRegistroDeMovInventarioBean.actualizarUbicacionPorCliente()}" update="contratonumero" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>
-                        <p:message for="clienteEmpresaruc" ></p:message>
                         <p:outputLabel for="inventario" value="Inventario Saliente: "></p:outputLabel>
                         <p:dataTable id="inventario" widgetVar="inventarioT" filteredValue="#{crearRegistroDeMovInventarioBean.inventarioFiltrado}" selection="#{crearRegistroDeMovInventarioBean.listaDeItems}" value="#{crearRegistroDeMovInventarioBean.inventarioDisponible}" var="item" rowKey="#{item.numeroSerial}" rows="5" paginator="true">
                             <f:facet name="header">
@@ -64,7 +59,6 @@
                                 #{item.condicionFisicaid.nombre}
                             </p:column>
                         </p:dataTable>
-                        <p:message for="inventario" ></p:message>
                         <f:facet name="footer">
                             <p:commandButton value="Generar Registro" actionListener="#{crearRegistroDeMovInventarioBean.generarRegistroDeMovimiento}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" ajax="false" update="@form">
                                 <p:confirm header="Confirmación" message="¿Está seguro que desea generar este registro de movimiento?"></p:confirm>

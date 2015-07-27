@@ -24,7 +24,7 @@
      RegistroDeMovimientoDeInventario.`fechaDeEmision` AS RegistroDeMovimientoDeInventario_fechaDeEmision,
      RegistroDeMovimientoDeInventario.`fechaDeEntrada` AS RegistroDeMovimientoDeInventario_fechaDeEntrada
 FROM
-     `RegistroDeMovimientoDeInventario` RegistroDeMovimientoDeInventario INNER JOIN `ClienteEmpresa` ClienteEmpresa ON RegistroDeMovimientoDeInventario.`ClienteEmpresa_ruc` = ClienteEmpresa.`ruc`
+     `RegistroDeMovimientoDeInventario` RegistroDeMovimientoDeInventario INNER JOIN `ClienteEmpresa` ClienteEmpresa ON RegistroDeMovimientoDeInventario.`ClienteEmpresa_id` = ClienteEmpresa.`id`
      INNER JOIN `TipoDeMovimiento` TipoDeMovimiento ON RegistroDeMovimientoDeInventario.`TipoDeMovimiento_id` = TipoDeMovimiento.`id`
 WHERE RegistroDeMovimientoDeInventario.`codigo` = $P{registroMov_id}]]>
 	</queryString>

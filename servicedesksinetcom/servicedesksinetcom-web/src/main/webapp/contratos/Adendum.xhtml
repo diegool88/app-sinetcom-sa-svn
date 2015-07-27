@@ -31,9 +31,9 @@
                     ///});
                 </script>
                 <h:form id="nuevoAdendum" enctype="multipart/form-data">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:remoteCommand name="enviarPeticionFiltro" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" update=":nuevoAdendum:equiposTree2" process="@this, :nuevoAdendum:filtroEquipos" actionListener="#{ingresoAdendumBean.actualizarTreeNodeEquipos}"></p:remoteCommand>
                     <p:panelGrid columns="1" id="seleccionContrato">
                         <p:dataTable id="dtContratos" value="#{ingresoAdendumBean.contratosDisponibles}" var="contrato" paginator="true" rows="15" rowKey="#{contrato.numero}" selectionMode="single" selection="#{ingresoAdendumBean.contratoSeleccionado}" paginatorPosition="bottom"
@@ -47,7 +47,7 @@
                                 #{contrato.numero}
                             </p:column>
                             <p:column headerText="Cliente">
-                                #{contrato.clienteEmpresaruc.nombreComercial}
+                                #{contrato.clienteEmpresaid.nombreComercial}
                             </p:column>
                             <p:column headerText="Fecha Suscripción">
                                 #{ingresoAdendumBean.formatoCortoDeFecha(contrato.fechaDeSuscripcion)}
@@ -69,9 +69,9 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel for="clienteEmpresa" value="Cliente:"/>
-                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoAdendumBean.nuevoAdendum.clienteEmpresaruc}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" converter="#{clienteEmpresaConverter}" required="true">
+                        <p:selectOneMenu id="clienteEmpresa" value="#{ingresoAdendumBean.nuevoAdendum.clienteEmpresaid}" effect="fade" var="empresas" filter="true" filterMatchMode="startsWith" converter="#{clienteEmpresaConverter}" required="true">
                             <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""/>
-                            <f:selectItems value="#{ingresoAdendumBean.clientesRuc}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.ruc}"/>
+                            <f:selectItems value="#{ingresoAdendumBean.clientes}" var="empresa" itemLabel="#{empresa.nombreComercial}" itemValue="#{empresa.id.toString()}"/>
                             <p:ajax listener="#{ingresoAdendumBean.cargarContactosDeCliente()}" update="contratoAdministrador" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:ajax>
                         </p:selectOneMenu>               
 
@@ -162,7 +162,7 @@
                         <p:outputLabel for="equiposContrato" value="Equipos:"/>
                         <p:commandButton id="equiposContrato" value="Ver Equipos" immediate="true" update=":nuevoAdendum:atadoEquipos" onclick="PF('equipos').show();"></p:commandButton>
                         <f:facet name="footer">
-                            <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoAdendum:contrato" update="@form" actionListener="#{ingresoAdendumBean.grabarAdendum}" onstart="statusDialog.show()" onsuccess="statusDialog.show()">
+                            <p:commandButton id="btnGrabar" value="Grabar" process=":nuevoAdendum:contrato" update=":nuevoAdendum:dtContratos" actionListener="#{ingresoAdendumBean.grabarAdendum}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()">
                             </p:commandButton>
                         </f:facet>
                     </p:panelGrid> 
@@ -171,7 +171,7 @@
                         <h:panelGrid id="prueba" columns="2" columnClasses="colum" cellpadding="5">    
                             <p:outputLabel for="cantidadPagos" value="Cantidad de Pagos"/>
                             <p:inputText id="cantidadPagos" value="#{ingresoAdendumBean.cantidadPagos}">
-                                <p:ajax event="keyup" listener="#{ingresoAdendumBean.calcularFechasPagos()}" update="pagos"></p:ajax>
+                                <p:ajax event="keyup" listener="#{ingresoAdendumBean.calcularFechasPagos()}" update="pagos" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:ajax>
                             </p:inputText>
                         </h:panelGrid>  
                         <p:dataTable id="pagos" value="#{ingresoAdendumBean.pagos}" var="pago" editable="true">
@@ -204,8 +204,10 @@
                                 <f:facet name="header">
                                     <h:outputText value="Ingreso de Garantía Económica"></h:outputText>
                                 </f:facet>
+                                <p:outputLabel for="numeroPoliza" value="Número de Póliza:"/>
+                                <p:inputText id="numeroPoliza" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.numeroPoliza}" maxlength="50" required="true"/>
                                 <p:outputLabel for="tipoGarantia" value="Tipo de Garantía:"/>
-                                <p:selectOneMenu id="tipoGarantia" value="#{ingresoAdendumBean.tipoGarantia}" required="true" requiredMessage="* Requerido">
+                                <p:selectOneMenu id="tipoGarantia" value="#{ingresoAdendumBean.tipoGarantia}" required="true" >
                                     <f:selectItem itemLabel="#{myBundle.SelectOneMessage}" itemValue=""></f:selectItem>
                                     <f:selectItems var="tipoGarantia" value="#{ingresoAdendumBean.tipoGarantias}" itemLabel="#{tipoGarantia.tipo}" itemValue="#{tipoGarantia.id}"></f:selectItems>
                                 </p:selectOneMenu>
@@ -220,15 +222,15 @@
                                 <p:calendar id="fechaInicio" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.fechaInicio}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
                                 <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
                                 <p:calendar id="fechaFin" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.fechaFin}" pattern="dd/MM/yyyy" required="true" showOn="button"></p:calendar>
-                                <p:outputLabel for="renovable" value="¿Renovable?:"/>
-                                <p:selectOneRadio id="renovable" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.renovable}" required="true">
+                                <p:outputLabel for="renovacion" value="¿Es Renovación?:"/>
+                                <p:selectOneRadio id="renovacion" value="#{ingresoAdendumBean.nuevaGarantiaEconomica.renovacion}" required="true">
                                     <f:selectItem itemLabel="Si" itemValue="true"></f:selectItem>
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                 </p:selectOneRadio>
                                 <p:outputLabel for="poliza" value="Póliza Digital:"/>
-                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarAdendum}" ></p:fileUpload>
+                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarPoliza}" ></p:fileUpload>
                                 <f:facet name="footer">
-                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoAdendum:garantiasEconomicas" update=":nuevoAdendum:garantiasEconomicas" actionListener="#{ingresoAdendumBean.agregarGarantia}"></p:commandButton>
+                                    <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoAdendum:garantiasEconomicas" update=":nuevoAdendum:garantiasEconomicas" actionListener="#{ingresoAdendumBean.agregarGarantia}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
                             <br/>
@@ -274,7 +276,7 @@
                                 <p:outputLabel for="descripcionVT" value="Descripción Visitas Técnica:"></p:outputLabel>
                                 <p:inputText id="descripcionVT" value="#{ingresoAdendumBean.descripcionVisitaT}"></p:inputText>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Agregar Visitas Técnicas" actionListener="#{ingresoAdendumBean.calcularFechasVisitasTecnicas}" process=":nuevoAdendum:visitasTecnicas" update=":nuevoAdendum:visitasTecnicas"></p:commandButton>
+                                    <p:commandButton value="Agregar Visitas Técnicas" actionListener="#{ingresoAdendumBean.calcularFechasVisitasTecnicas}" process=":nuevoAdendum:visitasTecnicas" update=":nuevoAdendum:visitasTecnicas" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                     <p:commandButton value="Limpiar Visitas Técnicas" actionListener="#{ingresoAdendumBean.limpiarVisitasTecnicas}" process="@this" update=":nuevoAdendum:visitasTecnicas"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
@@ -284,7 +286,7 @@
                                     <h:outputText value="Visitas Técnicas"></h:outputText>
                                 </f:facet>
                                 <p:column headerText="Tipo de Visita">
-                                    <h:outputText value="#{ingresoAdendumBean.tipoDeVisitaid.nombre}"></h:outputText>
+                                    <h:outputText value="#{visitaT.tipoDeVisitaid.nombre}"></h:outputText>
                                 </p:column>
                                 <p:column headerText="Fecha">
                                     <p:cellEditor>
@@ -341,7 +343,7 @@
                                 <p:outputLabel for="centroCapacitacion" value="Centro de Capacitación:"></p:outputLabel>
                                 <p:inputTextarea id="centroCapacitacion" value="#{ingresoAdendumBean.nuevoCurso.centroDeCapacitacion}" required="true" cols="20" rows="8"></p:inputTextarea>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Agregar Capacitación" actionListener="#{ingresoAdendumBean.agregarCurso}" process=":nuevoAdendum:cursosProgramados" update=":nuevoAdendum:cursosProgramados"></p:commandButton>
+                                    <p:commandButton value="Agregar Capacitación" actionListener="#{ingresoAdendumBean.agregarCurso}" process=":nuevoAdendum:cursosProgramados" update=":nuevoAdendum:cursosProgramados" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                 </f:facet>
                             </p:panelGrid>
                             <br/>

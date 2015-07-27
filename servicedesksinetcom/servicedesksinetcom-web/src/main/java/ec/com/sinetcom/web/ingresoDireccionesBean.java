@@ -7,7 +7,6 @@ package ec.com.sinetcom.web;
 
 import ec.com.sinetcom.orm.Ciudad;
 import ec.com.sinetcom.orm.ClienteDireccion;
-import ec.com.sinetcom.orm.ClienteDireccionPK;
 import ec.com.sinetcom.orm.ClienteEmpresa;
 import ec.com.sinetcom.servicios.ContratoServicio;
 import ec.com.sinetcom.webutil.Mensajes;
@@ -53,8 +52,6 @@ public class ingresoDireccionesBean implements Serializable {
     }
 
     public void crearDireccion() {
-        ClienteDireccionPK clienteDireccionPK = new ClienteDireccionPK(this.nuevaDireccion.getCiudad().getId(), this.nuevaDireccion.getClienteEmpresa().getRuc());
-        this.nuevaDireccion.setClienteDireccionPK(clienteDireccionPK);
         if (this.contratoServicio.existeDireccionCliente(nuevaDireccion)) {
             Mensajes.mostrarMensajeDeError("No puede ingresar más de una dirección por ciudad de un cliente!");
         } else if (this.contratoServicio.crearDireccionCliente(this.nuevaDireccion)) {

@@ -11,9 +11,9 @@
             <h:head />
             <h:body>
                 <h:form id="form">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <h1>Lista de tareas programadas</h1>
                     <p:dataTable id="tablaTareasP" var="tarea" selectionMode="single" value="#{listaTareasProgramadasBean.listaDeTareas}" rowKey="#{tarea.jobId}" selection="#{listaTareasProgramadasBean.tareaInfoSeleccionada}" scrollable="true" scrollWidth="100%" paginator="true" rows="10">
                         <p:ajax event="rowSelect" immediate="true" listener="#{listaTareasProgramadasBean.tareaSelecionada}" onstart="statusDialog.show()" onsuccess="statusDialog.hide()" update=":form:tablaTareasP, @this"></p:ajax>

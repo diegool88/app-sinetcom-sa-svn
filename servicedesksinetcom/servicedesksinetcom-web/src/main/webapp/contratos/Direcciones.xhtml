@@ -14,7 +14,7 @@
 
                 <h:form id="verDireccionesForm">
                     <p:dataTable id="dtDirecciones" var="direccion" value="#{ingresoDireccionesBean.direcciones}" paginator="true" rows="15"
-                                 selection="#{ingresoDireccionesBean.direccionSeleccionada}" selectionMode="single" rowKey="#{direccion.compositeKey}" filteredValue="#{ingresoDireccionesBean.direccionesFiltradas}" paginatorPosition="bottom"
+                                 selection="#{ingresoDireccionesBean.direccionSeleccionada}" selectionMode="single" rowKey="#{direccion.id}" filteredValue="#{ingresoDireccionesBean.direccionesFiltradas}" paginatorPosition="bottom"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
                         <f:facet name="header">
@@ -24,8 +24,8 @@
                         <p:ajax event="rowSelect" immediate="true" update="btnEliminar"></p:ajax>
                         <p:ajax event="rowUnselect" immediate="true" update="btnEliminar"></p:ajax>
 
-                        <p:column headerText="Cliente" sortBy="#{direccion.clienteEmpresa.nombreComercial}" filterBy="#{direccion.clienteEmpresa.nombreComercial}" filterMatchMode="exact" filterOptions="#{ingresoDireccionesBean.clientesFiltro}" >
-                            <h:outputText value="#{direccion.clienteEmpresa.nombreComercial}"/>
+                        <p:column headerText="Cliente" sortBy="#{direccion.clienteEmpresaid.nombreComercial}" filterBy="#{direccion.clienteEmpresaid.nombreComercial}" filterMatchMode="exact" filterOptions="#{ingresoDireccionesBean.clientesFiltro}" >
+                            <h:outputText value="#{direccion.clienteEmpresaid.nombreComercial}"/>
                         </p:column>
 
                         <p:column headerText="Ciudad" sortBy="#{direccion.ciudad.nombre}" filterBy="#{direccion.ciudad.nombre}">
@@ -52,9 +52,9 @@
                         <h:panelGrid columns="2" columnClasses="colum" cellpadding="5">
 
                             <p:outputLabel for="direccionCliente" value="Ruc Cliente"/>
-                            <p:selectOneMenu id="direccionCliente" value="#{ingresoDireccionesBean.nuevaDireccion.clienteEmpresa}" converter="#{clienteEmpresaConverter}" required="true">                    
+                            <p:selectOneMenu id="direccionCliente" value="#{ingresoDireccionesBean.nuevaDireccion.clienteEmpresaid}" converter="#{clienteEmpresaConverter}" required="true">                    
                                 <f:selectItem itemLabel="Selecione..." itemValue=""/>                    
-                                <f:selectItems value="#{ingresoDireccionesBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial} - #{Clientes.razonSocial}" itemValue="#{Clientes.ruc}" />
+                                <f:selectItems value="#{ingresoDireccionesBean.clientes}" var="Clientes" itemLabel="#{Clientes.nombreComercial} - #{Clientes.razonSocial}" itemValue="#{Clientes.id.toString()}" />
                              </p:selectOneMenu>
 
                             <p:outputLabel for="direccionCiudad" value="Ciudad:"/>
@@ -69,7 +69,7 @@
                             <p:outputLabel for="direccion2" value="Dirección 2:"/>
                             <p:inputText id="direccion2" value="#{ingresoDireccionesBean.nuevaDireccion.direccion2}" />
 
-                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoDireccionesBean.crearDireccion()}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('ingreso').hide();" update=":verDireccionesForm:dtDirecciones">
+                            <p:commandButton id="btnGrabar" value="Grabar" action="#{ingresoDireccionesBean.crearDireccion()}" onstart="statusDialog.show();" oncomplete="if (args &amp;&amp; !args.validationFailed){ PF('ingreso').hide();} statusDialog.hide();" update=":verDireccionesForm:dtDirecciones">
                                 <f:ajax execute="@all" render="@form"/>
                             </p:commandButton>
 

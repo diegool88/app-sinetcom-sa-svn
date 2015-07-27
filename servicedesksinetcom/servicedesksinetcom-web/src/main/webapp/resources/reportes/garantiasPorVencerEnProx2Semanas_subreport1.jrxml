@@ -11,7 +11,7 @@
      GarantiaEconomica.`porcentaje` AS GarantiaEconomica_porcentaje,
      GarantiaEconomica.`valor` AS GarantiaEconomica_valor,
      GarantiaEconomica.`fechaInicio` AS GarantiaEconomica_fechaInicio,
-     GarantiaEconomica.`renovable` AS GarantiaEconomica_renovable,
+     GarantiaEconomica.`renovacion` AS GarantiaEconomica_renovacion,
      GarantiaEconomica.`fechaFin` AS GarantiaEconomica_fechaFin
 FROM
      `GarantiaEconomica` GarantiaEconomica INNER JOIN `TipoGarantia` TipoGarantia ON GarantiaEconomica.`TipoGarantia_id` = TipoGarantia.`id`
@@ -24,7 +24,7 @@ AND TIMESTAMPDIFF(DAY, NOW(),`GarantiaEconomica`.`fechaFin`) <= 15]]>
 	<field name="GarantiaEconomica_porcentaje" class="java.lang.Integer"/>
 	<field name="GarantiaEconomica_valor" class="java.math.BigDecimal"/>
 	<field name="GarantiaEconomica_fechaInicio" class="java.sql.Timestamp"/>
-	<field name="GarantiaEconomica_renovable" class="java.lang.Boolean"/>
+	<field name="GarantiaEconomica_renovacion" class="java.lang.Boolean"/>
 	<field name="GarantiaEconomica_fechaFin" class="java.sql.Timestamp"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -80,11 +80,11 @@ AND TIMESTAMPDIFF(DAY, NOW(),`GarantiaEconomica`.`fechaFin`) <= 15]]>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Es Renovable:]]></text>
+				<text><![CDATA[Es Renovación:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="125" y="87" width="100" height="20" uuid="308110ef-a335-4930-b8ac-1dd63a7934e9"/>
-				<textFieldExpression><![CDATA[$F{GarantiaEconomica_renovable} ? "Si" : "No"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{GarantiaEconomica_renovacion} ? "Si" : "No"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="4" y="107" width="121" height="20" uuid="35313b81-7c91-4bad-bee6-76e73c1707f8"/>

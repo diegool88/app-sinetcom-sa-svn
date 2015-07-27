@@ -11,9 +11,9 @@
             <h:head />
             <h:body>
                 <h:form id="form">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:panel style="overflow: auto">
                         <f:facet name="header">
                             <h:outputText value="Búsqueda de Stock Local"></h:outputText>
@@ -88,6 +88,30 @@
                                         <h:outputText value="Bodega"></h:outputText>
                                     </f:facet>
                                     <h:outputText value="#{item.bodegaid.nombre}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.fechaIngresoABodega}" filterMatchMode="exact">
+                                    <f:facet name="header">
+                                        <h:outputText value="Fecha de Ingreso a Bodega"></h:outputText>                                        
+                                    </f:facet>
+                                    <h:outputText value="#{item.fechaIngresoABodega}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.fobUnitario}" filterMatchMode="exact">
+                                    <f:facet name="header">
+                                        <h:outputText value="FOB Unitario"></h:outputText>                                        
+                                    </f:facet>
+                                    <h:outputText value="#{item.fobUnitario}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.indice}" filterMatchMode="exact">
+                                    <f:facet name="header">
+                                        <h:outputText value="Índice"></h:outputText>                                        
+                                    </f:facet>
+                                    <h:outputText value="#{item.indice}"/>
+                                </p:column>
+                                <p:column width="200" filterBy="#{item.costeo}" filterMatchMode="exact">
+                                    <f:facet name="header">
+                                        <h:outputText value="Costeo"></h:outputText>                                        
+                                    </f:facet>
+                                    <h:outputText value="#{item.costeo}"/>
                                 </p:column>
                                 <p:rowExpansion>
                                     <p:panelGrid style="width: 700px;" columns="2">

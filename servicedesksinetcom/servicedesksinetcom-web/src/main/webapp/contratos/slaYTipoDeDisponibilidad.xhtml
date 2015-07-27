@@ -11,9 +11,9 @@
             <h:head />
             <h:body>
                 <h:form id="form">
-                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                         <p:graphicImage library="images" name="ajax_loader.gif" />
-                    </p:dialog>
+                    </p:dialog>-->
                     <p:panelGrid columns="2">
                         
                         <p:panelGrid id="ingresoSLA" columns="3">
@@ -21,7 +21,7 @@
                                 <h:outputText value="Ingreso de SLAs"></h:outputText>
                             </f:facet>
                             <p:outputLabel value="Nombre: " for="nombreF" />
-                            <p:inputText id="nombreF" value="#{fabricantesYCategorias.nuevoFabricante.nombre}" title="Nombre" required="true" requiredMessage="* Requerido"/>
+                            <p:inputText id="nombreF" value="#{fabricantesYCategorias.nuevoFabricante.nombre}" title="Nombre" required="true" />
                             <p:message for="nombreF"></p:message>
                             <p:outputLabel value="Descripción: " for="descripcionF" />
                             <p:inputTextarea id="descripcionF" rows="10" cols="20" value="#{fabricantesYCategorias.nuevoFabricante.descripcion}" title="Descripcion" />
@@ -35,7 +35,7 @@
                                 <h:outputText value="Ingreso de Categorías"></h:outputText>
                             </f:facet>
                             <p:outputLabel value="Nombre: " for="nombreC" />
-                            <p:inputText id="nombreC" value="#{fabricantesYCategorias.nuevaCategoriaProducto.nombre}" title="Nombre" required="true" requiredMessage="* Requerido"/>
+                            <p:inputText id="nombreC" value="#{fabricantesYCategorias.nuevaCategoriaProducto.nombre}" title="Nombre" required="true" />
                             <p:message for="nombreC"></p:message>
                             <p:outputLabel value="Descripción: " for="descripcionC" />
                             <p:inputTextarea id="descripcionC" rows="10" cols="20" value="#{fabricantesYCategorias.nuevaCategoriaProducto.descripcion}" title="Descripcion" />

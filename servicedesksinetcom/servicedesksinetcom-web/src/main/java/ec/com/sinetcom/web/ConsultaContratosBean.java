@@ -49,8 +49,10 @@ public class ConsultaContratosBean implements Serializable{
     private List<TipoGarantia> tipoGarantias;
     private List<TipoDeVisita> tipoDeVisitas;
     private List<Usuario> tecnicos;
-    private StreamedContent adendum;
+    private StreamedContent poliza;
     private StreamedContent contratoDigital;
+    private StreamedContent actaEREquipos;
+    private StreamedContent actaERProyecto;
     private Contrato contratoSeleccionado;
     private UploadedFile polizaACargar;
     private GarantiaEconomica nuevaGarantiaE;
@@ -88,7 +90,7 @@ public class ConsultaContratosBean implements Serializable{
      
     public void agregarGarantia(ActionEvent event) {
         if(this.polizaACargar != null){
-            this.nuevaGarantiaE.setAdendum(this.polizaACargar.getContents());
+            this.nuevaGarantiaE.setPoliza(this.polizaACargar.getContents());
             this.polizaACargar = null;
         }
         this.nuevaGarantiaE.setContratonumero(this.contratoSeleccionado);
@@ -112,13 +114,24 @@ public class ConsultaContratosBean implements Serializable{
         String contratoNumero = (String) event.getComponent().getAttributes().get("contratoNumero");
         Contrato contrato = this.contratoServicio.recuperarContrato(contratoNumero);
         this.contratoDigital = new DefaultStreamedContent(new ByteArrayInputStream(contrato.getContratoDigital()),"application/pdf", "contrato_" + contrato.getNumero() + ".pdf");
-
     }
     
-    public void asignarAdendumDescarga(ActionEvent event){
+    public void asignarActaEREquiposDescarga(ActionEvent event){
+        String contratoNumero = (String) event.getComponent().getAttributes().get("contratoNumero");
+        Contrato contrato = this.contratoServicio.recuperarContrato(contratoNumero);
+        this.actaEREquipos = new DefaultStreamedContent(new ByteArrayInputStream(contrato.getActaEREquiposDigital()),"application/pdf", "actaEREquipos_" + contrato.getNumero() + ".pdf");
+    }
+    
+    public void asignarPolizaDescarga(ActionEvent event){
         Integer pagoId = (Integer) event.getComponent().getAttributes().get("garantiaId");
         GarantiaEconomica garantiaE = this.contratoServicio.recuperarGarantiaE(pagoId);
-        this.adendum = new DefaultStreamedContent(new ByteArrayInputStream(garantiaE.getAdendum()),"application/pdf", "adendum_" + garantiaE.getId() + "_" + garantiaE.getContratonumero().getNumero() + ".pdf");
+        this.poliza = new DefaultStreamedContent(new ByteArrayInputStream(garantiaE.getPoliza()),"application/pdf", "adendum_" + garantiaE.getId() + "_" + garantiaE.getContratonumero().getNumero() + ".pdf");
+    }
+    
+    public void asignarActaERProyectoDescarga(ActionEvent event){
+        String contratoNumero = (String) event.getComponent().getAttributes().get("contratoNumero");
+        Contrato contrato = this.contratoServicio.recuperarContrato(contratoNumero);
+        this.actaERProyecto = new DefaultStreamedContent(new ByteArrayInputStream(contrato.getActaERProyectoDigital()),"application/pdf", "actaERProyecto_" + contrato.getNumero() + ".pdf");
     }
     
     public void actualizarNombreDeInstructor(){
@@ -141,7 +154,7 @@ public class ConsultaContratosBean implements Serializable{
     public void cargarPolizaEnGarantiaEconomica(RowEditEvent event){
         if(this.polizaACargar != null){
             GarantiaEconomica garantiaEconomica = ((GarantiaEconomica)event.getObject());
-            garantiaEconomica.setAdendum(this.polizaACargar.getContents());
+            garantiaEconomica.setPoliza(this.polizaACargar.getContents());
             this.polizaACargar = null;
         }
     }
@@ -186,12 +199,12 @@ public class ConsultaContratosBean implements Serializable{
         this.contratos = contratos;
     }
 
-    public StreamedContent getAdendum() {
-        return adendum;
+    public StreamedContent getPoliza() {
+        return poliza;
     }
 
-    public void setAdendum(StreamedContent adendum) {
-        this.adendum = adendum;
+    public void setPoliza(StreamedContent poliza) {
+        this.poliza = poliza;
     }
 
     public StreamedContent getContratoDigital() {
@@ -281,7 +294,21 @@ public class ConsultaContratosBean implements Serializable{
     public void setTecnicoSinetcom(Usuario tecnicoSinetcom) {
         this.tecnicoSinetcom = tecnicoSinetcom;
     }
-    
-    
+
+    public StreamedContent getActaEREquipos() {
+        return actaEREquipos;
+    }
+
+    public void setActaEREquipos(StreamedContent actaEREquipos) {
+        this.actaEREquipos = actaEREquipos;
+    }
+
+    public StreamedContent getActaERProyecto() {
+        return actaERProyecto;
+    }
+
+    public void setActaERProyecto(StreamedContent actaERProyecto) {
+        this.actaERProyecto = actaERProyecto;
+    }
     
 }

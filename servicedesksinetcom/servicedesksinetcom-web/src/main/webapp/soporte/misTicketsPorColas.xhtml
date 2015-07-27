@@ -11,9 +11,9 @@
         <f:view contentType="text/html">
             <h:form id="form" enctype="multipart/form-data">
                 <p:poll interval="10" listener="#{misTicketsPorCola.recargarTablaTickets()}" process="@this" update="tabla" />
-                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+<!--                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                     <p:graphicImage library="images" name="ajax_loader.gif" />
-                </p:dialog>
+                </p:dialog>-->
                 <f:facet name="header">
                     Mis Tickets Por Colas
                 </f:facet>                
@@ -41,7 +41,7 @@
                             <h:outputText value="#{ticket.prioridadTicketcodigo.nombre}"></h:outputText>
                         </p:column>
                         <p:column headerText="Empresa">
-                            <h:outputText value="#{ticket.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                            <h:outputText value="#{ticket.clienteEmpresaid.nombreComercial}"></h:outputText>
                         </p:column>
                         <p:column headerText="Equipo">
                             <h:outputText value="#{ticket.itemProductonumeroSerial.numeroSerial} - #{ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{ticket.itemProductonumeroSerial.modeloProductoid.modelo}"></h:outputText>
@@ -65,7 +65,7 @@
                             <h:outputText value="#{ticket.titulo}"></h:outputText>
                         </p:column>
                         <p:column headerText="Empresa" width="280">
-                            <h:outputText value="#{ticket.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                            <h:outputText value="#{ticket.clienteEmpresaid.nombreComercial}"></h:outputText>
                         </p:column>
                         <p:column headerText="Equipo" width="280">
                             <h:outputText value="#{ticket.itemProductonumeroSerial.numeroSerial} - #{ticket.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{ticket.itemProductonumeroSerial.modeloProductoid.modelo}"></h:outputText>
@@ -106,7 +106,7 @@
                                     <p:outputLabel value="Asunto:" />
                                     <h:outputText value="#{misTicketsPorCola.ticketSeleccionado.titulo}"></h:outputText>
                                     <p:outputLabel value="Empresa:" />
-                                    <h:outputText value="#{misTicketsPorCola.ticketSeleccionado.clienteEmpresaruc.nombreComercial}"></h:outputText>
+                                    <h:outputText value="#{misTicketsPorCola.ticketSeleccionado.clienteEmpresaid.nombreComercial}"></h:outputText>
                                     <p:outputLabel value="Equipo:" />
                                     <h:outputText value="#{misTicketsPorCola.ticketSeleccionado.itemProductonumeroSerial.numeroSerial} - #{misTicketsPorCola.ticketSeleccionado.itemProductonumeroSerial.modeloProductoid.lineaDeProductoid.nombre} #{misTicketsPorCola.ticketSeleccionado.itemProductonumeroSerial.modeloProductoid.modelo}"></h:outputText>
                                     <p:outputLabel value="Servicio:" />
@@ -139,23 +139,19 @@
                 <p:dialog header="Cerrar Ticket de Soporte" height="500" style="overflow: scroll;"  widgetVar="cerrarTicketDialog" modal="true" showEffect="fade" hideEffect="fade">
                     <p:panel id="cerrarT">
                         <h1><strong>Ingreso de Actividad</strong></h1>
-                        <p:panelGrid columns="3" columnClasses="label,value">
+                        <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Fecha Inicio de la actividad:"></h:outputText>
-                            <p:calendar id="fechaInicio" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaInicio}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
-                            <p:message for="fechaInicio"></p:message>
+                            <p:calendar id="fechaInicio" required="true"  value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaInicio}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
                             <h:outputText value="Fecha Fin de la actividad:"></h:outputText>
-                            <p:calendar id="fechaFin" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaFin}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
-                            <p:message for="fechaFin"></p:message>
+                            <p:calendar id="fechaFin" required="true"  value="#{misTicketsPorCola.nuevaActividadEnSitio.fechaFin}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
                             <h:outputText value="Horas de viaje:"></h:outputText>
                             <p:inputText id="horasViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorCola.nuevaActividadEnSitio.horasDeViaje}" >
                                 <f:convertNumber integerOnly="true"></f:convertNumber>
                             </p:inputText>
-                            <p:message for="horasViaje"></p:message>
                             <h:outputText value="Minutos de viaje:"></h:outputText>
                             <p:inputText id="minutosViaje" validatorMessage="Ingrese solo enteros" value="#{misTicketsPorCola.nuevaActividadEnSitio.minutosDeViaje}">
                                 <f:convertNumber integerOnly="true"></f:convertNumber>
                             </p:inputText>
-                            <p:message for="minutosViaje"></p:message>
                         </p:panelGrid>
                         <br/>
                         <p:dataTable id="actividades" value="#{misTicketsPorCola.actividadesEnSitio}" var="actividad">
@@ -201,10 +197,9 @@
                 </p:dialog>
                 <p:dialog header="Ingresar fecha y hora de Primer Contacto" widgetVar="primerContactoDialog" modal="true" showEffect="fade" hideEffect="fade">
                     <p:panel id="primerC">
-                        <p:panelGrid columns="3" columnClasses="label,value">
+                        <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Ingrese la fecha y hora: "></h:outputText>
-                            <p:calendar id="fechaPrimerC" required="true" requiredMessage="* Requerido" value="#{misTicketsPorCola.ticketSeleccionado.fechaDePrimerContacto}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
-                            <p:message for="fechaPrimerC"></p:message>
+                            <p:calendar id="fechaPrimerC" required="true"  value="#{misTicketsPorCola.ticketSeleccionado.fechaDePrimerContacto}" maxdate="#{misTicketsPorCola.fechaActual}" mindate="#{misTicketsPorCola.ticketSeleccionado.fechaDeCreacion}" pattern="MM/dd/yyyy HH:mm" mode="popup"></p:calendar>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Ingresar" actionListener="#{misTicketsPorCola.ingresarPrimerContacto}" process=":form:primerC" update="@form">
@@ -249,16 +244,13 @@
                         </p:panel>
                     </ui:repeat>
                     <p:panel id="nuevoArticulo" header="Nueva Nota" rendered="#{misTicketsPorCola.articulos != null}">
-                        <h:panelGrid columns="3" cellpadding="10">
+                        <h:panelGrid columns="2" cellpadding="10">
                             <h:outputLabel>Asunto: </h:outputLabel>
-                            <p:inputText id="asunto" value="#{misTicketsPorCola.articuloNuevo.asunto}" requiredMessage="* Requerido" required="true"></p:inputText>
-                            <p:message for="asunto"></p:message>
+                            <p:inputText id="asunto" value="#{misTicketsPorCola.articuloNuevo.asunto}"  required="true"></p:inputText>
                             <h:outputLabel>Mensaje: </h:outputLabel>
-                            <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
-                            <p:message for="cuerpo"></p:message>
+                            <p:inputTextarea id="cuerpo"  cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
                             <h:outputLabel>Adjunto: </h:outputLabel>
                             <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTicketsPorCola.adjuntarArchivo}" ></p:fileUpload>
-                            <p:message for="archivo"></p:message>
                         </h:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Agregar Nota" disabled="#{misTicketsPorCola.desactivarAgregarArticulo}" actionListener="#{misTicketsPorCola.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>
