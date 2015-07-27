@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Contacto.findAll", query = "SELECT c FROM Contacto c")})
 public class Contacto implements Serializable {
+    @JoinColumn(name = "ClienteEmpresa_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private ClienteEmpresa clienteEmpresaid;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +44,7 @@ public class Contacto implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Size(max = 10)
-    @Column(name = "cedulaDeCuidadania")
+    @Column(name = "cedulaDeCuidadania", unique = true)
     private String cedulaDeCuidadania;
     @Basic(optional = false)
     @NotNull
@@ -66,9 +69,6 @@ public class Contacto implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "correoElectronico")
     private String correoElectronico;
-    @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc")
-    @ManyToOne(optional = false)
-    private ClienteEmpresa clienteEmpresaruc;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "administradorDeContrato")
     private List<Contrato> contratoList;
 
@@ -143,14 +143,6 @@ public class Contacto implements Serializable {
         this.correoElectronico = correoElectronico;
     }
 
-    public ClienteEmpresa getClienteEmpresaruc() {
-        return clienteEmpresaruc;
-    }
-
-    public void setClienteEmpresaruc(ClienteEmpresa clienteEmpresaruc) {
-        this.clienteEmpresaruc = clienteEmpresaruc;
-    }
-
     @XmlTransient
     public List<Contrato> getContratoList() {
         return contratoList;
@@ -183,6 +175,14 @@ public class Contacto implements Serializable {
     @Override
     public String toString() {
         return "ec.com.sinetcom.orm.Contacto[ id=" + id + " ]";
+    }
+
+    public ClienteEmpresa getClienteEmpresaid() {
+        return clienteEmpresaid;
+    }
+
+    public void setClienteEmpresaid(ClienteEmpresa clienteEmpresaid) {
+        this.clienteEmpresaid = clienteEmpresaid;
     }
     
 }

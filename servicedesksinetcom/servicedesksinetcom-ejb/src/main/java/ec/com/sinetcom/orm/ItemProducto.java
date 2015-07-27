@@ -5,6 +5,7 @@
 package ec.com.sinetcom.orm;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -22,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,6 +43,16 @@ import org.eclipse.persistence.config.CacheIsolationType;
     @NamedQuery(name = "ItemProducto.findAll", query = "SELECT i FROM ItemProducto i")})
 @Cache(isolation = CacheIsolationType.ISOLATED)
 public class ItemProducto implements Serializable, Cloneable {
+    @Column(name = "fechaIngresoABodega")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaIngresoABodega;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "fobUnitario")
+    private BigDecimal fobUnitario;
+    @Column(name = "indice")
+    private BigDecimal indice;
+    @Column(name = "costeo")
+    private BigDecimal costeo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemProductonumeroSerial")
     private List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList;
     @ManyToMany(mappedBy = "itemProductoList1")
@@ -343,6 +356,38 @@ public class ItemProducto implements Serializable, Cloneable {
 
     public void setHistorialDeContratosYEquiposList(List<HistorialDeContratosYEquipos> historialDeContratosYEquiposList) {
         this.historialDeContratosYEquiposList = historialDeContratosYEquiposList;
+    }
+
+    public BigDecimal getFobUnitario() {
+        return fobUnitario;
+    }
+
+    public void setFobUnitario(BigDecimal fobUnitario) {
+        this.fobUnitario = fobUnitario;
+    }
+
+    public BigDecimal getIndice() {
+        return indice;
+    }
+
+    public void setIndice(BigDecimal indice) {
+        this.indice = indice;
+    }
+
+    public BigDecimal getCosteo() {
+        return costeo;
+    }
+
+    public void setCosteo(BigDecimal costeo) {
+        this.costeo = costeo;
+    }
+
+    public Date getFechaIngresoABodega() {
+        return fechaIngresoABodega;
+    }
+
+    public void setFechaIngresoABodega(Date fechaIngresoABodega) {
+        this.fechaIngresoABodega = fechaIngresoABodega;
     }
     
 }

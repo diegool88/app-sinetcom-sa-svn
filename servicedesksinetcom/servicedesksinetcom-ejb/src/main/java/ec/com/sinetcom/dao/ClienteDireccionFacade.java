@@ -37,7 +37,7 @@ public class ClienteDireccionFacade extends AbstractFacade<ClienteDireccion> {
      * @return 
      */
     public ClienteDireccion existeDireccionCliente(Ciudad ciudad, ClienteEmpresa clienteEmpresa){
-        String sql = "SELECT d FROM ClienteDireccion d WHERE d.clienteEmpresa = ?1 AND d.ciudad = ?2";
+        String sql = "SELECT d FROM ClienteDireccion d WHERE d.clienteEmpresaid = ?1 AND d.ciudad = ?2";
         Query qry = this.em.createQuery(sql);
         qry.setParameter(1, clienteEmpresa);
         qry.setParameter(2, ciudad);

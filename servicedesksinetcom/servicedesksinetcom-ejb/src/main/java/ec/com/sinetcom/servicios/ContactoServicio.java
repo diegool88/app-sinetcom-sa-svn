@@ -60,6 +60,16 @@ public class ContactoServicio {
     public ClienteEmpresa recuperarClienteEmpresa(String id) {
         return clienteEmpresaFacade.find(id);
     }
+    
+    public boolean verificarActualizacionCedulaCiudadania(Contacto contacto, String cedulaNueva){
+        Contacto contactoQ = this.contactoFacade.obtenerContactoPorCedulaCiudadania(cedulaNueva);
+        return contactoQ != null ? contactoQ.equals(contacto) : true;
+    }
+    
+    public boolean verificarActualizacionEmail(Contacto contacto, String emailNuevo){
+        Contacto contactoQ = this.contactoFacade.obtenerContactoPorCorreoElectronico(emailNuevo);
+        return contactoQ != null ? contactoQ.equals(contacto) : true;
+    }
 
     public boolean eliminarTipoContrato(Integer contacto) {
         try {

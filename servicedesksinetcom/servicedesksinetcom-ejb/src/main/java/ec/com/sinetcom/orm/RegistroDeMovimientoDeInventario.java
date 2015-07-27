@@ -40,6 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "RegistroDeMovimientoDeInventario.findAll", query = "SELECT r FROM RegistroDeMovimientoDeInventario r")})
 public class RegistroDeMovimientoDeInventario implements Serializable {
+    @JoinColumn(name = "ClienteEmpresa_id", referencedColumnName = "id")
+    @ManyToOne(optional = true)
+    private ClienteEmpresa clienteEmpresaid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "registroDeMovimientoDeInventariocodigo", fetch = FetchType.EAGER)
     private List<DetalleDeMovimientoDeProducto> detalleDeMovimientoDeProductoList;
     private static final long serialVersionUID = 1L;
@@ -79,9 +82,6 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
     @JoinColumn(name = "Contrato_numero", referencedColumnName = "numero")
     @ManyToOne
     private Contrato contratonumero;
-    @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc")
-    @ManyToOne
-    private ClienteEmpresa clienteEmpresaruc;
 
     public RegistroDeMovimientoDeInventario() {
     }
@@ -169,14 +169,6 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
         this.contratonumero = contratonumero;
     }
 
-    public ClienteEmpresa getClienteEmpresaruc() {
-        return clienteEmpresaruc;
-    }
-
-    public void setClienteEmpresaruc(ClienteEmpresa clienteEmpresaruc) {
-        this.clienteEmpresaruc = clienteEmpresaruc;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -209,6 +201,14 @@ public class RegistroDeMovimientoDeInventario implements Serializable {
 
     public void setDetalleDeMovimientoDeProductoList(List<DetalleDeMovimientoDeProducto> detalleDeMovimientoDeProductoList) {
         this.detalleDeMovimientoDeProductoList = detalleDeMovimientoDeProductoList;
+    }
+
+    public ClienteEmpresa getClienteEmpresaid() {
+        return clienteEmpresaid;
+    }
+
+    public void setClienteEmpresaid(ClienteEmpresa clienteEmpresaid) {
+        this.clienteEmpresaid = clienteEmpresaid;
     }
     
 }

@@ -44,6 +44,9 @@ public class Ticket implements Serializable {
     @Lob
     @Column(name = "hojaDeServicio")
     private byte[] hojaDeServicio;
+    @JoinColumn(name = "ClienteEmpresa_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private ClienteEmpresa clienteEmpresaid;
     @OneToMany(mappedBy = "ticketticketNumber")
     private List<VisitaTecnica> visitaTecnicaList;
     @Column(name = "fechaDePrimerContacto")
@@ -64,9 +67,6 @@ public class Ticket implements Serializable {
     @JoinColumn(name = "ItemProducto_numeroSerial", referencedColumnName = "numeroSerial")
     @ManyToOne(optional = false)
     private ItemProducto itemProductonumeroSerial;
-    @JoinColumn(name = "ClienteEmpresa_ruc", referencedColumnName = "ruc")
-    @ManyToOne(optional = false)
-    private ClienteEmpresa clienteEmpresaruc;
     @Column(name = "fechaDeCierre")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaDeCierre;
@@ -309,14 +309,6 @@ public class Ticket implements Serializable {
         this.itemProductonumeroSerial = itemProductonumeroSerial;
     }
 
-    public ClienteEmpresa getClienteEmpresaruc() {
-        return clienteEmpresaruc;
-    }
-
-    public void setClienteEmpresaruc(ClienteEmpresa clienteEmpresaruc) {
-        this.clienteEmpresaruc = clienteEmpresaruc;
-    }
-
     public Date getFechaDeProximaActualizacion() {
         return fechaDeProximaActualizacion;
     }
@@ -350,13 +342,6 @@ public class Ticket implements Serializable {
         this.fechaDePrimerContacto = fechaDePrimerContacto;
     }
 
-    public byte[] getHojaDeServicio() {
-        return hojaDeServicio;
-    }
-
-    public void setHojaDeServicio(byte[] hojaDeServicio) {
-        this.hojaDeServicio = hojaDeServicio;
-    }
 
     @XmlTransient
     public List<VisitaTecnica> getVisitaTecnicaList() {
@@ -365,6 +350,22 @@ public class Ticket implements Serializable {
 
     public void setVisitaTecnicaList(List<VisitaTecnica> visitaTecnicaList) {
         this.visitaTecnicaList = visitaTecnicaList;
+    }
+
+    public byte[] getHojaDeServicio() {
+        return hojaDeServicio;
+    }
+
+    public void setHojaDeServicio(byte[] hojaDeServicio) {
+        this.hojaDeServicio = hojaDeServicio;
+    }
+
+    public ClienteEmpresa getClienteEmpresaid() {
+        return clienteEmpresaid;
+    }
+
+    public void setClienteEmpresaid(ClienteEmpresa clienteEmpresaid) {
+        this.clienteEmpresaid = clienteEmpresaid;
     }
     
 }

@@ -36,6 +36,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "GarantiaEconomica.findAll", query = "SELECT g FROM GarantiaEconomica g")})
 public class GarantiaEconomica implements Serializable {
     @Basic(optional = false)
+    @NotNull
+    @Column(name = "renovacion")
+    private boolean renovacion;
+    @Lob
+    @Column(name = "poliza")
+    private byte[] poliza;
+    @Size(max = 50)
+    @Column(name = "numeroPoliza")
+    private String numeroPoliza;
+    @Basic(optional = false)
     @NotNull()
     @Column(name = "porcentaje")
     private int porcentaje;
@@ -44,19 +54,12 @@ public class GarantiaEconomica implements Serializable {
     @NotNull
     @Column(name = "valor")
     private BigDecimal valor;
-    @Lob
-    @Column(name = "adendum")
-    private byte[] adendum;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "renovable")
-    private boolean renovable;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaInicio")
@@ -84,11 +87,11 @@ public class GarantiaEconomica implements Serializable {
         this.id = id;
     }
 
-    public GarantiaEconomica(Integer id, int porcentaje, BigDecimal valor, boolean renovable, Date fechaInicio, Date fechaFin) {
+    public GarantiaEconomica(Integer id, int porcentaje, BigDecimal valor, boolean renovacion, Date fechaInicio, Date fechaFin) {
         this.id = id;
         this.porcentaje = porcentaje;
         this.valor = valor;
-        this.renovable = renovable;
+        this.renovacion = renovacion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
@@ -99,15 +102,6 @@ public class GarantiaEconomica implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-
-    public boolean getRenovable() {
-        return renovable;
-    }
-
-    public void setRenovable(boolean renovable) {
-        this.renovable = renovable;
     }
 
     public Date getFechaInicio() {
@@ -191,12 +185,28 @@ public class GarantiaEconomica implements Serializable {
         this.valor = valor;
     }
 
-    public byte[] getAdendum() {
-        return adendum;
+    public boolean getRenovacion() {
+        return renovacion;
     }
 
-    public void setAdendum(byte[] adendum) {
-        this.adendum = adendum;
+    public void setRenovacion(boolean renovacion) {
+        this.renovacion = renovacion;
+    }
+
+    public byte[] getPoliza() {
+        return poliza;
+    }
+
+    public void setPoliza(byte[] poliza) {
+        this.poliza = poliza;
+    }
+
+    public String getNumeroPoliza() {
+        return numeroPoliza;
+    }
+
+    public void setNumeroPoliza(String numeroPoliza) {
+        this.numeroPoliza = numeroPoliza;
     }
     
 }
