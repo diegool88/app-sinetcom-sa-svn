@@ -170,7 +170,7 @@
                             <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTicketsPorCola.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
                             <p:message for="cuerpo"></p:message>
                             <h:outputLabel>Adjunto: </h:outputLabel>
-                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="52428800" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
                             <p:message for="archivo"></p:message>
                         </h:panelGrid>
                         <f:facet name="footer">

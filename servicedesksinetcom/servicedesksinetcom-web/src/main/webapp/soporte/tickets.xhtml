@@ -173,7 +173,7 @@
                     <p:panel id="hojaS">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione la hoja de Servicio"></h:outputText>
-                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{misTickets.adjuntarArchivoHojaS}" ></p:fileUpload>
+                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{misTickets.adjuntarArchivoHojaS}" ></p:fileUpload>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar Hoja de Servicio" actionListener="#{misTickets.guardarArchivoAdjuntoHojaS}" process="@this" update="@form">
@@ -210,7 +210,7 @@
                             <p:inputTextarea id="cuerpo" requiredMessage="* Requerido" cols="40" rows="10" value="#{misTickets.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
                             <p:message for="cuerpo"></p:message>
                             <h:outputLabel>Adjunto: </h:outputLabel>
-                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTickets.adjuntarArchivo}" ></p:fileUpload>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="52428800" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{misTickets.adjuntarArchivo}" ></p:fileUpload>
                             <p:message for="archivo"></p:message>
                         </h:panelGrid>
                         <f:facet name="footer">

@@ -314,7 +314,7 @@
                                         <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                     </p:selectOneRadio>
                                     <p:outputLabel for="polizaN" value="Póliza Digital:"/>
-                                    <p:fileUpload id="polizaN" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{consultaContratoBean.cargarPolizaEnNuevaGarantiaEconomica}" ></p:fileUpload>
+                                    <p:fileUpload id="polizaN" mode="advanced" sizeLimit="52428800" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{consultaContratoBean.cargarPolizaEnNuevaGarantiaEconomica}" ></p:fileUpload>
                                     <f:facet name="footer">
                                         <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":contratoForm:garantiasEconomicas" update=":contratoForm:garantiasEconomicas" actionListener="#{consultaContratoBean.agregarGarantia}" onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"></p:commandButton>
                                     </f:facet>
@@ -363,7 +363,7 @@
                                             <p:cellEditor>
                                                 <f:facet name="output"><h:outputText value="#{not empty garantiaE.poliza ? 'Tiene Póliza Digital' : 'No Tiene Póliza Digital'}"></h:outputText></f:facet>
                                                 <f:facet name="input">
-                                                    <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{consultaContratoBean.cargarPoliza}" ></p:fileUpload>
+                                                    <p:fileUpload id="poliza" mode="advanced" sizeLimit="52428800" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{consultaContratoBean.cargarPoliza}" ></p:fileUpload>
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>

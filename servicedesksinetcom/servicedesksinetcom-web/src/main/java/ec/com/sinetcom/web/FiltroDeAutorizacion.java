@@ -81,14 +81,14 @@ public class FiltroDeAutorizacion implements Filter {
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("ventas")){
             return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
-                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultarcontratos"))
+                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultacontratos"))
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 
         }
         
         if(usuario.getGrupoid().getNombre().toLowerCase().trim().equals("preventa")){
             return !(!req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/publico/")
-                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultarcontratos"))
+                    && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/contratos/") && req.getRequestURI().toLowerCase().contains("consultacontratos"))
                     && !(req.getRequestURI().replace("servicedesksinetcom-web/", "").startsWith("/soporte/") && (req.getRequestURI().toLowerCase().contains("mistickets") || req.getRequestURI().toLowerCase().contains("crearticket"))) 
                     && !req.getRequestURI().toLowerCase().contains("login")
                     && !req.getRequestURI().toLowerCase().contains("welcome")); 

@@ -212,7 +212,7 @@
                     <p:panel id="hojaS">
                         <p:panelGrid columns="2" columnClasses="label,value">
                             <h:outputText value="Seleccione la hoja de Servicio"></h:outputText>
-                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{ticketsPorEstado.adjuntarArchivoHojaS}" ></p:fileUpload>
+                            <p:fileUpload id="hoja" mode="advanced" sizeLimit="52428800" allowTypes="/(\.|\/)(pdf)$/" multiple="false" fileUploadListener="#{ticketsPorEstado.adjuntarArchivoHojaS}" ></p:fileUpload>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar Hoja de Servicio" actionListener="#{ticketsPorEstado.guardarArchivoAdjuntoHojaS}" process="@this" update="@form">
@@ -250,7 +250,7 @@
                             <h:outputLabel>Mensaje: </h:outputLabel>
                             <p:inputTextarea id="cuerpo"  cols="40" rows="10" value="#{ticketsPorEstado.articuloNuevo.cuerpo}" required="true"></p:inputTextarea>
                             <h:outputLabel>Adjunto: </h:outputLabel>
-                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{ticketsPorEstado.adjuntarArchivo}" ></p:fileUpload>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="52428800" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{ticketsPorEstado.adjuntarArchivo}" ></p:fileUpload>
                         </h:panelGrid>
                         <f:facet name="footer">
                             <p:commandButton value="Agregar Nota" disabled="#{ticketsPorEstado.desactivarAgregarArticulo}" actionListener="#{ticketsPorEstado.crearNuevoArticulo}" update=":form:articulos"  process=":form:articulos" onstart="statusDialog.show()" onsuccess="statusDialog.hide()"></p:commandButton>

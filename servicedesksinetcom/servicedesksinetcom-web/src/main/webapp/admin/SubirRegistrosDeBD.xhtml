@@ -15,7 +15,7 @@
                         <f:facet name="header">
                             <h:outputText value="Subir Archivo CSV"></h:outputText>
                         </f:facet>
-                        <p:fileUpload value="Seleccione Archivo CSV" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(csv)$/" multiple="false" update=":growl" fileUploadListener="#{subirDatosBDBean.cargarArchivo}" />
+                        <p:fileUpload value="Seleccione Archivo CSV" mode="advanced" sizeLimit="52428800" auto="true" allowTypes="/(\.|\/)(csv)$/" multiple="false" update=":growl" fileUploadListener="#{subirDatosBDBean.cargarArchivo}" />
                         <p:panelGrid columns="1">
                             <p:commandButton value="Subir Empresas" actionListener="#{subirDatosBDBean.cargar}" ajax="false">
                                 <f:attribute name="tabla" value="ClienteEmpresa"></f:attribute>
