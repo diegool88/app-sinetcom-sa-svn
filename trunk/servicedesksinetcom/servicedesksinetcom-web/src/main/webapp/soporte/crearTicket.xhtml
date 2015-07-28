@@ -79,7 +79,7 @@
                             <p:outputLabel for="archivo">Adjunto: </p:outputLabel>
                         </p:column>
                         <p:column>
-                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="5242880" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
+                            <p:fileUpload id="archivo" mode="advanced" sizeLimit="52428800" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" multiple="false" fileUploadListener="#{crearTicketBean.adjuntarArchivo}" ></p:fileUpload>
                         </p:column>
                         <f:facet name="footer">
                             <p:row>

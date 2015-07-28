@@ -247,7 +247,7 @@
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                 </p:selectOneRadio>
                                 <p:outputLabel for="poliza" value="Póliza Digital:"/>
-                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarPoliza}" ></p:fileUpload>
+                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="52428800" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoContratoBean.cargarPoliza}" ></p:fileUpload>
                                 <f:facet name="footer">
                                     <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoContrato:garantiasEconomicas" update=":nuevoContrato:garantiasEconomicas" actionListener="#{ingresoContratoBean.agregarGarantia}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                 </f:facet>

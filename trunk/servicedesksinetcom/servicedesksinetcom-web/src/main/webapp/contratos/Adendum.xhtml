@@ -228,7 +228,7 @@
                                     <f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
                                 </p:selectOneRadio>
                                 <p:outputLabel for="poliza" value="Póliza Digital:"/>
-                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="5242880" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarPoliza}" ></p:fileUpload>
+                                <p:fileUpload id="poliza" mode="advanced" sizeLimit="52428800" auto="true" allowTypes="/(\.|\/)(pdf)$/" multiple="false" update=":growl" fileUploadListener="#{ingresoAdendumBean.cargarPoliza}" ></p:fileUpload>
                                 <f:facet name="footer">
                                     <p:commandButton id="agregarGarantia" value="Agregar Garantía" process=":nuevoAdendum:garantiasEconomicas" update=":nuevoAdendum:garantiasEconomicas" actionListener="#{ingresoAdendumBean.agregarGarantia}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"></p:commandButton>
                                 </f:facet>
